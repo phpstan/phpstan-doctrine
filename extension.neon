@@ -1,0 +1,9 @@
+services:
+	-
+		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
+		tags:
+			- phpstan.broker.methodsClassReflectionExtension
+	-
+		class: PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension

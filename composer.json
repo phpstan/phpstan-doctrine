@@ -1,0 +1,27 @@
+{
+	"name": "phpstan/phpstan-doctrine",
+	"description": "Doctrine extensions for PHPStan",
+	"license": ["MIT"],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": "~7.0",
+		"phpstan/phpstan": "^0.6",
+		"doctrine/common": "^2.7",
+		"doctrine/orm": "^2.5"
+	},
+	"require-dev": {
+		"consistence/coding-standard": "~0.12.0",
+		"phing/phing": "^2.16.0",
+		"phpunit/phpunit": "^5.7",
+		"slevomat/coding-standard": "dev-php7#d4a1a9c"
+	},
+	"autoload": {
+		"psr-4": {
+			"PHPStan\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"classmap": ["tests/"]
+	}
+}
