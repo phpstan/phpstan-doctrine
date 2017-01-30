@@ -1,0 +1,32 @@
+<?php declare(strict_types = 1);
+
+namespace PHPStan\Type\Doctrine;
+
+use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\Type;
+
+class DoctrineSelectableDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+{
+
+	public static function getClass(): string
+	{
+		return \Doctrine\Common\Collections\Collection::class;
+	}
+
+	public function isMethodSupported(MethodReflection $methodReflection): bool
+	{
+		return $methodReflection->getName() === 'matching';
+	}
+
+	public function getTypeFromMethodCall(
+		MethodReflection $methodReflection,
+		MethodCall $methodCall,
+		Scope $scope
+	): Type
+	{
+		return $scope->getType($methodCall->var);
+	}
+
+}
