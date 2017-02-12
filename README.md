@@ -16,13 +16,13 @@ This extension provides following features:
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
 
-```
+```bash
 composer require --dev phpstan/phpstan-doctrine
 ```
 
 And include extension.neon in your project's PHPStan config:
 
-```
+```yaml
 includes:
 	- vendor/phpstan/phpstan-doctrine/extension.neon
 ```
