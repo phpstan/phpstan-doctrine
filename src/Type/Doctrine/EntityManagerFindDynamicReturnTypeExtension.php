@@ -7,6 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
@@ -51,10 +52,15 @@ class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\Dynam
 		}
 
 		if ($class === 'self') {
-			$class = $scope->getClass();
+			$class = $scope->getClassReflection()->getName();
 		}
 
-		return new ObjectType($class, $methodReflection->getName() === 'find');
+		$type = new ObjectType($class);
+		if ($methodReflection->getName() === 'find') {
+			$type = TypeCombinator::addNull($type);
+		}
+
+		return $type;
 	}
 
 }
