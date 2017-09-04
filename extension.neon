@@ -11,3 +11,9 @@ services:
 		class: PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: Doctrine\Common\Annotations\AnnotationReader
