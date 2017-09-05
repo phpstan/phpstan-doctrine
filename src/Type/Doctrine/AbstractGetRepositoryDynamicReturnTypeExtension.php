@@ -3,15 +3,17 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\Entity;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
+use PHPStan\Reflection\BrokerAwareClassReflectionExtension;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
-class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+abstract class AbstractGetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, BrokerAwareClassReflectionExtension
 {
 
 	/**
@@ -24,15 +26,14 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 	 */
 	private $annotationReader;
 
-	public function __construct(Broker $broker, Reader $annotationReader)
+	public function __construct(Reader $annotationReader)
 	{
-		$this->broker = $broker;
 		$this->annotationReader = $annotationReader;
 	}
 
-	public static function getClass(): string
+	public function setBroker(\PHPStan\Broker\Broker $broker)
 	{
-		return \Doctrine\ORM\EntityManager::class;
+		$this->broker = $broker;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
@@ -79,17 +80,27 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 		$annotations = $this->annotationReader
 			->getClassAnnotations($classReflection->getNativeReflection());
 
+		/** @var \Doctrine\ORM\Mapping\Entity|null $entityAnnotation */
+		$entityAnnotation = null;
 		foreach ($annotations as $annotation) {
-			if (
-				$annotation instanceof Entity &&
-				$annotation->repositoryClass &&
-				$this->broker->hasClass($annotation->repositoryClass)
-			) {
-				return new ObjectType($annotation->repositoryClass);
+			if ($annotation instanceof Entity) {
+				$entityAnnotation = $annotation;
 			}
 		}
 
-		return $methodReflection->getReturnType();
+		if ($entityAnnotation === null) {
+			return $methodReflection->getReturnType();
+		}
+
+		$repositoryClass = EntityRepository::class;
+		if (
+			$entityAnnotation->repositoryClass &&
+			$this->broker->hasClass($entityAnnotation->repositoryClass)
+		) {
+			$repositoryClass = $entityAnnotation->repositoryClass;
+		}
+
+		return new ObjectType($repositoryClass);
 	}
 
 }
