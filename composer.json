@@ -11,9 +11,7 @@
 	},
 	"require": {
 		"php": "~7.0",
-		"phpstan/phpstan": "^0.8",
-		"doctrine/common": "^2.7",
-		"doctrine/orm": "^2.5"
+		"phpstan/phpstan": "^0.8"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "~0.13.0",
