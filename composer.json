@@ -6,12 +6,12 @@
 	"prefer-stable": true,
 	"extra": {
 		"branch-alias": {
-			"dev-master": "0.8-dev"
+			"dev-master": "0.9-dev"
 		}
 	},
 	"require": {
 		"php": "~7.0",
-		"phpstan/phpstan": "^0.8",
+		"phpstan/phpstan": "^0.9",
 		"doctrine/common": "^2.7",
 		"doctrine/orm": "^2.5"
 	},
