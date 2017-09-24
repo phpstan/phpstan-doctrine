@@ -1,2 +1,4 @@
 parameters:
-	ignoreErrors: []
+	ignoreErrors:
+		- '#but returns PHPUnit_Framework_MockObject_MockObject#'
+
