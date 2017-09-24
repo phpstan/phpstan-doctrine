@@ -2,6 +2,7 @@
 <ruleset name="PHPStan Doctrine extensions">
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml"/>
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility.MissingConstantVisibility"/>
 		<exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
