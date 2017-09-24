@@ -1,4 +1,6 @@
 parameters:
 	ignoreErrors:
 		- '#but returns PHPUnit_Framework_MockObject_MockObject#'
+		- '#PHPUnit_Framework_MockObject_MockObject given#'
+		- '#Access to an undefined property PHPUnit_Framework_MockObject_MockObject::\$\w+#'
 
