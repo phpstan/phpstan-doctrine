@@ -22,7 +22,7 @@ class DoctrineSelectableClassReflectionExtension implements \PHPStan\Reflection\
 	public function getMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): \PHPStan\Reflection\MethodReflection
 	{
 		$selectableReflection = $this->broker->getClass(\Doctrine\Common\Collections\Selectable::class);
-		return $selectableReflection->getMethod($methodName);
+		return $selectableReflection->getNativeMethod($methodName);
 	}
 
 }
