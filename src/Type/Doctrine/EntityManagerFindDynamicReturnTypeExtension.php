@@ -5,6 +5,7 @@ namespace PHPStan\Type\Doctrine;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -32,23 +33,24 @@ class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\Dynam
 		Scope $scope
 	): Type
 	{
+		$mixedType = new MixedType();
 		if (count($methodCall->args) === 0) {
-			return $methodReflection->getReturnType();
+			return $mixedType;
 		}
 		$arg = $methodCall->args[0]->value;
 		if (!($arg instanceof \PhpParser\Node\Expr\ClassConstFetch)) {
-			return $methodReflection->getReturnType();
+			return $mixedType;
 		}
 
 		$class = $arg->class;
 		if (!($class instanceof \PhpParser\Node\Name)) {
-			return $methodReflection->getReturnType();
+			return $mixedType;
 		}
 
 		$class = (string) $class;
 
 		if ($class === 'static') {
-			return $methodReflection->getReturnType();
+			return $mixedType;
 		}
 
 		if ($class === 'self') {
