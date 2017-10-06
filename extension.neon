@@ -1,3 +1,7 @@
+parameters:
+	doctrine:
+		repositoryClass: Doctrine\ORM\EntityRepository
+
 services:
 	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
@@ -13,6 +17,8 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			repositoryClass: %doctrine.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-

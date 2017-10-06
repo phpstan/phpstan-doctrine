@@ -10,6 +10,16 @@ use PHPStan\Type\Type;
 class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
+	/**
+	 * @var string
+	 */
+	private $repositoryClass;
+
+	public function __construct(string $repositoryClass)
+	{
+		$this->repositoryClass = $repositoryClass;
+	}
+
 	public static function getClass(): string
 	{
 		return \Doctrine\ORM\EntityManager::class;
@@ -48,7 +58,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 			$class = $scope->getClassReflection()->getName();
 		}
 
-		return new EntityRepositoryType($class);
+		return new EntityRepositoryType($class, $this->repositoryClass);
 	}
 
 }

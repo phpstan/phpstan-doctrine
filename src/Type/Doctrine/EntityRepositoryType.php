@@ -12,9 +12,9 @@ class EntityRepositoryType extends ObjectType
 	 */
 	private $entityClass;
 
-	public function __construct(string $entityClass)
+	public function __construct(string $entityClass, string $repositoryClass)
 	{
-		parent::__construct(\Doctrine\ORM\EntityRepository::class);
+		parent::__construct($repositoryClass);
 		$this->entityClass = $entityClass;
 	}
 
