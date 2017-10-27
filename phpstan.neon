@@ -1,6 +1,3 @@
-parameters:
-	ignoreErrors:
-		- '#but returns PHPUnit_Framework_MockObject_MockObject#'
-		- '#PHPUnit_Framework_MockObject_MockObject given#'
-		- '#Access to an undefined property PHPUnit_Framework_MockObject_MockObject::\$\w+#'
-
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-phpunit/rules.neon
