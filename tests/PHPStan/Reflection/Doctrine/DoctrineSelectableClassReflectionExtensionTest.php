@@ -2,25 +2,23 @@
 
 namespace Tests\PHPStan\Reflection\Doctrine;
 
-use PHPStan\Broker\Broker;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpMethodReflection;
-use PHPUnit\Framework\TestCase;
 
-final class DoctrineSelectableClassReflectionExtensionTest extends TestCase
+final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Testing\TestCase
 {
+
+	/** @var \PHPStan\Broker\Broker */
+	private $broker;
 
 	/** @var \PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension */
 	private $extension;
 
 	protected function setUp()
 	{
-		$broker = $this->mockBroker();
+		$this->broker = $this->createBroker();
 
 		$this->extension = new DoctrineSelectableClassReflectionExtension();
-		$this->extension->setBroker($broker);
+		$this->extension->setBroker($this->broker);
 	}
 
 	/**
@@ -42,48 +40,15 @@ final class DoctrineSelectableClassReflectionExtensionTest extends TestCase
 	 */
 	public function testHasMethod(string $className, string $method, bool $expectedResult)
 	{
-		$classReflection = $this->mockClassReflection(new \ReflectionClass($className));
+		$classReflection = $this->broker->getClass($className);
 		$this->assertSame($expectedResult, $this->extension->hasMethod($classReflection, $method));
 	}
 
 	public function testGetMethod()
 	{
-		$classReflection = $this->mockClassReflection(new \ReflectionClass(\Doctrine\Common\Collections\Collection::class));
+		$classReflection = $this->broker->getClass(\Doctrine\Common\Collections\Collection::class);
 		$methodReflection = $this->extension->getMethod($classReflection, 'matching');
 		$this->assertSame('matching', $methodReflection->getName());
-	}
-
-	private function mockBroker(): Broker
-	{
-		$broker = $this->createMock(Broker::class);
-
-		$broker->method('getClass')->willReturnCallback(
-			function (string $className): ClassReflection {
-				return $this->mockClassReflection(new \ReflectionClass($className));
-			}
-		);
-
-		return $broker;
-	}
-
-	private function mockClassReflection(\ReflectionClass $reflectionClass): ClassReflection
-	{
-		$classReflection = $this->createMock(ClassReflection::class);
-		$classReflection->method('getName')->willReturn($reflectionClass->getName());
-		$classReflection->method('getNativeMethod')->willReturnCallback(
-			function (string $method) use ($reflectionClass): MethodReflection {
-				return $this->mockMethodReflection($reflectionClass->getMethod($method));
-			}
-		);
-
-		return $classReflection;
-	}
-
-	private function mockMethodReflection(\ReflectionMethod $method): PhpMethodReflection
-	{
-		$methodReflection = $this->createMock(PhpMethodReflection::class);
-		$methodReflection->method('getName')->willReturn($method->getName());
-		return $methodReflection;
 	}
 
 }

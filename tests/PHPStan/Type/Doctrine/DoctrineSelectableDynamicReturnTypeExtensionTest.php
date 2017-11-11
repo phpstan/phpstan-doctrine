@@ -53,14 +53,13 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 		$scope = $this->createMock(Scope::class);
 		$scope->method('getType')->will(
 			self::returnCallback(
-				function (\PhpParser\Node\Expr $node): Type {
-					return new ObjectType($node->getType());
+				function (): Type {
+					return new ObjectType(\Doctrine\Common\Collections\Collection::class);
 				}
 			)
 		);
 
 		$var = $this->createMock(Expr::class);
-		$var->method('getType')->willReturn(\Doctrine\Common\Collections\Collection::class);
 		$methodCall = $this->createMock(MethodCall::class);
 		$methodCall->var = $var;
 
