@@ -20,7 +20,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 		$this->repositoryClass = $repositoryClass;
 	}
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \Doctrine\ORM\EntityManager::class;
 	}

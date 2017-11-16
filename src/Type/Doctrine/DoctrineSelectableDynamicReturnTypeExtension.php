@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 class DoctrineSelectableDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \Doctrine\Common\Collections\Collection::class;
 	}

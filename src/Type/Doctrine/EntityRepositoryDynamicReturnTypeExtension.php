@@ -14,7 +14,7 @@ use PHPStan\Type\TypeCombinator;
 class EntityRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \Doctrine\ORM\EntityRepository::class;
 	}

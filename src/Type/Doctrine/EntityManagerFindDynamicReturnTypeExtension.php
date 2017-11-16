@@ -13,7 +13,7 @@ use PHPStan\Type\TypeCombinator;
 class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \Doctrine\ORM\EntityManager::class;
 	}
