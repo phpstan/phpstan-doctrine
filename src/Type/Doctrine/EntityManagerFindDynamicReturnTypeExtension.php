@@ -15,7 +15,7 @@ class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\Dynam
 
 	public function getClass(): string
 	{
-		return \Doctrine\ORM\EntityManager::class;
+		return \Doctrine\Common\Persistence\ObjectManager::class;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
