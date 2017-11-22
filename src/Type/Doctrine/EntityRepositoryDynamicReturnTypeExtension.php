@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -45,7 +46,7 @@ class EntityRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
 			return TypeCombinator::addNull($entityType);
 		}
 
-		return new ArrayType($entityType);
+		return new ArrayType(new IntegerType(), $entityType);
 	}
 
 }
