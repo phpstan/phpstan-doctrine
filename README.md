@@ -12,6 +12,14 @@ This extension provides following features:
 * Provides correct return type for `Doctrine\ORM\EntityManager::find`, `getReference` and `getPartialReference` when `Foo::class` entity class name is provided as the first argument
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`
 
+This extension does not yet support custom `repositoryClass` specified for each entity class. However, if your repositories have a common base class, you can configure it in your `phpstan.neon` and PHPStan will see additional methods you define in it:
+
+```
+parameters:
+	doctrine:
+		repositoryClass: MyApp\Doctrine\BetterEntityRepository
+```
+
 ## Usage
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
