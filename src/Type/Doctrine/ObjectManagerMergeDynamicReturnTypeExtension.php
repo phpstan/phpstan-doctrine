@@ -7,12 +7,12 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
 
-class EntityManagerMergeDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class ObjectManagerMergeDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
 	{
-		return \Doctrine\ORM\EntityManager::class;
+		return \Doctrine\Common\Persistence\ObjectManager::class;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

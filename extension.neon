@@ -22,7 +22,7 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\EntityManagerMergeDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\ObjectManagerMergeDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
