@@ -1,6 +1,7 @@
 parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
+		metadata: []
 		allCollectionsSelectable: true
 
 conditionalTags:
@@ -21,7 +22,7 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
 		arguments:
-			repositoryClass: %doctrine.repositoryClass%
+			metadataProvider: @PHPStan\DoctrineClassMetadataProvider
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -32,3 +33,9 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\DoctrineClassMetadataProvider
+		arguments:
+			repositoryClass: %doctrine.repositoryClass%
+			mapping: %doctrine.metadata%
+
