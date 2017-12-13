@@ -1,6 +1,7 @@
 parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
+		metadata: []
 
 services:
 	-
@@ -18,7 +19,7 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
 		arguments:
-			repositoryClass: %doctrine.repositoryClass%
+			metadataProvider: @PHPStan\DoctrineClassMetadataProvider
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -29,3 +30,9 @@ services:
 		class: PHPStan\Type\Doctrine\EntityRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\DoctrineClassMetadataProvider
+		arguments:
+			repositoryClass: %doctrine.repositoryClass%
+			mapping: %doctrine.metadata%
+
