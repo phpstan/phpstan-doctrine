@@ -6,12 +6,12 @@
 	"prefer-stable": true,
 	"extra": {
 		"branch-alias": {
-			"dev-master": "0.9-dev"
+			"dev-master": "0.10-dev"
 		}
 	},
 	"require": {
-		"php": "~7.0",
-		"phpstan/phpstan": "^0.9",
+		"php": "~7.1",
+		"phpstan/phpstan": "^0.10",
 		"doctrine/common": "^2.7",
 		"doctrine/orm": "^2.5"
 	},
@@ -19,9 +19,9 @@
 		"consistence/coding-standard": "~0.13.0",
 		"jakub-onderka/php-parallel-lint": "^0.9.2",
 		"phing/phing": "^2.16.0",
-		"phpstan/phpstan-phpunit": "^0.9",
-		"phpstan/phpstan-strict-rules": "^0.9",
-		"phpunit/phpunit": "^6.4",
+		"phpstan/phpstan-phpunit": "^0.10",
+		"phpstan/phpstan-strict-rules": "^0.10",
+		"phpunit/phpunit": "^7.0",
 		"slevomat/coding-standard": "^2.0"
 	},
 	"autoload": {

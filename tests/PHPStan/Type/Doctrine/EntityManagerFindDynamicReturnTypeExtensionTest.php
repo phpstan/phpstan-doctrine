@@ -17,7 +17,7 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 	/** @var \PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension */
 	private $extension;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->extension = new EntityManagerFindDynamicReturnTypeExtension();
 	}
@@ -41,11 +41,11 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 	 * @param string $method
 	 * @param bool $expectedResult
 	 */
-	public function testIsMethodSupported(string $method, bool $expectedResult)
+	public function testIsMethodSupported(string $method, bool $expectedResult): void
 	{
 		$methodReflection = $this->createMock(MethodReflection::class);
 		$methodReflection->method('getName')->willReturn($method);
-		$this->assertSame($expectedResult, $this->extension->isMethodSupported($methodReflection));
+		self::assertSame($expectedResult, $this->extension->isMethodSupported($methodReflection));
 	}
 
 	/**
@@ -112,7 +112,7 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 		string $entityClassName,
 		string $method,
 		string $expectedTypeDescription
-	)
+	): void
 	{
 		$methodReflection = $this->mockMethodReflection($method);
 		$scope = $this->mockScope();
@@ -120,7 +120,7 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 
 		$resultType = $this->extension->getTypeFromMethodCall($methodReflection, $methodCall, $scope);
 
-		$this->assertSame($expectedTypeDescription, $resultType->describe());
+		self::assertSame($expectedTypeDescription, $resultType->describe());
 	}
 
 	/**
@@ -195,7 +195,7 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 
 		$resultType = $this->extension->getTypeFromMethodCall($methodReflection, $methodCall, $scope);
 
-		$this->assertSame($expectedTypeDescription, $resultType->describe());
+		self::assertSame($expectedTypeDescription, $resultType->describe());
 	}
 
 	private function mockMethodReflection(string $method): MethodReflection

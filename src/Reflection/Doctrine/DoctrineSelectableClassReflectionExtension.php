@@ -8,7 +8,7 @@ class DoctrineSelectableClassReflectionExtension implements \PHPStan\Reflection\
 	/** @var \PHPStan\Broker\Broker */
 	private $broker;
 
-	public function setBroker(\PHPStan\Broker\Broker $broker)
+	public function setBroker(\PHPStan\Broker\Broker $broker): void
 	{
 		$this->broker = $broker;
 	}

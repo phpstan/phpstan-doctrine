@@ -17,7 +17,7 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 	/** @var \PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension */
 	private $extension;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->extension = new DoctrineSelectableDynamicReturnTypeExtension();
 	}
@@ -39,14 +39,14 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 	 * @param string $method
 	 * @param bool $expectedResult
 	 */
-	public function testIsMethodSupported(string $method, bool $expectedResult)
+	public function testIsMethodSupported(string $method, bool $expectedResult): void
 	{
 		$methodReflection = $this->createMock(MethodReflection::class);
 		$methodReflection->method('getName')->willReturn($method);
-		$this->assertSame($expectedResult, $this->extension->isMethodSupported($methodReflection));
+		self::assertSame($expectedResult, $this->extension->isMethodSupported($methodReflection));
 	}
 
-	public function testGetTypeFromMethodCall()
+	public function testGetTypeFromMethodCall(): void
 	{
 		$methodReflection = $this->createMock(MethodReflection::class);
 
@@ -65,8 +65,8 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 
 		$resultType = $this->extension->getTypeFromMethodCall($methodReflection, $methodCall, $scope);
 
-		$this->assertInstanceOf(ObjectType::class, $resultType);
-		$this->assertSame(\Doctrine\Common\Collections\Collection::class, $resultType->describe());
+		self::assertInstanceOf(ObjectType::class, $resultType);
+		self::assertSame(\Doctrine\Common\Collections\Collection::class, $resultType->describe());
 	}
 
 }
