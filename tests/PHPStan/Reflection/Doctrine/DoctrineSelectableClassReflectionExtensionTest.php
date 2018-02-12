@@ -13,7 +13,7 @@ final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Test
 	/** @var \PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension */
 	private $extension;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->broker = $this->createBroker();
 
@@ -38,17 +38,17 @@ final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Test
 	 * @param string $method
 	 * @param bool $expectedResult
 	 */
-	public function testHasMethod(string $className, string $method, bool $expectedResult)
+	public function testHasMethod(string $className, string $method, bool $expectedResult): void
 	{
 		$classReflection = $this->broker->getClass($className);
-		$this->assertSame($expectedResult, $this->extension->hasMethod($classReflection, $method));
+		self::assertSame($expectedResult, $this->extension->hasMethod($classReflection, $method));
 	}
 
-	public function testGetMethod()
+	public function testGetMethod(): void
 	{
 		$classReflection = $this->broker->getClass(\Doctrine\Common\Collections\Collection::class);
 		$methodReflection = $this->extension->getMethod($classReflection, 'matching');
-		$this->assertSame('matching', $methodReflection->getName());
+		self::assertSame('matching', $methodReflection->getName());
 	}
 
 }
