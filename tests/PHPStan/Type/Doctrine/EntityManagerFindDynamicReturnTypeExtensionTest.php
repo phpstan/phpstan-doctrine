@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 {
 
-	const ENTITY_CLASS_NAME = '\\Foo\\Bar';
+	private const ENTITY_CLASS_NAME = '\\Foo\\Bar';
 
 	/** @var \PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension */
 	private $extension;
@@ -187,7 +187,7 @@ final class EntityManagerFindDynamicReturnTypeExtensionTest extends TestCase
 		string $entityClassName,
 		string $method,
 		string $expectedTypeDescription
-	)
+	): void
 	{
 		$methodReflection = $this->mockMethodReflection($method);
 		$scope = $this->mockScope();
