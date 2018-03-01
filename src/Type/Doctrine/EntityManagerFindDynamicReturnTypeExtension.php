@@ -39,7 +39,6 @@ class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\Dynam
 			return $mixedType;
 		}
 		$argType = $scope->getType($methodCall->args[0]->value);
-		var_dump($argType);
 		if (!$argType instanceof ConstantStringType) {
 			return $mixedType;
 		}
