@@ -5,6 +5,8 @@ namespace PHPStan\Type\Doctrine;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
 class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
@@ -39,26 +41,12 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 		if (count($methodCall->args) === 0) {
 			return $methodReflection->getReturnType();
 		}
-		$arg = $methodCall->args[0]->value;
-		if (!($arg instanceof \PhpParser\Node\Expr\ClassConstFetch)) {
-			return $methodReflection->getReturnType();
+		$argType = $scope->getType($methodCall->args[0]->value);
+		if (!$argType instanceof ConstantStringType) {
+			return new MixedType();
 		}
 
-		$class = $arg->class;
-		if (!($class instanceof \PhpParser\Node\Name)) {
-			return $methodReflection->getReturnType();
-		}
-
-		$class = (string) $class;
-		if ($class === 'static') {
-			return $methodReflection->getReturnType();
-		}
-
-		if ($class === 'self') {
-			$class = $scope->getClassReflection()->getName();
-		}
-
-		return new EntityRepositoryType($class, $this->repositoryClass);
+		return new EntityRepositoryType($argType->getValue(), $this->repositoryClass);
 	}
 
 }
