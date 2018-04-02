@@ -12,9 +12,7 @@ use PHPStan\Type\Type;
 class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $repositoryClass;
 
 	public function __construct(string $repositoryClass)

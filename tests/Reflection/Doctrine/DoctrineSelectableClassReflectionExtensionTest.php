@@ -1,8 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\PHPStan\Reflection\Doctrine;
-
-use PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension;
+namespace PHPStan\Reflection\Doctrine;
 
 final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Testing\TestCase
 {

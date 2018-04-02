@@ -1,12 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\PHPStan\Type\Doctrine;
+namespace PHPStan\Type\Doctrine;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPUnit\Framework\TestCase;

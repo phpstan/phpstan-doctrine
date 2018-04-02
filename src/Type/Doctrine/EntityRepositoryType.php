@@ -7,9 +7,7 @@ use PHPStan\Type\ObjectType;
 class EntityRepositoryType extends ObjectType
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $entityClass;
 
 	public function __construct(string $entityClass, string $repositoryClass)

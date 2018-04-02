@@ -41,11 +41,9 @@
 				passthru="true"
 				checkreturn="true"
 		>
-			<arg value="--standard=ruleset.xml"/>
 			<arg value="--extensions=php"/>
 			<arg value="--encoding=utf-8"/>
 			<arg value="--tab-width=4"/>
-			<arg value="--ignore=tests/*/data"/>
 			<arg value="-sp"/>
 			<arg path="src"/>
 			<arg path="tests"/>
@@ -59,11 +57,9 @@
 				passthru="true"
 				checkreturn="true"
 		>
-			<arg value="--standard=ruleset.xml"/>
 			<arg value="--extensions=php"/>
 			<arg value="--encoding=utf-8"/>
 			<arg value="--tab-width=4"/>
-			<arg value="--ignore=tests/*/data"/>
 			<arg value="-sp"/>
 			<arg path="src"/>
 			<arg path="tests"/>
