@@ -65,7 +65,7 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 		$resultType = $this->extension->getTypeFromMethodCall($methodReflection, $methodCall, $scope);
 
 		self::assertInstanceOf(ObjectType::class, $resultType);
-		self::assertSame(\Doctrine\Common\Collections\Collection::class, $resultType->describe());
+		self::assertSame(\Doctrine\Common\Collections\Collection::class, $resultType->describe(\PHPStan\Type\VerbosityLevel::value()));
 	}
 
 }
