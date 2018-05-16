@@ -5,6 +5,7 @@ namespace PHPStan\Type\Doctrine;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -37,7 +38,9 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 	): Type
 	{
 		if (count($methodCall->args) === 0) {
-			return $methodReflection->getReturnType();
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
 		}
 		$argType = $scope->getType($methodCall->args[0]->value);
 		if (!$argType instanceof ConstantStringType) {

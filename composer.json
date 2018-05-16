@@ -13,7 +13,8 @@
 		"php": "~7.1",
 		"phpstan/phpstan": "^0.10",
 		"doctrine/common": "^2.7",
-		"doctrine/orm": "^2.5"
+		"doctrine/orm": "^2.5",
+		"nikic/php-parser": "^4.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.0.1",
