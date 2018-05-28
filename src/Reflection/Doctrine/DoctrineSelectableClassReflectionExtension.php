@@ -2,7 +2,7 @@
 
 namespace PHPStan\Reflection\Doctrine;
 
-class DoctrineSelectableClassReflectionExtension implements \PHPStan\Reflection\MethodsClassReflectionExtension, \PHPStan\Reflection\BrokerAwareClassReflectionExtension
+class DoctrineSelectableClassReflectionExtension implements \PHPStan\Reflection\MethodsClassReflectionExtension, \PHPStan\Reflection\BrokerAwareExtension
 {
 
 	/** @var \PHPStan\Broker\Broker */
@@ -15,13 +15,13 @@ class DoctrineSelectableClassReflectionExtension implements \PHPStan\Reflection\
 
 	public function hasMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): bool
 	{
-		return $classReflection->getName() === \Doctrine\Common\Collections\Collection::class
+		return $classReflection->getName() === 'Doctrine\Common\Collections\Collection'
 			&& $methodName === 'matching';
 	}
 
 	public function getMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): \PHPStan\Reflection\MethodReflection
 	{
-		$selectableReflection = $this->broker->getClass(\Doctrine\Common\Collections\Selectable::class);
+		$selectableReflection = $this->broker->getClass('Doctrine\Common\Collections\Selectable');
 		return $selectableReflection->getNativeMethod($methodName);
 	}
 
