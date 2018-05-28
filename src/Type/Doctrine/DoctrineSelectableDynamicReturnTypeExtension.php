@@ -12,7 +12,7 @@ class DoctrineSelectableDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 	public function getClass(): string
 	{
-		return \Doctrine\Common\Collections\Collection::class;
+		return 'Doctrine\Common\Collections\Collection';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

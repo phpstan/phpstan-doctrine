@@ -17,7 +17,7 @@ class EntityRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
 
 	public function getClass(): string
 	{
-		return \Doctrine\ORM\EntityRepository::class;
+		return 'Doctrine\ORM\EntityRepository';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

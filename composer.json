@@ -12,9 +12,6 @@
 	"require": {
 		"php": "~7.1",
 		"phpstan/phpstan": "^0.10",
-		"doctrine/common": "^2.7",
-		"doctrine/orm": "^2.5",
-		"doctrine/collections": "^1.0",
 		"nikic/php-parser": "^4.0"
 	},
 	"require-dev": {
@@ -25,7 +22,15 @@
 		"phpstan/phpstan-phpunit": "^0.10",
 		"phpstan/phpstan-strict-rules": "^0.10",
 		"phpunit/phpunit": "^7.0",
-		"slevomat/coding-standard": "^4.5.2"
+		"slevomat/coding-standard": "^4.5.2",
+		"doctrine/common": "^2.7",
+		"doctrine/orm": "^2.5",
+		"doctrine/collections": "^1.0"
+	},
+	"conflict": {
+		"doctrine/common": "<2.7",
+		"doctrine/orm": "<2.5",
+		"doctrine/collections": "<1.0"
 	},
 	"autoload": {
 		"psr-4": {
