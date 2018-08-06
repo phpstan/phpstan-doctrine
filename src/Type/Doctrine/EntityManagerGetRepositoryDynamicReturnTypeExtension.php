@@ -23,7 +23,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 
 	public function getClass(): string
 	{
-		return 'Doctrine\Common\Persistence\ObjectManager';
+		return 'Doctrine\ORM\EntityManagerInterface';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
