@@ -2,29 +2,24 @@
 
 namespace PHPStan\Type\Doctrine;
 
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\VerbosityLevel;
+use const E_USER_DEPRECATED;
+use function trigger_error;
 
-class EntityRepositoryType extends ObjectType
+class EntityRepositoryType extends ObjectRepositoryType
 {
-
-	/** @var string */
-	private $entityClass;
 
 	public function __construct(string $entityClass, string $repositoryClass)
 	{
-		parent::__construct($repositoryClass);
-		$this->entityClass = $entityClass;
-	}
+		@trigger_error(
+			sprintf(
+				'Class %s is deprecated and will be removed. Use %s instead',
+				self::class,
+				ObjectRepositoryType::class
+			),
+			E_USER_DEPRECATED
+		);
 
-	public function getEntityClass(): string
-	{
-		return $this->entityClass;
-	}
-
-	public function describe(VerbosityLevel $level): string
-	{
-		return sprintf('%s<%s>', parent::describe($level), $this->entityClass);
+		parent::__construct($entityClass, $repositoryClass);
 	}
 
 }
