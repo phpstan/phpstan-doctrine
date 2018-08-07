@@ -1,6 +1,15 @@
 parameters:
 	doctrine:
-		repositoryClass: Doctrine\ORM\EntityRepository
+		odm:
+			mongodb:
+				managerClass: Doctrine\ODM\MongoDB\DocumentManager
+				repositoryClass: Doctrine\ODM\MongoDB\DocumentRepository
+		orm:
+			managerClass: Doctrine\ORM\EntityManagerInterface
+			repositoryClass: Doctrine\ORM\EntityRepository
+		persistence:
+			managerClass: Doctrine\Common\Persistence\ObjectManager
+			repositoryClass: Doctrine\Common\Persistence\ObjectRepository
 
 services:
 	-
@@ -11,14 +20,9 @@ services:
 		class: PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+
 	-
-		class: PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
-		arguments:
-			repositoryClass: %doctrine.repositoryClass%
+		class: PHPStan\Type\Doctrine\ObjectManagerFindDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -26,6 +30,28 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\EntityRepositoryDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			managerClass: %doctrine.persistence.managerClass%
+			repositoryClass: %doctrine.persistence.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			managerClass: %doctrine.odm.mongodb.managerClass%
+			repositoryClass: %doctrine.odm.mongodb.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			managerClass: %doctrine.orm.managerClass%
+			repositoryClass: %doctrine.orm.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
