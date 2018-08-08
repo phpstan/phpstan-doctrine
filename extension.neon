@@ -2,12 +2,15 @@ parameters:
 	doctrine:
 		odm:
 			mongodb:
+				registryClass: Doctrine\Bundle\MongoDBBundle\ManagerRegistry
 				managerClass: Doctrine\ODM\MongoDB\DocumentManager
 				repositoryClass: Doctrine\ODM\MongoDB\DocumentRepository
 		orm:
+			registryClass: Doctrine\Bundle\DoctrineBundle\Registry
 			managerClass: Doctrine\ORM\EntityManagerInterface
 			repositoryClass: Doctrine\ORM\EntityRepository
 		persistence:
+			registryClass: Doctrine\Common\Persistence\ManagerRegistry
 			managerClass: Doctrine\Common\Persistence\ObjectManager
 			repositoryClass: Doctrine\Common\Persistence\ObjectRepository
 
@@ -52,6 +55,50 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
 		arguments:
 			managerClass: %doctrine.orm.managerClass%
+			repositoryClass: %doctrine.orm.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetManagerDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.persistence.registryClass%
+			managerClass: %doctrine.persistence.managerClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetManagerDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.odm.mongodb.registryClass%
+			managerClass: %doctrine.odm.mongodb.managerClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetManagerDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.orm.registryClass%
+			managerClass: %doctrine.orm.managerClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.persistence.registryClass%
+			repositoryClass: %doctrine.persistence.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.odm.mongodb.registryClass%
+			repositoryClass: %doctrine.odm.mongodb.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			registryClass: %doctrine.orm.registryClass%
 			repositoryClass: %doctrine.orm.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
