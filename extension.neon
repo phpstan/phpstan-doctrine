@@ -2,6 +2,7 @@ parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
 		allCollectionsSelectable: true
+		objectManagerLoader: ~
 
 conditionalTags:
 	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
@@ -20,8 +21,6 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
-		arguments:
-			repositoryClass: %doctrine.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -38,3 +37,7 @@ services:
 			repositoryClass: %doctrine.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
+		arguments:
+			objectManagerLoader: %doctrine.objectManagerLoader%

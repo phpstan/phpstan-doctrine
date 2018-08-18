@@ -13,12 +13,12 @@ use PHPStan\Type\Type;
 abstract class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	/** @var string */
-	private $repositoryClass;
+	/** @var ObjectMetadataResolver */
+	private $metadataResolver;
 
-	public function __construct(string $repositoryClass)
+	public function __construct(ObjectMetadataResolver $metadataResolver)
 	{
-		$this->repositoryClass = $repositoryClass;
+		$this->metadataResolver = $metadataResolver;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
@@ -42,7 +42,14 @@ abstract class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\
 			return new MixedType();
 		}
 
-		return new ObjectRepositoryType($argType->getValue(), $this->repositoryClass);
+		$objectName = $argType->getValue();
+		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
+
+		if ($repositoryClass === null) {
+			return new MixedType();
+		}
+
+		return new ObjectRepositoryType($objectName, $repositoryClass);
 	}
 
 }
