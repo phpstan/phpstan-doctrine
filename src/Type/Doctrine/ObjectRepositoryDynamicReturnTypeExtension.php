@@ -12,12 +12,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
-class EntityRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class ObjectRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
 	{
-		return 'Doctrine\ORM\EntityRepository';
+		return 'Doctrine\Common\Persistence\ObjectRepository';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
@@ -36,7 +36,7 @@ class EntityRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
 	): Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
-		if (!$calledOnType instanceof EntityRepositoryType) {
+		if (!$calledOnType instanceof ObjectRepositoryType) {
 			return new MixedType();
 		}
 		$methodName = $methodReflection->getName();

@@ -11,7 +11,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
-class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class ObjectManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
