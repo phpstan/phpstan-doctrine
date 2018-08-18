@@ -12,7 +12,10 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 	 */
 	public function dataTopics(): array
 	{
-		return [['entityManagerDynamicReturn']];
+		return [
+			['entityManagerDynamicReturn'],
+			['entityRepositoryDynamicReturn'],
+		];
 	}
 
 	public function getDataPath(): string
