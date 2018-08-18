@@ -3,4 +3,4 @@ includes:
 
 parameters:
 	doctrine:
-		repositoryClass: Doctrine\ODM\MongoDB\DocumentRepository
+		objectManagerLoader: tests/DoctrineIntegration/ODM/document-manager.php

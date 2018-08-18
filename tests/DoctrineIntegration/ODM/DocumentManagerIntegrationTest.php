@@ -16,6 +16,7 @@ final class DocumentManagerIntegrationTest extends LevelsTestCase
 			['documentManagerDynamicReturn'],
 			['documentRepositoryDynamicReturn'],
 			['documentManagerMergeReturn'],
+			['customRepositoryUsage'],
 		];
 	}
 

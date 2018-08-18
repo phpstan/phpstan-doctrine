@@ -1,6 +1,6 @@
 parameters:
 	doctrine:
-		repositoryClass: Doctrine\ORM\EntityRepository
+		objectManagerLoader: ~
 
 services:
 	-
@@ -17,8 +17,6 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
-		arguments:
-			repositoryClass: %doctrine.repositoryClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -29,3 +27,7 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
+		arguments:
+			objectManagerLoader: %doctrine.objectManagerLoader%
