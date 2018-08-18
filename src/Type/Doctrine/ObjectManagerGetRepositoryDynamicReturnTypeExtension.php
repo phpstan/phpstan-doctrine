@@ -10,7 +10,7 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
-class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class ObjectManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
 	/** @var string */
@@ -47,7 +47,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 			return new MixedType();
 		}
 
-		return new EntityRepositoryType($argType->getValue(), $this->repositoryClass);
+		return new ObjectRepositoryType($argType->getValue(), $this->repositoryClass);
 	}
 
 }

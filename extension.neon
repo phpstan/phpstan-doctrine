@@ -15,11 +15,11 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\EntityManagerFindDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\ObjectManagerFindDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
 		arguments:
 			repositoryClass: %doctrine.repositoryClass%
 		tags:
@@ -29,6 +29,6 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\EntityRepositoryDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension

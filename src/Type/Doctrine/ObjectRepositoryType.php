@@ -5,7 +5,7 @@ namespace PHPStan\Type\Doctrine;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\VerbosityLevel;
 
-class EntityRepositoryType extends ObjectType
+class ObjectRepositoryType extends ObjectType
 {
 
 	/** @var string */
