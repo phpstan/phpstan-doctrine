@@ -43,12 +43,7 @@ class EntityManagerFindDynamicReturnTypeExtension implements \PHPStan\Type\Dynam
 			return $mixedType;
 		}
 
-		$type = new ObjectType($argType->getValue());
-		if ($methodReflection->getName() === 'find') {
-			$type = TypeCombinator::addNull($type);
-		}
-
-		return $type;
+		return TypeCombinator::addNull(new ObjectType($argType->getValue()));
 	}
 
 }
