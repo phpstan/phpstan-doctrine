@@ -25,12 +25,15 @@
 		"slevomat/coding-standard": "^4.5.2",
 		"doctrine/common": "^2.7",
 		"doctrine/orm": "^2.5",
-		"doctrine/collections": "^1.0"
+		"doctrine/collections": "^1.0",
+		"doctrine/mongodb-odm": "^1.2",
+		"alcaeus/mongo-php-adapter": "^1.1"
 	},
 	"conflict": {
 		"doctrine/common": "<2.7",
 		"doctrine/orm": "<2.5",
-		"doctrine/collections": "<1.0"
+		"doctrine/collections": "<1.0",
+		"doctrine/mongodb-odm": "<1.2"
 	},
 	"autoload": {
 		"psr-4": {
@@ -39,5 +42,10 @@
 	},
 	"autoload-dev": {
 		"classmap": ["tests/"]
+	},
+	"config": {
+		"platform": {
+			"ext-mongo": "1.6.16"
+		}
 	}
 }
