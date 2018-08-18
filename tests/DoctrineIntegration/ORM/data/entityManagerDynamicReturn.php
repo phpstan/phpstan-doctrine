@@ -32,12 +32,22 @@ class Example
 	public function getReferenceDynamicType(): void
 	{
 		$test = $this->entityManager->getReference(MyEntity::class, 1);
+
+		if ($test === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
 		$test->doSomething();
 	}
 
 	public function getPartialReferenceDynamicType(): void
 	{
 		$test = $this->entityManager->getPartialReference(MyEntity::class, 1);
+
+		if ($test === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
 		$test->doSomething();
 	}
 }
