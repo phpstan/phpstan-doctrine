@@ -8,6 +8,10 @@ services:
 		tags:
 			- phpstan.broker.methodsClassReflectionExtension
 	-
+		class: PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension
+		tags:
+			- phpstan.broker.methodsClassReflectionExtension
+	-
 		class: PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
