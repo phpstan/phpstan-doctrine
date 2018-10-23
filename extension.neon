@@ -1,8 +1,8 @@
 parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
-		repositoryPattern: /(.*)(Entity)(.*)/
-		repositoryReplace: $1Repository$3Repository
+		repositoryPattern: "/(.*)(Entity)(.*)/"
+		repositoryReplace: "$1Repository$3Repository"
 
 services:
 	-
