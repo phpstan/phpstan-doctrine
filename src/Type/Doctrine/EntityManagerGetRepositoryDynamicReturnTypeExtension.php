@@ -59,7 +59,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 
 		$repositoryClass = preg_replace($this->repositoryPattern, $this->repositoryReplace, $argType->getValue());
 
-		if (!class_exists($repositoryClass)) {
+		if (!$repositoryClass || !class_exists($repositoryClass)) {
 			$repositoryClass = $this->repositoryClass;
 		}
 
