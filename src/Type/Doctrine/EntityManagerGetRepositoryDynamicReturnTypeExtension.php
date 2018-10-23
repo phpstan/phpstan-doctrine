@@ -50,9 +50,7 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 				$methodReflection->getVariants()
 			)->getReturnType();
 		}
-
 		$argType = $scope->getType($methodCall->args[0]->value);
-
 		if (!$argType instanceof ConstantStringType) {
 			return new MixedType();
 		}
