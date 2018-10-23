@@ -1,6 +1,8 @@
 parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
+		repositoryPattern: /(.*)(Entity)(.*)/
+		repositoryReplace: $1Repository$3Repository
 
 services:
 	-
@@ -19,6 +21,8 @@ services:
 		class: PHPStan\Type\Doctrine\EntityManagerGetRepositoryDynamicReturnTypeExtension
 		arguments:
 			repositoryClass: %doctrine.repositoryClass%
+			repositoryPattern: %doctrine.repositoryPattern%
+			repositoryReplace: %doctrine.repositoryReplace%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
