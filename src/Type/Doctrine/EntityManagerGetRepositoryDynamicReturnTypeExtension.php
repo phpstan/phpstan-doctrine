@@ -16,9 +16,17 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 	/** @var string */
 	private $repositoryClass;
 
-	public function __construct(string $repositoryClass)
+	/** @var string */
+	private $repositoryPattern;
+
+	/** @var string */
+	private $repositoryReplace;
+
+	public function __construct(string $repositoryClass, string $repositoryPattern, string $repositoryReplace)
 	{
 		$this->repositoryClass = $repositoryClass;
+		$this->repositoryPattern = $repositoryPattern;
+		$this->repositoryReplace = $repositoryReplace;
 	}
 
 	public function getClass(): string
@@ -42,12 +50,20 @@ class EntityManagerGetRepositoryDynamicReturnTypeExtension implements \PHPStan\T
 				$methodReflection->getVariants()
 			)->getReturnType();
 		}
+
 		$argType = $scope->getType($methodCall->args[0]->value);
+
 		if (!$argType instanceof ConstantStringType) {
 			return new MixedType();
 		}
 
-		return new EntityRepositoryType($argType->getValue(), $this->repositoryClass);
+		$repositoryClass = preg_replace($this->repositoryPattern, $this->repositoryReplace, $argType->getValue());
+
+		if (!class_exists($repositoryClass)) {
+			$repositoryClass = $this->repositoryClass;
+		}
+
+		return new EntityRepositoryType($argType->getValue(), $repositoryClass);
 	}
 
 }
