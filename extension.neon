@@ -1,12 +1,15 @@
 parameters:
 	doctrine:
 		repositoryClass: Doctrine\ORM\EntityRepository
+		allCollectionsSelectable: true
+
+conditionalTags:
+	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
+		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%
 
 services:
 	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
-		tags:
-			- phpstan.broker.methodsClassReflectionExtension
 	-
 		class: PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension
 		tags:
