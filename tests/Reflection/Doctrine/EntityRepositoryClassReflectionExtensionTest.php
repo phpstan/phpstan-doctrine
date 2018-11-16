@@ -5,15 +5,15 @@ namespace PHPStan\Reflection\Doctrine;
 final class EntityRepositoryClassReflectionExtensionTest extends \PHPStan\Testing\TestCase
 {
 
-    /** @var \PHPStan\Broker\Broker */
-    private $broker;
+	/** @var \PHPStan\Broker\Broker */
+	private $broker;
 
-    /** @var \PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension */
-    private $extension;
+	/** @var \PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension */
+	private $extension;
 
-    protected function setUp(): void
-    {
-        $this->broker = $this->createBroker();
+	protected function setUp(): void
+	{
+		$this->broker = $this->createBroker();
 		$this->extension = new EntityRepositoryClassReflectionExtension();
 	}
 
@@ -34,7 +34,7 @@ final class EntityRepositoryClassReflectionExtensionTest extends \PHPStan\Testin
 
 	/**
 	 * @dataProvider dataHasMethod
-     *
+	 *
 	 * @param string $className
 	 * @param string $method
 	 * @param bool $expectedResult
@@ -48,7 +48,7 @@ final class EntityRepositoryClassReflectionExtensionTest extends \PHPStan\Testin
 
 	public function testGetMethod(): void
 	{
-	    $methodName = 'findOneByString';
+		$methodName = 'findOneByString';
 
 		$classReflection = $this->broker->getClass(\Doctrine\ORM\EntityRepository::class);
 		$methodReflection = $this->extension->getMethod($classReflection, $methodName);
