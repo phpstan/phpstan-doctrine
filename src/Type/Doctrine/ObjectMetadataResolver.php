@@ -3,8 +3,6 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ODM\MongoDB\Mapping\ClassMetadata as ODMMetadata;
-use Doctrine\ORM\Mapping\ClassMetadata as ORMMetadata;
 use RuntimeException;
 use function file_exists;
 use function is_readable;
@@ -32,7 +30,12 @@ final class ObjectMetadataResolver
 		}
 	}
 
-	private function getObjectManager(string $objectManagerLoader): ObjectManager
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
+	 * @param string $objectManagerLoader
+	 * @return ObjectManager
+	 */
+	private function getObjectManager(string $objectManagerLoader)
 	{
 		if (! file_exists($objectManagerLoader) && ! is_readable($objectManagerLoader)) {
 			throw new RuntimeException('Object manager could not be loaded');
@@ -49,12 +52,18 @@ final class ObjectMetadataResolver
 
 		$metadata = $this->objectManager->getClassMetadata($className);
 
-		if ($metadata instanceof ORMMetadata) {
-			return $metadata->customRepositoryClassName ?? $this->repositoryClass;
+		$ormMetadataClass = 'Doctrine\ORM\Mapping\ClassMetadata';
+		if ($metadata instanceof $ormMetadataClass) {
+			/** @var \Doctrine\ORM\Mapping\ClassMetadata $ormMetadata */
+			$ormMetadata = $metadata;
+			return $ormMetadata->customRepositoryClassName ?? $this->repositoryClass;
 		}
 
-		if ($metadata instanceof ODMMetadata) {
-			return $metadata->customRepositoryClassName ?? $this->repositoryClass;
+		$odmMetadataClass = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadata';
+		if ($metadata instanceof $odmMetadataClass) {
+			/** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata $odmMetadata */
+			$odmMetadata = $metadata;
+			return $odmMetadata->customRepositoryClassName ?? $this->repositoryClass;
 		}
 
 		return $this->repositoryClass;
