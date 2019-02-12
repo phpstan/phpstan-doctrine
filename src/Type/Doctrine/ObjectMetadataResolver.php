@@ -12,12 +12,18 @@ use function is_readable;
 final class ObjectMetadataResolver
 {
 
-	/** @var ObjectManager */
+	/** @var ?ObjectManager */
 	private $objectManager;
 
-	public function __construct(string $objectManagerLoader)
+	/** @var string */
+	private $repositoryClass;
+
+	public function __construct(?string $objectManagerLoader, string $repositoryClass)
 	{
-		$this->objectManager = $this->getObjectManager($objectManagerLoader);
+		if ($objectManagerLoader !== null) {
+			$this->objectManager = $this->getObjectManager($objectManagerLoader);
+		}
+		$this->repositoryClass = $repositoryClass;
 	}
 
 	private function getObjectManager(string $objectManagerLoader): ObjectManager
@@ -29,8 +35,12 @@ final class ObjectMetadataResolver
 		return require $objectManagerLoader;
 	}
 
-	public function getRepositoryClass(string $className): ?string
+	public function getRepositoryClass(string $className): string
 	{
+		if ($this->objectManager === null) {
+			return $this->repositoryClass;
+		}
+
 		$metadata = $this->objectManager->getClassMetadata($className);
 
 		if ($metadata instanceof ORMMetadata) {
@@ -41,7 +51,7 @@ final class ObjectMetadataResolver
 			return $metadata->customRepositoryClassName ?? 'Doctrine\ODM\MongoDB\DocumentRepository';
 		}
 
-		return null;
+		return $this->repositoryClass;
 	}
 
 }

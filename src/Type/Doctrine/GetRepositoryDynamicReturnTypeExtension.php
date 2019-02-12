@@ -45,10 +45,6 @@ abstract class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\
 		$objectName = $argType->getValue();
 		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
 
-		if ($repositoryClass === null) {
-			return new MixedType();
-		}
-
 		return new ObjectRepositoryType($objectName, $repositoryClass);
 	}
 
