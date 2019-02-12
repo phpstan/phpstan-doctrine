@@ -29,6 +29,14 @@ class DqlRuleTest extends RuleTestCase
 				'DQL: [Semantical Error] line 0, col 14 near \'Foo e\': Error: Class \'Foo\' is not defined.',
 				44,
 			],
+			[
+				'DQL: [Semantical Error] line 0, col 17 near \'Foo\': Error: Class \'Foo\' is not defined.',
+				51,
+			],
+			[
+				'DQL: [Semantical Error] line 0, col 17 near \'Foo\': Error: Class \'Foo\' is not defined.',
+				59,
+			],
 		]);
 	}
 

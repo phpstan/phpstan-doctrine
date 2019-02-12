@@ -46,4 +46,20 @@ class TestRepository
 		)->getResult();
 	}
 
+	public function heredoc(): void
+	{
+		$this->entityManager->createQuery(<<<DQL
+			SELECT e FROM Foo
+DQL
+		)->getResult();
+	}
+
+	public function nowdoc(): void
+	{
+		$this->entityManager->createQuery(<<<'DQL'
+			SELECT e FROM Foo
+DQL
+		)->getResult();
+	}
+
 }
