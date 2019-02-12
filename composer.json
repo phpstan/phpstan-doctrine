@@ -12,7 +12,13 @@
 	"require": {
 		"php": "~7.1",
 		"phpstan/phpstan": "^0.11",
-		"nikic/php-parser": "^4.0"
+		"nikic/php-parser": "^4.0",
+		"doctrine/orm": "^2.5",
+		"doctrine/common": "^2.7",
+		"doctrine/annotations": "^1.5",
+		"doctrine/persistence": "^1.1",
+		"doctrine/dbal": "^2.5",
+		"doctrine/event-manager": "^1.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.0.1",
@@ -23,14 +29,7 @@
 		"phpstan/phpstan-strict-rules": "^0.11",
 		"phpunit/phpunit": "^7.0",
 		"slevomat/coding-standard": "^4.5.2",
-		"doctrine/common": "^2.7",
-		"doctrine/orm": "^2.5",
 		"doctrine/collections": "^1.0"
-	},
-	"conflict": {
-		"doctrine/common": "<2.7",
-		"doctrine/orm": "<2.5",
-		"doctrine/collections": "<1.0"
 	},
 	"autoload": {
 		"psr-4": {
