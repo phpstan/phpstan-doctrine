@@ -11,6 +11,7 @@ This extension provides following features:
 
 * Provides correct return type for `Doctrine\ORM\EntityManager::find`, `getReference` and `getPartialReference` when `Foo::class` entity class name is provided as the first argument
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
+* Basic DQL validation for parse errors, unknown entity classes and unknown persistent fields.
 
 ## Usage
 
@@ -20,11 +21,18 @@ To use this extension, require it in [Composer](https://getcomposer.org/):
 composer require --dev phpstan/phpstan-doctrine
 ```
 
-And include extension.neon in your project's PHPStan config:
+Include extension.neon in your project's PHPStan config:
 
 ```
 includes:
 	- vendor/phpstan/phpstan-doctrine/extension.neon
+```
+
+If you're interested in DQL validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
+
+```
+includes:
+	- vendor/phpstan/phpstan-doctrine/rules.neon
 ```
 
 ## Configuration

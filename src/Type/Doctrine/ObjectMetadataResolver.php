@@ -18,7 +18,7 @@ final class ObjectMetadataResolver
 	public function __construct(?string $objectManagerLoader, ?string $repositoryClass)
 	{
 		if ($objectManagerLoader !== null) {
-			$this->objectManager = $this->getObjectManager($objectManagerLoader);
+			$this->objectManager = $this->loadObjectManager($objectManagerLoader);
 		}
 		if ($repositoryClass !== null) {
 			$this->repositoryClass = $repositoryClass;
@@ -29,14 +29,12 @@ final class ObjectMetadataResolver
 		}
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
-	 * @param string $objectManagerLoader
-	 * @return ObjectManager
-	 */
-	private function getObjectManager(string $objectManagerLoader)
+	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
 	{
-		if (! file_exists($objectManagerLoader) && ! is_readable($objectManagerLoader)) {
+		if (
+			!file_exists($objectManagerLoader)
+			|| !is_readable($objectManagerLoader)
+		) {
 			throw new \PHPStan\ShouldNotHappenException('Object manager could not be loaded');
 		}
 
@@ -66,6 +64,11 @@ final class ObjectMetadataResolver
 		}
 
 		return $this->repositoryClass;
+	}
+
+	public function getObjectManager(): ?ObjectManager
+	{
+		return $this->objectManager;
 	}
 
 }
