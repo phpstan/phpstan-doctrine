@@ -32,3 +32,9 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\ManagerRegistryGetRepositoryDynamicReturnTypeExtension
+		arguments:
+			repositoryClass: %doctrine.repositoryClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension

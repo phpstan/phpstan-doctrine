@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Call to an undefined method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\Persistence\\ManagerRegistryRepositoryDynamicReturn\\MyEntity>::nonexistant().",
+        "line": 31,
+        "ignorable": true
+    }
+]
