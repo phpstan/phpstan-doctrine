@@ -1,0 +1,2 @@
+rules:
+	- PHPStan\Rules\Doctrine\ORM\DqlRule
