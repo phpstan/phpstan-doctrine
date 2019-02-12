@@ -10,15 +10,27 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
-abstract class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
+
+	/** @var string */
+	private $managerClass;
 
 	/** @var ObjectMetadataResolver */
 	private $metadataResolver;
 
-	public function __construct(ObjectMetadataResolver $metadataResolver)
+	public function __construct(
+		string $managerClass,
+		ObjectMetadataResolver $metadataResolver
+	)
 	{
+		$this->managerClass = $managerClass;
 		$this->metadataResolver = $metadataResolver;
+	}
+
+	public function getClass(): string
+	{
+		return $this->managerClass;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

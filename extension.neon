@@ -20,10 +20,6 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\ObjectManagerGetRepositoryDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: PHPStan\Type\Doctrine\ObjectManagerMergeDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
@@ -32,11 +28,21 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\ManagerRegistryGetRepositoryDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
+
+	managerRegistryGetRepository:
+		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+		arguments:
+			managerClass: Doctrine\Common\Persistence\ManagerRegistry
+
+	objectManagerGetRepository:
+		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+		arguments:
+			managerClass: Doctrine\Common\Persistence\ObjectManager
