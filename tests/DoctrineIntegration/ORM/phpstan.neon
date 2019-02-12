@@ -1,2 +1,8 @@
 includes:
 	- ../../../extension.neon
+parameters:
+	doctrine:
+		metadata:
+			PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnRepository:
+				type: annotation
+				paths: []
