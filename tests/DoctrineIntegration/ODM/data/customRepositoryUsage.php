@@ -25,6 +25,11 @@ class Example
 		$test = $this->repository->get('testing');
 		$test->doSomethingElse();
 	}
+
+	public function nonexistant(): void
+	{
+		$this->repository->nonexistant();
+	}
 }
 
 /**
