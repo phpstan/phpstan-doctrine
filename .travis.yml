@@ -3,7 +3,6 @@ php:
   - 7.1
   - 7.2
 before_script:
-  - pecl install -f mongodb-stable
   - composer self-update
   - composer install
 script:
