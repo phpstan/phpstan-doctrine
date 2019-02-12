@@ -3,7 +3,6 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use RuntimeException;
 use function file_exists;
 use function is_readable;
 
