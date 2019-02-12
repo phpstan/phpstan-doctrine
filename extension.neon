@@ -1,6 +1,6 @@
 parameters:
 	doctrine:
-		repositoryClass: Doctrine\ORM\EntityRepository
+		repositoryClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 

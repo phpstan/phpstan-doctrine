@@ -18,12 +18,18 @@ final class ObjectMetadataResolver
 	/** @var string */
 	private $repositoryClass;
 
-	public function __construct(?string $objectManagerLoader, string $repositoryClass)
+	public function __construct(?string $objectManagerLoader, ?string $repositoryClass)
 	{
 		if ($objectManagerLoader !== null) {
 			$this->objectManager = $this->getObjectManager($objectManagerLoader);
 		}
-		$this->repositoryClass = $repositoryClass;
+		if ($repositoryClass !== null) {
+			$this->repositoryClass = $repositoryClass;
+		} elseif ($this->objectManager !== null && get_class($this->objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
+			$this->repositoryClass = 'Doctrine\ODM\MongoDB\DocumentRepository';
+		} else {
+			$this->repositoryClass = 'Doctrine\ORM\EntityRepository';
+		}
 	}
 
 	private function getObjectManager(string $objectManagerLoader): ObjectManager
@@ -44,11 +50,11 @@ final class ObjectMetadataResolver
 		$metadata = $this->objectManager->getClassMetadata($className);
 
 		if ($metadata instanceof ORMMetadata) {
-			return $metadata->customRepositoryClassName ?? 'Doctrine\ORM\EntityRepository';
+			return $metadata->customRepositoryClassName ?? $this->repositoryClass;
 		}
 
 		if ($metadata instanceof ODMMetadata) {
-			return $metadata->customRepositoryClassName ?? 'Doctrine\ODM\MongoDB\DocumentRepository';
+			return $metadata->customRepositoryClassName ?? $this->repositoryClass;
 		}
 
 		return $this->repositoryClass;
