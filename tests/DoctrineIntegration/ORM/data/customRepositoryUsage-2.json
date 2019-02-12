@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyRepository::nonexistant().",
+        "line": 30,
+        "ignorable": true
+    }
+]
