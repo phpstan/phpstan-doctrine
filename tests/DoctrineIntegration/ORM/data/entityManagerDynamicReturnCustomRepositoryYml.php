@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnRepository;
+namespace PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryYml;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -29,20 +29,15 @@ class Example
 
 		$test->doSomething();
 	}
+
+	public function errorDynamicType(): void
+	{
+		$this->entityManager->getRepository(MyEntity::class)->nonexistant();
+	}
 }
 
-/**
- * @ORM\Entity(repositoryClass="MyEntityRepository")
- */
 class MyEntity
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 *
-	 * @var int
-	 */
 	private $id;
 
 	public function doSomething(): void

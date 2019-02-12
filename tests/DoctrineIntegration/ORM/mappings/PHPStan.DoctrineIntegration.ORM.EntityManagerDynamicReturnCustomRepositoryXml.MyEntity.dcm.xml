@@ -1,0 +1,8 @@
+<doctrine-mapping>
+    <entity name="PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryXml\MyEntity"
+            repository-class="PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryXml\MyEntityRepository">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+    </entity>
+</doctrine-mapping>

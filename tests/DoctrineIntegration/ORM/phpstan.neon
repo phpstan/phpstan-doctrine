@@ -3,6 +3,14 @@ includes:
 parameters:
 	doctrine:
 		metadata:
-			PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnRepository:
+			PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryAnnotations:
 				type: annotation
 				paths: []
+			PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryXml:
+				type: xml
+				paths:
+					- tests/DoctrineIntegration/ORM/mappings/
+			PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryYml:
+				type: yml
+				paths:
+					- tests/DoctrineIntegration/ORM/mappings/

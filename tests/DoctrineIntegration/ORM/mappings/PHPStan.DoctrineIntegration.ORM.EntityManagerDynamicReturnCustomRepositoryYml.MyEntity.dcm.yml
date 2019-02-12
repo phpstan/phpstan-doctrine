@@ -1,0 +1,8 @@
+PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryYml\MyEntity:
+  type: entity
+  repositoryClass: PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturnCustomRepositoryYml\MyEntityRepository
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO

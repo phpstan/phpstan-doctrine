@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturnCustomRepositoryAnnotations\\MyEntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturnCustomRepositoryAnnotations\\MyEntity>::nonexistant().",
+        "line": 35,
+        "ignorable": true
+    }
+]

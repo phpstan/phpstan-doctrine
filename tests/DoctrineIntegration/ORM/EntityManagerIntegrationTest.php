@@ -14,8 +14,10 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 	{
 		return [
 			['entityManagerDynamicReturn'],
+			['entityManagerDynamicReturnCustomRepositoryAnnotations'],
+			['entityManagerDynamicReturnCustomRepositoryXml'],
+			['entityManagerDynamicReturnCustomRepositoryYml'],
 			['entityRepositoryDynamicReturn'],
-			['entityManagerDynamicReturnRepository'],
 			['entityManagerMergeReturn'],
 		];
 	}
