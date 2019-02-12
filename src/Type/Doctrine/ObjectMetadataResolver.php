@@ -38,7 +38,7 @@ final class ObjectMetadataResolver
 	private function getObjectManager(string $objectManagerLoader)
 	{
 		if (! file_exists($objectManagerLoader) && ! is_readable($objectManagerLoader)) {
-			throw new RuntimeException('Object manager could not be loaded');
+			throw new \PHPStan\ShouldNotHappenException('Object manager could not be loaded');
 		}
 
 		return require $objectManagerLoader;
