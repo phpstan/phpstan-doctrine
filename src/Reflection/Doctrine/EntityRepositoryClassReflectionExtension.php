@@ -9,8 +9,14 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 
 	public function hasMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): bool
 	{
-		return $classReflection->getName() === 'Doctrine\ORM\EntityRepository'
-			&& (strpos($methodName, 'findBy') === 0 || strpos($methodName, 'findOneBy') === 0);
+		return (
+			$classReflection->getName() === 'Doctrine\ORM\EntityRepository'
+			|| $classReflection->isSubclassOf('Doctrine\ORM\EntityRepository')
+		) && (
+			strpos($methodName, 'findBy') === 0
+			|| strpos($methodName, 'findOneBy') === 0
+			|| strpos($methodName, 'countBy') === 0
+		);
 	}
 
 	public function getMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): \PHPStan\Reflection\MethodReflection
