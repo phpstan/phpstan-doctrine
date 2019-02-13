@@ -11,6 +11,7 @@ This extension provides following features:
 
 * Provides correct return type for `Doctrine\ORM\EntityManager::find`, `getReference` and `getPartialReference` when `Foo::class` entity class name is provided as the first argument
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
+* Interpret `EntityRepository<MyEntity>` correctly in phpDocs for further type inference of methods called on the repository.
 * Basic DQL validation for parse errors, unknown entity classes and unknown persistent fields.
 
 ## Usage

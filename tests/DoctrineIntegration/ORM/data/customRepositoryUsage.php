@@ -14,20 +14,37 @@ class Example
 	 */
 	private $repository;
 
-	public function __construct(EntityManagerInterface $entityManager)
+	/**
+	 * @var MyRepository<MyEntity>
+	 */
+	private $anotherRepository;
+
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		MyRepository $anotherRepository
+	)
 	{
 		$this->repository = $entityManager->getRepository(MyEntity::class);
+		$this->anotherRepository = $anotherRepository;
 	}
 
 	public function get(): void
 	{
 		$test = $this->repository->get(1);
 		$test->doSomethingElse();
+		$test->nonexistent();
 	}
 
 	public function nonexistant(): void
 	{
 		$this->repository->nonexistant();
+	}
+
+	public function genericRepository(): void
+	{
+		$entity = $this->anotherRepository->find(1);
+		$entity->doSomethingElse();
+		$entity->nonexistent();
 	}
 }
 

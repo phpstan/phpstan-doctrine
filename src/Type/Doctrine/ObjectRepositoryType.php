@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine;
 
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 
 class ObjectRepositoryType extends ObjectType
@@ -25,6 +26,11 @@ class ObjectRepositoryType extends ObjectType
 	public function describe(VerbosityLevel $level): string
 	{
 		return sprintf('%s<%s>', parent::describe($level), $this->entityClass);
+	}
+
+	public static function __set_state(array $properties): Type
+	{
+		return new self($properties['entityClass'], $properties['className']);
 	}
 
 }

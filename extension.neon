@@ -33,6 +33,11 @@ services:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
 
+	-
+		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension
+		tags:
+			- phpstan.phpDoc.typeNodeResolverExtension
+
 	managerRegistryGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
 		tags:
