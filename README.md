@@ -13,6 +13,7 @@ This extension provides following features:
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
 * Interpret `EntityRepository<MyEntity>` correctly in phpDocs for further type inference of methods called on the repository.
 * Basic DQL validation for parse errors, unknown entity classes and unknown persistent fields.
+* Recognizes magic `findBy*`, `findOneBy*` and `countBy*` methods on EntityRepository.
 
 ## Usage
 
