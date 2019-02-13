@@ -29,7 +29,7 @@ class ObjectRepositoryType extends ObjectType
 	}
 
 	/**
-	 * @param string[] $properties
+	 * @param mixed[] $properties
 	 * @return self
 	 */
 	public static function __set_state(array $properties): Type
