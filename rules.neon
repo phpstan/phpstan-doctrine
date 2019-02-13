@@ -1,2 +1,3 @@
 rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
+	- PHPStan\Rules\Doctrine\ORM\MagicRepositoryMethodCallRule
