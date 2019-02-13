@@ -28,6 +28,10 @@ class ObjectRepositoryType extends ObjectType
 		return sprintf('%s<%s>', parent::describe($level), $this->entityClass);
 	}
 
+	/**
+	 * @param string[] $properties
+	 * @return self
+	 */
 	public static function __set_state(array $properties): Type
 	{
 		return new self($properties['entityClass'], $properties['className']);
