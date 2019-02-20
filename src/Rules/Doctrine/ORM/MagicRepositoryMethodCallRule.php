@@ -78,6 +78,11 @@ class MagicRepositoryMethodCallRule implements Rule
 			return [];
 		}
 
+		$repositoryReflectionClass = new \ReflectionClass($calledOnType->getClassName());
+		if ($repositoryReflectionClass->hasMethod($methodName)) {
+			return [];
+		}
+
 		return [sprintf(
 			'Call to method %s::%s() - entity %s does not have a field named $%s.',
 			$calledOnType->describe(VerbosityLevel::typeOnly()),
