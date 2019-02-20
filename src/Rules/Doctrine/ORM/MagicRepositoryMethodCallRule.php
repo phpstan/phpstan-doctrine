@@ -4,6 +4,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\ObjectRepositoryType;
@@ -15,9 +16,13 @@ class MagicRepositoryMethodCallRule implements Rule
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
+	/** @var Broker */
+	private $broker;
+
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver, Broker $broker)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->broker = $broker;
 	}
 
 	public function getNodeType(): string
@@ -75,6 +80,11 @@ class MagicRepositoryMethodCallRule implements Rule
 		$entityClass = $calledOnType->getEntityClass();
 		$classMetadata = $objectManager->getClassMetadata($entityClass);
 		if ($classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName)) {
+			return [];
+		}
+
+		$repositoryReflectionClass = $this->broker->getClass($calledOnType->getClassName());
+		if ($repositoryReflectionClass->hasNativeMethod($methodName)) {
 			return [];
 		}
 

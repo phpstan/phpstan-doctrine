@@ -12,7 +12,9 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new MagicRepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null));
+		$broker = $this->createBroker();
+
+		return new MagicRepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), $broker);
 	}
 
 	public function testRule(): void
@@ -27,20 +29,32 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 				25,
 			],
 			[
-				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneByTransient() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
-				34,
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findByCustomMethod() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $customMethod.',
+				26,
 			],
 			[
-				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneByNonexistent() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneByTransient() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
 				35,
 			],
 			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneByNonexistent() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				36,
+			],
+			[
 				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::countByTransient() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
-				44,
+				45,
 			],
 			[
 				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::countByNonexistent() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
-				45,
+				46,
+			],
+			[
+				'Call to method PHPStan\Rules\Doctrine\ORM\TestRepository<PHPStan\Rules\Doctrine\ORM\MySecondEntity>::findByTransient() - entity PHPStan\Rules\Doctrine\ORM\MySecondEntity does not have a field named $transient.',
+				55,
+			],
+			[
+				'Call to method PHPStan\Rules\Doctrine\ORM\TestRepository<PHPStan\Rules\Doctrine\ORM\MySecondEntity>::findByNonexistent() - entity PHPStan\Rules\Doctrine\ORM\MySecondEntity does not have a field named $nonexistent.',
+				56,
 			],
 		]);
 	}
