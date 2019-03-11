@@ -46,6 +46,12 @@ class Example
 		$entity->doSomethingElse();
 		$entity->nonexistent();
 	}
+
+	public function callExistingMethodOnRepository(): void
+	{
+		$this->repository->findOneByBlabla()->test();
+		$this->anotherRepository->findOneByBlabla()->test();
+	}
 }
 
 /**
