@@ -79,4 +79,9 @@ class MyRepository extends EntityRepository
 
 		return $entity;
 	}
+
+	public function findOneByBlabla(): int
+	{
+
+	}
 }

@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerMergeReturn\\MyEntity::doSomethingElse().",
+        "line": 24,
+        "ignorable": true
+    }
+]

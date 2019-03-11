@@ -27,6 +27,7 @@ class Example
 		}
 
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 
 	public function getReferenceDynamicType(): void
@@ -38,6 +39,7 @@ class Example
 		}
 
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 
 	public function getPartialReferenceDynamicType(): void
@@ -49,6 +51,7 @@ class Example
 		}
 
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 }
 

@@ -21,6 +21,7 @@ class Example
 	{
 		$test = $this->entityManager->merge(new MyEntity());
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 }
 

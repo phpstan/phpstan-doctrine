@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 30,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 42,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 54,
+        "ignorable": true
+    }
+]

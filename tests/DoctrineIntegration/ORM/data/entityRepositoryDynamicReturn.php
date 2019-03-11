@@ -28,6 +28,7 @@ class Example
 		}
 
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 
 	public function findOneByDynamicType(): void
@@ -39,6 +40,7 @@ class Example
 		}
 
 		$test->doSomething();
+		$test->doSomethingElse();
 	}
 
 	public function findAllDynamicType(): void
@@ -47,6 +49,7 @@ class Example
 
 		foreach ($items as $test) {
 			$test->doSomething();
+			$test->doSomethingElse();
 		}
 	}
 
@@ -56,6 +59,64 @@ class Example
 
 		foreach ($items as $test) {
 			$test->doSomething();
+			$test->doSomethingElse();
+		}
+	}
+}
+
+class Example2
+{
+	/**
+	 * @var EntityRepository<MyEntity>
+	 */
+	private $repository;
+
+	public function __construct(EntityManagerInterface $entityManager)
+	{
+		$this->repository = $entityManager->getRepository(MyEntity::class);
+	}
+
+	public function findDynamicType(): void
+	{
+		$test = $this->repository->find(1);
+
+		if ($test === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
+		$test->doSomething();
+		$test->doSomethingElse();
+	}
+
+	public function findOneByDynamicType(): void
+	{
+		$test = $this->repository->findOneBy(['blah' => 'testing']);
+
+		if ($test === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
+		$test->doSomething();
+		$test->doSomethingElse();
+	}
+
+	public function findAllDynamicType(): void
+	{
+		$items = $this->repository->findAll();
+
+		foreach ($items as $test) {
+			$test->doSomething();
+			$test->doSomethingElse();
+		}
+	}
+
+	public function findByDynamicType(): void
+	{
+		$items = $this->repository->findBy(['blah' => 'testing']);
+
+		foreach ($items as $test) {
+			$test->doSomething();
+			$test->doSomethingElse();
 		}
 	}
 }
