@@ -62,9 +62,4 @@ DQL
 		)->getResult();
 	}
 
-    public function findByCustomMethod(): array
-    {
-        return [];
-    }
-
 }

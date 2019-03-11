@@ -23,7 +23,6 @@ class MagicRepositoryCalls
 		$entityRepository->findByTitle('test');
 		$entityRepository->findByTransient('test');
 		$entityRepository->findByNonexistent('test');
-		$entityRepository->findByCustomMethod();
 	}
 
 	public function doFindOneBy(): void
@@ -46,14 +45,4 @@ class MagicRepositoryCalls
 		$entityRepository->countByNonexistent('test');
 	}
 
-	public function doFindByWithRepository(): void
-	{
-		$entityRepository = $this->entityManager->getRepository(MySecondEntity::class);
-		$entityRepository->findBy(['id' => 1]);
-		$entityRepository->findById(1);
-		$entityRepository->findByTitle('test');
-		$entityRepository->findByTransient('test');
-		$entityRepository->findByNonexistent('test');
-		$entityRepository->findByCustomMethod();
-	}
 }
