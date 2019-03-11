@@ -16,6 +16,10 @@ services:
 		tags:
 			- phpstan.broker.methodsClassReflectionExtension
 	-
+		class: PHPStan\Type\Doctrine\CreateQueryBuilderDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
@@ -36,6 +40,15 @@ services:
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilderTypeSpecifyingExtension
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 
 	-
 		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension

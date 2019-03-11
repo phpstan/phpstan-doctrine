@@ -2,3 +2,15 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\MagicRepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
+
+parameters:
+	doctrine:
+		queryBuilderRule: true
+
+conditionalTags:
+	PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule:
+		phpstan.rules.rule: %doctrine.queryBuilderRule%
+
+services:
+	-
+		class: PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
