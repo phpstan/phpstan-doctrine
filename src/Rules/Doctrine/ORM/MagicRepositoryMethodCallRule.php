@@ -48,6 +48,11 @@ class MagicRepositoryMethodCallRule implements Rule
 		}
 
 		$methodName = $methodNameIdentifier->toString();
+		$repositoryReflectionClass = $this->broker->getClass($calledOnType->getClassName());
+		if ($repositoryReflectionClass->hasNativeMethod($methodName)) {
+			return [];
+		}
+
 		if (
 			strpos($methodName, 'findBy') === 0
 			&& strlen($methodName) > strlen('findBy')
@@ -80,11 +85,6 @@ class MagicRepositoryMethodCallRule implements Rule
 		$entityClass = $calledOnType->getEntityClass();
 		$classMetadata = $objectManager->getClassMetadata($entityClass);
 		if ($classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName)) {
-			return [];
-		}
-
-		$repositoryReflectionClass = $this->broker->getClass($calledOnType->getClassName());
-		if ($repositoryReflectionClass->hasNativeMethod($methodName)) {
 			return [];
 		}
 
