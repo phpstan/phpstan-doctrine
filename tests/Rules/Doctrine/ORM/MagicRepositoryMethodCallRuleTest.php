@@ -12,9 +12,7 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		$broker = $this->createBroker();
-
-		return new MagicRepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), $broker);
+		return new MagicRepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null));
 	}
 
 	public function testRule(): void
