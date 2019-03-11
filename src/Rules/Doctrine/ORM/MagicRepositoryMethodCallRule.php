@@ -48,6 +48,10 @@ class MagicRepositoryMethodCallRule implements Rule
 		}
 
 		$methodName = $methodNameIdentifier->toString();
+		if (!$this->broker->hasClass($calledOnType->getClassName())) {
+			return [];
+		}
+
 		$repositoryReflectionClass = $this->broker->getClass($calledOnType->getClassName());
 		if ($repositoryReflectionClass->hasNativeMethod($methodName)) {
 			return [];

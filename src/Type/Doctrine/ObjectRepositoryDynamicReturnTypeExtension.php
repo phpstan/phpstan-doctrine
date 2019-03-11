@@ -53,24 +53,26 @@ class ObjectRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
 		}
 
 		$methodName = $methodReflection->getName();
-		$repositoryClassReflection = $this->broker->getClass($calledOnType->getClassName());
-		if (
-			(
+		if ($this->broker->hasClass($calledOnType->getClassName())) {
+			$repositoryClassReflection = $this->broker->getClass($calledOnType->getClassName());
+			if (
 				(
-					strpos($methodName, 'findBy') === 0
-					&& strlen($methodName) > strlen('findBy')
-				) || (
-					strpos($methodName, 'findOneBy') === 0
-					&& strlen($methodName) > strlen('findOneBy')
+					(
+						strpos($methodName, 'findBy') === 0
+						&& strlen($methodName) > strlen('findBy')
+					) || (
+						strpos($methodName, 'findOneBy') === 0
+						&& strlen($methodName) > strlen('findOneBy')
+					)
 				)
-			)
-			&& $repositoryClassReflection->hasNativeMethod($methodName)
-		) {
-			return ParametersAcceptorSelector::selectFromArgs(
-				$scope,
-				$methodCall->args,
-				$repositoryClassReflection->getNativeMethod($methodName)->getVariants()
-			)->getReturnType();
+				&& $repositoryClassReflection->hasNativeMethod($methodName)
+			) {
+				return ParametersAcceptorSelector::selectFromArgs(
+					$scope,
+					$methodCall->args,
+					$repositoryClassReflection->getNativeMethod($methodName)->getVariants()
+				)->getReturnType();
+			}
 		}
 
 		if (!$calledOnType instanceof ObjectRepositoryType) {
