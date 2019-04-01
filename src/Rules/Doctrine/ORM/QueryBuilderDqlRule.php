@@ -84,7 +84,7 @@ class QueryBuilderDqlRule implements Rule
 				$args = $this->processArgs($scope, $methodName, $methodCall->args);
 			} catch (DynamicQueryBuilderArgumentException $e) {
 				// todo parameter "detectDynamicQueryBuilders" a hlasit jako error - pro oddebugovani
-				continue;
+				return [];
 			}
 
 			try {
