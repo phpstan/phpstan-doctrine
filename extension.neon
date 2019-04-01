@@ -1,13 +1,16 @@
 parameters:
 	doctrine:
 		repositoryClass: null
-		queryBuilderClass: Slevomat\Doctrine\DQL\QueryBuilder
+		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
+		queryBuilderGetQueryNotOverride: true
 
 conditionalTags:
 	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
 		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%
+	PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension:
+		phpstan.broker.dynamicMethodReturnTypeExtension: %doctrine.queryBuilderGetQueryNotOverride%
 
 services:
 	-
@@ -47,8 +50,6 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
