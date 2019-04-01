@@ -1,6 +1,7 @@
 parameters:
 	doctrine:
 		repositoryClass: null
+		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 
@@ -17,6 +18,8 @@ services:
 			- phpstan.broker.methodsClassReflectionExtension
 	-
 		class: PHPStan\Type\Doctrine\CreateQueryBuilderDynamicReturnTypeExtension
+		arguments:
+			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -42,11 +45,15 @@ services:
 			repositoryClass: %doctrine.repositoryClass%
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension
+		arguments:
+			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilderTypeSpecifyingExtension
+		arguments:
+			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 

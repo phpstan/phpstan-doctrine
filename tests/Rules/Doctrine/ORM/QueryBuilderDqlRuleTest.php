@@ -49,8 +49,8 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	public function getDynamicMethodReturnTypeExtensions(): array
 	{
 		return [
-			new CreateQueryBuilderDynamicReturnTypeExtension(),
-			new QueryBuilderMethodDynamicReturnTypeExtension(),
+			new CreateQueryBuilderDynamicReturnTypeExtension(null),
+			new QueryBuilderMethodDynamicReturnTypeExtension(null),
 		];
 	}
 
@@ -60,7 +60,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	protected function getMethodTypeSpecifyingExtensions(): array
 	{
 		return [
-			new QueryBuilderTypeSpecifyingExtension(),
+			new QueryBuilderTypeSpecifyingExtension(null),
 		];
 	}
 

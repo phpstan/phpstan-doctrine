@@ -13,9 +13,9 @@ class QueryBuilderType extends ObjectType
 	/** @var MethodCall[] */
 	private $methodCalls = [];
 
-	public function __construct()
+	public function __construct(string $queryBuilderClass)
 	{
-		parent::__construct('Doctrine\ORM\QueryBuilder');
+		parent::__construct($queryBuilderClass);
 	}
 
 	public function isSuperTypeOf(Type $type): TrinaryLogic
@@ -46,7 +46,7 @@ class QueryBuilderType extends ObjectType
 
 	public function append(MethodCall $methodCall): self
 	{
-		$object = new self();
+		$object = new self($this->getClassName());
 		$object->methodCalls = $this->methodCalls;
 		$object->methodCalls[] = $methodCall;
 

@@ -16,17 +16,25 @@ use PHPStan\Type\ObjectType;
 class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
 
+	/** @var string|null */
+	private $queryBuilderClass;
+
 	/** @var \PHPStan\Analyser\TypeSpecifier */
 	private $typeSpecifier;
 
-	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
+	public function __construct(?string $queryBuilderClass)
 	{
-		$this->typeSpecifier = $typeSpecifier;
+		$this->queryBuilderClass = $queryBuilderClass;
 	}
 
 	public function getClass(): string
 	{
-		return 'Doctrine\ORM\QueryBuilder';
+		return $this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder';
+	}
+
+	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
+	{
+		$this->typeSpecifier = $typeSpecifier;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool

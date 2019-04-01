@@ -10,6 +10,14 @@ use PHPStan\Type\Type;
 class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
+	/** @var string|null */
+	private $queryBuilderClass;
+
+	public function __construct(?string $queryBuilderClass)
+	{
+		$this->queryBuilderClass = $queryBuilderClass;
+	}
+
 	public function getClass(): string
 	{
 		return 'Doctrine\ORM\EntityManager';
@@ -26,7 +34,9 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		Scope $scope
 	): Type
 	{
-		return new QueryBuilderType();
+		return new QueryBuilderType(
+			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder'
+		);
 	}
 
 }

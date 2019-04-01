@@ -13,9 +13,17 @@ use PHPStan\Type\Type;
 class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
+	/** @var string|null */
+	private $queryBuilderClass;
+
+	public function __construct(?string $queryBuilderClass)
+	{
+		$this->queryBuilderClass = $queryBuilderClass;
+	}
+
 	public function getClass(): string
 	{
-		return 'Doctrine\ORM\QueryBuilder';
+		return $this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
