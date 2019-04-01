@@ -2,7 +2,6 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -66,7 +65,7 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		/** @var EntityManagerInterface $objectManager */
+		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
 		$dql = $dqlType->getValue();

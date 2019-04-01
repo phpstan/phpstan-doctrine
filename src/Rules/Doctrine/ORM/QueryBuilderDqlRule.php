@@ -2,7 +2,6 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -65,9 +64,14 @@ class QueryBuilderDqlRule implements Rule
 		if ($objectManager === null) {
 			throw new ShouldNotHappenException('Please provide the "objectManagerLoader" setting for the DQL validation.');
 		}
-		if (!$objectManager instanceof EntityManagerInterface) {
+
+		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
+		if (!$objectManager instanceof $entityManagerInterface) {
 			return [];
 		}
+
+		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		$objectManager = $objectManager;
 
 		try {
 			$objectManager->createQuery($dqlType->getValue())->getSQL();

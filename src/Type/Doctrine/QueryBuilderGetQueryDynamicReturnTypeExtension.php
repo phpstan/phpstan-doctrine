@@ -2,7 +2,6 @@
 
 namespace PHPStan\Type\Doctrine;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
@@ -64,9 +63,13 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 		if ($objectManager === null) {
 			return $defaultReturnType;
 		}
-		if (!$objectManager instanceof EntityManagerInterface) {
+		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
+		if (!$objectManager instanceof $entityManagerInterface) {
 			return $defaultReturnType;
 		}
+
+		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		$objectManager = $objectManager;
 
 		$queryBuilder = $objectManager->createQueryBuilder();
 
