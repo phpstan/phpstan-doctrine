@@ -21,12 +21,13 @@ class Foo
 
 	public function doFoo(): Query
 	{
-		$query = $this->entityManager->createQueryBuilder()
+		$queryBuilder = $this->entityManager->createQueryBuilder()
 			->select('e')
-			->from(MyEntity::class, 'e')
-			->getQuery();
+			->from(MyEntity::class, 'e');
+		$query = $queryBuilder->getQuery();
 
 		$query->getDQL() === 'aaa';
+		$queryBuilder->getDQL() === 'aaa';
 
 		return $query;
 	}

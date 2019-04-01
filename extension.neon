@@ -47,6 +47,12 @@ services:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
 	-
+		class: PHPStan\Type\Doctrine\QueryBuilderGetDqlDynamicReturnTypeExtension
+		arguments:
+			queryBuilderClass: %doctrine.queryBuilderClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
