@@ -28,7 +28,7 @@ class QueryBuilderType extends ObjectType
 			return TrinaryLogic::createYes();
 		}
 
-		// taky musí fungovat type-specifying extension, tedy intersect
+		// todo taky musí fungovat type-specifying extension, tedy intersect
 		// intersect s více metodami musí vyhrát
 		// kombinovat pouze QB vycházející ze stejného řádku
 		// kombinovat pouze QB typy které se nevětví - udržovat si nějaký identifikátor pokaždé?
