@@ -74,4 +74,14 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function selectArray(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select([
+				'e.id',
+				'e.title',
+			])->from(MyEntity::class, 'e')
+			->getQuery();
+	}
+
 }

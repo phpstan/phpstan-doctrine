@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\QueryBuilderType;
@@ -110,7 +111,7 @@ class QueryBuilderDqlRule implements Rule
 	 * @param \PHPStan\Analyser\Scope $scope
 	 * @param string $methodName
 	 * @param \PhpParser\Node\Arg[] $methodCallArgs
-	 * @return scalar[]
+	 * @return mixed[]
 	 */
 	protected function processArgs(Scope $scope, string $methodName, array $methodCallArgs): array
 	{
@@ -119,6 +120,19 @@ class QueryBuilderDqlRule implements Rule
 			$value = $scope->getType($arg->value);
 			// todo $qb->expr() support
 			// todo new Expr\Andx support
+			if ($value instanceof ConstantArrayType) {
+				$array = [];
+				foreach ($value->getKeyTypes() as $i => $keyType) {
+					$valueType = $value->getValueTypes()[$i];
+					if (!$valueType instanceof ConstantScalarType) {
+						throw new DynamicQueryBuilderArgumentException();
+					}
+					$array[$keyType->getValue()] = $valueType->getValue();
+				}
+
+				$args[] = $array;
+				continue;
+			}
 			if (!$value instanceof ConstantScalarType) {
 				throw new DynamicQueryBuilderArgumentException();
 			}
