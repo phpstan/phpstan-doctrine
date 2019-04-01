@@ -26,6 +26,8 @@ class Foo
 			->from(MyEntity::class, 'e')
 			->getQuery();
 
+		$query->getDQL() === 'aaa';
+
 		return $query;
 	}
 

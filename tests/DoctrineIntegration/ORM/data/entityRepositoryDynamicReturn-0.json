@@ -1,0 +1,12 @@
+[
+    {
+        "message": "Call to method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findOneBy() - entity PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity does not have a field named $blah.",
+        "line": 93,
+        "ignorable": true
+    },
+    {
+        "message": "Call to method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findBy() - entity PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity does not have a field named $blah.",
+        "line": 115,
+        "ignorable": true
+    }
+]

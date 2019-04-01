@@ -1,5 +1,6 @@
 includes:
 	- ../../../extension.neon
+	- ../../../rules.neon
 
 parameters:
 	doctrine:

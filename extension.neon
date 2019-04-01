@@ -1,7 +1,7 @@
 parameters:
 	doctrine:
 		repositoryClass: null
-		queryBuilderClass: null
+		queryBuilderClass: Slevomat\Doctrine\DQL\QueryBuilder
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 
@@ -44,6 +44,12 @@ services:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
 	-
+		class: PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension
+		arguments:
+			queryBuilderClass: %doctrine.queryBuilderClass%
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
@@ -56,7 +62,10 @@ services:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
-
+	-
+		class: PHPStan\Type\Doctrine\QueryGetDqlDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension
 		tags:

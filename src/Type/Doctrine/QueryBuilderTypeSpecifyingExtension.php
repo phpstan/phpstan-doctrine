@@ -53,7 +53,7 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$node->args,
 			$methodReflection->getVariants()
 		)->getReturnType();
-		if (!(new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes()) {
+		if (!$returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes()) {
 			return new SpecifiedTypes([]);
 		}
 

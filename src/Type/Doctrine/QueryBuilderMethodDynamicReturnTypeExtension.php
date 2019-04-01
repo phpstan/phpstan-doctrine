@@ -28,7 +28,10 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return true;
+		$returnType = ParametersAcceptorSelector::selectSingle(
+			$methodReflection->getVariants()
+		)->getReturnType();
+		return $returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes();
 	}
 
 	public function getTypeFromMethodCall(
@@ -37,21 +40,14 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		Scope $scope
 	): Type
 	{
-		$returnType = ParametersAcceptorSelector::selectFromArgs(
-			$scope,
-			$methodCall->args,
-			$methodReflection->getVariants()
-		)->getReturnType();
-		if (!(new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes()) {
-			return $returnType;
-		}
-
 		$calledOnType = $scope->getType($methodCall->var);
 		if (
 			!$calledOnType instanceof QueryBuilderType
 			|| !$methodCall->name instanceof Identifier
 		) {
-			return $returnType;
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
 		}
 
 		return $calledOnType->append($methodCall);

@@ -6,8 +6,10 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\CreateQueryBuilderDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilderTypeSpecifyingExtension;
+use PHPStan\Type\Doctrine\QueryGetDqlDynamicReturnTypeExtension;
 
 class QueryBuilderDqlRuleTest extends RuleTestCase
 {
@@ -51,6 +53,8 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		return [
 			new CreateQueryBuilderDynamicReturnTypeExtension(null),
 			new QueryBuilderMethodDynamicReturnTypeExtension(null),
+			new QueryBuilderGetQueryDynamicReturnTypeExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), null),
+			new QueryGetDqlDynamicReturnTypeExtension(),
 		];
 	}
 

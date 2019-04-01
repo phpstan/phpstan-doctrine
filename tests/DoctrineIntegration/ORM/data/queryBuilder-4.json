@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Strict comparison using === between 'SELECT e FROM…' and 'aaa' will always evaluate to false.",
+        "line": 29,
+        "ignorable": true
+    }
+]
