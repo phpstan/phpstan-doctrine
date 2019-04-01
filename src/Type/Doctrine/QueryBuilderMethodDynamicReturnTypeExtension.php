@@ -7,6 +7,7 @@ use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
 class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
@@ -28,16 +29,21 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		Scope $scope
 	): Type
 	{
+		$returnType = ParametersAcceptorSelector::selectFromArgs(
+			$scope,
+			$methodCall->args,
+			$methodReflection->getVariants()
+		)->getReturnType();
+		if (!(new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes()) {
+			return $returnType;
+		}
+
 		$calledOnType = $scope->getType($methodCall->var);
 		if (
 			!$calledOnType instanceof QueryBuilderType
 			|| !$methodCall->name instanceof Identifier
 		) {
-			return ParametersAcceptorSelector::selectFromArgs(
-				$scope,
-				$methodCall->args,
-				$methodReflection->getVariants()
-			)->getReturnType();
+			return $returnType;
 		}
 
 		return $calledOnType->append($methodCall);

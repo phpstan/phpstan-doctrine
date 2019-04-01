@@ -9,7 +9,9 @@ use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
+use PHPStan\Type\ObjectType;
 
 class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
@@ -35,6 +37,15 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 	public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
 	{
 		if (!$scope->isInFirstLevelStatement()) {
+			return new SpecifiedTypes([]);
+		}
+
+		$returnType = ParametersAcceptorSelector::selectFromArgs(
+			$scope,
+			$node->args,
+			$methodReflection->getVariants()
+		)->getReturnType();
+		if (!(new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes()) {
 			return new SpecifiedTypes([]);
 		}
 
