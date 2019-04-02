@@ -97,7 +97,12 @@ class QueryBuilderDqlRule implements Rule
 		try {
 			$objectManager->createQuery($dqlType->getValue())->getSQL();
 		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			return [sprintf('QueryBuilder: %s', $e->getMessage())];
+			$message = sprintf('QueryBuilder: %s', $e->getMessage());
+			if (strpos($e->getMessage(), '[Syntax Error]') === 0) {
+				$message .= sprintf("\nDQL: %s", $dqlType->getValue());
+			}
+
+			return [$message];
 		}
 
 		return [];

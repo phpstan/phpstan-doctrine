@@ -23,15 +23,15 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/query-builder-dql.php'], [
 			[
-				'QueryBuilder: [Syntax Error] line 0, col 66: Error: Expected end of string, got \')\'',
+				"QueryBuilder: [Syntax Error] line 0, col 66: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1)",
 				31,
 			],
 			[
-				'QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got \')\'',
+				"QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = :id)",
 				43,
 			],
 			[
-				'QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got \')\'',
+				"QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = :id)",
 				55,
 			],
 			[
