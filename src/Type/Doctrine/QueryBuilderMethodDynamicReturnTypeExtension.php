@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
@@ -30,6 +31,9 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		$returnType = ParametersAcceptorSelector::selectSingle(
 			$methodReflection->getVariants()
 		)->getReturnType();
+		if ($returnType instanceof MixedType) {
+			return false;
+		}
 		return $returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes();
 	}
 

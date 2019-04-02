@@ -11,6 +11,7 @@ use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 
 class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
@@ -53,6 +54,9 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$node->args,
 			$methodReflection->getVariants()
 		)->getReturnType();
+		if ($returnType instanceof MixedType) {
+			return new SpecifiedTypes([]);
+		}
 		if (!$returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes()) {
 			return new SpecifiedTypes([]);
 		}
