@@ -16,7 +16,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null));
+		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), true);
 	}
 
 	public function testRule(): void
@@ -41,6 +41,14 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 14 near \'Foo e\': Error: Class \'Foo\' is not defined.',
 				71,
+			],
+			[
+				'Could not analyse QueryBuilder with unknown beginning.',
+				89,
+			],
+			[
+				'Could not analyse QueryBuilder with dynamic arguments.',
+				99,
 			],
 		]);
 	}

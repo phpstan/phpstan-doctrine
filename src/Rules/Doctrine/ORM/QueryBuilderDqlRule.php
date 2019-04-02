@@ -10,6 +10,7 @@ use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\QueryBuilderType;
+use PHPStan\Type\ObjectType;
 
 class QueryBuilderDqlRule implements Rule
 {
@@ -17,9 +18,16 @@ class QueryBuilderDqlRule implements Rule
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
+	/** @var bool */
+	private $reportDynamicQueryBuilders;
+
+	public function __construct(
+		ObjectMetadataResolver $objectMetadataResolver,
+		bool $reportDynamicQueryBuilders
+	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->reportDynamicQueryBuilders = $reportDynamicQueryBuilders;
 	}
 
 	public function getNodeType(): string
@@ -44,6 +52,14 @@ class QueryBuilderDqlRule implements Rule
 
 		$calledOnType = $scope->getType($node->var);
 		if (!$calledOnType instanceof QueryBuilderType) {
+			if (
+				$this->reportDynamicQueryBuilders
+				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes()
+			) {
+				return [
+					'Could not analyse QueryBuilder with unknown beginning.',
+				];
+			}
 			return [];
 		}
 
@@ -57,6 +73,11 @@ class QueryBuilderDqlRule implements Rule
 		}
 
 		if (!$dqlType instanceof ConstantStringType) {
+			if ($this->reportDynamicQueryBuilders) {
+				return [
+					'Could not analyse QueryBuilder with dynamic arguments.',
+				];
+			}
 			return [];
 		}
 

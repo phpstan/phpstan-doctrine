@@ -1,5 +1,16 @@
+parameters:
+	doctrine:
+		reportDynamicQueryBuilders: false
+
 rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\MagicRepositoryMethodCallRule
-	- PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
+
+services:
+	-
+		class: PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
+		arguments:
+			reportDynamicQueryBuilders: %doctrine.reportDynamicQueryBuilders%
+		tags:
+			- phpstan.rules.rule
