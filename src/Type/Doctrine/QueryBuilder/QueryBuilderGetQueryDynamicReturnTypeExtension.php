@@ -8,11 +8,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\ConstantScalarType;
+use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryType;
-use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
 use PHPStan\Type\Type;
 use function in_array;
 use function method_exists;
@@ -21,19 +19,24 @@ use function strtolower;
 class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	/** @var string|null */
-	private $queryBuilderClass;
-
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
+	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
+	private $argumentsProcessor;
+
+	/** @var string|null */
+	private $queryBuilderClass;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
+		ArgumentsProcessor $argumentsProcessor,
 		?string $queryBuilderClass
 	)
 	{
-		$this->queryBuilderClass = $queryBuilderClass;
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->argumentsProcessor = $argumentsProcessor;
+		$this->queryBuilderClass = $queryBuilderClass;
 	}
 
 	public function getClass(): string
@@ -105,7 +108,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 			}
 
 			try {
-				$args = $this->processArgs($scope, $methodName, $calledMethodCall->args);
+				$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->args);
 			} catch (DynamicQueryBuilderArgumentException $e) {
 				// todo parameter "detectDynamicQueryBuilders" a hlasit jako error - pro oddebugovani
 				return $defaultReturnType;
@@ -115,49 +118,6 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 		}
 
 		return new QueryType($queryBuilder->getDQL());
-	}
-
-	/**
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @param string $methodName
-	 * @param \PhpParser\Node\Arg[] $methodCallArgs
-	 * @return mixed[]
-	 */
-	protected function processArgs(Scope $scope, string $methodName, array $methodCallArgs): array
-	{
-		$args = [];
-		foreach ($methodCallArgs as $arg) {
-			$value = $scope->getType($arg->value);
-			if (
-				$value instanceof ExprType
-				&& strpos($value->getClassName(), 'Doctrine\ORM\Query\Expr') === 0
-			) {
-				$className = $value->getClassName();
-				$args[] = new $className(...$this->processArgs($scope, '__construct', $value->getConstructorArgs()));
-				continue;
-			}
-			// todo $qb->expr() support
-			if ($value instanceof ConstantArrayType) {
-				$array = [];
-				foreach ($value->getKeyTypes() as $i => $keyType) {
-					$valueType = $value->getValueTypes()[$i];
-					if (!$valueType instanceof ConstantScalarType) {
-						throw new DynamicQueryBuilderArgumentException();
-					}
-					$array[$keyType->getValue()] = $valueType->getValue();
-				}
-
-				$args[] = $array;
-				continue;
-			}
-			if (!$value instanceof ConstantScalarType) {
-				throw new DynamicQueryBuilderArgumentException();
-			}
-
-			$args[] = $value->getValue();
-		}
-
-		return $args;
 	}
 
 }

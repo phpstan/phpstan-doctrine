@@ -4,13 +4,10 @@ parameters:
 		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
-		queryBuilderGetQueryNotOverride: true
 
 conditionalTags:
 	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
 		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%
-	PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension:
-		phpstan.broker.dynamicMethodReturnTypeExtension: %doctrine.queryBuilderGetQueryNotOverride%
 
 services:
 	-
@@ -56,6 +53,9 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
+			argumentsProcessor: @argumentsProcessor
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
@@ -77,6 +77,10 @@ services:
 		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension
 		tags:
 			- phpstan.phpDoc.typeNodeResolverExtension
+
+	argumentsProcessor:
+		class: PHPStan\Type\Doctrine\ArgumentsProcessor
+		autowired: false
 
 	managerRegistryGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension

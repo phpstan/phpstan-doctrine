@@ -6,6 +6,7 @@ use Doctrine\ORM\Query\Expr\Base;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension;
@@ -84,7 +85,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		return [
 			new CreateQueryBuilderDynamicReturnTypeExtension(null),
 			new QueryBuilderMethodDynamicReturnTypeExtension(null),
-			new QueryBuilderGetQueryDynamicReturnTypeExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), null),
+			new QueryBuilderGetQueryDynamicReturnTypeExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), new ArgumentsProcessor(), null),
 			new QueryGetDqlDynamicReturnTypeExtension(),
 		];
 	}
