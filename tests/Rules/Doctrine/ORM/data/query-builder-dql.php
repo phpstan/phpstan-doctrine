@@ -124,4 +124,34 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function addNewExprSyntaxError(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->add('orderBy', new \Doctrine\ORM\Query\Expr\OrderBy('e.name)', 'ASC'))
+			->getQuery();
+	}
+
+	public function addNewExprSemanticError(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->add('orderBy', new \Doctrine\ORM\Query\Expr\OrderBy('e.name', 'ASC'))
+			->getQuery();
+	}
+
+	public function addNewExprCorrect(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->add('orderBy', new \Doctrine\ORM\Query\Expr\OrderBy('e.title', 'ASC'))
+			->getQuery();
+	}
+
 }
