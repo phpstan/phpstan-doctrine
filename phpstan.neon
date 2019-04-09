@@ -14,3 +14,6 @@ parameters:
 		-
 			message: '~^Variable method call on Doctrine\\ORM\\QueryBuilder\.$~'
 			path: */src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
+		-
+			message: '~^Variable method call on Doctrine\\ORM\\Query\\Expr\.$~'
+			path: */src/Type/Doctrine/QueryBuilder/Expr/ExpressionBuilderDynamicReturnTypeExtension.php

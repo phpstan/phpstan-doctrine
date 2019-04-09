@@ -10,6 +10,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExpressionBuilderDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension;
@@ -74,6 +75,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
 				170,
 			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 72 near \'nickname LIKE\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nickname',
+				194,
+			],
 		]);
 	}
 
@@ -82,11 +87,14 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	 */
 	public function getDynamicMethodReturnTypeExtensions(): array
 	{
+		$objectMetadataResolver = new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null);
+		$argumentsProcessor = new ArgumentsProcessor();
 		return [
 			new CreateQueryBuilderDynamicReturnTypeExtension(null),
 			new QueryBuilderMethodDynamicReturnTypeExtension(null),
-			new QueryBuilderGetQueryDynamicReturnTypeExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), new ArgumentsProcessor(), null),
+			new QueryBuilderGetQueryDynamicReturnTypeExtension($objectMetadataResolver, $argumentsProcessor, null),
 			new QueryGetDqlDynamicReturnTypeExtension(),
+			new ExpressionBuilderDynamicReturnTypeExtension($objectMetadataResolver, $argumentsProcessor),
 		];
 	}
 

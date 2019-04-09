@@ -77,6 +77,12 @@ services:
 		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension
 		tags:
 			- phpstan.phpDoc.typeNodeResolverExtension
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\ExpressionBuilderDynamicReturnTypeExtension
+		arguments:
+			argumentsProcessor: @argumentsProcessor
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 
 	argumentsProcessor:
 		class: PHPStan\Type\Doctrine\ArgumentsProcessor

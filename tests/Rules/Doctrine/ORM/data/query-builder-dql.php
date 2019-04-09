@@ -188,4 +188,16 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function qbExpr(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->add('where', $queryBuilder->expr()->orX(
+				$queryBuilder->expr()->eq('e.id', '1'),
+				$queryBuilder->expr()->like('e.nickname', '\'nick\'')
+			))
+			->getQuery();
+	}
+
 }

@@ -33,7 +33,6 @@ class ArgumentsProcessor
 				$args[] = $value->getExprObject();
 				continue;
 			}
-			// todo $qb->expr() support
 			if ($value instanceof ConstantArrayType) {
 				$array = [];
 				foreach ($value->getKeyTypes() as $i => $keyType) {
