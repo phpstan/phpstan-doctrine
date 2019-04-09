@@ -7,25 +7,25 @@ use PHPStan\Type\ObjectType;
 class ExprType extends ObjectType
 {
 
-	/** @var \PhpParser\Node\Arg[] */
-	private $constructorArgs;
+	/** @var object */
+	private $exprObject;
 
 	/**
 	 * @param string $className
-	 * @param \PhpParser\Node\Arg[] $constructorArgs
+	 * @param object $exprObject
 	 */
-	public function __construct(string $className, array $constructorArgs)
+	public function __construct(string $className, $exprObject)
 	{
 		parent::__construct($className);
-		$this->constructorArgs = $constructorArgs;
+		$this->exprObject = $exprObject;
 	}
 
 	/**
-	 * @return \PhpParser\Node\Arg[]
+	 * @return object
 	 */
-	public function getConstructorArgs(): array
+	public function getExprObject()
 	{
-		return $this->constructorArgs;
+		return $this->exprObject;
 	}
 
 }

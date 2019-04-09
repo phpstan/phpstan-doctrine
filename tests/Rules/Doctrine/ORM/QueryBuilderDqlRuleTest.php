@@ -105,9 +105,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	 */
 	public function getDynamicStaticMethodReturnTypeExtensions(): array
 	{
+		$argumentsProcessor = new ArgumentsProcessor();
 		return [
-			new NewExprDynamicReturnTypeExtension(OrderBy::class),
-			new NewExprDynamicReturnTypeExtension(Base::class),
+			new NewExprDynamicReturnTypeExtension($argumentsProcessor, OrderBy::class),
+			new NewExprDynamicReturnTypeExtension($argumentsProcessor, Base::class),
 		];
 	}
 

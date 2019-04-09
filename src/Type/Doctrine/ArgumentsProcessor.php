@@ -30,8 +30,7 @@ class ArgumentsProcessor
 				$value instanceof ExprType
 				&& strpos($value->getClassName(), 'Doctrine\ORM\Query\Expr') === 0
 			) {
-				$className = $value->getClassName();
-				$args[] = new $className(...$this->processArgs($scope, '__construct', $value->getConstructorArgs()));
+				$args[] = $value->getExprObject();
 				continue;
 			}
 			// todo $qb->expr() support

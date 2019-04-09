@@ -24,6 +24,7 @@
 				@dataProvider,
 				@requires
 			"/>
+			<property name="enableObjectTypeHint" value="false"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>

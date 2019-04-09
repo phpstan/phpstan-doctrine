@@ -6,17 +6,27 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
+use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 
 class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
 
+	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
+	private $argumentsProcessor;
+
 	/** @var string */
 	private $class;
 
-	public function __construct(string $class)
+	public function __construct(
+		ArgumentsProcessor $argumentsProcessor,
+		string $class
+	)
 	{
+		$this->argumentsProcessor = $argumentsProcessor;
 		$this->class = $class;
 	}
 
@@ -35,7 +45,24 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 		if (!$methodCall->class instanceof Name) {
 			throw new \PHPStan\ShouldNotHappenException();
 		}
-		return new ExprType($methodCall->class->toString(), $methodCall->args);
+
+		$className = $methodCall->class->toString();
+
+		try {
+			$exprObject = new $className(
+				...$this->argumentsProcessor->processArgs(
+					$scope,
+					$methodReflection->getName(),
+					$methodCall->args
+				)
+			);
+		} catch (DynamicQueryBuilderArgumentException $e) {
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
+		}
+
+		return new ExprType($className, $exprObject);
 	}
 
 }
