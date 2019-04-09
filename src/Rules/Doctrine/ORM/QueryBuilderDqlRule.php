@@ -66,10 +66,7 @@ class QueryBuilderDqlRule implements Rule
 		try {
 			$dqlType = $scope->getType(new MethodCall($node, new Node\Identifier('getDQL'), []));
 		} catch (\Throwable $e) {
-			return [
-				'foo',
-				// todo reproduce
-			];
+			return [sprintf('Internal error: %s', $e->getMessage())];
 		}
 
 		if (!$dqlType instanceof ConstantStringType) {
