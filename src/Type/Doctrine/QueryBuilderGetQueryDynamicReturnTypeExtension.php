@@ -79,10 +79,21 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 			}
 
 			$methodName = $calledMethodCall->name->toString();
-			if (in_array(strtolower($methodName), [
+			$lowerMethodName = strtolower($methodName);
+			if (in_array($lowerMethodName, [
 				'setparameter',
 				'setparameters',
 			], true)) {
+				continue;
+			}
+
+			if ($lowerMethodName === 'setfirstresult') {
+				$queryBuilder->setFirstResult(0);
+				continue;
+			}
+
+			if ($lowerMethodName === 'setmaxresults') {
+				$queryBuilder->setMaxResults(10);
 				continue;
 			}
 

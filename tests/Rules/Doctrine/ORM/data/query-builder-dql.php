@@ -102,4 +102,26 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function limitOffset(int $offset, int $limit): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.transient = 1')
+			->setFirstResult($offset)
+			->setMaxResults($limit)
+			->getQuery();
+	}
+
+	public function limitOffsetCorrect(int $offset, int $limit): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->setFirstResult($offset)
+			->setMaxResults($limit)
+			->getQuery();
+	}
+
 }

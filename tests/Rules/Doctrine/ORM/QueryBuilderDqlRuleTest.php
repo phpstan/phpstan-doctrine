@@ -50,6 +50,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				'Could not analyse QueryBuilder with dynamic arguments.',
 				99,
 			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
+				107,
+			],
 		]);
 	}
 
