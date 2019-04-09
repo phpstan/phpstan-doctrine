@@ -64,9 +64,12 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 			return $defaultReturnType;
 		}
 
-		$exprObject = $queryBuilder->expr()->{$methodReflection->getName()}(...$args);
+		$exprValue = $queryBuilder->expr()->{$methodReflection->getName()}(...$args);
+		if (is_object($exprValue)) {
+			return new ExprType(get_class($exprValue), $exprValue);
+		}
 
-		return new ExprType(get_class($exprObject), $exprObject);
+		return $scope->getTypeFromValue($exprValue);
 	}
 
 }

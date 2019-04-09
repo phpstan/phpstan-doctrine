@@ -200,4 +200,28 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function qbExprIsNull(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->add('where', $queryBuilder->expr()->orX(
+				$queryBuilder->expr()->eq('e.id', '1'),
+				$queryBuilder->expr()->isNull('e.nickname')
+			))
+			->getQuery();
+	}
+
+	public function qbExprIsNullSyntaxError(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->add('where', $queryBuilder->expr()->orX(
+				$queryBuilder->expr()->eq('e.id', '1'),
+				$queryBuilder->expr()->isNull('e.nickname)')
+			))
+			->getQuery();
+	}
+
 }
