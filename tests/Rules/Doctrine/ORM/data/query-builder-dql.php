@@ -224,4 +224,24 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function weirdTypeSpecifyingExtensionProblem(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->where('e.transient = :test');
+
+		$queryBuilder->getQuery();
+	}
+
+	public function weirdTypeSpecifyingExtensionProblemCorrect(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->where('e.title = :test');
+
+		$queryBuilder->getQuery();
+	}
+
 }

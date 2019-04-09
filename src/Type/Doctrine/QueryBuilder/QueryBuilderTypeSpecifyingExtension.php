@@ -68,8 +68,13 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			return new SpecifiedTypes([]);
 		}
 
+		$queryBuilderNode = $node;
+		while ($queryBuilderNode instanceof MethodCall) {
+			$queryBuilderNode = $queryBuilderNode->var;
+		}
+
 		return $this->typeSpecifier->create(
-			$node->var,
+			$queryBuilderNode,
 			$calledOnType->append($node),
 			TypeSpecifierContext::createTruthy()
 		);
