@@ -154,4 +154,38 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
+	public function addNewExprFirstAssignedToVariable(): void
+	{
+		$orderBy = new \Doctrine\ORM\Query\Expr\OrderBy('e.name', 'ASC');
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->add('orderBy', $orderBy)
+			->getQuery();
+	}
+
+	public function addNewExprBase(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->add('where', new \Doctrine\ORM\Query\Expr\Andx([
+				'e.transient = 1',
+				'e.name = \'foo\'',
+			]))
+			->getQuery();
+	}
+
+	public function addNewExprBaseCorrect(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->add('where', new \Doctrine\ORM\Query\Expr\Andx([
+				'e.id = 1',
+			]))
+			->getQuery();
+	}
+
 }

@@ -91,3 +91,48 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Common\Persistence\ObjectManager
+
+	## NewExprDynamicReturnTypeExtensions
+
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\Base
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\Comparison
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\From
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\Func
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\Join
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\Math
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr\OrderBy

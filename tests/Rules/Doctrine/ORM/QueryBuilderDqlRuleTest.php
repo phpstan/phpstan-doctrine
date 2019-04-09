@@ -2,11 +2,14 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Query\Expr\Base;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderTypeSpecifyingExtension;
@@ -62,6 +65,14 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				'QueryBuilder: [Semantical Error] line 0, col 78 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
 				139,
 			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 78 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				160,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
+				170,
+			],
 		]);
 	}
 
@@ -85,6 +96,17 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		return [
 			new QueryBuilderTypeSpecifyingExtension(null),
+		];
+	}
+
+	/**
+	 * @return \PHPStan\Type\DynamicStaticMethodReturnTypeExtension[]
+	 */
+	public function getDynamicStaticMethodReturnTypeExtensions(): array
+	{
+		return [
+			new NewExprDynamicReturnTypeExtension(OrderBy::class),
+			new NewExprDynamicReturnTypeExtension(Base::class),
 		];
 	}
 

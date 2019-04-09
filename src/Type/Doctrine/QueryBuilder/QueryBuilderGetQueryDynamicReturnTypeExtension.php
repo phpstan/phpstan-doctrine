@@ -3,7 +3,6 @@
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -13,8 +12,8 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryType;
+use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use function in_array;
 use function method_exists;
 use function strtolower;
@@ -130,12 +129,11 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 		foreach ($methodCallArgs as $arg) {
 			$value = $scope->getType($arg->value);
 			if (
-				$arg->value instanceof New_
-				&& $value instanceof TypeWithClassName
+				$value instanceof ExprType
 				&& strpos($value->getClassName(), 'Doctrine\ORM\Query\Expr') === 0
 			) {
 				$className = $value->getClassName();
-				$args[] = new $className(...$this->processArgs($scope, '__construct', $arg->value->args));
+				$args[] = new $className(...$this->processArgs($scope, '__construct', $value->getConstructorArgs()));
 				continue;
 			}
 			// todo $qb->expr() support
