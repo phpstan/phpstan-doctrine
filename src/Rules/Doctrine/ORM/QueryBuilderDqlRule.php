@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use PHPStan\Type\Doctrine\QueryBuilderType;
+use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderType;
 use PHPStan\Type\ObjectType;
 
 class QueryBuilderDqlRule implements Rule

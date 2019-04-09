@@ -9,7 +9,7 @@ parameters:
 conditionalTags:
 	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
 		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%
-	PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension:
+	PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension:
 		phpstan.broker.dynamicMethodReturnTypeExtension: %doctrine.queryBuilderGetQueryNotOverride%
 
 services:
@@ -20,7 +20,7 @@ services:
 		tags:
 			- phpstan.broker.methodsClassReflectionExtension
 	-
-		class: PHPStan\Type\Doctrine\CreateQueryBuilderDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
@@ -47,30 +47,30 @@ services:
 			objectManagerLoader: %doctrine.objectManagerLoader%
 			repositoryClass: %doctrine.repositoryClass%
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilderGetDqlDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetDqlDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilderTypeSpecifyingExtension
+		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderTypeSpecifyingExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 	-
-		class: PHPStan\Type\Doctrine\QueryGetDqlDynamicReturnTypeExtension
+		class: PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-

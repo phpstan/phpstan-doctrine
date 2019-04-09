@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\Type\Doctrine;
+namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -10,6 +10,8 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
+use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\Query\QueryType;
 use PHPStan\Type\Type;
 use function in_array;
 use function method_exists;

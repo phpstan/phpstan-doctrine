@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\Type\Doctrine;
+namespace PHPStan\Type\Doctrine\Query;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;

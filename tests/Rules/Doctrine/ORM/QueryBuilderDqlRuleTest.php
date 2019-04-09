@@ -4,12 +4,12 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use PHPStan\Type\Doctrine\CreateQueryBuilderDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use PHPStan\Type\Doctrine\QueryBuilderGetQueryDynamicReturnTypeExtension;
-use PHPStan\Type\Doctrine\QueryBuilderMethodDynamicReturnTypeExtension;
-use PHPStan\Type\Doctrine\QueryBuilderTypeSpecifyingExtension;
-use PHPStan\Type\Doctrine\QueryGetDqlDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension;
+use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderTypeSpecifyingExtension;
 
 class QueryBuilderDqlRuleTest extends RuleTestCase
 {
