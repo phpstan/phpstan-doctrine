@@ -2,7 +2,6 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 
-use Doctrine\ORM\Query\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -33,7 +32,7 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	public function getClass(): string
 	{
-		return Expr::class;
+		return 'Doctrine\ORM\Query\Expr';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
