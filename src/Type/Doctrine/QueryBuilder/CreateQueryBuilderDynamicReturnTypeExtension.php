@@ -20,7 +20,7 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 	public function getClass(): string
 	{
-		return 'Doctrine\ORM\EntityManager';
+		return 'Doctrine\ORM\EntityManagerInterface';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
