@@ -6,9 +6,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
@@ -44,11 +46,19 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	): Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
-		if (!$calledOnType instanceof QueryBuilderType) {
-			return $calledOnType;
+		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
+		if (count($queryBuilderTypes) === 0) {
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
 		}
 
-		return $calledOnType->append($methodCall);
+		$resultTypes = [];
+		foreach ($queryBuilderTypes as $queryBuilderType) {
+			$resultTypes[] = $queryBuilderType->append($methodCall);
+		}
+
+		return TypeCombinator::union(...$resultTypes);
 	}
 
 }

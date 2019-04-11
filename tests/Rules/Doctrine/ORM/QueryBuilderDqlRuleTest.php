@@ -94,6 +94,36 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testRuleBranches(): void
+	{
+		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], [
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
+				31,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
+				45,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
+				59,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
+				90,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 95 near \'foo = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named foo',
+				107,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
+				107,
+			],
+		]);
+	}
+
 	/**
 	 * @return \PHPStan\Type\DynamicMethodReturnTypeExtension[]
 	 */

@@ -10,9 +10,11 @@ use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeCombinator;
 
 class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
@@ -62,9 +64,8 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 		}
 
 		$calledOnType = $scope->getType($node->var);
-		if (
-			!$calledOnType instanceof QueryBuilderType
-		) {
+		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
+		if (count($queryBuilderTypes) === 0) {
 			return new SpecifiedTypes([]);
 		}
 
@@ -73,10 +74,16 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$queryBuilderNode = $queryBuilderNode->var;
 		}
 
+		$resultTypes = [];
+		foreach ($queryBuilderTypes as $queryBuilderType) {
+			$resultTypes[] = $queryBuilderType->append($node);
+		}
+
 		return $this->typeSpecifier->create(
 			$queryBuilderNode,
-			$calledOnType->append($node),
-			TypeSpecifierContext::createTruthy()
+			TypeCombinator::union(...$resultTypes),
+			TypeSpecifierContext::createTruthy(),
+			true
 		);
 	}
 

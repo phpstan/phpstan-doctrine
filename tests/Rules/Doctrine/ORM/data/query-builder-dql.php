@@ -55,7 +55,7 @@ class TestQueryBuilderRepository
 		$qb->getQuery();
 	}
 
-	// todo if/else - union of QBs
+
 
 	public function unknownField(): void
 	{

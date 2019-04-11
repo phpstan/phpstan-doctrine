@@ -7,10 +7,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeUtils;
 
 class QueryBuilderDqlRule implements Rule
 {
@@ -51,7 +51,8 @@ class QueryBuilderDqlRule implements Rule
 		}
 
 		$calledOnType = $scope->getType($node->var);
-		if (!$calledOnType instanceof QueryBuilderType) {
+		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
+		if (count($queryBuilderTypes) === 0) {
 			if (
 				$this->reportDynamicQueryBuilders
 				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes()
@@ -69,7 +70,8 @@ class QueryBuilderDqlRule implements Rule
 			return [sprintf('Internal error: %s', $e->getMessage())];
 		}
 
-		if (!$dqlType instanceof ConstantStringType) {
+		$dqls = TypeUtils::getConstantStrings($dqlType);
+		if (count($dqls) === 0) {
 			if ($this->reportDynamicQueryBuilders) {
 				return [
 					'Could not analyse QueryBuilder with dynamic arguments.',
@@ -91,18 +93,21 @@ class QueryBuilderDqlRule implements Rule
 		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
-		try {
-			$objectManager->createQuery($dqlType->getValue())->getSQL();
-		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			$message = sprintf('QueryBuilder: %s', $e->getMessage());
-			if (strpos($e->getMessage(), '[Syntax Error]') === 0) {
-				$message .= sprintf("\nDQL: %s", $dqlType->getValue());
-			}
+		$messages = [];
+		foreach ($dqls as $dql) {
+			try {
+				$objectManager->createQuery($dql->getValue())->getSQL();
+			} catch (\Doctrine\ORM\Query\QueryException $e) {
+				$message = sprintf('QueryBuilder: %s', $e->getMessage());
+				if (strpos($e->getMessage(), '[Syntax Error]') === 0) {
+					$message .= sprintf("\nDQL: %s", $dql->getValue());
+				}
 
-			return [$message];
+				$messages[] = $message;
+			}
 		}
 
-		return [];
+		return $messages;
 	}
 
 }

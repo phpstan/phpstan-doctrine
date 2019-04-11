@@ -9,9 +9,11 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
+use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use function in_array;
 use function method_exists;
 use function strtolower;
@@ -61,7 +63,8 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 			$methodCall->args,
 			$methodReflection->getVariants()
 		)->getReturnType();
-		if (!$calledOnType instanceof QueryBuilderType) {
+		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
+		if (count($queryBuilderTypes) === 0) {
 			return $defaultReturnType;
 		}
 
@@ -77,47 +80,52 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
-		$queryBuilder = $objectManager->createQueryBuilder();
+		$resultTypes = [];
+		foreach ($queryBuilderTypes as $queryBuilderType) {
+			$queryBuilder = $objectManager->createQueryBuilder();
 
-		foreach ($calledOnType->getMethodCalls() as $calledMethodCall) {
-			if (!$calledMethodCall->name instanceof Identifier) {
-				continue;
+			foreach ($queryBuilderType->getMethodCalls() as $calledMethodCall) {
+				if (!$calledMethodCall->name instanceof Identifier) {
+					continue;
+				}
+
+				$methodName = $calledMethodCall->name->toString();
+				$lowerMethodName = strtolower($methodName);
+				if (in_array($lowerMethodName, [
+					'setparameter',
+					'setparameters',
+				], true)) {
+					continue;
+				}
+
+				if ($lowerMethodName === 'setfirstresult') {
+					$queryBuilder->setFirstResult(0);
+					continue;
+				}
+
+				if ($lowerMethodName === 'setmaxresults') {
+					$queryBuilder->setMaxResults(10);
+					continue;
+				}
+
+				if (!method_exists($queryBuilder, $methodName)) {
+					continue;
+				}
+
+				try {
+					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->args);
+				} catch (DynamicQueryBuilderArgumentException $e) {
+					// todo parameter "detectDynamicQueryBuilders" a hlasit jako error - pro oddebugovani
+					return $defaultReturnType;
+				}
+
+				$queryBuilder->{$methodName}(...$args);
 			}
 
-			$methodName = $calledMethodCall->name->toString();
-			$lowerMethodName = strtolower($methodName);
-			if (in_array($lowerMethodName, [
-				'setparameter',
-				'setparameters',
-			], true)) {
-				continue;
-			}
-
-			if ($lowerMethodName === 'setfirstresult') {
-				$queryBuilder->setFirstResult(0);
-				continue;
-			}
-
-			if ($lowerMethodName === 'setmaxresults') {
-				$queryBuilder->setMaxResults(10);
-				continue;
-			}
-
-			if (!method_exists($queryBuilder, $methodName)) {
-				continue;
-			}
-
-			try {
-				$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->args);
-			} catch (DynamicQueryBuilderArgumentException $e) {
-				// todo parameter "detectDynamicQueryBuilders" a hlasit jako error - pro oddebugovani
-				return $defaultReturnType;
-			}
-
-			$queryBuilder->{$methodName}(...$args);
+			$resultTypes[] = new QueryType($queryBuilder->getDQL());
 		}
 
-		return new QueryType($queryBuilder->getDQL());
+		return TypeCombinator::union(...$resultTypes);
 	}
 
 }

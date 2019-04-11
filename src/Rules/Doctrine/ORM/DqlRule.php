@@ -6,9 +6,9 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeUtils;
 
 class DqlRule implements Rule
 {
@@ -41,11 +41,6 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		$dqlType = $scope->getType($node->args[0]->value);
-		if (!$dqlType instanceof ConstantStringType) {
-			return [];
-		}
-
 		$methodName = $node->name->toLowerString();
 		if ($methodName !== 'createquery') {
 			return [];
@@ -54,6 +49,11 @@ class DqlRule implements Rule
 		$calledOnType = $scope->getType($node->var);
 		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
 		if (!(new ObjectType($entityManagerInterface))->isSuperTypeOf($calledOnType)->yes()) {
+			return [];
+		}
+
+		$dqls = TypeUtils::getConstantStrings($scope->getType($node->args[0]->value));
+		if (count($dqls) === 0) {
 			return [];
 		}
 
@@ -68,16 +68,17 @@ class DqlRule implements Rule
 		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
-		$dql = $dqlType->getValue();
-		$query = $objectManager->createQuery($dql);
-
-		try {
-			$query->getSQL();
-		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			return [sprintf('DQL: %s', $e->getMessage())];
+		$messages = [];
+		foreach ($dqls as $dql) {
+			$query = $objectManager->createQuery($dql->getValue());
+			try {
+				$query->getSQL();
+			} catch (\Doctrine\ORM\Query\QueryException $e) {
+				$messages[] = sprintf('DQL: %s', $e->getMessage());
+			}
 		}
 
-		return [];
+		return $messages;
 	}
 
 }

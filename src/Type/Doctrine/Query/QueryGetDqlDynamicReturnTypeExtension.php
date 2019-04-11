@@ -7,8 +7,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -30,7 +32,8 @@ class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeEx
 	): Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
-		if (!$calledOnType instanceof QueryType) {
+		$queryTypes = DoctrineTypeUtils::getQueryTypes($calledOnType);
+		if (count($queryTypes) === 0) {
 			return ParametersAcceptorSelector::selectFromArgs(
 				$scope,
 				$methodCall->args,
@@ -38,7 +41,12 @@ class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeEx
 			)->getReturnType();
 		}
 
-		return new ConstantStringType($calledOnType->getDql());
+		$dqls = [];
+		foreach ($queryTypes as $queryType) {
+			$dqls[] = new ConstantStringType($queryType->getDql());
+		}
+
+		return TypeCombinator::union(...$dqls);
 	}
 
 }

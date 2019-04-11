@@ -29,4 +29,10 @@ class MyEntity
 	 */
 	private $transient;
 
+	/**
+	 * @var self
+	 * @ORM\ManyToOne(targetEntity=MyEntity::class)
+	 */
+	private $parent;
+
 }
