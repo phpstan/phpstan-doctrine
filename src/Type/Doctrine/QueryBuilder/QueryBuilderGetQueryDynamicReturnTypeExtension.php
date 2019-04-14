@@ -115,7 +115,6 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 				try {
 					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->args);
 				} catch (DynamicQueryBuilderArgumentException $e) {
-					// todo parameter "detectDynamicQueryBuilders" a hlasit jako error - pro oddebugovani
 					return $defaultReturnType;
 				}
 
