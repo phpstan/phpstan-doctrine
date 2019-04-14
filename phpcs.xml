@@ -20,15 +20,11 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
-			<property name="usefulAnnotations" type="array" value="
-				@dataProvider,
-				@requires
-			"/>
 			<property name="enableObjectTypeHint" value="false"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
-	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
+	<rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
