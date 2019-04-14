@@ -16,6 +16,8 @@ use PHPStan\Type\TypeCombinator;
 class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
+	private const MAX_COMBINATIONS = 16;
+
 	/** @var string|null */
 	private $queryBuilderClass;
 
@@ -60,6 +62,9 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
+			return $calledOnType;
+		}
+		if (count($queryBuilderTypes) > self::MAX_COMBINATIONS) {
 			return $calledOnType;
 		}
 

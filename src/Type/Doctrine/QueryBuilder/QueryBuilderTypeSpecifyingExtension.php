@@ -20,6 +20,8 @@ use PHPStan\Type\TypeCombinator;
 class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
 
+	private const MAX_COMBINATIONS = 16;
+
 	/** @var string|null */
 	private $queryBuilderClass;
 
@@ -78,6 +80,10 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 		$calledOnType = $scope->getType($node->var);
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
+			return new SpecifiedTypes([]);
+		}
+
+		if (count($queryBuilderTypes) > self::MAX_COMBINATIONS) {
 			return new SpecifiedTypes([]);
 		}
 
