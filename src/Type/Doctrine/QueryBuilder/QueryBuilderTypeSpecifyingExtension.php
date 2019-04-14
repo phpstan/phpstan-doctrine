@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
@@ -48,6 +49,17 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 	public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
 	{
 		if (!$scope->isInFirstLevelStatement()) {
+			return new SpecifiedTypes([]);
+		}
+		if (!$node->name instanceof Identifier) {
+			return new SpecifiedTypes([]);
+		}
+
+		$lowerMethodName = strtolower($node->name->toString());
+		if (in_array($lowerMethodName, [
+			'setparameter',
+			'setparameters',
+		], true)) {
 			return new SpecifiedTypes([]);
 		}
 

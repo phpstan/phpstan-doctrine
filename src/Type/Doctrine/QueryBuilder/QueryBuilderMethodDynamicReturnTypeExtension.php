@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -46,11 +47,20 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	): Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
+		if (!$methodCall->name instanceof Identifier) {
+			return $calledOnType;
+		}
+		$lowerMethodName = strtolower($methodCall->name->toString());
+		if (in_array($lowerMethodName, [
+			'setparameter',
+			'setparameters',
+		], true)) {
+			return $calledOnType;
+		}
+
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
-			return ParametersAcceptorSelector::selectSingle(
-				$methodReflection->getVariants()
-			)->getReturnType();
+			return $calledOnType;
 		}
 
 		$resultTypes = [];
