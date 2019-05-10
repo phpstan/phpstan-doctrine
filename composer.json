@@ -1,12 +1,18 @@
 {
 	"name": "phpstan/phpstan-doctrine",
 	"description": "Doctrine extensions for PHPStan",
+	"type": "phpstan-extension",
 	"license": ["MIT"],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"extra": {
 		"branch-alias": {
 			"dev-master": "0.11-dev"
+		},
+		"phpstan": {
+			"includes": [
+				"extension.neon"
+			]
 		}
 	},
 	"require": {
