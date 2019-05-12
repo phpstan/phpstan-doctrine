@@ -88,6 +88,6 @@ class MyRepository extends EntityRepository
 
 	public function findOneByBlabla(): int
 	{
-
+		return 1;
 	}
 }

@@ -1,6 +1,7 @@
 includes:
 	- ../../../extension.neon
 	- ../../../rules.neon
+	- ../../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
 	doctrine:
