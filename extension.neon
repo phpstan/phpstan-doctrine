@@ -5,6 +5,14 @@ parameters:
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 
+parametersSchema:
+	doctrine: structure([
+		repositoryClass: schema(string(), nullable())
+		queryBuilderClass: schema(string(), nullable())
+		allCollectionsSelectable: bool()
+		objectManagerLoader: schema(string(), nullable())
+	])
+
 conditionalTags:
 	PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension:
 		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%

@@ -2,6 +2,15 @@ parameters:
 	doctrine:
 		reportDynamicQueryBuilders: false
 
+parametersSchema:
+	doctrine: structure([
+		repositoryClass: schema(string(), nullable())
+		queryBuilderClass: schema(string(), nullable())
+		allCollectionsSelectable: bool()
+		objectManagerLoader: schema(string(), nullable())
+		reportDynamicQueryBuilders: bool()
+	])
+
 rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\MagicRepositoryMethodCallRule
