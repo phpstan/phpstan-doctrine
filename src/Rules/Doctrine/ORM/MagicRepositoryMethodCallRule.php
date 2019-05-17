@@ -78,11 +78,7 @@ class MagicRepositoryMethodCallRule implements Rule
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
-			throw new \PHPStan\ShouldNotHappenException(sprintf(
-				'Please provide the "objectManagerLoader" setting for magic repository %s::%s() method validation.',
-				$calledOnType->getClassName(),
-				$methodName
-			));
+			return [];
 		}
 
 		$fieldName = $this->classify($methodFieldName);

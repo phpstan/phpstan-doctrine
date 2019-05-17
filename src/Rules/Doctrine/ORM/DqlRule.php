@@ -5,7 +5,6 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
@@ -59,7 +58,7 @@ class DqlRule implements Rule
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
-			throw new ShouldNotHappenException('Please provide the "objectManagerLoader" setting for the DQL validation.');
+			return [];
 		}
 		if (!$objectManager instanceof $entityManagerInterface) {
 			return [];

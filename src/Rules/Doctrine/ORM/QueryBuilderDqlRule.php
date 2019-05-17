@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
@@ -82,7 +81,7 @@ class QueryBuilderDqlRule implements Rule
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
-			throw new ShouldNotHappenException('Please provide the "objectManagerLoader" setting for the DQL validation.');
+			return [];
 		}
 
 		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
