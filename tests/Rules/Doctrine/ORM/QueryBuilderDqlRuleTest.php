@@ -19,6 +19,9 @@ use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderTypeSpecifyingExtension;
 class QueryBuilderDqlRuleTest extends RuleTestCase
 {
 
+	/** @var bool */
+	private $fasterVersion;
+
 	protected function getRule(): Rule
 	{
 		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), true);
@@ -26,6 +29,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
+		$this->fasterVersion = false;
 		$this->analyse([__DIR__ . '/data/query-builder-dql.php'], [
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 66: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1)",
@@ -94,9 +98,22 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testRuleBranches(): void
+	/**
+	 * @return bool[][]
+	 */
+	public function dataRuleBranches(): array
 	{
-		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], [
+		return [[true], [false]];
+	}
+
+	/**
+	 * @dataProvider dataRuleBranches
+	 * @param bool $fasterVersion
+	 */
+	public function testRuleBranches(bool $fasterVersion): void
+	{
+		$this->fasterVersion = $fasterVersion;
+		$errors = [
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
 				31,
@@ -106,10 +123,6 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				45,
 			],
 			[
-				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
-				59,
-			],
-			[
 				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
 				90,
 			],
@@ -117,9 +130,29 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				'QueryBuilder: [Semantical Error] line 0, col 95 near \'foo = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named foo',
 				107,
 			],
-			[
+		];
+		if (!$fasterVersion) {
+			array_splice($errors, 2, 0, [
+				[
+					'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
+					59,
+				],
+			]);
+			$errors[] = [
 				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
 				107,
+			];
+		}
+		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], $errors);
+	}
+
+	public function testBranchingPerformance(): void
+	{
+		$this->fasterVersion = true;
+		$this->analyse([__DIR__ . '/data/query-builder-branches-performance.php'], [
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1 AND\': Error: \'p\' is not defined.',
+				121,
 			],
 		]);
 	}
@@ -132,7 +165,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		$objectMetadataResolver = new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null);
 		$argumentsProcessor = new ArgumentsProcessor();
 		return [
-			new CreateQueryBuilderDynamicReturnTypeExtension(null),
+			new CreateQueryBuilderDynamicReturnTypeExtension(null, $this->fasterVersion),
 			new QueryBuilderMethodDynamicReturnTypeExtension(null),
 			new QueryBuilderGetQueryDynamicReturnTypeExtension($objectMetadataResolver, $argumentsProcessor, null),
 			new QueryGetDqlDynamicReturnTypeExtension(),

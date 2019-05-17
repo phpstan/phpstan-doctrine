@@ -13,9 +13,16 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	/** @var string|null */
 	private $queryBuilderClass;
 
-	public function __construct(?string $queryBuilderClass)
+	/** @var bool */
+	private $fasterVersion;
+
+	public function __construct(
+		?string $queryBuilderClass,
+		bool $fasterVersion
+	)
 	{
 		$this->queryBuilderClass = $queryBuilderClass;
+		$this->fasterVersion = $fasterVersion;
 	}
 
 	public function getClass(): string
@@ -34,7 +41,12 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		Scope $scope
 	): Type
 	{
-		return new QueryBuilderType(
+		$class = SimpleQueryBuilderType::class;
+		if (!$this->fasterVersion) {
+			$class = BranchingQueryBuilderType::class;
+		}
+
+		return new $class(
 			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder'
 		);
 	}

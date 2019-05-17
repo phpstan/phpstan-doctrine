@@ -5,12 +5,17 @@ parameters:
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 
+		# setting this to false might lead to performance problems
+		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
+		queryBuilderFastAlgorithm: true
+
 parametersSchema:
 	doctrine: structure([
 		repositoryClass: schema(string(), nullable())
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
+		queryBuilderFastAlgorithm: bool()
 	])
 
 conditionalTags:
@@ -28,6 +33,7 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
+			fasterVersion: %doctrine.queryBuilderFastAlgorithm%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-

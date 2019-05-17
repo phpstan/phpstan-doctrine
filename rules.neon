@@ -8,6 +8,7 @@ parametersSchema:
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
+		queryBuilderFastAlgorithm: bool()
 		reportDynamicQueryBuilders: bool()
 	])
 
