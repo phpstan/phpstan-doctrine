@@ -244,4 +244,11 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
+	public function queryBuilderFromSomewhereElse(): void
+	{
+		$class = new ClassWithQueryBuilder($this->entityManager);
+		$queryBuilder = $class->getQueryBuilder()->andWhere('e.nonexistent = :test');
+		$queryBuilder->getQuery();
+	}
+
 }

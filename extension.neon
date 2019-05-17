@@ -4,6 +4,7 @@ parameters:
 		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
+		searchOtherMethodsForQueryBuilderBeginning: true
 
 		# setting this to false might lead to performance problems
 		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
@@ -15,6 +16,7 @@ parametersSchema:
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
+		searchOtherMethodsForQueryBuilderBeginning: bool()
 		queryBuilderFastAlgorithm: bool()
 	])
 
@@ -74,6 +76,7 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
+			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 

@@ -4,6 +4,9 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\Query\Expr\Base;
 use Doctrine\ORM\Query\Expr\OrderBy;
+use PHPStan\DependencyInjection\Container;
+use PHPStan\DependencyInjection\ContainerFactory;
+use PHPStan\DependencyInjection\Nette\NetteContainer;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
@@ -95,6 +98,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
 				234,
 			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 60 near \'nonexistent =\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nonexistent',
+				251,
+			],
 		]);
 	}
 
@@ -164,13 +171,24 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		$objectMetadataResolver = new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null);
 		$argumentsProcessor = new ArgumentsProcessor();
+
 		return [
 			new CreateQueryBuilderDynamicReturnTypeExtension(null, $this->fasterVersion),
-			new QueryBuilderMethodDynamicReturnTypeExtension(null),
+			new QueryBuilderMethodDynamicReturnTypeExtension($this->getContainerWithDoctrineExtensions(), $this->getParser(), null, true),
 			new QueryBuilderGetQueryDynamicReturnTypeExtension($objectMetadataResolver, $argumentsProcessor, null),
 			new QueryGetDqlDynamicReturnTypeExtension(),
 			new ExpressionBuilderDynamicReturnTypeExtension($objectMetadataResolver, $argumentsProcessor),
 		];
+	}
+
+	private function getContainerWithDoctrineExtensions(): Container
+	{
+		$rootDir = __DIR__ . '/../../../../vendor/phpstan/phpstan';
+		$containerFactory = new ContainerFactory($rootDir);
+		return new NetteContainer($containerFactory->create($rootDir . '/tmp', [
+			$containerFactory->getConfigDirectory() . '/config.level7.neon',
+			__DIR__ . '/../../../../extension.neon',
+		], []));
 	}
 
 	/**

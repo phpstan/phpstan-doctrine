@@ -18,3 +18,6 @@ parameters:
 		-
 			message: '~^Variable method call on Doctrine\\ORM\\Query\\Expr\.$~'
 			path: */src/Type/Doctrine/QueryBuilder/Expr/ExpressionBuilderDynamicReturnTypeExtension.php
+		-
+			message: '~^Variable property access on PhpParser\\Node\\Stmt\\Declare_\|PhpParser\\Node\\Stmt\\Namespace_\.$~'
+			path: */src/Type/Doctrine/QueryBuilder/QueryBuilderMethodDynamicReturnTypeExtension.php
