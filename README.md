@@ -9,7 +9,7 @@
 
 This extension provides following features:
 
-* DQL validation for parse errors, unknown entity classes and unknown persistent fields.
+* DQL validation for parse errors, unknown entity classes and unknown persistent fields. QueryBuilder validation is also supported.
 * Recognizes magic `findBy*`, `findOneBy*` and `countBy*` methods on EntityRepository.
 * Validates entity fields in repository `findBy`, `findBy*`, `findOneBy`, `findOneBy*`, `count` and `countBy*` method calls.
 * Interprets `EntityRepository<MyEntity>` correctly in phpDocs for further type inference of methods called on the repository.
@@ -33,7 +33,7 @@ includes:
 	- vendor/phpstan/phpstan-doctrine/extension.neon
 ```
 
-If you're interested in DQL validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
+If you're interested in DQL/QueryBuilder validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
 
 ```
 includes:
