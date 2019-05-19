@@ -251,4 +251,14 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
+	public function anotherWeirdTypeSpecifyingExtensionProblem(): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->setParameter('test', '123');
+
+		$queryBuilder->getQuery();
+	}
+
 }

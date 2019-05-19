@@ -57,14 +57,6 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			return new SpecifiedTypes([]);
 		}
 
-		$lowerMethodName = strtolower($node->name->toString());
-		if (in_array($lowerMethodName, [
-			'setparameter',
-			'setparameters',
-		], true)) {
-			return new SpecifiedTypes([]);
-		}
-
 		$returnType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
 			$node->args,
