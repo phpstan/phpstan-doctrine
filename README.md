@@ -35,14 +35,14 @@ If you don't want to use `phpstan/extension-installer`, include extension.neon i
 
 ```
 includes:
-- vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
 ```
 
 If you're interested in DQL/QueryBuilder validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
 
 ```
 includes:
-- vendor/phpstan/phpstan-doctrine/rules.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
 ```
 </details>
 
