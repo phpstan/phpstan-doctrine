@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Base;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use PHPStan\DependencyInjection\Container;
@@ -101,6 +102,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'nonexistent =\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nonexistent',
 				251,
+			],
+			[
+				"QueryBuilder: [Syntax Error] line 0, col -1: Error: Expected =, <, <=, <>, >, >=, !=, got end of string.\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE foo",
+				281,
 			],
 		]);
 	}
@@ -210,6 +215,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		return [
 			new NewExprDynamicReturnTypeExtension($argumentsProcessor, OrderBy::class),
 			new NewExprDynamicReturnTypeExtension($argumentsProcessor, Base::class),
+			new NewExprDynamicReturnTypeExtension($argumentsProcessor, Expr::class),
 		];
 	}
 

@@ -170,3 +170,10 @@ services:
 		arguments:
 			class: Doctrine\ORM\Query\Expr\OrderBy
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\NewExprDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+		arguments:
+			class: Doctrine\ORM\Query\Expr
+			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor

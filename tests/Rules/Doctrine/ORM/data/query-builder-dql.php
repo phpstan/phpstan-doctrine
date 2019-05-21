@@ -261,4 +261,44 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
+	public function qbCustomExprMethod(): void
+	{
+		$expr = new CustomExpr();
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere($expr->correct());
+		$queryBuilder->getQuery();
+	}
+
+	public function qbCustomExprMethodSyntaxError(): void
+	{
+		$expr = new CustomExpr();
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere($expr->syntaxError());
+		$queryBuilder->getQuery();
+	}
+
+}
+
+class CustomExpr extends \Doctrine\ORM\Query\Expr
+{
+
+	public function __construct()
+	{
+		// necessary so that NewExprDynamicReturnTypeExtension works
+	}
+
+	public function syntaxError(): string
+	{
+		return 'foo';
+	}
+
+	public function correct(): string
+	{
+		return 'e.id = 1';
+	}
+
 }
