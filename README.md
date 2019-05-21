@@ -18,7 +18,7 @@ This extension provides following features:
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
 * Also supports Doctrine ODM.
 
-## Usage
+## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
 
@@ -26,19 +26,26 @@ To use this extension, require it in [Composer](https://getcomposer.org/):
 composer require --dev phpstan/phpstan-doctrine
 ```
 
-Include extension.neon in your project's PHPStan config:
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
 
 ```
 includes:
-	- vendor/phpstan/phpstan-doctrine/extension.neon
+- vendor/phpstan/phpstan-doctrine/extension.neon
 ```
 
 If you're interested in DQL/QueryBuilder validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
 
 ```
 includes:
-	- vendor/phpstan/phpstan-doctrine/rules.neon
+- vendor/phpstan/phpstan-doctrine/rules.neon
 ```
+</details>
+
 
 ## Configuration
 
