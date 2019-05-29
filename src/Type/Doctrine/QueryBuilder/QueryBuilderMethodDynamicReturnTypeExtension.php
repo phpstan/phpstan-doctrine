@@ -177,7 +177,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 			$scope->isDeclareStrictTypes(),
 			$methodReflection,
 			$scope->getNamespace()
-		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, [], null, null, false, false, false);
+		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, [], null, null, null, false, false, false);
 
 		$queryBuilderTypes = [];
 
