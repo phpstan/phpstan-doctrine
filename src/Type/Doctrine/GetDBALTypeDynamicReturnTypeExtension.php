@@ -18,7 +18,7 @@ final class GetDBALTypeDynamicReturnTypeExtension implements DynamicStaticMethod
 
 	public function getClass(): string
 	{
-		return \Doctrine\DBAL\Types\Type::class;
+		return 'Doctrine\DBAL\Types\Type';
 	}
 
 	public function isStaticMethodSupported(MethodReflection $methodReflection): bool
