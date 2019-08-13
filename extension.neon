@@ -119,6 +119,11 @@ services:
 		arguments:
 			managerClass: Doctrine\Common\Persistence\ObjectManager
 
+	dbalTypeGetType:
+		class: PHPStan\Type\Doctrine\GetDBALTypeDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
 	## NewExprDynamicReturnTypeExtensions
 
 	-
