@@ -62,10 +62,10 @@ You can opt in for more advanced analysis by providing the object manager from y
 ```neon
 parameters:
 	doctrine:
-		objectManagerLoader: tests/object-manager.php
+		objectManagerLoader: %rootDir%/../../../tests/object_manager.php
 ```
 
-For example, in a Symfony project, `object-manager.php` would look something like this:
+For example, in a Symfony project, `object_manager.php` would look something like this:
 
 ```php<?php
 
