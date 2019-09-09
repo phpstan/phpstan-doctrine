@@ -67,9 +67,14 @@ parameters:
 
 For example, in a Symfony project, `object-manager.php` would look something like this:
 
-```php
-require dirname(__DIR__).'/../config/bootstrap.php';
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+```php<?php
+
+declare(strict_types=1);
+
+require dirname(__DIR__).'/config/bootstrap.php';
+
+$kernel = new App\Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
+
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
