@@ -301,4 +301,9 @@ class CustomExpr extends \Doctrine\ORM\Query\Expr
 		return 'e.id = 1';
 	}
 
+	public function newParent(): void
+	{
+		$test = new parent();
+	}
+
 }

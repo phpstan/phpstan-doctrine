@@ -5,6 +5,8 @@ namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
+use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
@@ -12,7 +14,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 
-class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
+class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension, BrokerAwareExtension
 {
 
 	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
@@ -21,6 +23,9 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 	/** @var string */
 	private $class;
 
+	/** @var \PHPStan\Broker\Broker */
+	private $broker;
+
 	public function __construct(
 		ArgumentsProcessor $argumentsProcessor,
 		string $class
@@ -28,6 +33,11 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 	{
 		$this->argumentsProcessor = $argumentsProcessor;
 		$this->class = $class;
+	}
+
+	public function setBroker(Broker $broker): void
+	{
+		$this->broker = $broker;
 	}
 
 	public function getClass(): string
@@ -46,7 +56,12 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 			throw new \PHPStan\ShouldNotHappenException();
 		}
 
-		$className = $methodCall->class->toString();
+		$className = $scope->resolveName($methodCall->class);
+		if (!$this->broker->hasClass($className)) {
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
+		}
 
 		try {
 			$exprObject = new $className(
