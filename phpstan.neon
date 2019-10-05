@@ -8,16 +8,16 @@ includes:
 
 parameters:
 	excludes_analyse:
-		- */tests/*/data/*
+		- tests/*/data/*
 
 	ignoreErrors:
 		- '~^Parameter \#1 \$node \(.*\) of method .*Rule::processNode\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method PHPStan\\Rules\\Rule::processNode\(\)$~'
 		-
 			message: '~^Variable method call on Doctrine\\ORM\\QueryBuilder~'
-			path: */src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
+			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
 		-
 			message: '~^Variable method call on object\.$~'
-			path: */src/Type/Doctrine/QueryBuilder/Expr/ExpressionBuilderDynamicReturnTypeExtension.php
+			path: src/Type/Doctrine/QueryBuilder/Expr/ExpressionBuilderDynamicReturnTypeExtension.php
 		-
 			message: '~^Variable property access on PhpParser\\Node\\Stmt\\Declare_\|PhpParser\\Node\\Stmt\\Namespace_\.$~'
-			path: */src/Type/Doctrine/QueryBuilder/QueryBuilderMethodDynamicReturnTypeExtension.php
+			path: src/Type/Doctrine/QueryBuilder/QueryBuilderMethodDynamicReturnTypeExtension.php

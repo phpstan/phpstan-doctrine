@@ -7,7 +7,6 @@ use Doctrine\ORM\Query\Expr\Base;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
-use PHPStan\DependencyInjection\Nette\NetteContainer;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
@@ -135,26 +134,18 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 				45,
 			],
 			[
+				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
+				59,
+			],
+			/*[
 				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
 				90,
-			],
+			],*/
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 95 near \'foo = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named foo',
 				107,
 			],
 		];
-		if (!$fasterVersion) {
-			array_splice($errors, 2, 0, [
-				[
-					'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
-					59,
-				],
-			]);
-			$errors[] = [
-				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
-				107,
-			];
-		}
 		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], $errors);
 	}
 
@@ -190,10 +181,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		$rootDir = __DIR__ . '/../../../../vendor/phpstan/phpstan';
 		$containerFactory = new ContainerFactory($rootDir);
-		return new NetteContainer($containerFactory->create($rootDir . '/tmp', [
+		return $containerFactory->create($rootDir . '/tmp', [
 			$containerFactory->getConfigDirectory() . '/config.level7.neon',
 			__DIR__ . '/../../../../extension.neon',
-		], []));
+		], []);
 	}
 
 	/**

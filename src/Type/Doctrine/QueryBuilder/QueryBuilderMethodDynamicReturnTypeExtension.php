@@ -21,6 +21,7 @@ use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
+use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -177,7 +178,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 			$scope->isDeclareStrictTypes(),
 			$methodReflection,
 			$scope->getNamespace()
-		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, [], null, null, null, false, false, false);
+		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, TemplateTypeMap::createEmpty(), [], null, null, null, false, false, false);
 
 		$queryBuilderTypes = [];
 
