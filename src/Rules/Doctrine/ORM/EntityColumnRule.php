@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
+use Throwable;
 use function sprintf;
 
 class EntityColumnRule implements Rule
@@ -81,9 +82,22 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
+		$identifier = null;
+		if ($metadata->generatorType !== 5) { // ClassMetadataInfo::GENERATOR_TYPE_NONE
+			try {
+				$identifier = $metadata->getSingleIdentifierFieldName();
+			} catch (Throwable $e) {
+				$mappingException = 'Doctrine\ORM\Mapping\MappingException';
+				if (!$e instanceof $mappingException) {
+					throw $e;
+				}
+			}
+		}
+
 		$writableToPropertyType = $descriptor->getWritableToPropertyType();
 		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
-		if ($fieldMapping['nullable'] === true) {
+		$nullable = $fieldMapping['nullable'] === true;
+		if ($nullable) {
 			$writableToPropertyType = TypeCombinator::addNull($writableToPropertyType);
 			$writableToDatabaseType = TypeCombinator::addNull($writableToDatabaseType);
 		}
@@ -91,8 +105,9 @@ class EntityColumnRule implements Rule
 		if (!$property->getWritableType()->isSuperTypeOf($writableToPropertyType)->yes()) {
 			$errors[] = sprintf('Database can contain %s but property expects %s.', $writableToPropertyType->describe(VerbosityLevel::typeOnly()), $property->getWritableType()->describe(VerbosityLevel::typeOnly()));
 		}
-		if (!$writableToDatabaseType->isSuperTypeOf($property->getReadableType())->yes()) {
-			$errors[] = sprintf('Property can contain %s but database expects %s.', $property->getReadableType()->describe(VerbosityLevel::typeOnly()), $writableToDatabaseType->describe(VerbosityLevel::typeOnly()));
+		$propertyReadableType = $property->getReadableType();
+		if (!$writableToDatabaseType->isSuperTypeOf($identifier === $propertyName && !$nullable ? TypeCombinator::removeNull($propertyReadableType) : $propertyReadableType)->yes()) {
+			$errors[] = sprintf('Property can contain %s but database expects %s.', $propertyReadableType->describe(VerbosityLevel::typeOnly()), $writableToDatabaseType->describe(VerbosityLevel::typeOnly()));
 		}
 		return $errors;
 	}
