@@ -4,7 +4,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManager;
 
-class MagicRepositoryCalls
+class RepositoryFindByCalls
 {
 
 	/** @var EntityManager */

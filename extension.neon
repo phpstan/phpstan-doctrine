@@ -26,6 +26,12 @@ conditionalTags:
 
 services:
 	-
+		class: PHPStan\Type\Doctrine\DescriptorRegistryFactory
+	-
+		class: PHPStan\Type\Doctrine\DescriptorRegistry
+		factory: @PHPStan\Type\Doctrine\DescriptorRegistryFactory::createRegistry
+
+	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
 	-
 		class: PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension
@@ -177,3 +183,77 @@ services:
 		arguments:
 			class: Doctrine\ORM\Query\Expr
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
+
+	# Type descriptors
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\ArrayType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\BigIntType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\BinaryType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\BlobType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateImmutableType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateIntervalType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateTimeType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateTimeTzImmutableType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateTimeTzType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DateType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\DecimalType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\FloatType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\GuidType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\IntegerType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\JsonArrayType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\JsonType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\ObjectType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\SimpleArrayType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\SmallIntType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\StringType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\TextType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\TimeImmutableType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\TimeType
+		tags: [phpstan.doctrine.typeDescriptor]
