@@ -9,10 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MyBrokenEntity extends MyBrokenSuperclass
 {
+
 	/**
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="bigint")
-	 * @var int
+	 * @var int|null
 	 */
 	private $id;
 

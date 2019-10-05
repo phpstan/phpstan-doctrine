@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
@@ -31,31 +32,30 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		require_once __DIR__ . '/data/MyBrokenSuperclass.php';
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
-				'Database can contain string but property expects int.',
-				17,
+				'Database can contain string but property expects int|null.',
+				19,
 			],
 			[
 				'Database can contain string|null but property expects string.',
-				23,
+				25,
 			],
 			[
 				'Property can contain string|null but database expects string.',
-				29,
+				31,
 			],
 			[
 				'Database can contain DateTime but property expects DateTimeImmutable.',
-				35,
+				37,
 			],
 			[
 				'Database can contain DateTimeImmutable but property expects DateTime.',
-				41,
+				43,
 			],
 			[
 				'Property can contain DateTime but database expects DateTimeImmutable.',
-				41,
+				43,
 			],
 		]);
 	}
@@ -68,6 +68,30 @@ class EntityColumnRuleTest extends RuleTestCase
 				17,
 			],
 		]);
+	}
+
+	/**
+	 * @dataProvider generatedIdsProvider
+	 */
+	public function testGeneratedIds(string $file, array $expectedErrors): void
+	{
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	public function generatedIdsProvider(): Iterator
+	{
+		yield 'not nullable' => [__DIR__ . '/data/GeneratedIdEntity1.php', []];
+		yield 'nullable column' => [
+			__DIR__ . '/data/GeneratedIdEntity2.php',
+			[
+				[
+					'Database can contain string|null but property expects string.',
+					19,
+				],
+			],
+		];
+		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', []];
+		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', []];
 	}
 
 }
