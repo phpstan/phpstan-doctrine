@@ -87,10 +87,22 @@ class EntityRelationRule implements Rule
 		$errors = [];
 		if ($columnType !== null) {
 			if (!$property->getWritableType()->isSuperTypeOf($columnType)->yes()) {
-				$errors[] = sprintf('Database can contain %s but property expects %s.', $columnType->describe(VerbosityLevel::typeOnly()), $property->getWritableType()->describe(VerbosityLevel::typeOnly()));
+				$errors[] = sprintf(
+					'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
+					$className,
+					$propertyName,
+					$columnType->describe(VerbosityLevel::typeOnly()),
+					$property->getWritableType()->describe(VerbosityLevel::typeOnly())
+				);
 			}
 			if (!$columnType->isSuperTypeOf($property->getReadableType())->yes()) {
-				$errors[] = sprintf('Property can contain %s but database expects %s.', $property->getReadableType()->describe(VerbosityLevel::typeOnly()), $columnType->describe(VerbosityLevel::typeOnly()));
+				$errors[] = sprintf(
+					'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
+					$className,
+					$propertyName,
+					$property->getReadableType()->describe(VerbosityLevel::typeOnly()),
+					$columnType->describe(VerbosityLevel::typeOnly())
+				);
 			}
 		}
 
