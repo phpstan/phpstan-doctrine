@@ -34,27 +34,27 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
-				'Database can contain string but property expects int|null.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
 				19,
 			],
 			[
-				'Database can contain string|null but property expects string.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
 				25,
 			],
 			[
-				'Property can contain string|null but database expects string.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$two type mapping mismatch: property can contain string|null but database expects string.',
 				31,
 			],
 			[
-				'Database can contain DateTime but property expects DateTimeImmutable.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$three type mapping mismatch: database can contain DateTime but property expects DateTimeImmutable.',
 				37,
 			],
 			[
-				'Database can contain DateTimeImmutable but property expects DateTime.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: database can contain DateTimeImmutable but property expects DateTime.',
 				43,
 			],
 			[
-				'Property can contain DateTime but database expects DateTimeImmutable.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: property can contain DateTime but database expects DateTimeImmutable.',
 				43,
 			],
 		]);
@@ -64,7 +64,7 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
 			[
-				'Database can contain resource but property expects int.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
 				17,
 			],
 		]);
@@ -85,7 +85,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			__DIR__ . '/data/GeneratedIdEntity2.php',
 			[
 				[
-					'Database can contain string|null but property expects string.',
+					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
 					19,
 				],
 			],

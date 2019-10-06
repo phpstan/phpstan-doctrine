@@ -32,19 +32,19 @@ class EntityRelationRuleTest extends RuleTestCase
 		yield 'one to one' => [__DIR__ . '/data/EntityWithBrokenOneToOneRelations.php',
 			[
 				[
-					'Property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToOneRelations::$oneToOneNullableProperty type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
 					31,
 				],
 				[
-					'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToOneRelations::$oneToOneNullableColumn type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
 					37,
 				],
 				[
-					'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToOneRelations::$oneToOneWrongClass type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
 					50,
 				],
 				[
-					'Property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToOneRelations::$oneToOneWrongClass type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
 					50,
 				],
 			]];
@@ -52,19 +52,19 @@ class EntityRelationRuleTest extends RuleTestCase
 		yield 'many to one' => [__DIR__ . '/data/EntityWithBrokenManyToOneRelations.php',
 			[
 				[
-					'Property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToOneRelations::$manyToOneNullableProperty type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
 					31,
 				],
 				[
-					'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToOneRelations::$manyToOneNullableColumn type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
 					37,
 				],
 				[
-					'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToOneRelations::$manyToOneWrongClass type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
 					50,
 				],
 				[
-					'Property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToOneRelations::$manyToOneWrongClass type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
 					50,
 				],
 			]];
@@ -72,19 +72,19 @@ class EntityRelationRuleTest extends RuleTestCase
 		yield 'one to many' => [__DIR__ . '/data/EntityWithBrokenOneToManyRelations.php',
 			[
 				[
-					'Property can contain iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations::$oneToManyWithIterableAnnotation type mapping mismatch: property can contain iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					24,
 				],
 				[
-					'Property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations::$oneToManyWithCollectionAnnotation type mapping mismatch: property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					30,
 				],
 				[
-					'Database can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but property expects array<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations::$oneToManyWithArrayAnnotation type mapping mismatch: database can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but property expects array<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					36,
 				],
 				[
-					'Property can contain array<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations::$oneToManyWithArrayAnnotation type mapping mismatch: property can contain array<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					36,
 				],
 			]];
@@ -92,19 +92,19 @@ class EntityRelationRuleTest extends RuleTestCase
 		yield 'many to many' => [__DIR__ . '/data/EntityWithBrokenManyToManyRelations.php',
 			[
 				[
-					'Property can contain iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToManyRelations::$manyToManyWithIterableAnnotation type mapping mismatch: property can contain iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					24,
 				],
 				[
-					'Property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToManyRelations::$manyToManyWithCollectionAnnotation type mapping mismatch: property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					30,
 				],
 				[
-					'Database can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but property expects array<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToManyRelations::$manyToManyWithArrayAnnotation type mapping mismatch: database can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but property expects array<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					36,
 				],
 				[
-					'Property can contain array<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithBrokenManyToManyRelations::$manyToManyWithArrayAnnotation type mapping mismatch: property can contain array<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					36,
 				],
 			]];

@@ -103,11 +103,23 @@ class EntityColumnRule implements Rule
 		}
 
 		if (!$property->getWritableType()->isSuperTypeOf($writableToPropertyType)->yes()) {
-			$errors[] = sprintf('Database can contain %s but property expects %s.', $writableToPropertyType->describe(VerbosityLevel::typeOnly()), $property->getWritableType()->describe(VerbosityLevel::typeOnly()));
+			$errors[] = sprintf(
+				'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
+				$className,
+				$propertyName,
+				$writableToPropertyType->describe(VerbosityLevel::typeOnly()),
+				$property->getWritableType()->describe(VerbosityLevel::typeOnly())
+			);
 		}
 		$propertyReadableType = $property->getReadableType();
 		if (!$writableToDatabaseType->isSuperTypeOf($identifier === $propertyName && !$nullable ? TypeCombinator::removeNull($propertyReadableType) : $propertyReadableType)->yes()) {
-			$errors[] = sprintf('Property can contain %s but database expects %s.', $propertyReadableType->describe(VerbosityLevel::typeOnly()), $writableToDatabaseType->describe(VerbosityLevel::typeOnly()));
+			$errors[] = sprintf(
+				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
+				$className,
+				$propertyName,
+				$propertyReadableType->describe(VerbosityLevel::typeOnly()),
+				$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
+			);
 		}
 		return $errors;
 	}
