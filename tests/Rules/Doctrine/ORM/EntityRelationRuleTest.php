@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
@@ -16,9 +17,35 @@ class EntityRelationRuleTest extends RuleTestCase
 		);
 	}
 
-	public function testRule(): void
+	/**
+	 * @dataProvider ruleProvider
+	 */
+	public function testRule(string $file, array $expectedErrors): void
 	{
-		$this->analyse([__DIR__ . '/data/EntityWithRelations.php'], []);
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	public function ruleProvider(): Iterator
+	{
+		yield [__DIR__ . '/data/EntityWithRelations.php', []];
+		yield [__DIR__ . '/data/EntityWithBrokenOneToOneRelations.php', [
+			[
+				'Property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+				31,
+			],
+			[
+				'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+				37,
+			],
+			[
+				'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
+				50,
+			],
+			[
+				'Property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
+				50,
+			]
+		]];
 	}
 
 }
