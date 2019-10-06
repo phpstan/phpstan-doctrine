@@ -18,6 +18,7 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\MagicRepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityColumnRule
+	- PHPStan\Rules\Doctrine\ORM\EntityRelationRule
 
 services:
 	-
