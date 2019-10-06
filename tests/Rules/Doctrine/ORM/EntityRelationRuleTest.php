@@ -27,8 +27,28 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	public function ruleProvider(): Iterator
 	{
-		yield [__DIR__ . '/data/EntityWithRelations.php', []];
-		yield [__DIR__ . '/data/EntityWithBrokenOneToOneRelations.php', [
+		yield 'nice entity' => [__DIR__ . '/data/EntityWithRelations.php', []];
+
+		yield 'one to one' => [__DIR__ . '/data/EntityWithBrokenOneToOneRelations.php', [
+			[
+				'Property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+				31,
+			],
+			[
+				'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
+				37,
+			],
+			[
+				'Database can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but property expects PHPStan\Rules\Doctrine\ORM\MyEntity|null.',
+				50,
+			],
+			[
+				'Property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity|null.',
+				50,
+			]
+		]];
+
+		yield 'many to one' => [__DIR__ . '/data/EntityWithBrokenManyToOneRelations.php', [
 			[
 				'Property can contain PHPStan\Rules\Doctrine\ORM\AnotherEntity|null but database expects PHPStan\Rules\Doctrine\ORM\AnotherEntity.',
 				31,
