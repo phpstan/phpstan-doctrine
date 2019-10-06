@@ -22,4 +22,29 @@ class AnotherEntity
 	 */
 	private $manyToOne;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations")
+	 */
+	private $one;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations")
+	 */
+	private $two;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations")
+	 */
+	private $three;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations")
+	 */
+	private $four;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\EntityWithBrokenOneToManyRelations")
+	 */
+	private $five;
+
 }
