@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class EntityWithCustomType
+class EntityWithUnknownType
 {
 
 	/**
@@ -18,7 +18,7 @@ class EntityWithCustomType
 	private $id;
 
 	/**
-	 * @ORM\Column(type="custom")
+	 * @ORM\Column(type="unknown")
 	 * @var int
 	 */
 	private $foo;

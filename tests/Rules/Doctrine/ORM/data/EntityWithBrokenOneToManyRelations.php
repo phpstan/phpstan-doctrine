@@ -12,7 +12,7 @@ class EntityWithBrokenOneToManyRelations
 
 	/**
 	 * @ORM\Id()
-	 * @ORM\Column(type="int")
+	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
 	private $id;

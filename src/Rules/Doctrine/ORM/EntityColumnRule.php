@@ -23,10 +23,18 @@ class EntityColumnRule implements Rule
 	/** @var \PHPStan\Type\Doctrine\DescriptorRegistry */
 	private $descriptorRegistry;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry)
+	/** @var bool */
+	private $reportUnknownTypes;
+
+	public function __construct(
+		ObjectMetadataResolver $objectMetadataResolver,
+		DescriptorRegistry $descriptorRegistry,
+		bool $reportUnknownTypes
+	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
+		$this->reportUnknownTypes = $reportUnknownTypes;
 	}
 
 	public function getNodeType(): string
@@ -79,7 +87,12 @@ class EntityColumnRule implements Rule
 		try {
 			$descriptor = $this->descriptorRegistry->get($fieldMapping['type']);
 		} catch (DescriptorNotRegisteredException $e) {
-			return [];
+			return $this->reportUnknownTypes ? [sprintf(
+				'Property %s::$%s: Doctrine type "%s" does not have any registered descriptor.',
+				$className,
+				$propertyName,
+				$fieldMapping['type']
+			)] : [];
 		}
 
 		$identifier = null;
