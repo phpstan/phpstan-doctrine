@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\Descriptors\BigIntType;
 use PHPStan\Type\Doctrine\Descriptors\BinaryType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
+use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
@@ -32,8 +33,10 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeType(),
 				new DateTimeImmutableType(),
 				new BinaryType(),
+				new IntegerType(),
 				new ReflectionDescriptor(CustomType::NAME, $this->createBroker()),
-			])
+			]),
+			true
 		);
 	}
 
@@ -110,6 +113,16 @@ class EntityColumnRuleTest extends RuleTestCase
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: property can contain int but database expects array.',
+				24,
+			],
+		]);
+	}
+
+	public function testUnknownType(): void
+	{
+		$this->analyse([__DIR__ . '/data/EntityWithUnknownType.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithUnknownType::$foo: Doctrine type "unknown" does not have any registered descriptor.',
 				24,
 			],
 		]);
