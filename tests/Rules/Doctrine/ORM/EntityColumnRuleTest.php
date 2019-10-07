@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\DBAL\Types\Type;
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
@@ -10,6 +11,7 @@ use PHPStan\Type\Doctrine\Descriptors\BigIntType;
 use PHPStan\Type\Doctrine\Descriptors\BinaryType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
+use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
@@ -18,6 +20,10 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
+		if (!Type::hasType(CustomType::NAME)) {
+			Type::addType(CustomType::NAME, CustomType::class);
+		}
+
 		return new EntityColumnRule(
 			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null),
 			new DescriptorRegistry([
@@ -26,6 +32,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeType(),
 				new DateTimeImmutableType(),
 				new BinaryType(),
+				new ReflectionDescriptor(CustomType::NAME, $this->createBroker()),
 			])
 		);
 	}
@@ -92,6 +99,20 @@ class EntityColumnRuleTest extends RuleTestCase
 		];
 		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', []];
 		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', []];
+	}
+
+	public function testCustomType(): void
+	{
+		$this->analyse([__DIR__ . '/data/EntityWithCustomType.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: database can contain DateTimeInterface but property expects int.',
+				24,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: property can contain int but database expects array.',
+				24,
+			],
+		]);
 	}
 
 }
