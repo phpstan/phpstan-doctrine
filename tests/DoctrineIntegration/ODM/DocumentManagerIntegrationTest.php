@@ -27,7 +27,7 @@ final class DocumentManagerIntegrationTest extends LevelsTestCase
 
 	public function getPhpStanExecutablePath(): string
 	{
-		return __DIR__ . '/../../../vendor/bin/phpstan';
+		return __DIR__ . '/../../../vendor/phpstan/phpstan/bin/phpstan';
 	}
 
 	public function getPhpStanConfigPath(): ?string
