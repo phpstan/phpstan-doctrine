@@ -19,6 +19,8 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityRelationRule
+	- PHPStan\Rules\Doctrine\ORM\EntityMustNotBeFinalRule
+	- PHPStan\Rules\Doctrine\ORM\EntityMustNotContainFinalMethodsRule
 
 services:
 	-
