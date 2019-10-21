@@ -65,11 +65,30 @@ parameters:
 		objectManagerLoader: tests/object-manager.php
 ```
 
-For example, in a Symfony project, `object-manager.php` would look something like this:
+For example, in a Symfony4 project, `object-manager.php` would look something like this:
 
 ```php
-require dirname(__DIR__).'/../config/bootstrap.php';
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+require __DIR__.'/../config/bootstrap.php';
+$kernel = new \App\Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
+
+## Configuration for validate QueryBuilder
+
+```php
+        /** @var EntityManagerInterface $em */
+        $em = $this->getDoctrine()->getManager();
+        $services = $em->createQueryBuilder()
+            ->select('s')
+            ->from(VipService::class, 's')
+            ->leftJoin('s.vip', 'vip')
+            ->andWhere('vip.id = :vip_id')
+            ->leftJoin('s.serviceNomenclature', 'serviceNomenclature')
+            ->andWhere('serviceNomenclature.id = :nomenclature_id')
+            ->setParameter('vip_id', (int) $vipId)
+            ->setParameter('nomenclature_id', (int) $nomenclatureId)
+            ->getQuery()
+            ->getResult();
+```
+
