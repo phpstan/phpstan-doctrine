@@ -35,7 +35,7 @@ final class ObjectMetadataResolver
 			!file_exists($objectManagerLoader)
 			|| !is_readable($objectManagerLoader)
 		) {
-			throw new \PHPStan\ShouldNotHappenException('Object manager could not be loaded');
+			throw new \PHPStan\ShouldNotHappenException(sprintf('Unable to load ObjectManager from "%s"', $objectManagerLoader));
 		}
 
 		return require $objectManagerLoader;
