@@ -1,7 +1,7 @@
 includes:
 	- ../../../extension.neon
-	- ../../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
 	doctrine:
-		objectManagerLoader: tests/DoctrineIntegration/ODM/document-manager.php
+		objectManagerLoader: document-manager.php

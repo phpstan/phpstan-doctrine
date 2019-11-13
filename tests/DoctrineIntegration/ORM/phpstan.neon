@@ -1,8 +1,8 @@
 includes:
 	- ../../../extension.neon
 	- ../../../rules.neon
-	- ../../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
 	doctrine:
-		objectManagerLoader: tests/DoctrineIntegration/ORM/entity-manager.php
+		objectManagerLoader: entity-manager.php
