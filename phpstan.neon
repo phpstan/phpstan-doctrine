@@ -11,7 +11,6 @@ parameters:
 		- tests/*/data/*
 
 	ignoreErrors:
-		- '~^Parameter \#1 \$node \(.*\) of method .*Rule::processNode\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method PHPStan\\Rules\\Rule::processNode\(\)$~'
 		-
 			message: '~^Variable method call on Doctrine\\ORM\\QueryBuilder~'
 			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php

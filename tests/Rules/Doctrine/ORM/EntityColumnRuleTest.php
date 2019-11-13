@@ -85,12 +85,17 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider generatedIdsProvider
+	 * @param string $file
+	 * @param mixed[] $expectedErrors
 	 */
 	public function testGeneratedIds(string $file, array $expectedErrors): void
 	{
 		$this->analyse([$file], $expectedErrors);
 	}
 
+	/**
+	 * @return \Iterator<string, mixed[]>
+	 */
 	public function generatedIdsProvider(): Iterator
 	{
 		yield 'not nullable' => [__DIR__ . '/data/GeneratedIdEntity1.php', []];

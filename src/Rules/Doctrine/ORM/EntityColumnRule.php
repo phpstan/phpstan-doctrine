@@ -62,7 +62,6 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		/** @var \Doctrine\ORM\Mapping\ClassMetadataInfo $metadata */
 		$metadata = $objectManager->getClassMetadata($className);
 		$classMetadataInfo = 'Doctrine\ORM\Mapping\ClassMetadataInfo';
 		if (!$metadata instanceof $classMetadataInfo) {

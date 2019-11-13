@@ -22,12 +22,17 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
+	 * @param string $file
+	 * @param mixed[] $expectedErrors
 	 */
 	public function testRule(string $file, array $expectedErrors): void
 	{
 		$this->analyse([$file], $expectedErrors);
 	}
 
+	/**
+	 * @return \Iterator<string, mixed[]>
+	 */
 	public function ruleProvider(): Iterator
 	{
 		yield 'nice entity' => [__DIR__ . '/data/EntityWithRelations.php', []];
