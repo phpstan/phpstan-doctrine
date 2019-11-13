@@ -14,6 +14,9 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
 use function sprintf;
 
+/**
+ * @implements Rule<Node\Stmt\PropertyProperty>
+ */
 class EntityRelationRule implements Rule
 {
 
@@ -30,11 +33,6 @@ class EntityRelationRule implements Rule
 		return Node\Stmt\PropertyProperty::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Stmt\PropertyProperty $node
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @return string[]
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		$class = $scope->getClassReflection();

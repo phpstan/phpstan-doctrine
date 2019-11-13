@@ -10,6 +10,9 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\ObjectRepositoryType;
 use PHPStan\Type\VerbosityLevel;
 
+/**
+ * @implements Rule<Node\Expr\MethodCall>
+ */
 class MagicRepositoryMethodCallRule implements Rule
 {
 
@@ -30,11 +33,6 @@ class MagicRepositoryMethodCallRule implements Rule
 		return Node\Expr\MethodCall::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Expr\MethodCall $node
-	 * @param Scope $scope
-	 * @return string[]
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		$calledOnType = $scope->getType($node->var);

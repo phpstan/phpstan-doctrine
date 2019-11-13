@@ -11,6 +11,9 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
 
+/**
+ * @implements Rule<Node\Expr\MethodCall>
+ */
 class QueryBuilderDqlRule implements Rule
 {
 
@@ -34,11 +37,6 @@ class QueryBuilderDqlRule implements Rule
 		return Node\Expr\MethodCall::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Expr\MethodCall $node
-	 * @param Scope $scope
-	 * @return string[]
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		if (!$node->name instanceof Node\Identifier) {

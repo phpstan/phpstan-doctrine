@@ -14,6 +14,9 @@ use PHPStan\Type\VerbosityLevel;
 use Throwable;
 use function sprintf;
 
+/**
+ * @implements Rule<Node\Stmt\PropertyProperty>
+ */
 class EntityColumnRule implements Rule
 {
 
@@ -42,11 +45,6 @@ class EntityColumnRule implements Rule
 		return Node\Stmt\PropertyProperty::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Stmt\PropertyProperty $node
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @return string[]
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		$class = $scope->getClassReflection();

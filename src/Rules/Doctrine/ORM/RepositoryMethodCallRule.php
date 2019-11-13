@@ -11,6 +11,9 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\ObjectRepositoryType;
 use PHPStan\Type\VerbosityLevel;
 
+/**
+ * @implements Rule<Node\Expr\MethodCall>
+ */
 class RepositoryMethodCallRule implements Rule
 {
 
@@ -27,11 +30,6 @@ class RepositoryMethodCallRule implements Rule
 		return Node\Expr\MethodCall::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Expr\MethodCall $node
-	 * @param Scope $scope
-	 * @return string[]
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		if (!isset($node->args[0])) {

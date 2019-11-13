@@ -7,6 +7,9 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
+/**
+ * @extends RuleTestCase<RepositoryMethodCallRule>
+ */
 class RepositoryMethodCallRuleTest extends RuleTestCase
 {
 

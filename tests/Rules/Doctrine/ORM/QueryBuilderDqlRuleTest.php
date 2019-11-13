@@ -19,6 +19,9 @@ use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetQueryDynamicReturnTypeExte
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderTypeSpecifyingExtension;
 
+/**
+ * @extends RuleTestCase<QueryBuilderDqlRule>
+ */
 class QueryBuilderDqlRuleTest extends RuleTestCase
 {
 

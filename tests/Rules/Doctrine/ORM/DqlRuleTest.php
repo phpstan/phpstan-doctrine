@@ -6,6 +6,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
+/**
+ * @extends RuleTestCase<DqlRule>
+ */
 class DqlRuleTest extends RuleTestCase
 {
 

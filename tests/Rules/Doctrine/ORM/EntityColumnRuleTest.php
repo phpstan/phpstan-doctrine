@@ -16,6 +16,9 @@ use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
+/**
+ * @extends RuleTestCase<EntityColumnRule>
+ */
 class EntityColumnRuleTest extends RuleTestCase
 {
 
