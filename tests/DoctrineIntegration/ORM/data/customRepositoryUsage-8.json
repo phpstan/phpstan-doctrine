@@ -1,12 +1,12 @@
 [
     {
         "message": "Cannot call method doSomethingElse() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null.",
-        "line": 46,
+        "line": 53,
         "ignorable": true
     },
     {
         "message": "Cannot call method nonexistent() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null.",
-        "line": 47,
+        "line": 54,
         "ignorable": true
     }
 ]

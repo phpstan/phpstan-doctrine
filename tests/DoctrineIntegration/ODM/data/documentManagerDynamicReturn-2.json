@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerDynamicReturn\\MyDocument::doSomethingElse().",
+        "line": 31,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerDynamicReturn\\MyDocument::doSomethingElse().",
+        "line": 43,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerDynamicReturn\\MyDocument::doSomethingElse().",
+        "line": 55,
+        "ignorable": true
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "message": "Property PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\Example::$repository with generic class PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyRepository does not specify its types: T",
+        "line": 15,
+        "ignorable": true
+    },
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\Example::__construct() has parameter $anotherRepository with generic class PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyRepository but does not specify its types: T",
+        "line": 22,
+        "ignorable": true
+    }
+]

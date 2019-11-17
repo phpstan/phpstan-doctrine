@@ -7,8 +7,12 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 
 class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
@@ -50,14 +54,25 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 			)->getReturnType();
 		}
 		$argType = $scope->getType($methodCall->args[0]->value);
-		if (!$argType instanceof ConstantStringType) {
+		if ($argType instanceof ConstantStringType) {
+			$objectName = $argType->getValue();
+			$classType = new ObjectType($objectName);
+		} elseif ($argType instanceof GenericClassStringType) {
+			$classType = $argType->getGenericType();
+			if (!$classType instanceof TypeWithClassName) {
+				return new MixedType();
+			}
+
+			$objectName = $classType->getClassName();
+		} else {
 			return new MixedType();
 		}
 
-		$objectName = $argType->getValue();
 		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
 
-		return new ObjectRepositoryType($objectName, $repositoryClass);
+		return new GenericObjectType($repositoryClass, [
+			$classType,
+		]);
 	}
 
 }

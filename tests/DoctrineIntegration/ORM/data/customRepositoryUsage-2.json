@@ -11,17 +11,17 @@
     },
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity::nonexistent().",
-        "line": 47,
+        "line": 54,
         "ignorable": true
     },
     {
         "message": "Cannot call method test() on int.",
-        "line": 52,
+        "line": 59,
         "ignorable": true
     },
     {
         "message": "Cannot call method test() on int.",
-        "line": 53,
+        "line": 60,
         "ignorable": true
     }
 ]

@@ -40,6 +40,13 @@ class Example
 		$this->repository->nonexistant();
 	}
 
+	public function nonGenericRepository(): void
+	{
+		$entity = $this->repository->find(1);
+		$entity->doSomethingElse();
+		$entity->nonexistent();
+	}
+
 	public function genericRepository(): void
 	{
 		$entity = $this->anotherRepository->find(1);
@@ -73,6 +80,10 @@ class MyEntity
 	}
 }
 
+/**
+ * @template T
+ * @extends EntityRepository<T>
+ */
 class MyRepository extends EntityRepository
 {
 	public function get(int $id): MyEntity

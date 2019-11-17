@@ -3,8 +3,13 @@
 namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
-class TestRepository
+/**
+ * @template T
+ * @extends EntityRepository<T>
+ */
+class TestRepository extends EntityRepository
 {
 
 	/** @var EntityManager */

@@ -9,6 +9,17 @@ parameters:
 		# setting this to false might lead to performance problems
 		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
 		queryBuilderFastAlgorithm: true
+	stubFiles:
+		- stubs/DocumentManager.php
+		- stubs/DocumentRepository.php
+		- stubs/EntityManager.php
+		- stubs/EntityManagerDecorator.php
+		- stubs/EntityManagerInterface.php
+		- stubs/EntityRepository.php
+		- stubs/ManagerRegistry.php
+		- stubs/ObjectManager.php
+		- stubs/ObjectManagerDecorator.php
+		- stubs/ObjectRepository.php
 
 parametersSchema:
 	doctrine: structure([
@@ -49,18 +60,6 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\ObjectManagerFindDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: PHPStan\Type\Doctrine\ObjectManagerMergeDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: PHPStan\Type\Doctrine\ObjectRepositoryDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
@@ -96,10 +95,6 @@ services:
 		class: PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: PHPStan\PhpDoc\Doctrine\EntityRepositoryTypeNodeResolverExtension
-		tags:
-			- phpstan.phpDoc.typeNodeResolverExtension
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\Expr\ExpressionBuilderDynamicReturnTypeExtension
 		arguments:

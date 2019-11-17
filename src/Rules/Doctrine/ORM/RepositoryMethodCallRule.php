@@ -2,13 +2,15 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use PHPStan\Type\Doctrine\ObjectRepositoryType;
+use PHPStan\Type\GenericTypeVariableResolver;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 
 /**
@@ -43,9 +45,17 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 		$calledOnType = $scope->getType($node->var);
-		if (!$calledOnType instanceof ObjectRepositoryType) {
+		if (!$calledOnType instanceof TypeWithClassName) {
 			return [];
 		}
+		$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
+		if ($entityClassType === null) {
+			return [];
+		}
+		if (!$entityClassType instanceof TypeWithClassName) {
+			return [];
+		}
+		$entityClass = $entityClassType->getClassName();
 
 		$methodNameIdentifier = $node->name;
 		if (!$methodNameIdentifier instanceof Node\Identifier) {
@@ -66,7 +76,6 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 
-		$entityClass = $calledOnType->getEntityClass();
 		$classMetadata = $objectManager->getClassMetadata($entityClass);
 
 		$messages = [];

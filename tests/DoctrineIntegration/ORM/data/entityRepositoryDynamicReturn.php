@@ -121,6 +121,59 @@ class Example2
 	}
 }
 
+class Example3MagicMethods
+{
+	/**
+	 * @var EntityRepository<MyEntity>
+	 */
+	private $repository;
+
+	public function __construct(EntityManagerInterface $entityManager)
+	{
+		$this->repository = $entityManager->getRepository(MyEntity::class);
+	}
+
+	public function findDynamicType(): void
+	{
+		$test = $this->repository->findById(1);
+		foreach ($test as $item) {
+			$item->doSomething();
+			$item->doSomethingElse();
+		}
+	}
+
+	public function findDynamicType2(): void
+	{
+		$test = $this->repository->findByNonexistent(1);
+	}
+
+	public function findOneByDynamicType(): void
+	{
+		$test = $this->repository->findOneById(1);
+
+		if ($test === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
+		$test->doSomething();
+		$test->doSomethingElse();
+	}
+
+	public function findOneDynamicType2(): void
+	{
+		$test = $this->repository->findOneByNonexistent(1);
+	}
+
+	public function countBy(): void
+	{
+		$test = $this->repository->countById(1);
+		if ($test === 'foo') {
+
+		}
+		$test = $this->repository->countByNonexistent('test');
+	}
+}
+
 /**
  * @ORM\Entity()
  */

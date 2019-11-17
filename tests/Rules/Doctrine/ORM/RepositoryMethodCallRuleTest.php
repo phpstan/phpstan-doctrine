@@ -4,7 +4,6 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
@@ -16,6 +15,14 @@ class RepositoryMethodCallRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new RepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null));
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [__DIR__ . '/magic-repository.neon'];
 	}
 
 	public function testRule(): void
@@ -70,16 +77,6 @@ class RepositoryMethodCallRuleTest extends RuleTestCase
 				45,
 			],
 		]);
-	}
-
-	/**
-	 * @return \PHPStan\Type\DynamicMethodReturnTypeExtension[]
-	 */
-	public function getDynamicMethodReturnTypeExtensions(): array
-	{
-		return [
-			new GetRepositoryDynamicReturnTypeExtension(\Doctrine\ORM\EntityManager::class, new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null)),
-		];
 	}
 
 }

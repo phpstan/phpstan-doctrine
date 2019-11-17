@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Property PHPStan\\DoctrineIntegration\\ODM\\DocumentRepositoryDynamicReturn\\Example::$repository with generic class Doctrine\\ODM\\MongoDB\\Repository\\DocumentRepository does not specify its types: TDocumentClass",
+        "line": 16,
+        "ignorable": true
+    }
+]

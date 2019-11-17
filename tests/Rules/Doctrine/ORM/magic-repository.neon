@@ -1,0 +1,6 @@
+includes:
+	- ../../../../extension.neon
+
+parameters:
+	doctrine:
+		objectManagerLoader: entity-manager.php

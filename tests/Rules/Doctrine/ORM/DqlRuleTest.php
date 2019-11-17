@@ -22,23 +22,23 @@ class DqlRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/dql.php'], [
 			[
 				'DQL: [Syntax Error] line 0, col -1: Error: Expected Doctrine\ORM\Query\Lexer::T_IDENTIFIER, got end of string.',
-				30,
+				35,
 			],
 			[
 				'DQL: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
-				37,
+				42,
 			],
 			[
 				'DQL: [Semantical Error] line 0, col 14 near \'Foo e\': Error: Class \'Foo\' is not defined.',
-				44,
+				49,
 			],
 			[
 				'DQL: [Semantical Error] line 0, col 17 near \'Foo\': Error: Class \'Foo\' is not defined.',
-				51,
+				56,
 			],
 			[
 				'DQL: [Semantical Error] line 0, col 17 near \'Foo\': Error: Class \'Foo\' is not defined.',
-				59,
+				64,
 			],
 		]);
 	}
