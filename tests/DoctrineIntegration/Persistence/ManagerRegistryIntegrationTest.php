@@ -27,7 +27,7 @@ final class ManagerRegistryIntegrationTest extends LevelsTestCase
 		return __DIR__ . '/../../../vendor/bin/phpstan';
 	}
 
-	public function getPhpStanConfigPath(): ?string
+	public function getPhpStanConfigPath(): string
 	{
 		return __DIR__ . '/phpstan.neon';
 	}

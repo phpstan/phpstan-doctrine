@@ -8,6 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class QueryBuilderGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -38,10 +39,12 @@ class QueryBuilderGetDqlDynamicReturnTypeExtension implements DynamicMethodRetur
 		Scope $scope
 	): Type
 	{
-		return $scope->getType(new MethodCall(
+		$type = $scope->getType(new MethodCall(
 			new MethodCall($methodCall->var, new Identifier('getQuery')),
 			new Identifier('getDQL')
 		));
+
+		return TypeCombinator::removeNull($type);
 	}
 
 }
