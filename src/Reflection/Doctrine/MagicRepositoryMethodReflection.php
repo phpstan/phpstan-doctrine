@@ -54,12 +54,9 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		return true;
 	}
 
-	/**
-	 * @return string|false
-	 */
-	public function getDocComment()
+	public function getDocComment(): ?string
 	{
-		return false;
+		return null;
 	}
 
 	public function getName(): string
