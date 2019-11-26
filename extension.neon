@@ -193,6 +193,9 @@ services:
 		class: PHPStan\Type\Doctrine\Descriptors\BlobType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
+		class: PHPStan\Type\Doctrine\Descriptors\BooleanType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
 		class: PHPStan\Type\Doctrine\Descriptors\DateImmutableType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
