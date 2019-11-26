@@ -5,6 +5,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class ReflectionDescriptor implements DoctrineTypeDescriptor
 {
@@ -32,12 +33,16 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToPHPValue')->getVariants())->getReturnType();
+		$type = ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToPHPValue')->getVariants())->getReturnType();
+
+		return TypeCombinator::removeNull($type);
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToDatabaseValue')->getVariants())->getParameters()[0]->getType();
+		$type = ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToDatabaseValue')->getVariants())->getParameters()[0]->getType();
+
+		return TypeCombinator::removeNull($type);
 	}
 
 }

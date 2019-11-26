@@ -22,7 +22,7 @@ class CustomType extends Type
 		return self::NAME;
 	}
 
-	public function convertToPHPValue($value, AbstractPlatform $abstractPlatform): DateTimeInterface
+	public function convertToPHPValue($value, AbstractPlatform $abstractPlatform): ?DateTimeInterface
 	{
 		return new DateTimeImmutable();
 	}
@@ -30,7 +30,7 @@ class CustomType extends Type
 	/**
 	 * @param array $value
 	 */
-	public function convertToDatabaseValue($value, AbstractPlatform $abstractPlatform): string
+	public function convertToDatabaseValue($value, AbstractPlatform $abstractPlatform): ?string
 	{
 		return '';
 	}
