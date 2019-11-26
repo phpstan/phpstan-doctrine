@@ -42,4 +42,10 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $four;
 
+	/**
+	 * @ORM\Column(type="date")
+	 * @var \DateTimeImmutable
+	 */
+	private $six;
+
 }

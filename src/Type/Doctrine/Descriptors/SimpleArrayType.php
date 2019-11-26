@@ -10,7 +10,7 @@ class SimpleArrayType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'simple_array';
+		return \Doctrine\DBAL\Types\SimpleArrayType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

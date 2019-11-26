@@ -10,7 +10,7 @@ class DecimalType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'decimal';
+		return \Doctrine\DBAL\Types\DecimalType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

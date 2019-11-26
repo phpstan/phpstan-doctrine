@@ -11,7 +11,7 @@ class DateType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'date';
+		return \Doctrine\DBAL\Types\DateType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

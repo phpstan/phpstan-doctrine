@@ -10,7 +10,7 @@ class FloatType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'float';
+		return \Doctrine\DBAL\Types\FloatType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

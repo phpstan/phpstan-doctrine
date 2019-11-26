@@ -11,7 +11,7 @@ class BinaryType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'binary';
+		return \Doctrine\DBAL\Types\BinaryType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

@@ -10,7 +10,7 @@ class BigIntType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'bigint';
+		return \Doctrine\DBAL\Types\BigIntType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

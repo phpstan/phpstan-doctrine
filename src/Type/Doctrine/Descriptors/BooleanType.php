@@ -9,7 +9,7 @@ class BooleanType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'boolean';
+		return \Doctrine\DBAL\Types\BooleanType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

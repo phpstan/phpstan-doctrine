@@ -88,7 +88,7 @@ public function getWritableToPropertyType(): Type;
 public function getWritableToDatabaseType(): Type;
 ```
 
-* The `getType()` method simply returns the name of the custom type.
+* The `getType()` method simply returns the class name of the custom type.
 * The `getWritableToPropertyType()` method returns the PHPStan type that the custom type will write into the entity's property field. Basically it is the return type of the custom type's `convertToPHPValue()` method.
 * The `getWritableToDatabaseType()` method returns the PHPStan type that can be written from the entity's property field into the custom type. Again, basically it's the allowed type for the custom type's `convertToDatabaseValue()`'s first argument.
 
@@ -114,6 +114,6 @@ services:
 
 	# in case you are using the ReflectionDescriptor
 	-
-		class: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('my_custom_type_name')
+		class: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('MyApp\MyCustomTypeName')
 		tags: [phpstan.doctrine.typeDescriptor]
 ```

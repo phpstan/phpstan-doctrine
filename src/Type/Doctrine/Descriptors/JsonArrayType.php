@@ -10,7 +10,7 @@ class JsonArrayType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'json_array';
+		return \Doctrine\DBAL\Types\JsonArrayType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

@@ -11,7 +11,7 @@ class DateIntervalType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'dateinterval';
+		return \Doctrine\DBAL\Types\DateIntervalType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

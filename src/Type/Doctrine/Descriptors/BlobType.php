@@ -11,7 +11,7 @@ class BlobType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'blob';
+		return \Doctrine\DBAL\Types\BlobType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

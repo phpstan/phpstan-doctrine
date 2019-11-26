@@ -9,12 +9,16 @@ use PHPStan\Type\Type;
 class ReflectionDescriptor implements DoctrineTypeDescriptor
 {
 
-	/** @var string */
+	/** @var class-string<\Doctrine\DBAL\Types\Type> */
 	private $type;
 
 	/** @var \PHPStan\Broker\Broker */
 	private $broker;
 
+	/**
+	 * @param class-string<\Doctrine\DBAL\Types\Type> $type
+	 * @param \PHPStan\Broker\Broker $broker
+	 */
 	public function __construct(string $type, Broker $broker)
 	{
 		$this->type = $type;
@@ -28,12 +32,12 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return ParametersAcceptorSelector::selectSingle($this->broker->getClass((['Doctrine\DBAL\Types\Type', 'getTypesMap'])()[$this->type])->getNativeMethod('convertToPHPValue')->getVariants())->getReturnType();
+		return ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToPHPValue')->getVariants())->getReturnType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return ParametersAcceptorSelector::selectSingle($this->broker->getClass((['Doctrine\DBAL\Types\Type', 'getTypesMap'])()[$this->type])->getNativeMethod('convertToDatabaseValue')->getVariants())->getParameters()[0]->getType();
+		return ParametersAcceptorSelector::selectSingle($this->broker->getClass($this->type)->getNativeMethod('convertToDatabaseValue')->getVariants())->getParameters()[0]->getType();
 	}
 
 }

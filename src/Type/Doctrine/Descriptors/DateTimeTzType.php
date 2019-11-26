@@ -11,7 +11,7 @@ class DateTimeTzType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'datetimetz';
+		return \Doctrine\DBAL\Types\DateTimeTzType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

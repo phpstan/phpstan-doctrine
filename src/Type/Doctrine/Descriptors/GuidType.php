@@ -10,7 +10,7 @@ class GuidType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'guid';
+		return \Doctrine\DBAL\Types\GuidType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

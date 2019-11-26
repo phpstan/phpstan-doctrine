@@ -7,6 +7,9 @@ use PHPStan\Type\Type;
 interface DoctrineTypeDescriptor
 {
 
+	/**
+	 * @return class-string<\Doctrine\DBAL\Types\Type>
+	 */
 	public function getType(): string;
 
 	public function getWritableToPropertyType(): Type;

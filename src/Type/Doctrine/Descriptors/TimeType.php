@@ -11,7 +11,7 @@ class TimeType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'time';
+		return \Doctrine\DBAL\Types\TimeType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

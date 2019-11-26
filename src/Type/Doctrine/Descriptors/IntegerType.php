@@ -9,7 +9,7 @@ class IntegerType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'integer';
+		return \Doctrine\DBAL\Types\IntegerType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

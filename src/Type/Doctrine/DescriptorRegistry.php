@@ -2,12 +2,13 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\DBAL\Types\Type;
 use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 
 class DescriptorRegistry
 {
 
-	/** @var array<string, \PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor> */
+	/** @var array<class-string<\Doctrine\DBAL\Types\Type>, \PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor> */
 	private $descriptors = [];
 
 	/**
@@ -22,10 +23,17 @@ class DescriptorRegistry
 
 	public function get(string $type): DoctrineTypeDescriptor
 	{
-		if (!isset($this->descriptors[$type])) {
+		$typesMap = Type::getTypesMap();
+		if (!isset($typesMap[$type])) {
 			throw new \PHPStan\Type\Doctrine\DescriptorNotRegisteredException();
 		}
-		return $this->descriptors[$type];
+
+		/** @var class-string<\Doctrine\DBAL\Types\Type> $typeClass */
+		$typeClass = $typesMap[$type];
+		if (!isset($this->descriptors[$typeClass])) {
+			throw new \PHPStan\Type\Doctrine\DescriptorNotRegisteredException();
+		}
+		return $this->descriptors[$typeClass];
 	}
 
 }

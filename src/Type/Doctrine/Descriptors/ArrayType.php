@@ -10,7 +10,7 @@ class ArrayType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'array';
+		return \Doctrine\DBAL\Types\ArrayType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

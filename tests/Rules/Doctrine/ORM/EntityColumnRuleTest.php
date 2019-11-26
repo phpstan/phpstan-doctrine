@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\Descriptors\BigIntType;
 use PHPStan\Type\Doctrine\Descriptors\BinaryType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
+use PHPStan\Type\Doctrine\Descriptors\DateType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
@@ -37,7 +38,8 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeImmutableType(),
 				new BinaryType(),
 				new IntegerType(),
-				new ReflectionDescriptor(CustomType::NAME, $this->createBroker()),
+				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
+				new DateType(),
 			]),
 			true
 		);

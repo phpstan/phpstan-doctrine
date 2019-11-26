@@ -10,7 +10,7 @@ class JsonType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'json';
+		return \Doctrine\DBAL\Types\JsonType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

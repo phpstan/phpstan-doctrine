@@ -10,7 +10,7 @@ class ObjectType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'object';
+		return \Doctrine\DBAL\Types\ObjectType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

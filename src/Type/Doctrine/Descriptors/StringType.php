@@ -9,7 +9,7 @@ class StringType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'string';
+		return \Doctrine\DBAL\Types\StringType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

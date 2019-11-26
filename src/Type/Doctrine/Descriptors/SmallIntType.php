@@ -9,7 +9,7 @@ class SmallIntType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'smallint';
+		return \Doctrine\DBAL\Types\SmallIntType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

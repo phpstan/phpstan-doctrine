@@ -11,7 +11,7 @@ class TimeImmutableType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'time_immutable';
+		return \Doctrine\DBAL\Types\TimeImmutableType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

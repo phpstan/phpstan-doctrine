@@ -21,6 +21,11 @@ $config->setMetadataDriverImpl(
 	)
 );
 
+\Doctrine\DBAL\Types\Type::overrideType(
+	'date',
+	\Doctrine\DBAL\Types\DateTimeImmutableType::class
+);
+
 return EntityManager::create(
 	[
 		'driver' => 'pdo_sqlite',

@@ -9,7 +9,7 @@ class TextType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
-		return 'text';
+		return \Doctrine\DBAL\Types\TextType::class;
 	}
 
 	public function getWritableToPropertyType(): Type
