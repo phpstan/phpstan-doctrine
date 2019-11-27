@@ -20,7 +20,7 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 		$ruleLevelHelper = new RuleLevelHelper($broker, true, false, true);
 		return new CallMethodsRule(
 			$broker,
-			new FunctionCallParametersCheck($ruleLevelHelper, true, true, true),
+			new FunctionCallParametersCheck($ruleLevelHelper, true, true, true, true),
 			$ruleLevelHelper,
 			true,
 			true
