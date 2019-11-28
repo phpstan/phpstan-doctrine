@@ -9,6 +9,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\ErrorType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
@@ -112,7 +115,12 @@ class EntityColumnRule implements Rule
 			$writableToDatabaseType = TypeCombinator::addNull($writableToDatabaseType);
 		}
 
-		if (!$property->getWritableType()->isSuperTypeOf($writableToPropertyType)->yes()) {
+		$propertyWritableType = $property->getWritableType();
+		if (get_class($propertyWritableType) === MixedType::class || $propertyWritableType instanceof ErrorType || $propertyWritableType instanceof NeverType) {
+			return [];
+		}
+
+		if (!$propertyWritableType->isSuperTypeOf($writableToPropertyType)->yes()) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
 				$className,

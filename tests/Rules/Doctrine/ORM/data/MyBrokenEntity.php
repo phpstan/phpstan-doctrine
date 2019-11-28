@@ -48,4 +48,15 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $six;
 
+	/**
+	 * @ORM\Column(type="date")
+	 */
+	private $mixed;
+
+	/**
+	 * @ORM\Column(type="date")
+	 * @var int&string
+	 */
+	private $never;
+
 }

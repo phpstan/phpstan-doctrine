@@ -41,4 +41,15 @@ class EntityWithRelations
 	 */
 	private $manyToMany;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
+	 */
+	private $mixed;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
+	 * @var int&string
+	 */
+	private $never;
+
 }

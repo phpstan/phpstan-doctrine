@@ -7,8 +7,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MissingPropertyFromReflectionException;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
@@ -97,7 +99,11 @@ class EntityRelationRule implements Rule
 
 		$errors = [];
 		if ($columnType !== null) {
-			if (!$property->getWritableType()->isSuperTypeOf($columnType)->yes()) {
+			$propertyWritableType = $property->getWritableType();
+			if (get_class($propertyWritableType) === MixedType::class || $propertyWritableType instanceof ErrorType || $propertyWritableType instanceof NeverType) {
+				return [];
+			}
+			if (!$propertyWritableType->isSuperTypeOf($columnType)->yes()) {
 				$errors[] = sprintf(
 					'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
 					$className,
