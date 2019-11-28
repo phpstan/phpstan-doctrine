@@ -116,6 +116,21 @@ class EntityRelationRuleTest extends RuleTestCase
 					36,
 				],
 			]];
+
+		yield 'primary key as relation' => [
+			__DIR__ . '/data/MyEntityRelationPrimaryKey.php',
+			[],
+		];
+
+		yield 'primary key as nullable relation' => [
+			__DIR__ . '/data/MyEntityRelationNullablePrimaryKey.php',
+			[
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\MyEntityRelationNullablePrimaryKey::$id type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\MyEntity|null but database expects PHPStan\Rules\Doctrine\ORM\MyEntity.',
+					18,
+				],
+			],
+		];
 	}
 
 }

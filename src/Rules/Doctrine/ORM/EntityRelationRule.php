@@ -67,11 +67,25 @@ class EntityRelationRule implements Rule
 			return [];
 		}
 		$associationMapping = $metadata->associationMappings[$propertyName];
+		$identifier = null;
+		try {
+			$identifier = $metadata->getSingleIdentifierFieldName();
+		} catch (\Throwable $e) {
+			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
+			if (!$e instanceof $mappingException) {
+				throw $e;
+			}
+		}
 
 		$columnType = null;
 		if ((bool) ($associationMapping['type'] & 3)) { // ClassMetadataInfo::TO_ONE
 			$columnType = new ObjectType($associationMapping['targetEntity']);
-			if ($associationMapping['joinColumns'][0]['nullable'] ?? true) {
+			if ($identifier !== null && $identifier === $propertyName) {
+				$nullable = false;
+			} else {
+				$nullable = $associationMapping['joinColumns'][0]['nullable'] ?? true;
+			}
+			if ($nullable) {
 				$columnType = TypeCombinator::addNull($columnType);
 			}
 		} elseif ((bool) ($associationMapping['type'] & 12)) { // ClassMetadataInfo::TO_MANY
