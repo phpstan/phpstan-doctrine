@@ -255,3 +255,14 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\TimeType
 		tags: [phpstan.doctrine.typeDescriptor]
+
+	# 3rd party Type descriptors
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidBinaryTypeDescriptor
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidBinaryOrderedTimeTypeDescriptor
+		tags: [phpstan.doctrine.typeDescriptor]

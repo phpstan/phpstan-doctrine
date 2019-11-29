@@ -29,6 +29,7 @@
 		"phpstan/phpstan-phpunit": "^0.12",
 		"phpstan/phpstan-strict-rules": "^0.12",
 		"phpunit/phpunit": "^7.0",
+		"ramsey/uuid-doctrine": "^1.5.0",
 		"slevomat/coding-standard": "^4.5.2",
 		"doctrine/common": "^2.7",
 		"doctrine/orm": "^2.5",
