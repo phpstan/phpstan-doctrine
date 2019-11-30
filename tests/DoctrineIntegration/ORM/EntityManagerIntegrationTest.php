@@ -28,7 +28,7 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 
 	public function getPhpStanExecutablePath(): string
 	{
-		return __DIR__ . '/../../../vendor/bin/phpstan';
+		return __DIR__ . '/../../../vendor/phpstan/phpstan/phpstan';
 	}
 
 	public function getPhpStanConfigPath(): string
