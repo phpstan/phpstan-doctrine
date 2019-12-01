@@ -13,9 +13,11 @@ use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
 use PHPStan\Type\Doctrine\Descriptors\DateType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
+use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use Ramsey\Uuid\Doctrine\UuidType;
 
 /**
  * @extends RuleTestCase<EntityColumnRule>
@@ -27,6 +29,9 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		if (!Type::hasType(CustomType::NAME)) {
 			Type::addType(CustomType::NAME, CustomType::class);
+		}
+		if (!Type::hasType(UuidType::NAME)) {
+			Type::addType(UuidType::NAME, UuidType::class);
 		}
 
 		return new EntityColumnRule(
@@ -40,6 +45,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new IntegerType(),
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
 				new DateType(),
+				new UuidTypeDescriptor(UuidType::class),
 			]),
 			true
 		);
@@ -71,6 +77,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: property can contain DateTime but database expects DateTimeImmutable.',
 				43,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: database can contain Ramsey\Uuid\UuidInterface but property expects int.',
+				72,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: property can contain int but database expects Ramsey\Uuid\UuidInterface|string.',
+				72,
 			],
 		]);
 	}

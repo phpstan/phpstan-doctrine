@@ -59,4 +59,16 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $never;
 
+	/**
+	 * @ORM\Column(type="uuid")
+	 * @var \Ramsey\Uuid\UuidInterface
+	 */
+	private $uuid;
+
+	/**
+	 * @ORM\Column(type="uuid")
+	 * @var int
+	 */
+	private $uuidInvalidType;
+
 }
