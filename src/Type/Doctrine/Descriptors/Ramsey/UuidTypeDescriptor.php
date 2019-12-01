@@ -16,7 +16,10 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 		\Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType::class,
 	];
 
-	/** @var string */
+	/**
+	 * @phpstan-var class-string<\Doctrine\DBAL\Types\Type>
+	 * @var string
+	 */
 	private $uuidTypeName;
 
 	public function __construct(
