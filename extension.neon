@@ -260,9 +260,15 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor
 		tags: [phpstan.doctrine.typeDescriptor]
+		arguments:
+			uuidTypeName: 'Ramsey\Uuid\Doctrine\UuidType'
 	-
-		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidBinaryTypeDescriptor
+		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor
 		tags: [phpstan.doctrine.typeDescriptor]
+		arguments:
+			uuidTypeName: 'Ramsey\Uuid\Doctrine\UuidBinaryType'
 	-
-		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidBinaryOrderedTimeTypeDescriptor
+		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor
 		tags: [phpstan.doctrine.typeDescriptor]
+		arguments:
+			uuidTypeName: 'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType'
