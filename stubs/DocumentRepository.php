@@ -12,35 +12,35 @@ class DocumentRepository implements ObjectRepository
 {
 
 	/**
-	 * @param mixed $id
-	 * @param int|null $lockMode
-	 * @param int|null $lockVersion
-	 * @return TDocumentClass|null
+	 * @phpstan-param mixed $id
+	 * @phpstan-param int|null $lockMode
+	 * @phpstan-param int|null $lockVersion
+	 * @phpstan-return TDocumentClass|null
 	 */
 	public function find($id, $lockMode = null, $lockVersion = null);
 
 	/**
-	 * @return TDocumentClass[]
+	 * @phpstan-return TDocumentClass[]
 	 */
 	public function findAll();
 
 	/**
-	 * @param mixed[] $criteria
-	 * @param string[]|null $sort
-	 * @param int|null $limit
-	 * @param int|null $sip
-	 * @return TDocumentClass[]
+	 * @phpstan-param mixed[] $criteria
+	 * @phpstan-param string[]|null $sort
+	 * @phpstan-param int|null $limit
+	 * @phpstan-param int|null $sip
+	 * @phpstan-return TDocumentClass[]
 	 */
 	public function findBy(array $criteria, ?array $sort = null, $limit = null, $skip = null);
 
 	/**
-	 * @param mixed[] $criteria The criteria.
-	 * @return TDocumentClass|null
+	 * @phpstan-param mixed[] $criteria The criteria.
+	 * @phpstan-return TDocumentClass|null
 	 */
 	public function findOneBy(array $criteria);
 
 	/**
-	 * @return class-string<TDocumentClass>
+	 * @phpstan-return class-string<TDocumentClass>
 	 */
 	public function getClassName();
 

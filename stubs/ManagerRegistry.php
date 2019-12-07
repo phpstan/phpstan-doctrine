@@ -7,9 +7,9 @@ interface ManagerRegistry
 
 	/**
 	 * @template T
-	 * @param class-string<T> $persistentObject
-	 * @param string $persistentManagerName
-	 * @return ObjectRepository<T>
+	 * @phpstan-param class-string<T> $persistentObject
+	 * @phpstan-param string $persistentManagerName
+	 * @phpstan-return ObjectRepository<T>
 	 */
 	public function getRepository($persistentObject, $persistentManagerName = null);
 

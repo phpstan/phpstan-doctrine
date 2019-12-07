@@ -7,50 +7,50 @@ class EntityManagerDecorator implements EntityManagerInterface
 
 	/**
 	 * @template T
-	 * @param class-string<T> $entityName
-	 * @param mixed  $id
-	 * @param integer|null $lockMode
-	 * @param integer|null $lockVersion
-	 * @return T|null
+	 * @phpstan-param class-string<T> $entityName
+	 * @phpstan-param mixed  $id
+	 * @phpstan-param integer|null $lockMode
+	 * @phpstan-param integer|null $lockVersion
+	 * @phpstan-return T|null
 	 */
 	public function find($entityName, $id, $lockMode = null, $lockVersion = null);
 
 	/**
 	 * @template T
-	 * @param T $entity
-	 * @return T
+	 * @phpstan-param T $entity
+	 * @phpstan-return T
 	 */
 	public function merge($entity);
 
 	/**
 	 * @template T
-	 * @param class-string<T> $entityName
-	 * @return EntityRepository<T>
+	 * @phpstan-param class-string<T> $entityName
+	 * @phpstan-return EntityRepository<T>
 	 */
 	public function getRepository($entityName);
 
 	/**
 	 * @template T
-	 * @param class-string<T> $entityName
-	 * @param mixed $id
-	 * @return T|null
+	 * @phpstan-param class-string<T> $entityName
+	 * @phpstan-param mixed $id
+	 * @phpstan-return T|null
 	 */
 	public function getReference($entityName, $id);
 
 	/**
 	 * @template T
-	 * @param class-string<T> $entityName
-	 * @param mixed $identifier
+	 * @phpstan-param class-string<T> $entityName
+	 * @phpstan-param mixed $identifier
 	 *
-	 * @return T|null
+	 * @phpstan-return T|null
 	 */
 	public function getPartialReference($entityName, $identifier);
 
 	/**
 	 * @template T
-	 * @param T $entity
-	 * @param bool $deep
-	 * @return T
+	 * @phpstan-param T $entity
+	 * @phpstan-param bool $deep
+	 * @phpstan-return T
 	 */
 	public function copy($entity, $deep = false);
 

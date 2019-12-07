@@ -7,23 +7,23 @@ class ObjectManagerDecorator
 
 	/**
 	 * @template T
-	 * @param class-string<T> $className
-	 * @param mixed  $id
-	 * @return T|null
+	 * @phpstan-param class-string<T> $className
+	 * @phpstan-param mixed  $id
+	 * @phpstan-return T|null
 	 */
 	public function find($className, $id);
 
 	/**
 	 * @template T
-	 * @param T $object
-	 * @return T
+	 * @phpstan-param T $object
+	 * @phpstan-return T
 	 */
 	public function merge($object);
 
 	/**
 	 * @template T
-	 * @param class-string<T> $className
-	 * @return ObjectRepository<T>
+	 * @phpstan-param class-string<T> $className
+	 * @phpstan-return ObjectRepository<T>
 	 */
 	public function getRepository($className);
 
