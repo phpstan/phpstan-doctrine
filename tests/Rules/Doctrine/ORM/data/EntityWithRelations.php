@@ -71,9 +71,15 @@ class EntityWithRelations
 	private $genericCollection3;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
-	 * @var \Doctrine\Common\Collections\Collection<int, AnotherEntity>
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity", mappedBy="manyToOne")
+	 * @var \Doctrine\Common\Collections\Collection
 	 */
-	private $brokenCollectionAnnotation;
+	private $genericCollection4;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity", mappedBy="manyToOne")
+	 * @var \Doctrine\Common\Collections\Collection&iterable<MyEntity>
+	 */
+	private $genericCollection5;
 
 }

@@ -31,11 +31,31 @@ class EntityRelationRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @return \Iterator<string, mixed[]>
+	 * @return \Iterator<mixed[]>
 	 */
 	public function ruleProvider(): Iterator
 	{
-		yield 'nice entity' => [__DIR__ . '/data/EntityWithRelations.php', []];
+		yield [
+			__DIR__ . '/data/EntityWithRelations.php',
+			[
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection type mapping mismatch: property can contain Doctrine\Common\Collections\Collection<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					59,
+				],
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection4 type mapping mismatch: property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					77,
+				],
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection5 type mapping mismatch: database can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but property expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\MyEntity>.',
+					83,
+				],
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection5 type mapping mismatch: property can contain Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\MyEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+					83,
+				],
+			],
+		];
 
 		yield 'one to one' => [__DIR__ . '/data/EntityWithBrokenOneToOneRelations.php',
 			[
