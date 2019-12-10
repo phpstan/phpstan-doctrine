@@ -52,7 +52,12 @@ class EntityRelationRule implements Rule
 			return [];
 		}
 
-		$metadata = $objectManager->getClassMetadata($className);
+		try {
+			$metadata = $objectManager->getClassMetadata($className);
+		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+			return [];
+		}
+
 		$classMetadataInfo = 'Doctrine\ORM\Mapping\ClassMetadataInfo';
 		if (!$metadata instanceof $classMetadataInfo) {
 			return [];

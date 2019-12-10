@@ -52,4 +52,28 @@ class EntityWithRelations
 	 */
 	private $never;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity", mappedBy="manyToOne")
+	 * @var \Doctrine\Common\Collections\Collection<AnotherEntity>
+	 */
+	private $genericCollection;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity", mappedBy="manyToOne")
+	 * @var \Doctrine\Common\Collections\Collection<mixed, AnotherEntity>
+	 */
+	private $genericCollection2;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity", mappedBy="manyToOne")
+	 * @var \Doctrine\Common\Collections\Collection<int, AnotherEntity>
+	 */
+	private $genericCollection3;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
+	 * @var \Doctrine\Common\Collections\Collection<int, AnotherEntity>
+	 */
+	private $brokenCollectionAnnotation;
+
 }
