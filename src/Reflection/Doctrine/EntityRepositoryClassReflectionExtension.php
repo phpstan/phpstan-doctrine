@@ -44,7 +44,10 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			return false;
+			$repositoryAncesor = $classReflection->getAncestorWithClassName(\Doctrine\Persistence\ObjectRepository::class);
+			if ($repositoryAncesor === null) {
+				return false;
+			}
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
@@ -77,7 +80,10 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 	{
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			throw new \PHPStan\ShouldNotHappenException();
+			$repositoryAncesor = $classReflection->getAncestorWithClassName(\Doctrine\Persistence\ObjectRepository::class);
+			if ($repositoryAncesor === null) {
+				throw new \PHPStan\ShouldNotHappenException();
+			}
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();

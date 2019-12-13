@@ -50,7 +50,10 @@ class RepositoryMethodCallRule implements Rule
 		}
 		$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
 		if ($entityClassType === null) {
-			return [];
+			$entityClassType = GenericTypeVariableResolver::getType($calledOnType, \Doctrine\Persistence\ObjectRepository::class, 'TEntityClass');
+			if ($entityClassType === null) {
+				return [];
+			}
 		}
 		if (!$entityClassType instanceof TypeWithClassName) {
 			return [];

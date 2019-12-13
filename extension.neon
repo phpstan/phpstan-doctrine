@@ -20,6 +20,10 @@ parameters:
 		- stubs/ObjectManager.php
 		- stubs/ObjectManagerDecorator.php
 		- stubs/ObjectRepository.php
+		- stubs/Persistence/ManagerRegistry.php
+		- stubs/Persistence/ObjectManager.php
+		- stubs/Persistence/ObjectManagerDecorator.php
+		- stubs/Persistence/ObjectRepository.php
 
 parametersSchema:
 	doctrine: structure([
@@ -119,6 +123,20 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Common\Persistence\ObjectManager
+
+	persistenceManagerRegistryGetRepository:
+		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+		arguments:
+			managerClass: Doctrine\Persistence\ManagerRegistry
+
+	persistenceObjectManagerGetRepository:
+		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+		arguments:
+			managerClass: Doctrine\Persistence\ObjectManager
 
 	## NewExprDynamicReturnTypeExtensions
 
