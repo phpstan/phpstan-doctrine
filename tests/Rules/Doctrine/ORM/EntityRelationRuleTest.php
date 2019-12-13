@@ -39,10 +39,6 @@ class EntityRelationRuleTest extends RuleTestCase
 			__DIR__ . '/data/EntityWithRelations.php',
 			[
 				[
-					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection type mapping mismatch: property can contain Doctrine\Common\Collections\Collection<PHPStan\Rules\Doctrine\ORM\AnotherEntity> but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
-					59,
-				],
-				[
 					'Property PHPStan\Rules\Doctrine\ORM\EntityWithRelations::$genericCollection4 type mapping mismatch: property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
 					77,
 				],
