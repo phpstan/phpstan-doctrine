@@ -28,7 +28,7 @@ class DocumentRepository implements ObjectRepository
 	 * @phpstan-param mixed[] $criteria
 	 * @phpstan-param string[]|null $sort
 	 * @phpstan-param int|null $limit
-	 * @phpstan-param int|null $sip
+	 * @phpstan-param int|null $skip
 	 * @phpstan-return TDocumentClass[]
 	 */
 	public function findBy(array $criteria, ?array $sort = null, $limit = null, $skip = null);

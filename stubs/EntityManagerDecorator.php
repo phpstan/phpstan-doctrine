@@ -2,6 +2,9 @@
 
 namespace Doctrine\ORM\Decorator;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+
 class EntityManagerDecorator implements EntityManagerInterface
 {
 
