@@ -71,4 +71,34 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $uuidInvalidType;
 
+	/**
+	 * @ORM\Column(type="array")
+	 * @var int[]
+	 */
+	private $arrayOfIntegers;
+
+	/**
+	 * @ORM\Column(type="array")
+	 * @var mixed[][]
+	 */
+	private $arrayOfArrays;
+
+	/**
+	 * @ORM\Column(type="array")
+	 * @var mixed[]
+	 */
+	private $mixeds;
+
+	/**
+	 * @ORM\Column(type="array")
+	 * @var array|null
+	 */
+	private $arrayOrNull;
+
+	/**
+	 * @ORM\Column(type="array")
+	 * @var int[]|null
+	 */
+	private $arrayOfIntegersOrNull;
+
 }

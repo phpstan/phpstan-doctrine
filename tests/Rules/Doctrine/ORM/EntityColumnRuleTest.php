@@ -7,6 +7,7 @@ use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\Descriptors\ArrayType;
 use PHPStan\Type\Doctrine\Descriptors\BigIntType;
 use PHPStan\Type\Doctrine\Descriptors\BinaryType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
@@ -46,6 +47,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
 				new DateType(),
 				new UuidTypeDescriptor(UuidType::class),
+				new ArrayType(),
 			]),
 			true
 		);
@@ -85,6 +87,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: property can contain int but database expects Ramsey\Uuid\UuidInterface|string.',
 				72,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$arrayOrNull type mapping mismatch: property can contain array|null but database expects array.',
+				96,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$arrayOfIntegersOrNull type mapping mismatch: property can contain array|null but database expects array.',
+				102,
 			],
 		]);
 	}
