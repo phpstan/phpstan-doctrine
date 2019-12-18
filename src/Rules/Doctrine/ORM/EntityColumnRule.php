@@ -103,10 +103,10 @@ class EntityColumnRule implements Rule
 			)] : [];
 		}
 
-		$identifier = null;
+		$identifiers = [];
 		if ($metadata->generatorType !== 5) { // ClassMetadataInfo::GENERATOR_TYPE_NONE
 			try {
-				$identifier = $metadata->getSingleIdentifierFieldName();
+				$identifiers = $metadata->getIdentifierFieldNames();
 			} catch (Throwable $e) {
 				$mappingException = 'Doctrine\ORM\Mapping\MappingException';
 				if (!$e instanceof $mappingException) {
@@ -148,7 +148,7 @@ class EntityColumnRule implements Rule
 			);
 		}
 		$propertyReadableType = TypeTraverser::map($property->getReadableType(), $transformArrays);
-		if (!$writableToDatabaseType->isSuperTypeOf($identifier === $propertyName && !$nullable ? TypeCombinator::removeNull($propertyReadableType) : $propertyReadableType)->yes()) {
+		if (!$writableToDatabaseType->isSuperTypeOf(in_array($propertyName, $identifiers, true) && !$nullable ? TypeCombinator::removeNull($propertyReadableType) : $propertyReadableType)->yes()) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 				$className,

@@ -74,9 +74,9 @@ class EntityRelationRule implements Rule
 			return [];
 		}
 		$associationMapping = $metadata->associationMappings[$propertyName];
-		$identifier = null;
+		$identifiers = [];
 		try {
-			$identifier = $metadata->getSingleIdentifierFieldName();
+			$identifiers = $metadata->getIdentifierFieldNames();
 		} catch (\Throwable $e) {
 			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
 			if (!$e instanceof $mappingException) {
@@ -88,7 +88,7 @@ class EntityRelationRule implements Rule
 		$toMany = false;
 		if ((bool) ($associationMapping['type'] & 3)) { // ClassMetadataInfo::TO_ONE
 			$columnType = new ObjectType($associationMapping['targetEntity']);
-			if ($identifier !== null && $identifier === $propertyName) {
+			if (in_array($propertyName, $identifiers, true)) {
 				$nullable = false;
 			} else {
 				$nullable = $associationMapping['joinColumns'][0]['nullable'] ?? true;

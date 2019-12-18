@@ -136,6 +136,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		];
 		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', []];
 		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', []];
+		yield 'composite' => [__DIR__ . '/data/CompositePrimaryKeyEntity1.php', []];
 	}
 
 	public function testCustomType(): void

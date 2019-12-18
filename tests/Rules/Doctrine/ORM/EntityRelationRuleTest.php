@@ -147,6 +147,11 @@ class EntityRelationRuleTest extends RuleTestCase
 				],
 			],
 		];
+
+		yield 'composite primary key' => [
+			__DIR__ . '/data/CompositePrimaryKeyEntity2.php',
+			[],
+		];
 	}
 
 }
