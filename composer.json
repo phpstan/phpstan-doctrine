@@ -34,7 +34,8 @@
 		"doctrine/common": "^2.7",
 		"doctrine/orm": "^2.5",
 		"doctrine/collections": "^1.0",
-		"doctrine/mongodb-odm": "^1.2"
+		"doctrine/mongodb-odm": "^1.2",
+		"ergebnis/composer-normalize": "^2.0.2"
 	},
 	"conflict": {
 		"doctrine/common": "<2.7",
