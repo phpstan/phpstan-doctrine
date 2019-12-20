@@ -1,10 +1,42 @@
 {
 	"name": "phpstan/phpstan-doctrine",
-	"description": "Doctrine extensions for PHPStan",
 	"type": "phpstan-extension",
-	"license": ["MIT"],
-	"minimum-stability": "dev",
-	"prefer-stable": true,
+	"description": "Doctrine extensions for PHPStan",
+	"license": [
+		"MIT"
+	],
+	"require": {
+		"php": "~7.1",
+		"nikic/php-parser": "^4.0",
+		"phpstan/phpstan": "^0.12.3"
+	},
+	"conflict": {
+		"doctrine/collections": "<1.0",
+		"doctrine/common": "<2.7",
+		"doctrine/mongodb-odm": "<1.2",
+		"doctrine/orm": "<2.5"
+	},
+	"require-dev": {
+		"consistence/coding-standard": "^3.0.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+		"doctrine/collections": "^1.0",
+		"doctrine/common": "^2.7",
+		"doctrine/mongodb-odm": "^1.2",
+		"doctrine/orm": "^2.5",
+		"ergebnis/composer-normalize": "^2.0.2",
+		"jakub-onderka/php-parallel-lint": "^1.0",
+		"phing/phing": "^2.16.0",
+		"phpstan/phpstan-phpunit": "^0.12",
+		"phpstan/phpstan-strict-rules": "^0.12",
+		"phpunit/phpunit": "^7.0",
+		"ramsey/uuid-doctrine": "^1.5.0",
+		"slevomat/coding-standard": "^4.5.2"
+	},
+	"config": {
+		"platform": {
+			"ext-mongo": "1.6.16"
+		}
+	},
 	"extra": {
 		"branch-alias": {
 			"dev-master": "0.12-dev"
@@ -16,44 +48,16 @@
 			]
 		}
 	},
-	"require": {
-		"php": "~7.1",
-		"phpstan/phpstan": "^0.12.3",
-		"nikic/php-parser": "^4.0"
-	},
-	"require-dev": {
-		"consistence/coding-standard": "^3.0.1",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
-		"jakub-onderka/php-parallel-lint": "^1.0",
-		"phing/phing": "^2.16.0",
-		"phpstan/phpstan-phpunit": "^0.12",
-		"phpstan/phpstan-strict-rules": "^0.12",
-		"phpunit/phpunit": "^7.0",
-		"ramsey/uuid-doctrine": "^1.5.0",
-		"slevomat/coding-standard": "^4.5.2",
-		"doctrine/common": "^2.7",
-		"doctrine/orm": "^2.5",
-		"doctrine/collections": "^1.0",
-		"doctrine/mongodb-odm": "^1.2",
-		"ergebnis/composer-normalize": "^2.0.2"
-	},
-	"conflict": {
-		"doctrine/common": "<2.7",
-		"doctrine/orm": "<2.5",
-		"doctrine/collections": "<1.0",
-		"doctrine/mongodb-odm": "<1.2"
-	},
 	"autoload": {
 		"psr-4": {
 			"PHPStan\\": "src/"
 		}
 	},
 	"autoload-dev": {
-		"classmap": ["tests/"]
+		"classmap": [
+			"tests/"
+		]
 	},
-	"config": {
-		"platform": {
-			"ext-mongo": "1.6.16"
-		}
-	}
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
