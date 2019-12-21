@@ -35,7 +35,7 @@ class EntityRepository implements ObjectRepository
 
 	/**
 	 * @phpstan-param mixed[] $criteria The criteria.
-	 * @phpstan-param array|null $orderBy
+	 * @phpstan-param mixed[]|null $orderBy
 	 * @phpstan-return TEntityClass|null
 	 */
 	public function findOneBy(array $criteria, array $orderBy = null);
