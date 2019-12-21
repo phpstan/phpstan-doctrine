@@ -114,6 +114,6 @@ services:
 
 	# in case you are using the ReflectionDescriptor
 	-
-		class: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('MyApp\MyCustomTypeName')
+		factory: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('MyApp\MyCustomTypeName')
 		tags: [phpstan.doctrine.typeDescriptor]
 ```
