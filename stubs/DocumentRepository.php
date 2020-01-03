@@ -19,6 +19,8 @@ class DocumentRepository implements ObjectRepository
 	 */
 	public function find($id, $lockMode = null, $lockVersion = null);
 
+	// following methods could be removed if we only supported doctrine/persistence ^1.3 because of different implemented ObjectRepository namespace
+
 	/**
 	 * @phpstan-return TDocumentClass[]
 	 */
