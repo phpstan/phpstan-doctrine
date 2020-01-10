@@ -62,6 +62,13 @@ class Example
 		$repository = $this->entityManager->getRepository($entityName);
 		$repository->getClassName();
 		$repository->unknownMethod();
+		$entity = $repository->find(1);
+
+		if ($entity === null) {
+			throw new RuntimeException('Sorry, but no...');
+		}
+
+		$entity->unknownMethod();
 	}
 }
 
