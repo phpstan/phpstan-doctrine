@@ -15,7 +15,7 @@
         "ignorable": true
     },
     {
-        "message": "Call to an undefined method Doctrine\\Persistence\\ObjectRepository<T>::unknownMethod().",
+        "message": "Call to an undefined method Doctrine\\Persistence\\ObjectRepository<object>::unknownMethod().",
         "line": 64,
         "ignorable": true
     }

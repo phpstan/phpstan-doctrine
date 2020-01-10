@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Call to an undefined method object::unknownMethod().",
+        "line": 71,
+        "ignorable": true
+    }
+]
