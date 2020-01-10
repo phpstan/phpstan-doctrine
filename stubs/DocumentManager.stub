@@ -20,13 +20,6 @@ class DocumentManager implements ObjectManager
 
 	/**
 	 * @template T
-	 * @phpstan-param T $document
-	 * @phpstan-return T
-	 */
-	public function merge($document);
-
-	/**
-	 * @template T
 	 * @phpstan-param class-string<T> $documentName
 	 * @phpstan-return DocumentRepository<T>
 	 */

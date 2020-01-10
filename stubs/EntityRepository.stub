@@ -12,6 +12,13 @@ class EntityRepository implements ObjectRepository
 {
 
 	/**
+	 * @phpstan-return class-string<TEntityClass>
+	 */
+	protected function getEntityName();
+
+	// following methods could be removed if we only supported doctrine/persistence ^1.3 because of different implemented ObjectRepository namespace
+
+	/**
 	 * @phpstan-param mixed $id
 	 * @phpstan-param int|null $lockMode
 	 * @phpstan-param int|null $lockVersion
@@ -44,10 +51,5 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-return class-string<TEntityClass>
 	 */
 	public function getClassName();
-
-	/**
-	 * @phpstan-return class-string<TEntityClass>
-	 */
-	protected function getEntityName();
 
 }
