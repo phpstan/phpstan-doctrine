@@ -10,20 +10,20 @@ parameters:
 		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
 		queryBuilderFastAlgorithm: true
 	stubFiles:
-		- stubs/DocumentManager.php
-		- stubs/DocumentRepository.php
-		- stubs/EntityManager.php
-		- stubs/EntityManagerDecorator.php
-		- stubs/EntityManagerInterface.php
-		- stubs/EntityRepository.php
-		- stubs/ManagerRegistry.php
-		- stubs/ObjectManager.php
-		- stubs/ObjectManagerDecorator.php
-		- stubs/ObjectRepository.php
-		- stubs/Persistence/ManagerRegistry.php
-		- stubs/Persistence/ObjectManager.php
-		- stubs/Persistence/ObjectManagerDecorator.php
-		- stubs/Persistence/ObjectRepository.php
+		- stubs/DocumentManager.stub
+		- stubs/DocumentRepository.stub
+		- stubs/EntityManager.stub
+		- stubs/EntityManagerDecorator.stub
+		- stubs/EntityManagerInterface.stub
+		- stubs/EntityRepository.stub
+		- stubs/ManagerRegistry.stub
+		- stubs/ObjectManager.stub
+		- stubs/ObjectManagerDecorator.stub
+		- stubs/ObjectRepository.stub
+		- stubs/Persistence/ManagerRegistry.stub
+		- stubs/Persistence/ObjectManager.stub
+		- stubs/Persistence/ObjectManagerDecorator.stub
+		- stubs/Persistence/ObjectRepository.stub
 
 parametersSchema:
 	doctrine: structure([
