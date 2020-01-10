@@ -13,5 +13,10 @@
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturn\\MyEntity::doSomethingElse().",
         "line": 54,
         "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method Doctrine\\Persistence\\ObjectRepository<T>::unknownMethod().",
+        "line": 64,
+        "ignorable": true
     }
 ]

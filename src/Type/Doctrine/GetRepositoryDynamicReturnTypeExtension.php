@@ -9,7 +9,6 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -60,12 +59,16 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		} elseif ($argType instanceof GenericClassStringType) {
 			$classType = $argType->getGenericType();
 			if (!$classType instanceof TypeWithClassName) {
-				return new MixedType();
+				return ParametersAcceptorSelector::selectSingle(
+					$methodReflection->getVariants()
+				)->getReturnType();
 			}
 
 			$objectName = $classType->getClassName();
 		} else {
-			return new MixedType();
+			return ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			)->getReturnType();
 		}
 
 		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);

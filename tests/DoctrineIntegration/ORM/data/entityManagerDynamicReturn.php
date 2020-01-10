@@ -53,6 +53,16 @@ class Example
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
+
+	/**
+	 * @param class-string $entityName
+	 */
+	public function doSomethingWithRepository(string $entityName): void
+	{
+		$repository = $this->entityManager->getRepository($entityName);
+		$repository->getClassName();
+		$repository->unknownMethod();
+	}
 }
 
 /**
