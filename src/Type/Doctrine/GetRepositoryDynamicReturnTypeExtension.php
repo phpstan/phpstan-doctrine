@@ -10,7 +10,6 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -49,7 +48,7 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 	): Type
 	{
 		if (count($methodCall->args) === 0) {
-			return $this->getDefaultReturnType($methodReflection);
+			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
 		}
 		$argType = $scope->getType($methodCall->args[0]->value);
 		if ($argType instanceof ConstantStringType) {
@@ -58,12 +57,12 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		} elseif ($argType instanceof GenericClassStringType) {
 			$classType = $argType->getGenericType();
 			if (!$classType instanceof TypeWithClassName) {
-				return $this->getDefaultReturnType($methodReflection);
+				return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
 			}
 
 			$objectName = $classType->getClassName();
 		} else {
-			return $this->getDefaultReturnType($methodReflection);
+			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
 		}
 
 		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
@@ -73,17 +72,19 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		]);
 	}
 
-	private function getDefaultReturnType(MethodReflection $methodReflection): Type
+	/**
+	 * @param \PHPStan\Analyser\Scope $scope
+	 * @param \PhpParser\Node\Arg[] $args
+	 * @param \PHPStan\Reflection\MethodReflection $methodReflection
+	 * @return \PHPStan\Type\Type
+	 */
+	private function getDefaultReturnType(Scope $scope, array $args, MethodReflection $methodReflection): Type
 	{
-		$type = ParametersAcceptorSelector::selectSingle(
+		return ParametersAcceptorSelector::selectFromArgs(
+			$scope,
+			$args,
 			$methodReflection->getVariants()
 		)->getReturnType();
-
-		if ($type instanceof GenericObjectType) {
-			$type = new GenericObjectType($type->getClassName(), [new ObjectWithoutClassType()]);
-		}
-
-		return $type;
 	}
 
 }
