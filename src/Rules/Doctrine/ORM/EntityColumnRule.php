@@ -64,9 +64,6 @@ class EntityColumnRule implements Rule
 		}
 
 		$className = $class->getName();
-		if ($objectManager->getMetadataFactory()->isTransient($className)) {
-			return [];
-		}
 
 		try {
 			$metadata = $objectManager->getClassMetadata($className);
