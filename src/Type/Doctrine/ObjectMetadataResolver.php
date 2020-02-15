@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Mapping\MappingException;
 use function file_exists;
 use function is_readable;
 
@@ -69,7 +70,9 @@ final class ObjectMetadataResolver
 		$objectManager = $this->getObjectManager();
 		if ($this->repositoryClass !== null) {
 			return $this->resolvedRepositoryClass = $this->repositoryClass;
-		} elseif ($objectManager !== null && get_class($objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
+		}
+
+		if ($objectManager !== null && get_class($objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
 			return $this->resolvedRepositoryClass = 'Doctrine\ODM\MongoDB\DocumentRepository';
 		}
 
@@ -83,7 +86,15 @@ final class ObjectMetadataResolver
 			return $this->getResolvedRepositoryClass();
 		}
 
-		$metadata = $objectManager->getClassMetadata($className);
+		try {
+			$metadata = $objectManager->getClassMetadata($className);
+		} catch (MappingException $e) {
+			if (class_exists($className) && (new \ReflectionClass($className))->isAbstract()) {
+				return $this->getResolvedRepositoryClass();
+			}
+
+			throw $e;
+		}
 
 		$ormMetadataClass = 'Doctrine\ORM\Mapping\ClassMetadata';
 		if ($metadata instanceof $ormMetadataClass) {
