@@ -1,0 +1,11 @@
+<?php
+
+namespace Doctrine\ODM\MongoDB\Mapping;
+
+class ClassMetadata
+{
+
+	/** @var string|null */
+	public $customRepositoryClassName;
+
+}

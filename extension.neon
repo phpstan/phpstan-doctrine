@@ -10,6 +10,7 @@ parameters:
 		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
 		queryBuilderFastAlgorithm: true
 	stubFiles:
+		- stubs/ClassMetadataInfo.stub
 		- stubs/DocumentManager.stub
 		- stubs/DocumentRepository.stub
 		- stubs/EntityManager.stub
@@ -17,6 +18,7 @@ parameters:
 		- stubs/EntityManagerInterface.stub
 		- stubs/EntityRepository.stub
 		- stubs/ManagerRegistry.stub
+		- stubs/MongoClassMetadataInfo.stub
 		- stubs/ObjectManager.stub
 		- stubs/ObjectManagerDecorator.stub
 		- stubs/ObjectRepository.stub
