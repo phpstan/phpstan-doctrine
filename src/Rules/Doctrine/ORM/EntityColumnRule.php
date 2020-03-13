@@ -117,7 +117,7 @@ class EntityColumnRule implements Rule
 
 		$writableToPropertyType = $descriptor->getWritableToPropertyType();
 		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
-		$nullable = $fieldMapping['nullable'] === true;
+		$nullable = isset($fieldMapping['nullable']) ? $fieldMapping['nullable'] === true : false;
 		if ($nullable) {
 			$writableToPropertyType = TypeCombinator::addNull($writableToPropertyType);
 			$writableToDatabaseType = TypeCombinator::addNull($writableToDatabaseType);
