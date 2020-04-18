@@ -22,6 +22,8 @@ parameters:
 		- stubs/ObjectManager.stub
 		- stubs/ObjectManagerDecorator.stub
 		- stubs/ObjectRepository.stub
+		- stubs/QueryBuilder.stub
+		- stubs/Statement.stub
 		- stubs/Persistence/ManagerRegistry.stub
 		- stubs/Persistence/ObjectManager.stub
 		- stubs/Persistence/ObjectManagerDecorator.stub

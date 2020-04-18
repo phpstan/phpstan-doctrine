@@ -1,0 +1,49 @@
+<?php
+
+namespace Doctrine\DBAL\Query;
+
+use Doctrine\DBAL\Statement;
+
+/**
+ * @template TExecute
+ */
+class QueryBuilder
+{
+	/**
+	 * @phpstan-param mixed $select
+	 * @phpstan-return QueryBuilder<Statement>
+	 */
+	public function select($select = null);
+
+	/**
+	 * @phpstan-param mixed $select
+	 * @phpstan-return QueryBuilder<Statement>
+	 */
+	public function addSelect($select = null);
+
+	/**
+	 * @phpstan-param string|null $delete
+	 * @phpstan-param string|null $alias
+	 * @phpstan-return QueryBuilder<int>
+	 */
+	public function delete($delete = null, $alias = null);
+
+	/**
+	 * @phpstan-param string|null $update
+	 * @phpstan-param string|null $alias
+	 * @phpstan-return QueryBuilder<int>
+	 */
+	public function update($update = null, $alias = null);
+
+
+	/**
+	 * @phpstan-param string|null $insert
+	 * @phpstan-return QueryBuilder<int>
+	 */
+	public function insert($insert = null);
+
+	/**
+	 * @phpstan-return TExecute
+	 */
+	public function execute();
+}
