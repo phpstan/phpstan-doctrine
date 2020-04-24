@@ -26,6 +26,7 @@ parameters:
 		- stubs/Persistence/ObjectManager.stub
 		- stubs/Persistence/ObjectManagerDecorator.stub
 		- stubs/Persistence/ObjectRepository.stub
+		- stubs/RepositoryFactory.stub
 
 parametersSchema:
 	doctrine: structure([
