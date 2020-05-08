@@ -14,7 +14,7 @@ class RepositoryMethodCallRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new RepositoryMethodCallRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null));
+		return new RepositoryMethodCallRule(new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null));
 	}
 
 	/**

@@ -30,7 +30,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null), true);
+		return new QueryBuilderDqlRule(new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null), true);
 	}
 
 	public function testRule(): void
@@ -168,7 +168,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	 */
 	public function getDynamicMethodReturnTypeExtensions(): array
 	{
-		$objectMetadataResolver = new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null);
+		$objectMetadataResolver = new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null);
 		$argumentsProcessor = new ArgumentsProcessor();
 
 		return [

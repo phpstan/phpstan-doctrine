@@ -192,3 +192,23 @@ class MyEntity
 	{
 	}
 }
+
+interface EntityInterface
+{
+
+}
+
+class GetRepositoryOnNonClasses
+{
+
+	public function doFoo(EntityManagerInterface $entityManager): void
+	{
+		$entityManager->getRepository(EntityInterface::class);
+	}
+
+	public function doBar(EntityManagerInterface $entityManager): void
+	{
+		$entityManager->getRepository('nonexistentClass');
+	}
+
+}

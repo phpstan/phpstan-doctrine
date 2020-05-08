@@ -16,7 +16,7 @@ class EntityRelationRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new EntityRelationRule(
-			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null)
+			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null)
 		);
 	}
 

@@ -36,7 +36,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		}
 
 		return new EntityColumnRule(
-			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', null),
+			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null),
 			new DescriptorRegistry([
 				new BigIntType(),
 				new StringType(),

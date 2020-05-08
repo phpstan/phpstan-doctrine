@@ -3,11 +3,15 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPStan\Reflection\ReflectionProvider;
 use function file_exists;
 use function is_readable;
 
 final class ObjectMetadataResolver
 {
+
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
 
 	/** @var string|null */
 	private $objectManagerLoader;
@@ -21,8 +25,13 @@ final class ObjectMetadataResolver
 	/** @var string|null */
 	private $resolvedRepositoryClass;
 
-	public function __construct(?string $objectManagerLoader, ?string $repositoryClass)
+	public function __construct(
+		ReflectionProvider $reflectionProvider,
+		?string $objectManagerLoader,
+		?string $repositoryClass
+	)
 	{
+		$this->reflectionProvider = $reflectionProvider;
 		$this->objectManagerLoader = $objectManagerLoader;
 		$this->repositoryClass = $repositoryClass;
 	}
@@ -80,6 +89,15 @@ final class ObjectMetadataResolver
 	{
 		$objectManager = $this->getObjectManager();
 		if ($objectManager === null) {
+			return $this->getResolvedRepositoryClass();
+		}
+
+		if (!$this->reflectionProvider->hasClass($className)) {
+			return $this->getResolvedRepositoryClass();
+		}
+
+		$classReflection = $this->reflectionProvider->getClass($className);
+		if ($classReflection->isInterface() || $classReflection->isTrait()) {
 			return $this->getResolvedRepositoryClass();
 		}
 
