@@ -3,7 +3,7 @@
 namespace Doctrine\Persistence;
 
 /**
- * @template TEntityClass
+ * @template TEntityClass of object
  */
 interface ObjectRepository
 {

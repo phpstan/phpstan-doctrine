@@ -23,5 +23,10 @@
         "message": "Cannot call method test() on int.",
         "line": 60,
         "ignorable": true
+    },
+    {
+        "message": "Type mixed in generic type Doctrine\\ORM\\EntityRepository<mixed> in PHPDoc tag @extends is not subtype of template type TEntityClass of object of class Doctrine\\ORM\\EntityRepository.",
+        "line": 87,
+        "ignorable": true
     }
 ]

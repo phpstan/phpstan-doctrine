@@ -5,7 +5,7 @@ namespace Doctrine\ORM;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
- * @template TEntityClass
+ * @template TEntityClass of object
  * @implements ObjectRepository<TEntityClass>
  */
 class EntityRepository implements ObjectRepository

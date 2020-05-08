@@ -6,7 +6,7 @@ interface ManagerRegistry
 {
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $persistentObject
 	 * @phpstan-param string $persistentManagerName
 	 * @phpstan-return ObjectRepository<T>

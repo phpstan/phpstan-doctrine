@@ -1,0 +1,42 @@
+[
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 30,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 31,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 42,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 43,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 51,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 52,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 61,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 62,
+        "ignorable": true
+    }
+]

@@ -9,7 +9,7 @@ class EntityManagerDecorator implements EntityManagerInterface
 {
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed  $id
 	 * @phpstan-param integer|null $lockMode
@@ -19,21 +19,21 @@ class EntityManagerDecorator implements EntityManagerInterface
 	public function find($entityName, $id, $lockMode = null, $lockVersion = null);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-return T
 	 */
 	public function merge($entity);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-return EntityRepository<T>
 	 */
 	public function getRepository($entityName);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $id
 	 * @phpstan-return T|null
@@ -41,7 +41,7 @@ class EntityManagerDecorator implements EntityManagerInterface
 	public function getReference($entityName, $id);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $identifier
 	 *
@@ -50,7 +50,7 @@ class EntityManagerDecorator implements EntityManagerInterface
 	public function getPartialReference($entityName, $identifier);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T
