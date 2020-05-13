@@ -8,4 +8,10 @@ class ClassMetadataInfo
 	/** @var string|null */
 	public $customRepositoryClassName;
 
+    /**
+     * @param string $assocName
+     * @return class-string
+     */
+    public function getAssociationTargetClass($assocName);
+
 }
