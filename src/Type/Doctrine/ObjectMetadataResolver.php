@@ -2,7 +2,8 @@
 
 namespace PHPStan\Type\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\AbstractManagerRegistry;
 use PHPStan\Reflection\ReflectionProvider;
 use function file_exists;
 use function is_readable;
@@ -16,7 +17,7 @@ final class ObjectMetadataResolver
 	/** @var string|null */
 	private $objectManagerLoader;
 
-	/** @var ObjectManager|null|false */
+	/** @var ObjectManager|AbstractManagerRegistry|null|false */
 	private $objectManager;
 
 	/** @var string|null */
@@ -36,7 +37,7 @@ final class ObjectMetadataResolver
 		$this->repositoryClass = $repositoryClass;
 	}
 
-	public function getObjectManager(): ?ObjectManager
+	public function getObjectManager()
 	{
 		if ($this->objectManager === false) {
 			return null;
@@ -56,8 +57,19 @@ final class ObjectMetadataResolver
 
 		return $this->objectManager;
 	}
+	public function getObjectManagerForClass(string $className): ?ObjectManager
+	{
+		if ($this->objectManager instanceof ObjectManager) {
+			return $this->objectManager;
+		}
+		if ($this->objectManager instanceof AbstractManagerRegistry) {
+			return $this->objectManager->getManagerForClass($className);
+		}
 
-	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
+		return null;
+	}
+
+	private function loadObjectManager(string $objectManagerLoader)
 	{
 		if (
 			!file_exists($objectManagerLoader)
@@ -76,6 +88,10 @@ final class ObjectMetadataResolver
 		}
 
 		$objectManager = $this->getObjectManager();
+		if($objectManager instanceof AbstractManagerRegistry) {
+			// Use default manager, which is enough to determine whether we're in an ODM or ORM environment
+			$objectManager = $objectManager->getManager();
+		}
 		if ($this->repositoryClass !== null) {
 			return $this->resolvedRepositoryClass = $this->repositoryClass;
 		} elseif ($objectManager !== null && get_class($objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
@@ -87,7 +103,7 @@ final class ObjectMetadataResolver
 
 	public function getRepositoryClass(string $className): string
 	{
-		$objectManager = $this->getObjectManager();
+		$objectManager = $this->getObjectManagerForClass($className);
 		if ($objectManager === null) {
 			return $this->getResolvedRepositoryClass();
 		}

@@ -74,7 +74,7 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
+		$objectManager = $this->objectMetadataResolver->getObjectManagerForClass($entityClass);
 		if ($objectManager === null) {
 			return [];
 		}

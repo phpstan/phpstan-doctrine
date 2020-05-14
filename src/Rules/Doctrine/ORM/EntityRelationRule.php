@@ -42,12 +42,13 @@ class EntityRelationRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
+		$className = $class->getName();
+
+		$objectManager = $this->objectMetadataResolver->getObjectManagerForClass($className);
 		if ($objectManager === null) {
 			return [];
 		}
 
-		$className = $class->getName();
 		if ($objectManager->getMetadataFactory()->isTransient($className)) {
 			return [];
 		}
