@@ -23,7 +23,7 @@ This extension provides following features:
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
 
-```
+```bash
 composer require --dev phpstan/phpstan-doctrine
 ```
 
@@ -34,14 +34,14 @@ If you also install [phpstan/extension-installer](https://github.com/phpstan/ext
 
 If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
 
-```
+```neon
 includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
 ```
 
 If you're interested in DQL/QueryBuilder validation, include also `rules.neon` (you will also need to provide the `objectManagerLoader`, see below):
 
-```
+```neon
 includes:
     - vendor/phpstan/phpstan-doctrine/rules.neon
 ```
@@ -69,6 +69,8 @@ parameters:
 For example, in a Symfony project, `object-manager.php` would look something like this:
 
 ```php
+<?php
+
 require dirname(__DIR__).'/../config/bootstrap.php';
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
@@ -81,6 +83,8 @@ If your application uses custom Doctrine types, you can write your own type desc
 Type descriptors implement the interface `PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor` which looks like this:
 
 ```php
+<?php
+
 public function getType(): string;
 
 public function getWritableToPropertyType(): Type;
