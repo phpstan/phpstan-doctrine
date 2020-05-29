@@ -1,0 +1,10 @@
+<?php
+namespace Doctrine\Bundle\DoctrineBundle\Repository {
+    /**
+     * @psalm-template TEntityClass
+     * @template-extends \Doctrine\ORM\EntityRepository<TEntityClass>
+     */
+    class ServiceEntityRepository extends \Doctrine\ORM\EntityRepository
+    {
+    }
+}
