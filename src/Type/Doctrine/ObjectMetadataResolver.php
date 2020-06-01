@@ -2,7 +2,7 @@
 
 namespace PHPStan\Type\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use PHPStan\Reflection\ReflectionProvider;
 use function file_exists;
 use function is_readable;

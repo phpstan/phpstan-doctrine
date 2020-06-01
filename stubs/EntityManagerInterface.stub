@@ -2,8 +2,8 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 
 interface EntityManagerInterface extends ObjectManager
 {

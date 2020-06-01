@@ -2,15 +2,13 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\Persistence\ObjectRepository as PersistenceObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 
 /**
  * @template TEntityClass
  * @implements ObjectRepository<TEntityClass>
- * @implements PersistenceObjectRepository<TEntityClass>
  */
-class EntityRepository implements ObjectRepository, PersistenceObjectRepository
+class EntityRepository implements ObjectRepository
 {
 
 	/**

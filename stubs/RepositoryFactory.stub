@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Repository;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 interface RepositoryFactory

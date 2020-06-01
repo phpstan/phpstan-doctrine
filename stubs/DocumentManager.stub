@@ -2,8 +2,8 @@
 
 namespace Doctrine\ODM\MongoDB;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
+use Doctrine\Persistence\ObjectManager;
 
 class DocumentManager implements ObjectManager
 {

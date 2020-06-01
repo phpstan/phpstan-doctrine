@@ -2,7 +2,7 @@
 
 namespace PHPStan\Reflection\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\IntegerType;

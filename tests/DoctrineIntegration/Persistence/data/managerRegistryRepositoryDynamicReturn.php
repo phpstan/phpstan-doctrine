@@ -2,7 +2,7 @@
 
 namespace PHPStan\DoctrineIntegration\Persistence\ManagerRegistryRepositoryDynamicReturn;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use RuntimeException;

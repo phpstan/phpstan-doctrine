@@ -17,11 +17,7 @@ parameters:
 		- stubs/EntityManagerDecorator.stub
 		- stubs/EntityManagerInterface.stub
 		- stubs/EntityRepository.stub
-		- stubs/ManagerRegistry.stub
 		- stubs/MongoClassMetadataInfo.stub
-		- stubs/ObjectManager.stub
-		- stubs/ObjectManagerDecorator.stub
-		- stubs/ObjectRepository.stub
 		- stubs/Persistence/ManagerRegistry.stub
 		- stubs/Persistence/ObjectManager.stub
 		- stubs/Persistence/ObjectManagerDecorator.stub
@@ -118,14 +114,14 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
-			managerClass: Doctrine\Common\Persistence\ManagerRegistry
+			managerClass: Doctrine\Persistence\ManagerRegistry
 
 	objectManagerGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
-			managerClass: Doctrine\Common\Persistence\ObjectManager
+			managerClass: Doctrine\Persistence\ObjectManager
 
 	persistenceManagerRegistryGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension

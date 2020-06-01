@@ -2,7 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
