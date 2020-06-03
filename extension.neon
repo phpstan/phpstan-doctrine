@@ -17,6 +17,7 @@ parameters:
 		- stubs/EntityManagerDecorator.stub
 		- stubs/EntityManagerInterface.stub
 		- stubs/EntityRepository.stub
+		- stubs/ServiceEntityRepository.stub
 		- stubs/MongoClassMetadataInfo.stub
 		- stubs/Persistence/ManagerRegistry.stub
 		- stubs/Persistence/ObjectManager.stub
