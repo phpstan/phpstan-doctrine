@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 31,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 32,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomething().",
+        "line": 43,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 44,
+        "ignorable": true
+    }
+]

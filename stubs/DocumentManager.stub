@@ -9,7 +9,7 @@ class DocumentManager implements ObjectManager
 {
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $documentName
 	 * @phpstan-param mixed  $identifier
 	 * @phpstan-param integer|null $lockMode
@@ -19,7 +19,7 @@ class DocumentManager implements ObjectManager
 	public function find($documentName, $identifier, $lockMode = null, $lockVersion = null);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $document
 	 * @phpstan-return T
 	 */
@@ -33,15 +33,15 @@ class DocumentManager implements ObjectManager
 	public function getRepository($documentName);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $documentName
 	 * @phpstan-param mixed $identifier
-	 * @phpstan-return T|null
+	 * @phpstan-return T
 	 */
 	public function getReference($documentName, $identifier);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $documentName
 	 * @phpstan-param mixed $identifier
 	 *

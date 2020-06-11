@@ -6,12 +6,12 @@
     },
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerDynamicReturn\\MyDocument::doSomethingElse().",
-        "line": 43,
+        "line": 38,
         "ignorable": true
     },
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerDynamicReturn\\MyDocument::doSomethingElse().",
-        "line": 55,
+        "line": 45,
         "ignorable": true
     }
 ]

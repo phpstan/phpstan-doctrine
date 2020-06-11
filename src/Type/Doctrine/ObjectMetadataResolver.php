@@ -79,7 +79,7 @@ final class ObjectMetadataResolver
 		if ($this->repositoryClass !== null) {
 			return $this->resolvedRepositoryClass = $this->repositoryClass;
 		} elseif ($objectManager !== null && get_class($objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
-			return $this->resolvedRepositoryClass = 'Doctrine\ODM\MongoDB\DocumentRepository';
+			return $this->resolvedRepositoryClass = 'Doctrine\ODM\MongoDB\Repository\DocumentRepository';
 		}
 
 		return $this->resolvedRepositoryClass = 'Doctrine\ORM\EntityRepository';

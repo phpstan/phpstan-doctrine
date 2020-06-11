@@ -34,11 +34,6 @@ class Example
 	public function getReferenceDynamicType(): void
 	{
 		$test = $this->documentManager->getReference(MyDocument::class, 'blah-123');
-
-		if ($test === null) {
-			throw new RuntimeException('Sorry, but no...');
-		}
-
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -46,11 +41,6 @@ class Example
 	public function getPartialReferenceDynamicType(): void
 	{
 		$test = $this->documentManager->getPartialReference(MyDocument::class, 'blah-123');
-
-		if ($test === null) {
-			throw new RuntimeException('Sorry, but no...');
-		}
-
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
