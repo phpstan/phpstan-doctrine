@@ -45,7 +45,7 @@ class DocumentManager implements ObjectManager
 	 * @phpstan-param class-string<T> $documentName
 	 * @phpstan-param mixed $identifier
 	 *
-	 * @phpstan-return T|null
+	 * @phpstan-return T
 	 */
 	public function getPartialReference($documentName, $identifier);
 
