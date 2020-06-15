@@ -153,6 +153,21 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testEmbeddable(): void
+	{
+		$this->analyse([__DIR__ . '/data/Embeddable.php'], []);
+	}
+
+	public function testBrokenEmbeddable(): void
+	{
+		$this->analyse([__DIR__ . '/data/BrokenEmbeddable.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\BrokenEmbeddable::$one type mapping mismatch: database can contain string|null but property expects string.',
+				16,
+			],
+		]);
+	}
+
 	public function testUnknownType(): void
 	{
 		$this->analyse([__DIR__ . '/data/EntityWithUnknownType.php'], [
