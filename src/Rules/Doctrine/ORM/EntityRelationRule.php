@@ -48,7 +48,11 @@ class EntityRelationRule implements Rule
 		}
 
 		$className = $class->getName();
-		if ($objectManager->getMetadataFactory()->isTransient($className)) {
+		try {
+			if ($objectManager->getMetadataFactory()->isTransient($className)) {
+				return [];
+			}
+		} catch (\ReflectionException $e) {
 			return [];
 		}
 
