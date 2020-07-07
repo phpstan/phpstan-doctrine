@@ -12,6 +12,10 @@ final class DocumentManagerIntegrationTest extends LevelsTestCase
 	 */
 	public function dataTopics(): array
 	{
+		if (PHP_VERSION_ID >= 80000) {
+			return [];
+		}
+
 		return [
 			['documentManagerDynamicReturn'],
 			['documentRepositoryDynamicReturn'],
