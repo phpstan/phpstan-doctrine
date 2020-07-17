@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Class PHPStan\\DoctrineIntegration\\Persistence\\ManagerRegistryRepositoryDynamicReturn\\MyEntity has an unused property $id.",
+        "line": 47,
+        "ignorable": true
+    }
+]

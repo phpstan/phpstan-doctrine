@@ -24,16 +24,6 @@ parameters:
 		- stubs/Persistence/ObjectManagerDecorator.stub
 		- stubs/Persistence/ObjectRepository.stub
 		- stubs/RepositoryFactory.stub
-	propertyAlwaysReadTags:
-		- '@@ORM\Column'
-		- '@@ORM\Id'
-		- '@@ORM\OneToOne'
-		- '@@ORM\OneToMany'
-		- '@@ORM\ManyToOne'
-		- '@@ORM\ManyToMany'
-		- '@@ORM\Embedded'
-	propertyAlwaysWrittenTags:
-		- '@@ORM\GeneratedValue'
 
 parametersSchema:
 	doctrine: structure([
@@ -115,6 +105,11 @@ services:
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+	-
+		class: PHPStan\Rules\Doctrine\ORM\PropertiesExtension
+		tags:
+			- phpstan.properties.readWriteExtension
 
 	doctrineQueryBuilderArgumentsProcessor:
 		class: PHPStan\Type\Doctrine\ArgumentsProcessor
