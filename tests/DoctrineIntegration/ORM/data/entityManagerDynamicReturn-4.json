@@ -1,7 +1,0 @@
-[
-    {
-        "message": "Class PHPStan\\DoctrineIntegration\\ORM\\EntityManagerDynamicReturn\\MyEntity has an unused property $id.",
-        "line": 87,
-        "ignorable": true
-    }
-]
