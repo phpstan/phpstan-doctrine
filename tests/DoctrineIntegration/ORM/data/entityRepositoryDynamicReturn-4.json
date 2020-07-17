@@ -3,5 +3,10 @@
         "message": "Strict comparison using === between int and 'foo' will always evaluate to false.",
         "line": 170,
         "ignorable": true
+    },
+    {
+        "message": "Class PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity has an unused property $id.",
+        "line": 189,
+        "ignorable": true
     }
 ]

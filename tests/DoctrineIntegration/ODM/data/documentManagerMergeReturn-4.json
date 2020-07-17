@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Class PHPStan\\DoctrineIntegration\\ODM\\DocumentManagerMergeReturn\\MyDocument has an unused property $id.",
+        "line": 38,
+        "ignorable": true
+    }
+]
