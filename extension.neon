@@ -24,6 +24,11 @@ parameters:
 		- stubs/Persistence/ObjectManagerDecorator.stub
 		- stubs/Persistence/ObjectRepository.stub
 		- stubs/RepositoryFactory.stub
+		- stubs/Collections/ArrayCollection.stub
+		- stubs/Collections/Collection.stub
+		- stubs/Collections/Selectable.stub
+		- stubs/ORM/QueryBuilder.stub
+		- stubs/ORM/AbstractQuery.stub
 
 parametersSchema:
 	doctrine: structure([

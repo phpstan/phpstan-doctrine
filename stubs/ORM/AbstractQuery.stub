@@ -1,0 +1,19 @@
+<?php
+
+namespace Doctrine\ORM;
+
+use Doctrine\Common\Collections\ArrayCollection;
+
+abstract class AbstractQuery
+{
+
+	/**
+	 * @param ArrayCollection<mixed, mixed>|array<mixed> $parameters
+	 * @return static
+	 */
+	public function setParameters($parameters)
+	{
+
+	}
+
+}

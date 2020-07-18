@@ -1,0 +1,18 @@
+<?php
+
+namespace Doctrine\Common\Collections;
+
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
+
+/**
+ * @template TKey
+ * @template T
+ * @extends IteratorAggregate<TKey, T>
+ * @extends ArrayAccess<TKey|null, T>
+ */
+interface Collection extends Countable, IteratorAggregate, ArrayAccess
+{
+
+}
