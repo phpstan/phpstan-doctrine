@@ -1,6 +1,6 @@
 [
     {
-        "message": "Class PHPStan\\DoctrineIntegration\\Persistence\\ManagerRegistryRepositoryDynamicReturn\\MyEntity has an unused property $id.",
+        "message": "Property PHPStan\\DoctrineIntegration\\Persistence\\ManagerRegistryRepositoryDynamicReturn\\MyEntity::$id is unused.",
         "line": 47,
         "ignorable": true
     }
