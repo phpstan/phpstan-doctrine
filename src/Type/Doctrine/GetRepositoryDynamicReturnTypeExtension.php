@@ -65,7 +65,11 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
 		}
 
-		$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
+		try {
+			$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
+		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
+		}
 
 		return new GenericObjectType($repositoryClass, [
 			$classType,

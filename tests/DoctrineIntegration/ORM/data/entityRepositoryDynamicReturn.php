@@ -2,6 +2,7 @@
 
 namespace PHPStan\DoctrineIntegration\ORM\EntityRepositoryDynamicReturn;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -210,5 +211,20 @@ class GetRepositoryOnNonClasses
 	{
 		$entityManager->getRepository('nonexistentClass');
 	}
+
+}
+
+abstract class BaseEntity
+{
+
+	/**
+	 * @return EntityRepository<self>
+	 */
+	public function getRepository(): EntityRepository
+	{
+		return $this->getEntityManager()->getRepository(static::class);
+	}
+
+	abstract public function getEntityManager(): EntityManager;
 
 }
