@@ -7,3 +7,4 @@ parameters:
 	doctrine:
 		objectManagerLoader: entity-manager.php
 		reportDynamicQueryBuilders: true
+		queryBuilderClass: PHPStan\DoctrineIntegration\ORM\QueryBuilder\CustomQueryBuilder

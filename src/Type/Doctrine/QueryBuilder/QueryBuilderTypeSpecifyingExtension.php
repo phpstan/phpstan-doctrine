@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
@@ -65,7 +66,7 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 		if ($returnType instanceof MixedType) {
 			return new SpecifiedTypes([]);
 		}
-		if (!$returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes()) {
+		if (!(new ObjectType(QueryBuilder::class))->isSuperTypeOf($returnType)->yes()) {
 			return new SpecifiedTypes([]);
 		}
 
