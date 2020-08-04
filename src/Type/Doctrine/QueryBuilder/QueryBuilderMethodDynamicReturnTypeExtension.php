@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -79,7 +80,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		if ($returnType instanceof MixedType) {
 			return false;
 		}
-		return $returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes();
+		return (new ObjectType(QueryBuilder::class))->isSuperTypeOf($returnType)->yes();
 	}
 
 	public function getTypeFromMethodCall(
