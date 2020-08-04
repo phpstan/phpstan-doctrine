@@ -79,7 +79,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 		if ($returnType instanceof MixedType) {
 			return false;
 		}
-		return $returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes();
+		return (new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes();
 	}
 
 	public function getTypeFromMethodCall(
