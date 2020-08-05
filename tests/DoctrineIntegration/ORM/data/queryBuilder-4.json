@@ -8,5 +8,15 @@
         "message": "Strict comparison using === between 'SELECT e FROM…' and 'aaa' will always evaluate to false.",
         "line": 30,
         "ignorable": true
+    },
+    {
+        "message": "Strict comparison using === between 'SELECT e FROM…' and 'bbb' will always evaluate to false.",
+        "line": 41,
+        "ignorable": true
+    },
+    {
+        "message": "Strict comparison using === between 'SELECT e FROM…' and 'bbb' will always evaluate to false.",
+        "line": 42,
+        "ignorable": true
     }
 ]

@@ -32,4 +32,16 @@ class Foo
 		return $query;
 	}
 
+	public function doBar(): Query
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$queryBuilder = $entityRepository->createQueryBuilder('e');
+		$query = $queryBuilder->getQuery();
+
+		$query->getDQL() === 'bbb';
+		$queryBuilder->getDQL() === 'bbb';
+
+		return $query;
+	}
+
 }
