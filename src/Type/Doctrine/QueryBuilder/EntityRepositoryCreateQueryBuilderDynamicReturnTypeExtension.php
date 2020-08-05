@@ -36,7 +36,7 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 	{
 		$calledOnType = $scope->getType($methodCall->var);
 		$entityName = $this->extractEntityName($calledOnType);
-		$entityNameArg = new Arg($entityName === null ? new Variable('entityName') : new String_($entityName));
+		$entityNameArg = new Arg($entityName === null ? new Variable('dynamicEntityClassName') : new String_($entityName));
 		$fromArgs = $methodCall->args;
 		array_unshift($fromArgs, $entityNameArg);
 

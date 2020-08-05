@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Could not analyse QueryBuilder with dynamic arguments.",
+        "line": 54,
+        "ignorable": true
+    }
+]

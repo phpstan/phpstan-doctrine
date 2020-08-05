@@ -44,4 +44,14 @@ class Foo
 		return $query;
 	}
 
+	/**
+	 * @phpstan-param class-string $entityClass
+	 */
+	public function dynamicQueryBuilder(string $entityClass): Query
+	{
+		$entityRepository = $this->entityManager->getRepository($entityClass);
+		$queryBuilder = $entityRepository->createQueryBuilder('e');
+		return $queryBuilder->getQuery();
+	}
+
 }
