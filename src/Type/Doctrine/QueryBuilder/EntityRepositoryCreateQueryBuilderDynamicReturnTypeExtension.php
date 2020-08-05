@@ -2,16 +2,14 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\GenericTypeVariableResolver;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -34,11 +32,15 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		Scope $scope
 	): Type
 	{
-		$calledOnType = $scope->getType($methodCall->var);
-		$entityName = $this->extractEntityName($calledOnType);
-		$entityNameArg = new Arg($entityName === null ? new Variable('dynamicEntityClassName') : new String_($entityName));
+		$entityNameExpr = new MethodCall($methodCall->var, new Identifier('getEntityName'));
+
+		$entityNameExprType = $scope->getType($entityNameExpr);
+		if ($entityNameExprType instanceof GenericClassStringType && $entityNameExprType->getGenericType() instanceof TypeWithClassName) {
+			$entityNameExpr = new String_($entityNameExprType->getGenericType()->getClassName());
+		}
+
 		$fromArgs = $methodCall->args;
-		array_unshift($fromArgs, $entityNameArg);
+		array_unshift($fromArgs, new Arg($entityNameExpr));
 
 		$callStack = new MethodCall($methodCall->var, new Identifier('getEntityManager'));
 		$callStack = new MethodCall($callStack, new Identifier('createQueryBuilder'));
@@ -46,20 +48,6 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		$callStack = new MethodCall($callStack, new Identifier('from'), $fromArgs);
 
 		return $scope->getType($callStack);
-	}
-
-	private function extractEntityName(Type $repositoryType): ?string
-	{
-		if (! $repositoryType instanceof TypeWithClassName) {
-			return null;
-		}
-
-		$entityClassType = GenericTypeVariableResolver::getType($repositoryType, ObjectRepository::class, 'TEntityClass');
-		if (! $entityClassType instanceof TypeWithClassName) {
-			return null;
-		}
-
-		return $entityClassType->getClassName();
 	}
 
 }
