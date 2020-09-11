@@ -1,27 +1,42 @@
 [
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity::nonexistent().",
-        "line": 35,
+        "line": 43,
         "ignorable": true
     },
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyRepository::nonexistant().",
-        "line": 40,
+        "line": 48,
         "ignorable": true
     },
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity::nonexistent().",
-        "line": 54,
+        "line": 62,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface::nonexistent().",
+        "line": 69,
         "ignorable": true
     },
     {
         "message": "Cannot call method test() on int.",
-        "line": 59,
+        "line": 74,
         "ignorable": true
     },
     {
         "message": "Cannot call method test() on int.",
-        "line": 60,
+        "line": 75,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface::test().",
+        "line": 76,
+        "ignorable": true
+    },
+    {
+        "message": "Method Doctrine\\Persistence\\ObjectRepository<PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface>::findOneByBlabla() invoked with 0 parameters, 1 required.",
+        "line": 76,
         "ignorable": true
     }
 ]

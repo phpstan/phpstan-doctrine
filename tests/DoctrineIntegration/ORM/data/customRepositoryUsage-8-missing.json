@@ -1,7 +1,17 @@
 [
     {
         "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity::nonexistent().",
-        "line": 54,
+        "line": 62,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface::nonexistent().",
+        "line": 69,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface::test().",
+        "line": 76,
         "ignorable": true
     }
 ]

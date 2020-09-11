@@ -66,6 +66,21 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 		}
 
 		$fieldName = $this->classify($methodFieldName);
+		// ensure all entities implementing the interface have the field
+		if (interface_exists($entityClassType->getClassName())) {
+			foreach ($objectManager->getMetadataFactory()->getAllMetadata() as $metadata) {
+				$implements = class_implements($metadata->getName());
+				if (!isset($implements[$entityClassType->getClassName()])) {
+					continue;
+				}
+				if (!$metadata->hasField($fieldName) && $metadata->hasAssociation($fieldName)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		$classMetadata = $objectManager->getClassMetadata($entityClassType->getClassName());
 
 		return $classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName);

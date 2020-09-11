@@ -2,6 +2,7 @@
 
 namespace PHPStan\DoctrineIntegration\ORM\CustomRepositoryUsage;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,13 +20,20 @@ class Example
 	 */
 	private $anotherRepository;
 
+	/**
+	 * @var MyRepositoryInterface
+	 */
+	private $interfaceRepository;
+
 	public function __construct(
 		EntityManagerInterface $entityManager,
-		MyRepository $anotherRepository
+		MyRepository $anotherRepository,
+		MyRepositoryInterface $interfaceRepository
 	)
 	{
 		$this->repository = $entityManager->getRepository(MyEntity::class);
 		$this->anotherRepository = $anotherRepository;
+		$this->interfaceRepository = $interfaceRepository;
 	}
 
 	public function get(): void
@@ -54,17 +62,31 @@ class Example
 		$entity->nonexistent();
 	}
 
+	public function interfaceRepository(): void
+	{
+		$entity = $this->interfaceRepository->find(1);
+		$entity->doSomethingElse();
+		$entity->nonexistent();
+	}
+
 	public function callExistingMethodOnRepository(): void
 	{
 		$this->repository->findOneByBlabla()->test();
 		$this->anotherRepository->findOneByBlabla()->test();
+		$this->interfaceRepository->findOneByBlabla()->test();
 	}
 }
+
+interface MyEntityInterface
+{
+	public function doSomethingElse(): void;
+}
+
 
 /**
  * @ORM\Entity(repositoryClass=MyRepository::class)
  */
-class MyEntity
+class MyEntity implements MyEntityInterface
 {
 	/**
 	 * @ORM\Id()
@@ -102,3 +124,12 @@ class MyRepository extends EntityRepository
 		return 1;
 	}
 }
+
+/**
+ * @extends ObjectRepository<MyEntityInterface>
+ */
+interface MyRepositoryInterface extends ObjectRepository
+{
+
+}
+

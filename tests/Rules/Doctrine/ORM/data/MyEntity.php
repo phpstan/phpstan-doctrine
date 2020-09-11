@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class MyEntity
+class MyEntity implements MyEntityInterface
 {
 	/**
 	 * @ORM\Id()

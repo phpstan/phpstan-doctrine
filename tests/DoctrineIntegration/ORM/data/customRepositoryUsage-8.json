@@ -1,12 +1,27 @@
 [
     {
         "message": "Cannot call method doSomethingElse() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null.",
-        "line": 53,
+        "line": 61,
         "ignorable": true
     },
     {
         "message": "Cannot call method nonexistent() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null.",
-        "line": 54,
+        "line": 62,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method doSomethingElse() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface|null.",
+        "line": 68,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method nonexistent() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface|null.",
+        "line": 69,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method test() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntityInterface|null.",
+        "line": 76,
         "ignorable": true
     }
 ]
