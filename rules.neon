@@ -33,3 +33,9 @@ services:
 			reportUnknownTypes: %doctrine.reportUnknownTypes%
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
+
+conditionalTags:
+	PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
