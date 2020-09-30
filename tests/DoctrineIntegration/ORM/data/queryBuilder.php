@@ -32,4 +32,26 @@ class Foo
 		return $query;
 	}
 
+	public function doBar(): Query
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$queryBuilder = $entityRepository->createQueryBuilder('e');
+		$query = $queryBuilder->getQuery();
+
+		$query->getDQL() === 'bbb';
+		$queryBuilder->getDQL() === 'bbb';
+
+		return $query;
+	}
+
+	/**
+	 * @phpstan-param class-string $entityClass
+	 */
+	public function dynamicQueryBuilder(string $entityClass): Query
+	{
+		$entityRepository = $this->entityManager->getRepository($entityClass);
+		$queryBuilder = $entityRepository->createQueryBuilder('e');
+		return $queryBuilder->getQuery();
+	}
+
 }
