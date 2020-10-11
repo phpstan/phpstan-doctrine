@@ -93,6 +93,8 @@ class EntityColumnRule implements Rule
 		if (!isset($metadata->fieldMappings[$propertyName])) {
 			return [];
 		}
+
+		/** @var array{type: string, fieldName: string, columnName?: string, inherited?: class-string, nullable?: bool} $fieldMapping */
 		$fieldMapping = $metadata->fieldMappings[$propertyName];
 
 		$errors = [];
