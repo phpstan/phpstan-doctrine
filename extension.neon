@@ -29,6 +29,7 @@ parameters:
 		- stubs/Collections/Selectable.stub
 		- stubs/ORM/QueryBuilder.stub
 		- stubs/ORM/AbstractQuery.stub
+		- stubs/ServiceDocumentRepository.stub
 
 parametersSchema:
 	doctrine: structure([
