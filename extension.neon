@@ -305,3 +305,9 @@ services:
 		tags: [phpstan.doctrine.typeDescriptor]
 		arguments:
 			uuidTypeName: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
+
+	# Doctrine Collection
+	-
+		class: App\PHPStan\DoctrineCollectionFirstTypeSpecifyingExtension
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
