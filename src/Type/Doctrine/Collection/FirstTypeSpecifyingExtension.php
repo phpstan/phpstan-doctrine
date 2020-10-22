@@ -16,6 +16,7 @@ use PHPStan\Type\TypeCombinator;
 
 final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
+
 	private const COLLECTION_CLASS = 'Doctrine\Common\Collections\Collection';
 	private const IS_EMPTY_METHOD_NAME = 'isEmpty';
 	private const FIRST_METHOD_NAME = 'first';
@@ -32,13 +33,13 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		MethodReflection $methodReflection,
 		MethodCall $node,
 		TypeSpecifierContext $context
-	): bool {
-		return
-			(
-				$methodReflection->getDeclaringClass()->getName() === self::COLLECTION_CLASS
-				|| $methodReflection->getDeclaringClass()->isSubclassOf(self::COLLECTION_CLASS)
-			)
-			&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
+	): bool
+	{
+		return (
+			$methodReflection->getDeclaringClass()->getName() === self::COLLECTION_CLASS
+			|| $methodReflection->getDeclaringClass()->isSubclassOf(self::COLLECTION_CLASS)
+		)
+		&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
 	}
 
 	public function specifyTypes(
@@ -46,7 +47,8 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		MethodCall $node,
 		Scope $scope,
 		TypeSpecifierContext $context
-	): SpecifiedTypes {
+	): SpecifiedTypes
+	{
 		$classReflection = $methodReflection->getDeclaringClass();
 		$methodVariants = $classReflection->getNativeMethod(self::FIRST_METHOD_NAME)->getVariants();
 
@@ -56,17 +58,18 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 				new ConstantBooleanType(false),
 				$context
 			);
-		} else {
-			return $this->typeSpecifier->create(
-				new MethodCall($node->var, self::FIRST_METHOD_NAME),
-				TypeCombinator::remove(ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType(), new ConstantBooleanType(false)),
-				$context
-			);
 		}
+
+		return $this->typeSpecifier->create(
+			new MethodCall($node->var, self::FIRST_METHOD_NAME),
+			TypeCombinator::remove(ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType(), new ConstantBooleanType(false)),
+			$context
+		);
 	}
 
 	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
 	{
 		$this->typeSpecifier = $typeSpecifier;
 	}
+
 }
