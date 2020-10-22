@@ -59,7 +59,7 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 		$entityClass = $entityClassType->getClassName();
-		
+
 		if (interface_exists($entityClass)) {
 			return [];
 		}
