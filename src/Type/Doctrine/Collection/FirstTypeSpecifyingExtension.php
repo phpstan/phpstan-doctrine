@@ -10,7 +10,7 @@ use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\TypeCombinator;
 
@@ -50,11 +50,19 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		$classReflection = $methodReflection->getDeclaringClass();
 		$methodVariants = $classReflection->getNativeMethod(self::FIRST_METHOD_NAME)->getVariants();
 
-		return $this->typeSpecifier->create(
-			new MethodCall($node->var, self::FIRST_METHOD_NAME),
-			TypeCombinator::remove(ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType(), new BooleanType()),
-			$context
-		);
+		if ($context->truthy()) {
+			return $this->typeSpecifier->create(
+				new MethodCall($node->var, self::FIRST_METHOD_NAME),
+				new ConstantBooleanType(false),
+				$context
+			);
+		} else {
+			return $this->typeSpecifier->create(
+				new MethodCall($node->var, self::FIRST_METHOD_NAME),
+				TypeCombinator::remove(ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType(), new ConstantBooleanType(false)),
+				$context
+			);
+		}
 	}
 
 	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
