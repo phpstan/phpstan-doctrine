@@ -22,4 +22,9 @@ class MyEntityImplementingInterface implements MyExtendedInterface
 	{
 		return true;
 	}
+
+	public function getName(): string
+	{
+		return 'my name';
+	}
 }

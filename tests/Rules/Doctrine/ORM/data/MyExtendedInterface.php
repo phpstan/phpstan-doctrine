@@ -4,5 +4,5 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 interface MyExtendedInterface extends MyInterface
 {
-    // No new methods
+    public function getName(): string;
 }
