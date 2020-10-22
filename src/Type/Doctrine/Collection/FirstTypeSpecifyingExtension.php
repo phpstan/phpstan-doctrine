@@ -8,7 +8,6 @@ use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
-use PHPStan\Broker\Broker;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\BooleanType;
@@ -21,13 +20,8 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 	private const IS_EMPTY_METHOD_NAME = 'isEmpty';
 	private const FIRST_METHOD_NAME = 'first';
 
-	private Broker $broker;
-	private TypeSpecifier $typeSpecifier;
-
-	public function __construct(Broker $broker)
-	{
-		$this->broker = $broker;
-	}
+	/** @var TypeSpecifier */
+	private $typeSpecifier;
 
 	public function getClass(): string
 	{
@@ -39,7 +33,12 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		MethodCall $node,
 		TypeSpecifierContext $context
 	): bool {
-		return $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME && $context->false();
+		return
+			(
+				$methodReflection->getDeclaringClass()->getName() === self::COLLECTION_CLASS
+				|| $methodReflection->getDeclaringClass()->isSubclassOf(self::COLLECTION_CLASS)
+			)
+			&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
 	}
 
 	public function specifyTypes(
@@ -48,12 +47,12 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		Scope $scope,
 		TypeSpecifierContext $context
 	): SpecifiedTypes {
-		$classReflection = $this->broker->getClass(self::COLLECTION_CLASS);
+		$classReflection = $methodReflection->getDeclaringClass();
 		$methodVariants = $classReflection->getNativeMethod(self::FIRST_METHOD_NAME)->getVariants();
 
 		return $this->typeSpecifier->create(
 			new MethodCall($node->var, self::FIRST_METHOD_NAME),
-			TypeCombinator::remove(new BooleanType(), ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType()),
+			TypeCombinator::remove(ParametersAcceptorSelector::selectSingle($methodVariants)->getReturnType(), new BooleanType()),
 			$context
 		);
 	}
