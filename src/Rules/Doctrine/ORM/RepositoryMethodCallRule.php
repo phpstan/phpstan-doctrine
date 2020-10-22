@@ -59,6 +59,10 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 		$entityClass = $entityClassType->getClassName();
+		
+		if (interface_exists($entityClass)) {
+			return [];
+		}
 
 		$methodNameIdentifier = $node->name;
 		if (!$methodNameIdentifier instanceof Node\Identifier) {
