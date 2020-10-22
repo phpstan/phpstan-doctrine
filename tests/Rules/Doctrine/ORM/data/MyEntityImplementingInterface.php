@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class MyEntityImplementingInterface implements MyExtendedInterface
+class MyEntityImplementingInterface implements MyInterface
 {
 	/**
 	 * @ORM\Id()
@@ -18,13 +18,14 @@ class MyEntityImplementingInterface implements MyExtendedInterface
 	 */
 	private $id;
 
-	public function requiredMethod(): bool
-	{
-		return true;
-	}
+	/**
+	 * @ORM\Column()
+	 * @var string
+	 */
+	private $name;
 
 	public function getName(): string
 	{
-		return 'my name';
+		return $this->name;
 	}
 }
