@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class MyEntity implements MyExtendedInterface
+class MyEntityImplementingInterface implements MyExtendedInterface
 {
 	/**
 	 * @ORM\Id()
@@ -18,7 +18,7 @@ class MyEntity implements MyExtendedInterface
 	 */
 	private $id;
 
-	public function requiredMethod()
+	public function requiredMethod(): bool
 	{
 		return true;
 	}

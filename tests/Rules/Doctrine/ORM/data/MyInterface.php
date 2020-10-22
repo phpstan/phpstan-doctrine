@@ -4,8 +4,5 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 interface MyInterface
 {
-	/**
-	 * @return bool
-	 */
-	public function requiredMethod();
+	public function requiredMethod(): bool;
 }
