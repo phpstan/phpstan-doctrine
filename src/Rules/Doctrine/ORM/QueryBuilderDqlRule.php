@@ -93,7 +93,7 @@ class QueryBuilderDqlRule implements Rule
 		$messages = [];
 		foreach ($dqls as $dql) {
 			try {
-				$objectManager->createQuery($dql->getValue())->getSQL();
+				$objectManager->createQuery($dql->getValue())->getAST();
 			} catch (\Doctrine\ORM\Query\QueryException $e) {
 				$message = sprintf('QueryBuilder: %s', $e->getMessage());
 				if (strpos($e->getMessage(), '[Syntax Error]') === 0) {

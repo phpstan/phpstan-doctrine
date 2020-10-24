@@ -69,7 +69,7 @@ class DqlRule implements Rule
 		foreach ($dqls as $dql) {
 			$query = $objectManager->createQuery($dql->getValue());
 			try {
-				$query->getSQL();
+				$query->getAST();
 			} catch (\Doctrine\ORM\Query\QueryException $e) {
 				$messages[] = sprintf('DQL: %s', $e->getMessage());
 			}
