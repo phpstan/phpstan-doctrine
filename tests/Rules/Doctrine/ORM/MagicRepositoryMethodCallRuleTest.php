@@ -4,6 +4,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PHPStan\Rules\FunctionCallParametersCheck;
 use PHPStan\Rules\Methods\CallMethodsRule;
+use PHPStan\Rules\NullsafeCheck;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleLevelHelper;
 use PHPStan\Testing\RuleTestCase;
@@ -20,7 +21,7 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 		$ruleLevelHelper = new RuleLevelHelper($broker, true, false, true);
 		return new CallMethodsRule(
 			$broker,
-			new FunctionCallParametersCheck($ruleLevelHelper, true, true, true, true),
+			new FunctionCallParametersCheck($ruleLevelHelper, new NullsafeCheck(), true, true, true, true),
 			$ruleLevelHelper,
 			true,
 			true
