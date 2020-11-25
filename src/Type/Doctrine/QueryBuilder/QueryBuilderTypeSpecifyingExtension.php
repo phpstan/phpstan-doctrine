@@ -65,7 +65,7 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 		if ($returnType instanceof MixedType) {
 			return new SpecifiedTypes([]);
 		}
-		if (!(new ObjectType($this->getClass()))->isSuperTypeOf($returnType)->yes()) {
+		if (!$returnType->isSuperTypeOf(new ObjectType($this->getClass()))->yes()) {
 			return new SpecifiedTypes([]);
 		}
 

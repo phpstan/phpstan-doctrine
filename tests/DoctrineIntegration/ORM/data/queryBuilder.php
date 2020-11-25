@@ -54,18 +54,4 @@ class Foo
 		return $queryBuilder->getQuery();
 	}
 
-	public function usingMethodThatReturnStatic(): ?MyEntity
-	{
-		$queryBuilder = $this->entityManager->createQueryBuilder();
-
-		$queryBuilder
-			->select('e')
-			->from(MyEntity::class, 'e')
-			->where('e.id = :id')
-			->setParameters([
-				'id' => 123,
-			]);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
-	}
 }
