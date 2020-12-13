@@ -1,6 +1,6 @@
 # Doctrine extensions for PHPStan
 
-[![Build Status](https://travis-ci.com/phpstan/phpstan-doctrine.svg?branch=master)](https://travis-ci.com/phpstan/phpstan-doctrine)
+[![Build](https://github.com/phpstan/phpstan-doctrine/workflows/Build/badge.svg)](https://github.com/phpstan/phpstan-doctrine/actions)
 [![Latest Stable Version](https://poser.pugx.org/phpstan/phpstan-doctrine/v/stable)](https://packagist.org/packages/phpstan/phpstan-doctrine)
 [![License](https://poser.pugx.org/phpstan/phpstan-doctrine/license)](https://packagist.org/packages/phpstan/phpstan-doctrine)
 

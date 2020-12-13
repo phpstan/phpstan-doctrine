@@ -36,7 +36,18 @@
 
 	<target name="cs">
 		<exec
-				executable="vendor/bin/phpcs"
+			executable="composer"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="install"/>
+			<arg value="--working-dir"/>
+			<arg path="build-cs"/>
+			<arg value="--ansi"/>
+		</exec>
+		<exec
+				executable="build-cs/vendor/bin/phpcs"
 				logoutput="true"
 				passthru="true"
 				checkreturn="true"
@@ -52,7 +63,7 @@
 
 	<target name="cs-fix">
 		<exec
-				executable="vendor/bin/phpcbf"
+				executable="build-cs/vendor/bin/phpcbf"
 				logoutput="true"
 				passthru="true"
 				checkreturn="true"

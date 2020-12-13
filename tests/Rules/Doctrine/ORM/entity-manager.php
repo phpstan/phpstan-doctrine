@@ -1,13 +1,10 @@
 <?php declare(strict_types = 1);
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-
-AnnotationRegistry::registerUniqueLoader('class_exists');
 
 $config = new Configuration();
 $config->setProxyDir(__DIR__);
