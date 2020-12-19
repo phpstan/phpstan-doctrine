@@ -27,7 +27,7 @@
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-phpunit": "^0.12.16",
 		"phpstan/phpstan-strict-rules": "^0.12.5",
-		"phpunit/phpunit": "^7.5.20",
+		"phpunit/phpunit": "^9.5.0",
 		"ramsey/uuid-doctrine": "^1.5.0"
 	},
 	"config": {
