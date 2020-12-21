@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/phpstan/phpstan-doctrine/license)](https://packagist.org/packages/phpstan/phpstan-doctrine)
 
 * [PHPStan](https://phpstan.org/)
-* [Doctrine](http://www.doctrine-project.org/)
+* [Doctrine](https://www.doctrine-project.org/)
 
 This extension provides following features:
 
