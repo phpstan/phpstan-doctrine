@@ -18,6 +18,7 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 			['entityManagerMergeReturn'],
 			['customRepositoryUsage'],
 			['queryBuilder'],
+			['dbalQueryBuilderExecuteDynamicReturn'],
 		];
 	}
 

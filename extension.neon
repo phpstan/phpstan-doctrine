@@ -212,6 +212,10 @@ services:
 		arguments:
 			class: Doctrine\ORM\Query\Expr
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
+	-
+		class: PHPStan\Type\Doctrine\DBAL\QueryBuilder\QueryBuilderExecuteMethodExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 
 	# Type descriptors
 	-

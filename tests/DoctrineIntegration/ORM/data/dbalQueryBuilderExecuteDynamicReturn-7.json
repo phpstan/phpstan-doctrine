@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\Driver\\ResultStatement|int.",
+        "line": 43,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\Driver\\ResultStatement|int.",
+        "line": 60,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\Driver\\ResultStatement|int.",
+        "line": 76,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\Driver\\ResultStatement|int.",
+        "line": 87,
+        "ignorable": true
+    }
+]
