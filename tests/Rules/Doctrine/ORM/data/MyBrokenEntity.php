@@ -101,4 +101,22 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $arrayOfIntegersOrNull;
 
+	/**
+	 * @ORM\Column(type="decimal")
+	 * @var int|float|numeric-string
+	 */
+	private $decimal;
+
+	/**
+	 * @ORM\Column(type="decimal")
+	 * @var int|float|string
+	 */
+	private $decimalWithString;
+
+	/**
+	 * @ORM\Column(type="decimal")
+	 * @var string
+	 */
+	private $decimalWithString2;
+
 }

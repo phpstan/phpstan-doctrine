@@ -13,6 +13,7 @@ use PHPStan\Type\Doctrine\Descriptors\BinaryType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
 use PHPStan\Type\Doctrine\Descriptors\DateType;
+use PHPStan\Type\Doctrine\Descriptors\DecimalType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
@@ -48,6 +49,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateType(),
 				new UuidTypeDescriptor(UuidType::class),
 				new ArrayType(),
+				new DecimalType(),
 			]),
 			true
 		);
