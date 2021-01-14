@@ -2,6 +2,7 @@
 
 namespace Doctrine\ORM;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
@@ -49,5 +50,14 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-return class-string<TEntityClass>
 	 */
 	protected function getEntityName();
+
+	/**
+	 * @param \Doctrine\Common\Collections\Criteria $criteria
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 *
+	 * @psalm-return \Doctrine\Common\Collections\Collection<int, TEntityClass>
+	 */
+	public function matching(Criteria $criteria);
 
 }

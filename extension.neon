@@ -11,6 +11,7 @@ parameters:
 		queryBuilderFastAlgorithm: true
 	stubFiles:
 		- stubs/ClassMetadataInfo.stub
+		- stubs/Criteria.stub
 		- stubs/DocumentManager.stub
 		- stubs/DocumentRepository.stub
 		- stubs/EntityManager.stub
