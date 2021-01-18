@@ -12,6 +12,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class QueryBuilderExecuteMethodExtension implements DynamicMethodReturnTypeExtension
 {
@@ -45,7 +46,7 @@ class QueryBuilderExecuteMethodExtension implements DynamicMethodReturnTypeExten
 
 			$name = $nameObject->toString();
 			if ($name === 'select' || $name === 'addSelect') {
-				return new ObjectType(ResultStatement::class);
+				return TypeCombinator::intersect($defaultReturnType, new ObjectType(ResultStatement::class));
 			}
 
 			$var = $var->var;
