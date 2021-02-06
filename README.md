@@ -77,6 +77,8 @@ $kernel->boot();
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
 
+In Symfony 5, the bootstrap file might be located in `tests/` folder or even missing. Check the [Symfony documentation about custom bootstrap process](https://symfony.com/doc/current/testing/bootstrap.html) for more informations.
+
 ## Custom types
 
 If your application uses custom Doctrine types, you can write your own type descriptors to analyse them properly.
