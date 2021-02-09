@@ -14,15 +14,24 @@ $new = new MyEntity();
  */
 $collection = new ArrayCollection();
 
-$entityOrFalse = $collection->first();
-$entityOrFalse;
+$entityOrFalse1 = $collection->first();
+$entityOrFalse1;
+
+$entityOrFalse2 = $collection->last();
+$entityOrFalse2;
 
 if ($collection->isEmpty()) {
-	$false = $collection->first();
-	$false;
+	$false1 = $collection->first();
+	$false1;
+
+	$false2 = $collection->last();
+	$false2;
 }
 
 if (!$collection->isEmpty()) {
-	$entity = $collection->first();
-	$entity;
+	$entity1 = $collection->first();
+	$entity1;
+
+	$entity2 = $collection->last();
+	$entity2;
 }

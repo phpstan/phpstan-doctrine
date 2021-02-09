@@ -313,6 +313,6 @@ services:
 
 	# Doctrine Collection
 	-
-		class: PHPStan\Type\Doctrine\Collection\FirstTypeSpecifyingExtension
+		class: PHPStan\Type\Doctrine\Collection\IsEmptyTypeSpecifyingExtension
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension

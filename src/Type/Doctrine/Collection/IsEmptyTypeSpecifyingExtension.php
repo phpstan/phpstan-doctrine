@@ -12,12 +12,13 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
 
-final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
+final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
 
 	private const COLLECTION_CLASS = 'Doctrine\Common\Collections\Collection';
 	private const IS_EMPTY_METHOD_NAME = 'isEmpty';
 	private const FIRST_METHOD_NAME = 'first';
+	private const LAST_METHOD_NAME = 'last';
 
 	/** @var TypeSpecifier */
 	private $typeSpecifier;
@@ -47,11 +48,19 @@ final class FirstTypeSpecifyingExtension implements MethodTypeSpecifyingExtensio
 		TypeSpecifierContext $context
 	): SpecifiedTypes
 	{
-		return $this->typeSpecifier->create(
+		$first = $this->typeSpecifier->create(
 			new MethodCall($node->var, self::FIRST_METHOD_NAME),
 			new ConstantBooleanType(false),
 			$context
 		);
+
+		$last = $this->typeSpecifier->create(
+			new MethodCall($node->var, self::LAST_METHOD_NAME),
+			new ConstantBooleanType(false),
+			$context
+		);
+
+		return $first->unionWith($last);
 	}
 
 	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void

@@ -7,7 +7,7 @@ use PHPStan\Rules\Rule;
 /**
  * @extends \PHPStan\Testing\RuleTestCase<VariableTypeReportingRule>
  */
-class FirstTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
+class IsEmptyTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
 {
 
 	protected function getRule(): Rule
@@ -21,7 +21,7 @@ class FirstTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
 	protected function getMethodTypeSpecifyingExtensions(): array
 	{
 		return [
-			new FirstTypeSpecifyingExtension(),
+			new IsEmptyTypeSpecifyingExtension(),
 		];
 	}
 
@@ -29,16 +29,28 @@ class FirstTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/collection.php'], [
 			[
-				'Variable $entityOrFalse is: MyEntity|false',
+				'Variable $entityOrFalse1 is: MyEntity|false',
 				18,
 			],
 			[
-				'Variable $false is: false',
-				22,
+				'Variable $entityOrFalse2 is: MyEntity|false',
+				21,
 			],
 			[
-				'Variable $entity is: MyEntity',
-				27,
+				'Variable $false1 is: false',
+				25,
+			],
+			[
+				'Variable $false2 is: false',
+				28,
+			],
+			[
+				'Variable $entity1 is: MyEntity',
+				33,
+			],
+			[
+				'Variable $entity2 is: MyEntity',
+				36,
 			],
 		]);
 	}
