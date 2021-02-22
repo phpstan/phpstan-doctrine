@@ -8,7 +8,7 @@ use IteratorAggregate;
 
 /**
  * @template TKey
- * @template T
+ * @template-covariant T
  * @extends IteratorAggregate<TKey, T>
  * @extends ArrayAccess<TKey|null, T>
  */
