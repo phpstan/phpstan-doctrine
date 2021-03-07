@@ -3,5 +3,10 @@
         "message": "Property PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\Example::$repository with generic class Doctrine\\ORM\\EntityRepository does not specify its types: TEntityClass",
         "line": 16,
         "ignorable": true
+    },
+    {
+        "message": "Class PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\Bug180Repository extends generic class Doctrine\\ORM\\EntityRepository but does not specify its types: TEntityClass",
+        "line": 232,
+        "ignorable": true
     }
 ]

@@ -228,3 +228,16 @@ abstract class BaseEntity
 	abstract public function getEntityManager(): EntityManager;
 
 }
+
+class Bug180Repository extends EntityRepository
+{
+	public const ALIAS = 'o';
+
+
+	public function testingMethod(): int
+	{
+		$qb = $this->createQueryBuilder();
+
+		return (int) $qb->getQuery()->getSingleScalarResult();
+	}
+}

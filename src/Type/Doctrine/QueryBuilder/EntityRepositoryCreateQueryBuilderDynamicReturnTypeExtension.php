@@ -8,6 +8,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Type;
@@ -37,6 +38,10 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		$entityNameExprType = $scope->getType($entityNameExpr);
 		if ($entityNameExprType instanceof GenericClassStringType && $entityNameExprType->getGenericType() instanceof TypeWithClassName) {
 			$entityNameExpr = new String_($entityNameExprType->getGenericType()->getClassName());
+		}
+
+		if (!isset($methodCall->args[0])) {
+			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 		}
 
 		$fromArgs = $methodCall->args;
