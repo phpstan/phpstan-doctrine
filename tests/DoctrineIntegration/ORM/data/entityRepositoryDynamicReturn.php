@@ -218,7 +218,7 @@ abstract class BaseEntity
 {
 
 	/**
-	 * @return EntityRepository<self>
+	 * @return EntityRepository<static>
 	 */
 	public function getRepository(): EntityRepository
 	{
