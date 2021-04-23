@@ -66,18 +66,35 @@ parameters:
 		objectManagerLoader: tests/object-manager.php
 ```
 
-For example, in a Symfony project, `object-manager.php` would look something like this:
+Example for Symfony 4:
 
 ```php
-<?php
+// tests/object-manager.php
 
-require __DIR__.'/../config/bootstrap.php';
-$kernel = new \App\Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+use App\Kernel;
+
+require __DIR__ . '/../config/bootstrap.php';
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
 
-In Symfony 5, the bootstrap file might be located in `tests/` folder or even missing. Check the [Symfony documentation about custom bootstrap process](https://symfony.com/doc/current/testing/bootstrap.html) for more informations.
+Example for Symfony 5:
+
+```php
+// tests/object-manager.php
+
+use App\Kernel;
+use Symfony\Component\Dotenv\Dotenv;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+(new Dotenv())->bootEnv(__DIR__ . '/../.env');
+
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$kernel->boot();
+return $kernel->getContainer()->get('doctrine')->getManager();
+```
 
 ## Custom types
 
