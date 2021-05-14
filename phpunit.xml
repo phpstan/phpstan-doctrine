@@ -27,7 +27,7 @@
     </coverage>
 
     <testsuites>
-        <testsuite name="PHPStan for Symfony">
+        <testsuite name="PHPStan for Doctrine">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
