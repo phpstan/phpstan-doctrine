@@ -149,8 +149,8 @@ class EntityColumnRule implements Rule
 				'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
 				$className,
 				$propertyName,
-				$writableToPropertyType->describe(VerbosityLevel::typeOnly()),
-				$property->getWritableType()->describe(VerbosityLevel::typeOnly())
+				$writableToPropertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyWritableType, $writableToPropertyType)),
+				$property->getWritableType()->describe(VerbosityLevel::getRecommendedLevelByType($propertyWritableType, $writableToPropertyType))
 			);
 		}
 		$propertyReadableType = TypeTraverser::map($property->getReadableType(), $transformArrays);
@@ -159,8 +159,8 @@ class EntityColumnRule implements Rule
 				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 				$className,
 				$propertyName,
-				$propertyReadableType->describe(VerbosityLevel::typeOnly()),
-				$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
+				$propertyReadableType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyReadableType)),
+				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyReadableType))
 			);
 		}
 		return $errors;

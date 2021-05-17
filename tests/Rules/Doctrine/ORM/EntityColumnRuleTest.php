@@ -32,6 +32,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType(CustomType::NAME)) {
 			Type::addType(CustomType::NAME, CustomType::class);
 		}
+		if (!Type::hasType(CustomNumericType::NAME)) {
+			Type::addType(CustomNumericType::NAME, CustomNumericType::class);
+		}
 		if (!Type::hasType(UuidType::NAME)) {
 			Type::addType(UuidType::NAME, UuidType::class);
 		}
@@ -46,6 +49,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new BinaryType(),
 				new IntegerType(),
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
+				new ReflectionDescriptor(CustomNumericType::class, $this->createBroker()),
 				new DateType(),
 				new UuidTypeDescriptor(UuidType::class),
 				new ArrayType(),
@@ -97,6 +101,10 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$arrayOfIntegersOrNull type mapping mismatch: property can contain array|null but database expects array.',
 				102,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects string&numeric.',
+				126,
 			],
 		]);
 	}
@@ -151,6 +159,10 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: property can contain int but database expects array.',
 				24,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$numeric type mapping mismatch: property can contain string but database expects string&numeric.',
+				30,
 			],
 		]);
 	}
