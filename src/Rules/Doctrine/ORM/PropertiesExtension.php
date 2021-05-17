@@ -28,6 +28,9 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 		return $metadata->hasField($propertyName) || $metadata->hasAssociation($propertyName);
 	}
 
+	/**
+	 * @param class-string $className
+	 */
 	private function findMetadata(string $className): ?\Doctrine\ORM\Mapping\ClassMetadataInfo
 	{
 		$objectManager = $this->objectMetadataResolver->getObjectManager();

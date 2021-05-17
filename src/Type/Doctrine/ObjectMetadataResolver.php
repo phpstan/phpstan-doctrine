@@ -103,7 +103,7 @@ final class ObjectMetadataResolver
 			return $this->getResolvedRepositoryClass();
 		}
 
-		$metadata = $objectManager->getClassMetadata($className);
+		$metadata = $objectManager->getClassMetadata($classReflection->getName());
 
 		$ormMetadataClass = 'Doctrine\ORM\Mapping\ClassMetadata';
 		if ($metadata instanceof $ormMetadataClass) {

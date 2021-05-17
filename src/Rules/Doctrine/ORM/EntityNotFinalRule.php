@@ -4,12 +4,13 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function sprintf;
 
 /**
- * @implements Rule<Node\Stmt\Class_>
+ * @implements Rule<InClassNode>
  */
 class EntityNotFinalRule implements Rule
 {
@@ -24,12 +25,16 @@ class EntityNotFinalRule implements Rule
 
 	public function getNodeType(): string
 	{
-		return Node\Stmt\Class_::class;
+		return InClassNode::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (! $node->isFinal()) {
+		$classReflection = $scope->getClassReflection();
+		if ($classReflection === null) {
+			throw new \PHPStan\ShouldNotHappenException();
+		}
+		if (!$classReflection->isFinal()) {
 			return [];
 		}
 
@@ -38,9 +43,8 @@ class EntityNotFinalRule implements Rule
 			return [];
 		}
 
-		$className = (string) $node->namespacedName;
 		try {
-			if ($objectManager->getMetadataFactory()->isTransient($className)) {
+			if ($objectManager->getMetadataFactory()->isTransient($classReflection->getName())) {
 				return [];
 			}
 		} catch (\ReflectionException $e) {
@@ -49,7 +53,7 @@ class EntityNotFinalRule implements Rule
 
 		return [sprintf(
 			'Entity class %s is final which can cause problems with proxies.',
-			$className
+			$classReflection->getDisplayName()
 		)];
 	}
 

@@ -58,7 +58,10 @@ class RepositoryMethodCallRule implements Rule
 		if (!$entityClassType instanceof TypeWithClassName) {
 			return [];
 		}
-		$entityClass = $entityClassType->getClassName();
+		$entityClassReflection = $entityClassType->getClassReflection();
+		if ($entityClassReflection === null) {
+			return [];
+		}
 
 		$methodNameIdentifier = $node->name;
 		if (!$methodNameIdentifier instanceof Node\Identifier) {
@@ -79,7 +82,7 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 
-		$classMetadata = $objectManager->getClassMetadata($entityClass);
+		$classMetadata = $objectManager->getClassMetadata($entityClassReflection->getName());
 
 		$messages = [];
 		foreach ($argType->getKeyTypes() as $keyType) {
@@ -99,7 +102,7 @@ class RepositoryMethodCallRule implements Rule
 				'Call to method %s::%s() - entity %s does not have a field named $%s.',
 				$calledOnType->describe(VerbosityLevel::typeOnly()),
 				$methodName,
-				$entityClass,
+				$entityClassReflection->getDisplayName(),
 				$fieldName
 			);
 		}
