@@ -22,4 +22,16 @@ class EntityWithCustomType
 	 * @var int
 	 */
 	private $foo;
+
+	/**
+	 * @ORM\Column(type="custom_numeric")
+	 * @var string
+	 */
+	private $numeric;
+
+	/**
+	 * @ORM\Column(type="custom_numeric")
+	 * @var numeric-string
+	 */
+	private $correctNumeric;
 }

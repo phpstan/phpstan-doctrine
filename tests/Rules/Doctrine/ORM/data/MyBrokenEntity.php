@@ -119,4 +119,10 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $decimalWithString2;
 
+	/**
+	 * @ORM\Column(type="string")
+	 * @var numeric-string
+	 */
+	private $numericString;
+
 }
