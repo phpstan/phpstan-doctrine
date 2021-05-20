@@ -52,6 +52,7 @@ interface EntityManagerInterface extends ObjectManager
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T
+	 * @deprecated 2.7 This method is being removed from the ORM and won't have any replacement
 	 */
 	public function copy($entity, $deep = false);
 
