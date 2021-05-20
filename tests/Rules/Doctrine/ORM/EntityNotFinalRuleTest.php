@@ -45,6 +45,11 @@ class EntityNotFinalRuleTest extends RuleTestCase
 			],
 		];
 
+		yield 'final annotated entity' => [
+			__DIR__ . '/data/FinalAnnotatedEntity.php',
+			[],
+		];
+
 		yield 'final non-entity' => [
 			__DIR__ . '/data/FinalNonEntity.php',
 			[],
