@@ -34,7 +34,7 @@ class EntityNotFinalRule implements Rule
 		if ($classReflection === null) {
 			throw new \PHPStan\ShouldNotHappenException();
 		}
-		if (!$classReflection->isFinal()) {
+		if (!$classReflection->isFinalByKeyword()) {
 			return [];
 		}
 
