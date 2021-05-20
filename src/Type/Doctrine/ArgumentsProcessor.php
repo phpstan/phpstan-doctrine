@@ -16,6 +16,7 @@ class ArgumentsProcessor
 	 * @param string $methodName
 	 * @param \PhpParser\Node\Arg[] $methodCallArgs
 	 * @return mixed[]
+	 * @throws DynamicQueryBuilderArgumentException
 	 */
 	public function processArgs(
 		Scope $scope,

@@ -7,4 +7,10 @@ use Exception;
 class DynamicQueryBuilderArgumentException extends Exception
 {
 
+	/** @api */
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 }
