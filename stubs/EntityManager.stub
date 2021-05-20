@@ -19,6 +19,7 @@ class EntityManager implements EntityManagerInterface
 	 * @template T
 	 * @phpstan-param T $entity
 	 * @phpstan-return T
+	 * @deprecated 2.7 This method is being removed from the ORM and won't have any replacement
 	 */
 	public function merge($entity);
 
@@ -51,6 +52,7 @@ class EntityManager implements EntityManagerInterface
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T
+	 * @deprecated 2.7 This method is being removed from the ORM and won't have any replacement
 	 */
 	public function copy($entity, $deep = false);
 
