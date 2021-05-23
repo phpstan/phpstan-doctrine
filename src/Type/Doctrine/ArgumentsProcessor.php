@@ -8,6 +8,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
 
+/** @api */
 class ArgumentsProcessor
 {
 
