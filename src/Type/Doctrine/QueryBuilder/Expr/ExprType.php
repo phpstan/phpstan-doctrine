@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 
 use PHPStan\Type\ObjectType;
 
+/** @api */
 class ExprType extends ObjectType
 {
 

@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
+/** @api */
 abstract class QueryBuilderType extends ObjectType
 {
 

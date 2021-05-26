@@ -36,6 +36,7 @@ final class ObjectMetadataResolver
 		$this->repositoryClass = $repositoryClass;
 	}
 
+	/** @api */
 	public function getObjectManager(): ?ObjectManager
 	{
 		if ($this->objectManager === false) {
