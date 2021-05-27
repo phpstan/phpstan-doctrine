@@ -8,10 +8,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
 class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension, BrokerAwareExtension
@@ -58,9 +58,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 
 		$className = $scope->resolveName($methodCall->class);
 		if (!$this->broker->hasClass($className)) {
-			return ParametersAcceptorSelector::selectSingle(
-				$methodReflection->getVariants()
-			)->getReturnType();
+			return new ObjectType($className);
 		}
 
 		try {
@@ -72,9 +70,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 				)
 			);
 		} catch (DynamicQueryBuilderArgumentException $e) {
-			return ParametersAcceptorSelector::selectSingle(
-				$methodReflection->getVariants()
-			)->getReturnType();
+			return new ObjectType($this->broker->getClassName($className));
 		}
 
 		return new ExprType($className, $exprObject);
