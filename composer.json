@@ -24,6 +24,7 @@
 		"doctrine/mongodb-odm": "^1.3 || ^2.1",
 		"doctrine/orm": "^2.9.1",
 		"doctrine/persistence": "^1.1 || ^2.0",
+		"nesbot/carbon": "^2.49",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-phpunit": "^0.12.16",
 		"phpstan/phpstan-strict-rules": "^0.12.5",
