@@ -296,6 +296,12 @@ services:
 
 	# 3rd party Type descriptors
 	-
+		factory: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('Carbon\Doctrine\CarbonImmutableType')
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		factory: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('Carbon\Doctrine\CarbonType')
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
 		class: PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor
 		tags: [phpstan.doctrine.typeDescriptor]
 		arguments:

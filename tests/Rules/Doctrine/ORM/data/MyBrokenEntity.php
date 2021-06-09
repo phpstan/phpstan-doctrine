@@ -125,4 +125,27 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $numericString;
 
+	/**
+	 * @ORM\Column(type="carbon")
+	 * @var \Carbon\CarbonImmutable
+	 */
+	private $invalidCarbon;
+
+	/**
+	 * @ORM\Column(type="carbon_immutable")
+	 * @var \Carbon\Carbon
+	 */
+	private $invalidCarbonImmutable;
+
+	/**
+	 * @ORM\Column(type="carbon")
+	 * @var \Carbon\Carbon
+	 */
+	private $validCarbon;
+
+	/**
+	 * @ORM\Column(type="carbon_immutable")
+	 * @var \Carbon\CarbonImmutable
+	 */
+	private $validCarbonImmutable;
 }

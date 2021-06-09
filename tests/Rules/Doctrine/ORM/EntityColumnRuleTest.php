@@ -2,6 +2,8 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Carbon\Doctrine\CarbonImmutableType;
+use Carbon\Doctrine\CarbonType;
 use Doctrine\DBAL\Types\Type;
 use Iterator;
 use PHPStan\Rules\Rule;
@@ -38,22 +40,30 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType(UuidType::NAME)) {
 			Type::addType(UuidType::NAME, UuidType::class);
 		}
+		if (!Type::hasType('carbon')) {
+			Type::addType('carbon', \Carbon\Doctrine\CarbonType::class);
+		}
+		if (!Type::hasType('carbon_immutable')) {
+			Type::addType('carbon_immutable', \Carbon\Doctrine\CarbonImmutableType::class);
+		}
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null),
 			new DescriptorRegistry([
+				new ArrayType(),
 				new BigIntType(),
-				new StringType(),
-				new DateTimeType(),
-				new DateTimeImmutableType(),
 				new BinaryType(),
+				new DateTimeImmutableType(),
+				new DateTimeType(),
+				new DateType(),
+				new DecimalType(),
 				new IntegerType(),
+				new StringType(),
+				new UuidTypeDescriptor(UuidType::class),
+				new ReflectionDescriptor(CarbonImmutableType::class, $this->createBroker()),
+				new ReflectionDescriptor(CarbonType::class, $this->createBroker()),
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
 				new ReflectionDescriptor(CustomNumericType::class, $this->createBroker()),
-				new DateType(),
-				new UuidTypeDescriptor(UuidType::class),
-				new ArrayType(),
-				new DecimalType(),
 			]),
 			true
 		);
@@ -105,6 +115,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects string&numeric.',
 				126,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbon type mapping mismatch: database can contain Carbon\Carbon but property expects Carbon\CarbonImmutable.',
+				132,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
+				138,
 			],
 		]);
 	}
