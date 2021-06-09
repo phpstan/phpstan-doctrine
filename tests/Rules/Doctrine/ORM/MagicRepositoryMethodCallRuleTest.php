@@ -2,13 +2,8 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
-use PHPStan\Php\PhpVersion;
-use PHPStan\Rules\FunctionCallParametersCheck;
 use PHPStan\Rules\Methods\CallMethodsRule;
-use PHPStan\Rules\NullsafeCheck;
-use PHPStan\Rules\PhpDoc\UnresolvableTypeHelper;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleLevelHelper;
 use PHPStan\Testing\RuleTestCase;
 
 /**
@@ -19,15 +14,7 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		$broker = $this->createBroker();
-		$ruleLevelHelper = new RuleLevelHelper($broker, true, false, true);
-		return new CallMethodsRule(
-			$broker,
-			new FunctionCallParametersCheck($ruleLevelHelper, new NullsafeCheck(), new PhpVersion(PHP_VERSION_ID), new UnresolvableTypeHelper(true), true, true, true, true, true),
-			$ruleLevelHelper,
-			true,
-			true
-		);
+		return self::getContainer()->getByType(CallMethodsRule::class);
 	}
 
 	/**
