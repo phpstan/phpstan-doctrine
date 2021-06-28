@@ -22,28 +22,28 @@ class JsonType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-        return new \PHPStan\Type\UnionType([
-            new ArrayType(new MixedType(), new MixedType()),
-            new BooleanType(),
-            new FloatType(),
-            new IntegerType(),
-            new NullType(),
-            new ObjectType(),
-            new StringType(),
-        ]);
+		return new \PHPStan\Type\UnionType([
+			new ArrayType(new MixedType(), new MixedType()),
+			new BooleanType(),
+			new FloatType(),
+			new IntegerType(),
+			new NullType(),
+			new ObjectType(),
+			new StringType(),
+		]);
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-        return new \PHPStan\Type\UnionType([
-            new ArrayType(new MixedType(), new MixedType()),
-            new BooleanType(),
-            new FloatType(),
-            new IntegerType(),
-            new NullType(),
-            new ObjectType(),
-            new StringType(),
-        ]);
+		return new \PHPStan\Type\UnionType([
+			new ArrayType(new MixedType(), new MixedType()),
+			new BooleanType(),
+			new FloatType(),
+			new IntegerType(),
+			new NullType(),
+			new ObjectType(),
+			new StringType(),
+		]);
 	}
 
 }
