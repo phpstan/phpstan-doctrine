@@ -17,6 +17,7 @@ use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
 use PHPStan\Type\Doctrine\Descriptors\DateType;
 use PHPStan\Type\Doctrine\Descriptors\DecimalType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
+use PHPStan\Type\Doctrine\Descriptors\JsonType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
@@ -57,6 +58,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeType(),
 				new DateType(),
 				new DecimalType(),
+				new JsonType(),
 				new IntegerType(),
 				new StringType(),
 				new UuidTypeDescriptor(UuidType::class),
