@@ -15,12 +15,12 @@ class JsonType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\ArrayType(new MixedType(), new MixedType());
+		return new \PHPStan\Type\MixedType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return new \PHPStan\Type\ArrayType(new MixedType(), new MixedType());
+		return new \PHPStan\Type\MixedType();
 	}
 
 }
