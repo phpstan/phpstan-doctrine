@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use JsonSerializable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
@@ -11,6 +12,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use stdClass;
 
 class JsonType implements DoctrineTypeDescriptor
 {
@@ -28,7 +30,8 @@ class JsonType implements DoctrineTypeDescriptor
 			new FloatType(),
 			new IntegerType(),
 			new NullType(),
-			new ObjectType(),
+			new ObjectType(JsonSerializable::class),
+			new ObjectType(stdClass::class),
 			new StringType(),
 		]);
 	}
@@ -41,7 +44,8 @@ class JsonType implements DoctrineTypeDescriptor
 			new FloatType(),
 			new IntegerType(),
 			new NullType(),
-			new ObjectType(),
+			new ObjectType(JsonSerializable::class),
+			new ObjectType(stdClass::class),
 			new StringType(),
 		]);
 	}
