@@ -17,6 +17,22 @@ use stdClass;
 class JsonType implements DoctrineTypeDescriptor
 {
 
+	private static function getJsonType(): \PHPStan\Type\UnionType
+	{
+		$mixedType = new MixedType();
+
+		return new \PHPStan\Type\UnionType([
+			new ArrayType($mixedType, $mixedType),
+			new BooleanType(),
+			new FloatType(),
+			new IntegerType(),
+			new NullType(),
+			new ObjectType(JsonSerializable::class),
+			new ObjectType(stdClass::class),
+			new StringType(),
+		]);
+	}
+
 	public function getType(): string
 	{
 		return \Doctrine\DBAL\Types\JsonType::class;
@@ -24,30 +40,12 @@ class JsonType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\UnionType([
-			new ArrayType(new MixedType(), new MixedType()),
-			new BooleanType(),
-			new FloatType(),
-			new IntegerType(),
-			new NullType(),
-			new ObjectType(JsonSerializable::class),
-			new ObjectType(stdClass::class),
-			new StringType(),
-		]);
+		return self::getJsonType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return new \PHPStan\Type\UnionType([
-			new ArrayType(new MixedType(), new MixedType()),
-			new BooleanType(),
-			new FloatType(),
-			new IntegerType(),
-			new NullType(),
-			new ObjectType(JsonSerializable::class),
-			new ObjectType(stdClass::class),
-			new StringType(),
-		]);
+		return self::getJsonType();
 	}
 
 }
