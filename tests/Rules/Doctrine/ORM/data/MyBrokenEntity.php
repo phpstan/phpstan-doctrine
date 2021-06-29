@@ -151,7 +151,7 @@ class MyBrokenEntity extends MyBrokenSuperclass
 
 	/**
 	 * @ORM\Column(type="json")
-	 * @var Object
+	 * @var EmptyObject
 	 */
 	private $incompatibleJsonValueObject;
 }

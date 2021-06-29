@@ -12,6 +12,6 @@ final class JsonSerializableObject implements JsonSerializable
     }
 }
 
-final class Object
+final class EmptyObject
 {
 }
