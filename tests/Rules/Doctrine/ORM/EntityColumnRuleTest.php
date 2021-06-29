@@ -126,14 +126,14 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
 				138,
 			],
-            [
-                'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: database can contain array|bool|float|int|JsonSerializable|stdClass|string|null but property expects object.',
-                156
-            ],
-            [
-                'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain object but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
-                156
-            ]
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: database can contain array|bool|float|int|JsonSerializable|stdClass|string|null but property expects PHPStan\Rules\Doctrine\ORM\EmptyObject.',
+				156,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
+				156,
+			],
 		]);
 	}
 
