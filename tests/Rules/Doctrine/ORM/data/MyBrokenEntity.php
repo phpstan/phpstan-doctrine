@@ -148,4 +148,10 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 * @var \Carbon\CarbonImmutable
 	 */
 	private $validCarbonImmutable;
+
+	/**
+	 * @ORM\Column(type="json")
+	 * @var EmptyObject
+	 */
+	private $incompatibleJsonValueObject;
 }

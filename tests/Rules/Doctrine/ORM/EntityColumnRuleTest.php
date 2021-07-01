@@ -17,6 +17,7 @@ use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
 use PHPStan\Type\Doctrine\Descriptors\DateType;
 use PHPStan\Type\Doctrine\Descriptors\DecimalType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
+use PHPStan\Type\Doctrine\Descriptors\JsonType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
@@ -57,6 +58,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeType(),
 				new DateType(),
 				new DecimalType(),
+				new JsonType(),
 				new IntegerType(),
 				new StringType(),
 				new UuidTypeDescriptor(UuidType::class),
@@ -123,6 +125,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
 				138,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: database can contain array|bool|float|int|JsonSerializable|stdClass|string|null but property expects PHPStan\Rules\Doctrine\ORM\EmptyObject.',
+				156,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
+				156,
 			],
 		]);
 	}
