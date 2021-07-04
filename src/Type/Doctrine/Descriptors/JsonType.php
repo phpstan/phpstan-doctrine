@@ -8,6 +8,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
@@ -40,7 +41,7 @@ class JsonType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return self::getJsonType();
+		return new NeverType();
 	}
 
 	public function getWritableToDatabaseType(): Type

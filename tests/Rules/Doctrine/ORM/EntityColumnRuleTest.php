@@ -127,14 +127,15 @@ class EntityColumnRuleTest extends RuleTestCase
 				138,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: database can contain array|bool|float|int|JsonSerializable|stdClass|string|null but property expects PHPStan\Rules\Doctrine\ORM\EmptyObject.',
-				156,
-			],
-			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
 				156,
 			],
 		]);
+	}
+
+	public function testRuleOnMyEntity(): void
+	{
+		$this->analyse([__DIR__ . '/data/MyEntity.php'], []);
 	}
 
 	public function testSuperclass(): void
