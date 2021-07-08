@@ -8,7 +8,7 @@ abstract class AbstractQuery
 {
 
 	/**
-	 * @param ArrayCollection<mixed, mixed>|array<mixed> $parameters
+	 * @param ArrayCollection<array-key, mixed>|array<mixed> $parameters
 	 * @return static
 	 */
 	public function setParameters($parameters)

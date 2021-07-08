@@ -3,7 +3,7 @@
 namespace Doctrine\Common\Collections;
 
 /**
- * @template TKey
+ * @template TKey of array-key
  * @template T
  * @implements Collection<TKey,T>
  * @implements Selectable<TKey,T>

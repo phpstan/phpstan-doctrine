@@ -1,5 +1,15 @@
 [
     {
+        "message": "Cannot call method doSomethingElse() on object|null.",
+        "line": 46,
+        "ignorable": true
+    },
+    {
+        "message": "Cannot call method nonexistent() on object|null.",
+        "line": 47,
+        "ignorable": true
+    },
+    {
         "message": "Cannot call method doSomethingElse() on PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null.",
         "line": 53,
         "ignorable": true

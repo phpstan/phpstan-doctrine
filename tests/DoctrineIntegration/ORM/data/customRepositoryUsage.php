@@ -81,7 +81,7 @@ class MyEntity
 }
 
 /**
- * @template T
+ * @template T of object
  * @extends EntityRepository<T>
  */
 class MyRepository extends EntityRepository

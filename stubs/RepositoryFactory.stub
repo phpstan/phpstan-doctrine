@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 interface RepositoryFactory
 {
     /**
-     * @template TEntityClass
+     * @template TEntityClass of object
      * @phpstan-param class-string<TEntityClass> $entityName
      * @phpstan-return ObjectRepository<TEntityClass>
      */

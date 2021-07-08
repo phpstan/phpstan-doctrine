@@ -9,7 +9,7 @@ interface EntityManagerInterface extends ObjectManager
 {
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $className
 	 * @phpstan-param mixed  $id
 	 * @phpstan-return T|null
@@ -17,21 +17,21 @@ interface EntityManagerInterface extends ObjectManager
 	public function find($className, $id);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $object
 	 * @phpstan-return T
 	 */
 	public function merge($object);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $className
 	 * @phpstan-return ObjectRepository<T>
 	 */
 	public function getRepository($className);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $id
 	 * @phpstan-return T|null
@@ -39,7 +39,7 @@ interface EntityManagerInterface extends ObjectManager
 	public function getReference($entityName, $id);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $identifier
 	 *
@@ -48,7 +48,7 @@ interface EntityManagerInterface extends ObjectManager
 	public function getPartialReference($entityName, $identifier);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T

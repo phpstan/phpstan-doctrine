@@ -10,7 +10,7 @@
         "ignorable": true
     },
     {
-        "message": "Method Doctrine\\ORM\\EntityRepository<mixed>::createQueryBuilder() invoked with 0 parameters, 1-2 required.",
+        "message": "Method Doctrine\\ORM\\EntityRepository<object>::createQueryBuilder() invoked with 0 parameters, 1-2 required.",
         "line": 239,
         "ignorable": true
     },

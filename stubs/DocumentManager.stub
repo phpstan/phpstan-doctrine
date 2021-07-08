@@ -50,7 +50,7 @@ class DocumentManager implements ObjectManager
 	public function getPartialReference($documentName, $identifier);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T

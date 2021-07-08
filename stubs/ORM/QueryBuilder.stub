@@ -6,7 +6,7 @@ class QueryBuilder
 {
 
 	/**
-	 * @param \Doctrine\Common\Collections\ArrayCollection<mixed, mixed>|array<mixed> $parameters
+	 * @param \Doctrine\Common\Collections\ArrayCollection<array-key, mixed>|array<mixed> $parameters
 	 * @return static
 	 */
 	public function setParameters($parameters)

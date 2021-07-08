@@ -6,7 +6,7 @@ class EntityManager implements EntityManagerInterface
 {
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed  $id
 	 * @phpstan-param integer|null $lockMode
@@ -16,7 +16,7 @@ class EntityManager implements EntityManagerInterface
 	public function find($entityName, $id, $lockMode = null, $lockVersion = null);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-return T
 	 * @deprecated 2.7 This method is being removed from the ORM and won't have any replacement
@@ -24,14 +24,14 @@ class EntityManager implements EntityManagerInterface
 	public function merge($entity);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-return EntityRepository<T>
 	 */
 	public function getRepository($entityName);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $id
 	 * @phpstan-return T|null
@@ -39,7 +39,7 @@ class EntityManager implements EntityManagerInterface
 	public function getReference($entityName, $id);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $identifier
 	 *
@@ -48,7 +48,7 @@ class EntityManager implements EntityManagerInterface
 	public function getPartialReference($entityName, $identifier);
 
 	/**
-	 * @template T
+	 * @template T of object
 	 * @phpstan-param T $entity
 	 * @phpstan-param bool $deep
 	 * @phpstan-return T

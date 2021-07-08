@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Call to an undefined method object::doSomethingElse().",
+        "line": 46,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method object::nonexistent().",
+        "line": 47,
+        "ignorable": true
+    },
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyRepository::get() should return PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity but returns T of object.",
+        "line": 97,
+        "ignorable": true
+    }
+]

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
- * @template TEntityClass
+ * @template TEntityClass of object
  * @implements ObjectRepository<TEntityClass>
  */
 class EntityRepository implements ObjectRepository
