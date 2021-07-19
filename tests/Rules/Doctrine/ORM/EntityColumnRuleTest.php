@@ -176,6 +176,13 @@ class EntityColumnRuleTest extends RuleTestCase
 		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', []];
 		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', []];
 		yield 'composite' => [__DIR__ . '/data/CompositePrimaryKeyEntity1.php', []];
+		yield 'no generated value 1' => [__DIR__ . '/data/GeneratedIdEntity5.php', []];
+		yield 'no generated value 2' => [__DIR__ . '/data/GeneratedIdEntity6.php', [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity6::$id type mapping mismatch: property can contain int|null but database expects int.',
+				18,
+			],
+		]];
 	}
 
 	public function testCustomType(): void
