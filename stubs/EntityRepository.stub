@@ -12,6 +12,9 @@ use Doctrine\Persistence\ObjectRepository;
 class EntityRepository implements ObjectRepository
 {
 
+	/** @var class-string<TEntityClass> */
+	protected $_entityName;
+
 	/**
 	 * @phpstan-param mixed $id
 	 * @phpstan-param int|null $lockMode
