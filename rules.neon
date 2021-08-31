@@ -2,6 +2,8 @@ parameters:
 	doctrine:
 		reportDynamicQueryBuilders: false
 		reportUnknownTypes: false
+		allowNullablePropertyForRequiredField: false
+
 
 parametersSchema:
 	doctrine: structure([
@@ -13,6 +15,7 @@ parametersSchema:
 		queryBuilderFastAlgorithm: bool()
 		reportDynamicQueryBuilders: bool()
 		reportUnknownTypes: bool()
+		allowNullablePropertyForRequiredField: bool()
 	])
 
 rules:
@@ -31,6 +34,7 @@ services:
 		class: PHPStan\Rules\Doctrine\ORM\EntityColumnRule
 		arguments:
 			reportUnknownTypes: %doctrine.reportUnknownTypes%
+			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
 		tags:
 			- phpstan.rules.rule
 	-
