@@ -18,6 +18,8 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
+
+use function in_array;
 use function sprintf;
 
 /**
@@ -35,15 +37,20 @@ class EntityColumnRule implements Rule
 	/** @var bool */
 	private $reportUnknownTypes;
 
+	/** @var bool */
+	private $allowNullablePropertyForRequiredField;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		DescriptorRegistry $descriptorRegistry,
-		bool $reportUnknownTypes
+		bool $reportUnknownTypes,
+		bool $allowNullablePropertyForRequiredField
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
 		$this->reportUnknownTypes = $reportUnknownTypes;
+		$this->allowNullablePropertyForRequiredField = $allowNullablePropertyForRequiredField;
 	}
 
 	public function getNodeType(): string
@@ -154,7 +161,14 @@ class EntityColumnRule implements Rule
 			);
 		}
 		$propertyReadableType = TypeTraverser::map($property->getReadableType(), $transformArrays);
-		if (!$writableToDatabaseType->isSuperTypeOf(in_array($propertyName, $identifiers, true) && !$nullable ? TypeCombinator::removeNull($propertyReadableType) : $propertyReadableType)->yes()) {
+
+		if (
+			!$writableToDatabaseType->isSuperTypeOf(
+				$this->allowNullablePropertyForRequiredField || (in_array($propertyName, $identifiers, true) && !$nullable)
+					? TypeCombinator::removeNull($propertyReadableType)
+					: $propertyReadableType
+			)->yes()
+		) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 				$className,

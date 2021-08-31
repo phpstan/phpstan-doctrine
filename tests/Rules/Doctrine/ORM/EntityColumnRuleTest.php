@@ -30,6 +30,9 @@ use Ramsey\Uuid\Doctrine\UuidType;
 class EntityColumnRuleTest extends RuleTestCase
 {
 
+	/** @var bool */
+	private $allowNullablePropertyForRequiredField;
+
 	protected function getRule(): Rule
 	{
 		if (!Type::hasType(CustomType::NAME)) {
@@ -67,12 +70,14 @@ class EntityColumnRuleTest extends RuleTestCase
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
 				new ReflectionDescriptor(CustomNumericType::class, $this->createBroker()),
 			]),
-			true
+			true,
+			$this->allowNullablePropertyForRequiredField
 		);
 	}
 
 	public function testRule(): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
@@ -133,13 +138,66 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testRuleWithAllowedNullableProperty(): void
+	{
+		$this->allowNullablePropertyForRequiredField = true;
+		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
+				19,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
+				25,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$three type mapping mismatch: database can contain DateTime but property expects DateTimeImmutable.',
+				37,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: database can contain DateTimeImmutable but property expects DateTime.',
+				43,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: property can contain DateTime but database expects DateTimeImmutable.',
+				43,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: database can contain Ramsey\Uuid\UuidInterface but property expects int.',
+				72,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: property can contain int but database expects Ramsey\Uuid\UuidInterface|string.',
+				72,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects string&numeric.',
+				126,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbon type mapping mismatch: database can contain Carbon\Carbon but property expects Carbon\CarbonImmutable.',
+				132,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
+				138,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
+				156,
+			],
+		]);
+	}
+
 	public function testRuleOnMyEntity(): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([__DIR__ . '/data/MyEntity.php'], []);
 	}
 
 	public function testSuperclass(): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
@@ -155,6 +213,7 @@ class EntityColumnRuleTest extends RuleTestCase
 	 */
 	public function testGeneratedIds(string $file, array $expectedErrors): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([$file], $expectedErrors);
 	}
 
@@ -187,6 +246,7 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	public function testCustomType(): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([__DIR__ . '/data/EntityWithCustomType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: database can contain DateTimeInterface but property expects int.',
@@ -205,6 +265,7 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	public function testUnknownType(): void
 	{
+		$this->allowNullablePropertyForRequiredField = false;
 		$this->analyse([__DIR__ . '/data/EntityWithUnknownType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithUnknownType::$foo: Doctrine type "unknown" does not have any registered descriptor.',
