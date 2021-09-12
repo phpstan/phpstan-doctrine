@@ -21,6 +21,7 @@ parametersSchema:
 rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
+	- PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
 	- PHPStan\Rules\Doctrine\ORM\EntityRelationRule
 
 services:
@@ -39,7 +40,3 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
-
-conditionalTags:
-	PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule:
-		phpstan.rules.rule: %featureToggles.bleedingEdge%
