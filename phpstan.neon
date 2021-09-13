@@ -8,7 +8,7 @@ includes:
 	- phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
-	excludes_analyse:
+	excludePaths:
 		- tests/*/data/*
 
 	ignoreErrors:

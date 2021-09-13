@@ -2,7 +2,7 @@
 
 namespace PHPStan\Reflection\Doctrine;
 
-final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Testing\TestCase
+final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Testing\PHPStanTestCase
 {
 
 	/** @var \PHPStan\Broker\Broker */
