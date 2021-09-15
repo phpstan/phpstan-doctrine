@@ -25,9 +25,16 @@ class EntityRelationRule implements Rule
 	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
+	/** @var bool */
+	private $allowNullablePropertyForRequiredField;
+
+	public function __construct(
+		ObjectMetadataResolver $objectMetadataResolver,
+		bool $allowNullablePropertyForRequiredField
+	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->allowNullablePropertyForRequiredField = $allowNullablePropertyForRequiredField;
 	}
 
 	public function getNodeType(): string
@@ -136,7 +143,13 @@ class EntityRelationRule implements Rule
 					$propertyWritableType->describe(VerbosityLevel::typeOnly())
 				);
 			}
-			if (!$columnType->isSuperTypeOf($property->getReadableType())->yes()) {
+			if (
+				!$columnType->isSuperTypeOf(
+					$this->allowNullablePropertyForRequiredField
+						? TypeCombinator::removeNull($property->getReadableType())
+						: $property->getReadableType()
+				)->yes()
+			) {
 				$errors[] = sprintf(
 					'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 					$className,

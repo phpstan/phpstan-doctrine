@@ -4,7 +4,6 @@ parameters:
 		reportUnknownTypes: false
 		allowNullablePropertyForRequiredField: false
 
-
 parametersSchema:
 	doctrine: structure([
 		repositoryClass: schema(string(), nullable())
@@ -22,7 +21,6 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
-	- PHPStan\Rules\Doctrine\ORM\EntityRelationRule
 
 services:
 	-
@@ -40,3 +38,9 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
+	-
+		class: PHPStan\Rules\Doctrine\ORM\EntityRelationRule
+		arguments:
+			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
+		tags:
+			- phpstan.rules.rule
