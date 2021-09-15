@@ -15,16 +15,6 @@ class IsEmptyTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
 		return new VariableTypeReportingRule();
 	}
 
-	/**
-	 * @return \PHPStan\Type\MethodTypeSpecifyingExtension[]
-	 */
-	protected function getMethodTypeSpecifyingExtensions(): array
-	{
-		return [
-			new IsEmptyTypeSpecifyingExtension(),
-		];
-	}
-
 	public function testExtension(): void
 	{
 		$this->analyse([__DIR__ . '/data/collection.php'], [
@@ -53,6 +43,13 @@ class IsEmptyTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
 				36,
 			],
 		]);
+	}
+
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/../../../../extension.neon',
+		];
 	}
 
 }

@@ -1,0 +1,3 @@
+parameters:
+	doctrine:
+		objectManagerLoader: entity-manager.php

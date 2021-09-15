@@ -9,7 +9,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
  */
-class QueryBuilderDqlRuleTest extends RuleTestCase
+class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule
@@ -122,21 +122,12 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], $errors);
 	}
 
-	public function testBranchingPerformance(): void
-	{
-		$this->analyse([__DIR__ . '/data/query-builder-branches-performance.php'], [
-			[
-				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1 AND\': Error: \'p\' is not defined.',
-				121,
-			],
-		]);
-	}
-
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
 			__DIR__ . '/../../../../extension.neon',
 			__DIR__ . '/entity-manager.neon',
+			__DIR__ . '/slow.neon',
 		];
 	}
 
