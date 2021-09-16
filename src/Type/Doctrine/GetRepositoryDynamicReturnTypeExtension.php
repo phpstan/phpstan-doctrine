@@ -10,6 +10,7 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -48,7 +49,10 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 	): Type
 	{
 		if (count($methodCall->args) === 0) {
-			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
+			return new GenericObjectType(
+				$this->metadataResolver->getResolvedRepositoryClass(),
+				[new ObjectWithoutClassType()]
+			);
 		}
 		$argType = $scope->getType($methodCall->args[0]->value);
 		if ($argType instanceof ConstantStringType) {
@@ -57,7 +61,10 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		} elseif ($argType instanceof GenericClassStringType) {
 			$classType = $argType->getGenericType();
 			if (!$classType instanceof TypeWithClassName) {
-				return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
+				return new GenericObjectType(
+					$this->metadataResolver->getResolvedRepositoryClass(),
+					[$classType]
+				);
 			}
 
 			$objectName = $classType->getClassName();
@@ -84,11 +91,19 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 	 */
 	private function getDefaultReturnType(Scope $scope, array $args, MethodReflection $methodReflection): Type
 	{
-		return ParametersAcceptorSelector::selectFromArgs(
+		$defaultType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
 			$args,
 			$methodReflection->getVariants()
 		)->getReturnType();
+		if ($defaultType instanceof GenericObjectType && count($defaultType->getTypes()) > 0) {
+			return new GenericObjectType(
+				$this->metadataResolver->getResolvedRepositoryClass(),
+				[$defaultType->getTypes()[0]]
+			);
+		}
+
+		return $defaultType;
 	}
 
 }

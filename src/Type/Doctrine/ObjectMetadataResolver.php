@@ -70,7 +70,7 @@ final class ObjectMetadataResolver
 		return require $objectManagerLoader;
 	}
 
-	private function getResolvedRepositoryClass(): string
+	public function getResolvedRepositoryClass(): string
 	{
 		if ($this->resolvedRepositoryClass !== null) {
 			return $this->resolvedRepositoryClass;
