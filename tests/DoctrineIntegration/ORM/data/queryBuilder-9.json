@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\QueryBuilder\\Foo::usingMethodThatReturnStatic() should return PHPStan\\DoctrineIntegration\\ORM\\CustomRepositoryUsage\\MyEntity|null but returns mixed.",
+        "line": 69,
+        "ignorable": true
+    }
+]
