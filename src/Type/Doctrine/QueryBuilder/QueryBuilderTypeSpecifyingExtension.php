@@ -60,7 +60,7 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 
 		$returnType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
-			$node->args,
+			$node->getArgs(),
 			$methodReflection->getVariants()
 		)->getReturnType();
 		if ($returnType instanceof MixedType) {

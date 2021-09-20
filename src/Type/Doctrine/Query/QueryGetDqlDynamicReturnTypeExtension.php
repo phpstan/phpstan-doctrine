@@ -36,7 +36,7 @@ class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeEx
 		if (count($queryTypes) === 0) {
 			return ParametersAcceptorSelector::selectFromArgs(
 				$scope,
-				$methodCall->args,
+				$methodCall->getArgs(),
 				$methodReflection->getVariants()
 			)->getReturnType();
 		}

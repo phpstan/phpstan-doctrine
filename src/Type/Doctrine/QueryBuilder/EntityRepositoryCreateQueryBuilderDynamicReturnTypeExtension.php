@@ -40,16 +40,16 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 			$entityNameExpr = new String_($entityNameExprType->getGenericType()->getClassName());
 		}
 
-		if (!isset($methodCall->args[0])) {
+		if (!isset($methodCall->getArgs()[0])) {
 			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 		}
 
-		$fromArgs = $methodCall->args;
+		$fromArgs = $methodCall->getArgs();
 		array_unshift($fromArgs, new Arg($entityNameExpr));
 
 		$callStack = new MethodCall($methodCall->var, new Identifier('getEntityManager'));
 		$callStack = new MethodCall($callStack, new Identifier('createQueryBuilder'));
-		$callStack = new MethodCall($callStack, new Identifier('select'), [$methodCall->args[0]]);
+		$callStack = new MethodCall($callStack, new Identifier('select'), [$methodCall->getArgs()[0]]);
 		$callStack = new MethodCall($callStack, new Identifier('from'), $fromArgs);
 
 		return $scope->getType($callStack);

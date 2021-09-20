@@ -34,10 +34,10 @@ class RepositoryMethodCallRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (!isset($node->args[0])) {
+		if (!isset($node->getArgs()[0])) {
 			return [];
 		}
-		$argType = $scope->getType($node->args[0]->value);
+		$argType = $scope->getType($node->getArgs()[0]->value);
 		if (!$argType instanceof ConstantArrayType) {
 			return [];
 		}

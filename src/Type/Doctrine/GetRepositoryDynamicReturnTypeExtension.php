@@ -48,13 +48,13 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		Scope $scope
 	): Type
 	{
-		if (count($methodCall->args) === 0) {
+		if (count($methodCall->getArgs()) === 0) {
 			return new GenericObjectType(
 				$this->metadataResolver->getResolvedRepositoryClass(),
 				[new ObjectWithoutClassType()]
 			);
 		}
-		$argType = $scope->getType($methodCall->args[0]->value);
+		$argType = $scope->getType($methodCall->getArgs()[0]->value);
 		if ($argType instanceof ConstantStringType) {
 			$objectName = $argType->getValue();
 			$classType = new ObjectType($objectName);
@@ -69,13 +69,13 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 
 			$objectName = $classType->getClassName();
 		} else {
-			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
+			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection);
 		}
 
 		try {
 			$repositoryClass = $this->metadataResolver->getRepositoryClass($objectName);
 		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
-			return $this->getDefaultReturnType($scope, $methodCall->args, $methodReflection);
+			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection);
 		}
 
 		return new GenericObjectType($repositoryClass, [

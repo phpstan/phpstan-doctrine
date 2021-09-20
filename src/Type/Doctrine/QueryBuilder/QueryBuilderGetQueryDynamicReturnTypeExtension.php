@@ -60,7 +60,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 		$calledOnType = $scope->getType($methodCall->var);
 		$defaultReturnType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
-			$methodCall->args,
+			$methodCall->getArgs(),
 			$methodReflection->getVariants()
 		)->getReturnType();
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
@@ -113,7 +113,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 				}
 
 				try {
-					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->args);
+					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->getArgs());
 				} catch (DynamicQueryBuilderArgumentException $e) {
 					return $defaultReturnType;
 				}

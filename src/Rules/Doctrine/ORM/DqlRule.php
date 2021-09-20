@@ -34,7 +34,7 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		if (count($node->args) === 0) {
+		if (count($node->getArgs()) === 0) {
 			return [];
 		}
 
@@ -49,7 +49,7 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		$dqls = TypeUtils::getConstantStrings($scope->getType($node->args[0]->value));
+		$dqls = TypeUtils::getConstantStrings($scope->getType($node->getArgs()[0]->value));
 		if (count($dqls) === 0) {
 			return [];
 		}

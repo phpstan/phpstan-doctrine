@@ -66,7 +66,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 				...$this->argumentsProcessor->processArgs(
 					$scope,
 					$methodReflection->getName(),
-					$methodCall->args
+					$methodCall->getArgs()
 				)
 			);
 		} catch (DynamicQueryBuilderArgumentException $e) {

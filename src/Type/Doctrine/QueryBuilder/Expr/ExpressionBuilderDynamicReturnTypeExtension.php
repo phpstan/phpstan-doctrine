@@ -59,7 +59,7 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 		$queryBuilder = $objectManager->createQueryBuilder();
 
 		try {
-			$args = $this->argumentsProcessor->processArgs($scope, $methodReflection->getName(), $methodCall->args);
+			$args = $this->argumentsProcessor->processArgs($scope, $methodReflection->getName(), $methodCall->getArgs());
 		} catch (DynamicQueryBuilderArgumentException $e) {
 			return $defaultReturnType;
 		}
