@@ -25,6 +25,7 @@
 		"doctrine/orm": "^2.9.1",
 		"doctrine/persistence": "^1.1 || ^2.0",
 		"nesbot/carbon": "^2.49",
+		"nikic/php-parser": "^4.13.0",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-phpunit": "^1.0",
 		"phpstan/phpstan-strict-rules": "^1.0",
