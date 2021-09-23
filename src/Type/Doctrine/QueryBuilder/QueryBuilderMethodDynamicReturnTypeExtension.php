@@ -153,7 +153,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 		$methodReflection = $classReflection->getNativeMethod($methodName);
 		$fileName = $methodReflection->getDeclaringClass()->getFileName();
-		if ($fileName === false) {
+		if ($fileName === null) {
 			return [];
 		}
 
