@@ -110,14 +110,18 @@ final class ObjectMetadataResolver
 		if ($metadata instanceof $ormMetadataClass) {
 			/** @var \Doctrine\ORM\Mapping\ClassMetadata $ormMetadata */
 			$ormMetadata = $metadata;
-			return $ormMetadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
+			return $ormMetadata->customRepositoryClassName
+				?? $this->repositoryClass
+				?? 'Doctrine\ORM\EntityRepository';
 		}
 
 		$odmMetadataClass = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadata';
 		if ($metadata instanceof $odmMetadataClass) {
 			/** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata $odmMetadata */
 			$odmMetadata = $metadata;
-			return $odmMetadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
+			return $odmMetadata->customRepositoryClassName
+				?? $this->repositoryClass
+				?? 'Doctrine\ODM\MongoDB\Repository\DocumentRepository';
 		}
 
 		return $this->getResolvedRepositoryClass();
