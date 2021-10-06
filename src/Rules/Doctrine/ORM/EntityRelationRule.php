@@ -102,6 +102,7 @@ class EntityRelationRule implements Rule
 			if (in_array($propertyName, $identifiers, true)) {
 				$nullable = false;
 			} else {
+				/** @var bool $nullable */
 				$nullable = $associationMapping['joinColumns'][0]['nullable'] ?? true;
 			}
 			if ($nullable) {
