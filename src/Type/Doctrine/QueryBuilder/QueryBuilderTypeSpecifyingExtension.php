@@ -85,6 +85,11 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$queryBuilderNode = $queryBuilderNode->var;
 		}
 
+		// If the variable is not a query builder, there is nothing to specify
+		if (!(new ObjectType(QueryBuilder::class))->isSuperTypeOf($scope->getType($queryBuilderNode))->yes()) {
+			return new SpecifiedTypes([]);
+		}
+
 		$resultTypes = [];
 		foreach ($queryBuilderTypes as $queryBuilderType) {
 			$resultTypes[] = $queryBuilderType->append($node);
