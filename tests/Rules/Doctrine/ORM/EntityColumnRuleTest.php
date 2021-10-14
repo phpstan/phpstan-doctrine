@@ -120,7 +120,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				102,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects string&numeric.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects numeric-string.',
 				126,
 			],
 			[
@@ -171,7 +171,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				72,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects string&numeric.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects numeric-string.',
 				126,
 			],
 			[
@@ -257,7 +257,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				24,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$numeric type mapping mismatch: property can contain string but database expects string&numeric.',
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$numeric type mapping mismatch: property can contain string but database expects numeric-string.',
 				30,
 			],
 		]);
