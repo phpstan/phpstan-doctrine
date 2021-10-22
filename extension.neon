@@ -95,6 +95,7 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
+			parser: @defaultAnalysisParser
 			queryBuilderClass: %doctrine.queryBuilderClass%
 			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 		tags:
