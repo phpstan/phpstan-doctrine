@@ -6,9 +6,14 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariant;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\TrinaryLogic;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\TemplateTypeMap;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 
 class MagicRepositoryMethodReflection implements MethodReflection
 {
@@ -70,13 +75,31 @@ class MagicRepositoryMethodReflection implements MethodReflection
 
 	public function getVariants(): array
 	{
+		if (strpos($this->name, 'findBy') === 0) {
+			$arguments = [
+				new DummyParameter('argument', new MixedType(), false, null, false, null),
+				new DummyParameter('orderBy', new UnionType([new ArrayType(new StringType(), new StringType()), new NullType()]), true, null, false, null),
+				new DummyParameter('limit', new UnionType([new IntegerType(), new NullType()]), true, null, false, null),
+				new DummyParameter('offset', new UnionType([new IntegerType(), new NullType()]), true, null, false, null),
+			];
+		} elseif (strpos($this->name, 'findOneBy') === 0) {
+			$arguments = [
+				new DummyParameter('argument', new MixedType(), false, null, false, null),
+				new DummyParameter('orderBy', new UnionType([new ArrayType(new StringType(), new StringType()), new NullType()]), true, null, false, null),
+			];
+		} elseif (strpos($this->name, 'countBy') === 0) {
+			$arguments = [
+				new DummyParameter('argument', new MixedType(), false, null, false, null),
+			];
+		} else {
+			throw new \PHPStan\ShouldNotHappenException();
+		}
+
 		return [
 			new FunctionVariant(
 				TemplateTypeMap::createEmpty(),
 				null,
-				[
-					new DummyParameter('parameter', new MixedType(), false, null, false, null),
-				],
+				$arguments,
 				false,
 				$this->type
 			),

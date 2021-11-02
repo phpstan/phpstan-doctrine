@@ -56,4 +56,32 @@ class MagicRepositoryCalls
 		$entityRepository->findByNonexistent('test');
 		$entityRepository->findByCustomMethod();
 	}
+
+	public function doFindByWithOptionals(): void
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$entityRepository->findByTitle('test', ['id' => 'DESC']);
+		$entityRepository->findByTitle('test', null);
+		$entityRepository->findByTitle('test', [1 => 'DESC']);
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], 1);
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], null);
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], '1');
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], 1, 1);
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], 1, null);
+		$entityRepository->findByTitle('test', ['id' => 'DESC'], 1, '1');
+	}
+
+	public function doFindOneByWithOptionals(): void
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$entityRepository->findOneByTitle('test', ['id' => 'DESC']);
+		$entityRepository->findOneByTitle('test', null);
+		$entityRepository->findOneByTitle('test', [1 => 'DESC']);
+	}
+
+	public function doCountByWithOptionals(): void
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$entityRepository->countByTitle('test', ['id' => 'DESC']);
+	}
 }
