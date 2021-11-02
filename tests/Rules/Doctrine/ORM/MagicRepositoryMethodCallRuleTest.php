@@ -68,6 +68,26 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 				'Call to an undefined method PHPStan\Rules\Doctrine\ORM\TestRepository<PHPStan\Rules\Doctrine\ORM\MySecondEntity>::findByNonexistent().',
 				56,
 			],
+			[
+				'Parameter #2 $orderBy of method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findByTitle() expects array<string, string>|null, array<int, string> given.',
+				65,
+			],
+			[
+				'Parameter #3 $limit of method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findByTitle() expects int|null, string given.',
+				68,
+			],
+			[
+				'Parameter #4 $offset of method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findByTitle() expects int|null, string given.',
+				71,
+			],
+			[
+				'Parameter #2 $orderBy of method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneByTitle() expects array<string, string>|null, array<int, string> given.',
+				79,
+			],
+			[
+				'Method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::countByTitle() invoked with 2 parameters, 1 required.',
+				85,
+			],
 		]);
 	}
 
