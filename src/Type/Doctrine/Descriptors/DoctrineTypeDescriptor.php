@@ -16,4 +16,6 @@ interface DoctrineTypeDescriptor
 
 	public function getWritableToDatabaseType(): Type;
 
+	public function getDatabaseInternalType(): Type;
+
 }

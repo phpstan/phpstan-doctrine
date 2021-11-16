@@ -45,4 +45,9 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 		return TypeCombinator::removeNull($type);
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\MixedType();
+	}
+
 }

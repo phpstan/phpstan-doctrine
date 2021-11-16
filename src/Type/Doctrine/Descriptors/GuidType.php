@@ -23,4 +23,9 @@ class GuidType implements DoctrineTypeDescriptor
 		return new StringType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new StringType();
+	}
+
 }

@@ -23,4 +23,9 @@ class ObjectType implements DoctrineTypeDescriptor
 		return new ObjectWithoutClassType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

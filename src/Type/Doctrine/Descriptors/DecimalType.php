@@ -24,4 +24,9 @@ class DecimalType implements DoctrineTypeDescriptor
 		return TypeCombinator::union(new \PHPStan\Type\StringType(), new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
+	}
+
 }

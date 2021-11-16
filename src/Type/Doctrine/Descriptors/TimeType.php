@@ -24,4 +24,9 @@ class TimeType implements DoctrineTypeDescriptor
 		return new \PHPStan\Type\ObjectType(DateTimeInterface::class);
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }
