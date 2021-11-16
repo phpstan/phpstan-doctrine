@@ -54,4 +54,9 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 		);
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

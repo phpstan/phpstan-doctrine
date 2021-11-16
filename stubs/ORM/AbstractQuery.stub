@@ -4,6 +4,9 @@ namespace Doctrine\ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @template TResult The type of results returned by this query in HYDRATE_OBJECT mode
+ */
 abstract class AbstractQuery
 {
 

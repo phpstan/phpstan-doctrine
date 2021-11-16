@@ -23,4 +23,9 @@ class FloatType implements DoctrineTypeDescriptor
 		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
+	}
+
 }

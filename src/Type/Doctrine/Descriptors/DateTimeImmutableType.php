@@ -24,4 +24,9 @@ class DateTimeImmutableType implements DoctrineTypeDescriptor
 		return new ObjectType(DateTimeImmutable::class);
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

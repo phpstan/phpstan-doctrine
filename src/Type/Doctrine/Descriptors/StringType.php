@@ -22,4 +22,9 @@ class StringType implements DoctrineTypeDescriptor
 		return new \PHPStan\Type\StringType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

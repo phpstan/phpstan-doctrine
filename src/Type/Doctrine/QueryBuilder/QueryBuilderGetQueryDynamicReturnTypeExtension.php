@@ -2,6 +2,10 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use Doctrine\Common\CommonException;
+use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
@@ -9,8 +13,11 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
+use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
+use PHPStan\Type\Doctrine\Query\QueryResultTypeWalker;
 use PHPStan\Type\Doctrine\Query\QueryType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -30,15 +37,20 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 	/** @var string|null */
 	private $queryBuilderClass;
 
+	/** @var DescriptorRegistry */
+	private $descriptorRegistry;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		ArgumentsProcessor $argumentsProcessor,
-		?string $queryBuilderClass
+		?string $queryBuilderClass,
+		DescriptorRegistry $descriptorRegistry
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->argumentsProcessor = $argumentsProcessor;
 		$this->queryBuilderClass = $queryBuilderClass;
+		$this->descriptorRegistry = $descriptorRegistry;
 	}
 
 	public function getClass(): string
@@ -121,10 +133,29 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 				$queryBuilder->{$methodName}(...$args);
 			}
 
-			$resultTypes[] = new QueryType($queryBuilder->getDQL());
+			$resultTypes[] = $this->getQueryType($queryBuilder->getDQL());
 		}
 
 		return TypeCombinator::union(...$resultTypes);
+	}
+
+	private function getQueryType(string $dql): Type
+	{
+		$em = $this->objectMetadataResolver->getObjectManager();
+		if (!$em instanceof EntityManagerInterface) {
+			return new QueryType($dql, null);
+		}
+
+		$typeBuilder = new QueryResultTypeBuilder();
+
+		try {
+			$query = $em->createQuery($dql);
+			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
+		} catch (ORMException | DBALException | CommonException $e) {
+			return new QueryType($dql, null);
+		}
+
+		return new QueryType($dql, $typeBuilder->getResultType());
 	}
 
 }

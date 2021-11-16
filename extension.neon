@@ -38,6 +38,7 @@ parameters:
 		- stubs/ORM/AbstractQuery.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
+		- stubs/ORM/Query.stub
 		- stubs/Persistence/Mapping/ClassMetadata.stub
 		- stubs/ServiceDocumentRepository.stub
 
@@ -118,6 +119,12 @@ services:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 	-
 		class: PHPStan\Type\Doctrine\Query\QueryGetDqlDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\CreateQueryDynamicReturnTypeExtension
+		arguments:
+			objectMetadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-

@@ -49,4 +49,9 @@ class JsonType implements DoctrineTypeDescriptor
 		return self::getJsonType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new StringType();
+	}
+
 }
