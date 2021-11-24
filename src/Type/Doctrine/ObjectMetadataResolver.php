@@ -60,7 +60,7 @@ final class ObjectMetadataResolver
 
 	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
 	{
-		if (!file_exists($objectManagerLoader)) {
+		if (!is_file($objectManagerLoader)) {
 			throw new \PHPStan\ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" does not exist',
 				$objectManagerLoader
