@@ -4,7 +4,7 @@ namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Reflection\ReflectionProvider;
-use function file_exists;
+use function is_file;
 use function is_readable;
 
 final class ObjectMetadataResolver
@@ -66,7 +66,7 @@ final class ObjectMetadataResolver
 				$objectManagerLoader
 			));
 		}
-		
+
 		if (!is_readable($objectManagerLoader)) {
 			throw new \PHPStan\ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" is not readable',
