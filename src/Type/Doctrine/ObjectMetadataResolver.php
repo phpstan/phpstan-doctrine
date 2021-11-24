@@ -60,11 +60,18 @@ final class ObjectMetadataResolver
 
 	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
 	{
-		if (
-			!file_exists($objectManagerLoader)
-			|| !is_readable($objectManagerLoader)
-		) {
-			throw new \PHPStan\ShouldNotHappenException('Object manager could not be loaded');
+		if (!file_exists($objectManagerLoader)) {
+			throw new \PHPStan\ShouldNotHappenException(sprintf(
+				'Object manager could not be loaded: file "%s" does not exist',
+				$objectManagerLoader
+			));
+		}
+		
+		if (!is_readable($objectManagerLoader)) {
+			throw new \PHPStan\ShouldNotHappenException(sprintf(
+				'Object manager could not be loaded: file "%s" is not readable',
+				$objectManagerLoader
+			));
 		}
 
 		return require $objectManagerLoader;
