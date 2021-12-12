@@ -1,0 +1,18 @@
+<?php
+
+namespace Doctrine\ORM\Mapping;
+
+/**
+ * @template-covariant T of object
+ * @extends ClassMetadataInfo<T>
+ */
+class ClassMetadata extends ClassMetadataInfo
+{
+    /**
+     * @param class-string<T> $entityName
+     */
+    public function __construct($entityName)
+    {
+
+    }
+}

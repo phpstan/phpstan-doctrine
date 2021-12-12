@@ -1,0 +1,50 @@
+<?php
+
+namespace Doctrine\ORM\Mapping;
+
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use ReflectionClass;
+
+/**
+ * @template-covariant T of object
+ * @implements ClassMetadata<T>
+ */
+class ClassMetadataInfo implements ClassMetadata
+{
+
+	/** @var string|null */
+	public $customRepositoryClassName;
+
+	/**
+     * @param class-string<T> $entityName
+     */
+    public function __construct($entityName)
+    {
+
+    }
+
+    /**
+	 * @param string $assocName
+	 * @return class-string
+	 */
+	public function getAssociationTargetClass($assocName);
+
+    /**
+	 * @return T
+	 */
+	public function newInstance()
+	{
+
+	}
+
+	/**
+	 * @return class-string<T>
+	 */
+	public function getName();
+
+	/**
+	 * @return ReflectionClass<T>
+	 */
+	public function getReflectionClass();
+
+}

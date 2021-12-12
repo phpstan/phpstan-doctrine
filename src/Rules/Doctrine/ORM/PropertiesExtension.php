@@ -30,6 +30,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 	/**
 	 * @param class-string $className
+	 * @return \Doctrine\ORM\Mapping\ClassMetadataInfo<object>
 	 */
 	private function findMetadata(string $className): ?\Doctrine\ORM\Mapping\ClassMetadataInfo
 	{
