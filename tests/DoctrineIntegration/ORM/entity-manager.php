@@ -1,15 +1,16 @@
 <?php declare(strict_types = 1);
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\DoctrineProvider;
 
 $config = new Configuration();
 $config->setProxyDir(__DIR__);
 $config->setProxyNamespace('PHPstan\Doctrine\OrmProxies');
-$config->setMetadataCacheImpl(new ArrayCache());
+$config->setMetadataCacheImpl(new DoctrineProvider(new ArrayAdapter()));
 
 $config->setMetadataDriverImpl(
 	new AnnotationDriver(

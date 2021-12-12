@@ -30,7 +30,8 @@
 		"phpstan/phpstan-phpunit": "^1.0",
 		"phpstan/phpstan-strict-rules": "^1.0",
 		"phpunit/phpunit": "^9.5",
-		"ramsey/uuid-doctrine": "^1.5.0"
+		"ramsey/uuid-doctrine": "^1.5.0",
+		"symfony/cache": "^4.4.35"
 	},
 	"config": {
 		"platform": {
