@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Call to method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findOneBy() - entity PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity does not have a field named $blah.",
+        "line": 94,
+        "ignorable": true
+    },
+    {
+        "message": "Call to method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findBy() - entity PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity does not have a field named $blah.",
+        "line": 116,
+        "ignorable": true
+    },
+    {
+        "message": "Method Doctrine\\ORM\\EntityRepository<object>::createQueryBuilder() invoked with 0 parameters, 1-2 required.",
+        "line": 239,
+        "ignorable": true
+    },
+    {
+        "message": "Could not analyse QueryBuilder with unknown beginning.",
+        "line": 241,
+        "ignorable": true
+    }
+]
