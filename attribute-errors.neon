@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method ReflectionClass::getAttributes\\(\\)\\.$#"
+			count: 1
+			path: src/Type/Doctrine/ObjectMetadataResolver.php

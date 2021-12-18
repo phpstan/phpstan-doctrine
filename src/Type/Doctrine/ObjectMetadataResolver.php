@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Reflection\ReflectionProvider;
 use function is_file;
@@ -97,6 +98,17 @@ final class ObjectMetadataResolver
 
 	public function getRepositoryClass(string $className): string
 	{
+		if (PHP_MAJOR_VERSION >= 8 && $this->reflectionProvider->hasClass($className)) {
+			$classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
+			$attribute = $classReflection->getAttributes(Entity::class)[0] ?? null;
+			if ($attribute !== null) {
+				$attributeInstance = $attribute->newInstance();
+				if ($attributeInstance->repositoryClass !== null) {
+					return $attributeInstance->repositoryClass;
+				}
+			}
+		}
+
 		$objectManager = $this->getObjectManager();
 		if ($objectManager === null) {
 			return $this->getResolvedRepositoryClass();
