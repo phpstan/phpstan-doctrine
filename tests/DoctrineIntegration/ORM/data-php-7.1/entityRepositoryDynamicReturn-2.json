@@ -1,0 +1,47 @@
+[
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 89,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 101,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 110,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 120,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 142,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findByNonexistent().",
+        "line": 148,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity::doSomethingElse().",
+        "line": 160,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::findOneByNonexistent().",
+        "line": 165,
+        "ignorable": true
+    },
+    {
+        "message": "Call to an undefined method Doctrine\\ORM\\EntityRepository<PHPStan\\DoctrineIntegration\\ORM\\EntityRepositoryDynamicReturn\\MyEntity>::countByNonexistent().",
+        "line": 174,
+        "ignorable": true
+    }
+]

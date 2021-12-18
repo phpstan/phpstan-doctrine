@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Strict comparison using === between int and 'foo' will always evaluate to false.",
+        "line": 171,
+        "ignorable": true
+    }
+]

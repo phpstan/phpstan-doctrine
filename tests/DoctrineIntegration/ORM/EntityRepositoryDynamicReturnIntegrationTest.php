@@ -4,7 +4,7 @@ namespace PHPStan\DoctrineIntegration\ORM;
 
 use PHPStan\Testing\LevelsTestCase;
 
-final class EntityManagerIntegrationTest extends LevelsTestCase
+final class EntityRepositoryDynamicReturnIntegrationTest extends LevelsTestCase
 {
 
 	/**
@@ -13,16 +13,16 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 	public function dataTopics(): array
 	{
 		return [
-			['entityManagerDynamicReturn'],
-			['entityManagerMergeReturn'],
-			['customRepositoryUsage'],
-			['queryBuilder'],
-			['dbalQueryBuilderExecuteDynamicReturn'],
+			['entityRepositoryDynamicReturn'],
 		];
 	}
 
 	public function getDataPath(): string
 	{
+		if (PHP_MAJOR_VERSION === 7 && PHP_MINOR_VERSION === 1) {
+			return __DIR__ . '/data-php-7.1';
+		}
+
 		return __DIR__ . '/data';
 	}
 

@@ -9,6 +9,7 @@ includes:
 parameters:
 	excludePaths:
 		- tests/*/data/*
+		- tests/*/data-php-*/*
 
 	ignoreErrors:
 		-

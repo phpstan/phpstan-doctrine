@@ -1,0 +1,7 @@
+[
+    {
+        "message": "Parameter #1 $className of method Doctrine\\Persistence\\ObjectManager::getRepository() expects class-string<nonexistentClass>, string given.",
+        "line": 212,
+        "ignorable": true
+    }
+]
