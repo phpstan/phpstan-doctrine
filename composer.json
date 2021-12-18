@@ -35,8 +35,8 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.3.24",
-			"ext-mongo": "1.6.16"
+			"ext-mongo": "1.12",
+			"ext-mongodb": "1.6.16"
 		},
 		"sort-packages": true,
 		"allow-plugins": {
