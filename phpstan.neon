@@ -9,7 +9,9 @@ includes:
 parameters:
 	excludePaths:
 		- tests/*/data/*
+		- tests/*/data-attributes/*
 		- tests/*/data-php-*/*
+		- tests/Rules/Doctrine/ORM/entity-manager.php
 
 	ignoreErrors:
 		-

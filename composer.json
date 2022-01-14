@@ -23,7 +23,7 @@
 		"doctrine/dbal": "^2.13.7",
 		"doctrine/lexer": "^1.2.1",
 		"doctrine/mongodb-odm": "^1.3 || ^2.1",
-		"doctrine/orm": "^2.9.1",
+		"doctrine/orm": "^2.11.0",
 		"doctrine/persistence": "^1.1 || ^2.0",
 		"nesbot/carbon": "^2.49",
 		"nikic/php-parser": "^4.13.2",

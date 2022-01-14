@@ -13,6 +13,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
@@ -101,7 +102,7 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		/** @var array{type: string, fieldName: string, columnName?: string, inherited?: class-string, nullable?: bool} $fieldMapping */
+		/** @var array{type: string, fieldName: string, columnName?: string, inherited?: class-string, nullable?: bool, enumType?: ?string} $fieldMapping */
 		$fieldMapping = $metadata->fieldMappings[$propertyName];
 
 		$errors = [];
@@ -116,6 +117,16 @@ class EntityColumnRule implements Rule
 			)] : [];
 		}
 
+		$writableToPropertyType = $descriptor->getWritableToPropertyType();
+		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
+
+		$enumTypeString = $fieldMapping['enumType'] ?? null;
+		if ($enumTypeString !== null) {
+			$enumType = new ObjectType($enumTypeString);
+			$writableToPropertyType = $enumType;
+			$writableToDatabaseType = $enumType;
+		}
+
 		$identifiers = [];
 		if ($metadata->generatorType !== 5) { // ClassMetadataInfo::GENERATOR_TYPE_NONE
 			try {
@@ -128,8 +139,6 @@ class EntityColumnRule implements Rule
 			}
 		}
 
-		$writableToPropertyType = $descriptor->getWritableToPropertyType();
-		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
 		$nullable = isset($fieldMapping['nullable']) ? $fieldMapping['nullable'] === true : false;
 		if ($nullable) {
 			$writableToPropertyType = TypeCombinator::addNull($writableToPropertyType);

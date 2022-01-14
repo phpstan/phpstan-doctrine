@@ -23,6 +23,7 @@ use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use Ramsey\Uuid\Doctrine\UuidType;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<EntityColumnRule>
@@ -270,6 +271,25 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithUnknownType::$foo: Doctrine type "unknown" does not have any registered descriptor.',
 				24,
+			],
+		]);
+	}
+
+	public function testEnumType(): void
+	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('Test requires PHP 8.1.');
+		}
+
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->analyse([__DIR__ . '/data-attributes/enum-type.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORMAttributes\FooEnum but property expects PHPStan\Rules\Doctrine\ORMAttributes\BarEnum.',
+				35,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORMAttributes\BarEnum but database expects PHPStan\Rules\Doctrine\ORMAttributes\FooEnum.',
+				35,
 			],
 		]);
 	}
