@@ -71,6 +71,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
 				new ReflectionDescriptor(CustomNumericType::class, $this->createBroker()),
 			]),
+			$this->createReflectionProvider(),
 			true,
 			$this->allowNullablePropertyForRequiredField
 		);
@@ -290,6 +291,10 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORMAttributes\BarEnum but database expects PHPStan\Rules\Doctrine\ORMAttributes\FooEnum.',
 				35,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type3 type mapping mismatch: backing type string of enum PHPStan\Rules\Doctrine\ORMAttributes\FooEnum does not match database type int.',
+				38,
 			],
 		]);
 	}

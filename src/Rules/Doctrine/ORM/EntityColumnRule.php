@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MissingPropertyFromReflectionException;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
@@ -35,6 +36,9 @@ class EntityColumnRule implements Rule
 	/** @var \PHPStan\Type\Doctrine\DescriptorRegistry */
 	private $descriptorRegistry;
 
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
+
 	/** @var bool */
 	private $reportUnknownTypes;
 
@@ -44,12 +48,14 @@ class EntityColumnRule implements Rule
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		DescriptorRegistry $descriptorRegistry,
+		ReflectionProvider $reflectionProvider,
 		bool $reportUnknownTypes,
 		bool $allowNullablePropertyForRequiredField
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
+		$this->reflectionProvider = $reflectionProvider;
 		$this->reportUnknownTypes = $reportUnknownTypes;
 		$this->allowNullablePropertyForRequiredField = $allowNullablePropertyForRequiredField;
 	}
@@ -122,6 +128,22 @@ class EntityColumnRule implements Rule
 
 		$enumTypeString = $fieldMapping['enumType'] ?? null;
 		if ($enumTypeString !== null) {
+			if ($this->reflectionProvider->hasClass($enumTypeString)) {
+				$enumReflection = $this->reflectionProvider->getClass($enumTypeString);
+				$backedEnumType = $enumReflection->getBackedEnumType();
+				if ($backedEnumType !== null) {
+					if (!$backedEnumType->equals($writableToDatabaseType) || !$backedEnumType->equals($writableToPropertyType)) {
+						$errors[] = sprintf(
+							'Property %s::$%s type mapping mismatch: backing type %s of enum %s does not match database type %s.',
+							$className,
+							$propertyName,
+							$backedEnumType->describe(VerbosityLevel::typeOnly()),
+							$enumReflection->getDisplayName(),
+							$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
+						);
+					}
+				}
+			}
 			$enumType = new ObjectType($enumTypeString);
 			$writableToPropertyType = $enumType;
 			$writableToDatabaseType = $enumType;

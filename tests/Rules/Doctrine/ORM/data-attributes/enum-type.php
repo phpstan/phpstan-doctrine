@@ -34,4 +34,7 @@ class Foo
 	#[ORM\Column(type: "string", enumType: FooEnum::class)]
 	public BarEnum $type2;
 
+	#[ORM\Column(type: "integer", enumType: FooEnum::class)]
+	public FooEnum $type3;
+
 }
