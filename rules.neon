@@ -22,6 +22,10 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
 
+conditionalTags:
+	PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
+
 services:
 	-
 		class: PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
@@ -36,6 +40,8 @@ services:
 			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule
 	-
 		class: PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
 	-
