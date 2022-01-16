@@ -7,7 +7,31 @@ use ReflectionClass;
 
 /**
  * @template-covariant T of object
- * @implements ClassMetadata<T>
+ * @template-implements ClassMetadata<T>
+ * @psalm-type FieldMapping = array{
+ *      type: string,
+ *      fieldName: string,
+ *      columnName: string,
+ *      length?: int,
+ *      id?: bool,
+ *      nullable?: bool,
+ *      notInsertable?: bool,
+ *      notUpdatable?: bool,
+ *      generated?: string,
+ *      enumType?: class-string<BackedEnum>,
+ *      columnDefinition?: string,
+ *      precision?: int,
+ *      scale?: int,
+ *      unique?: string,
+ *      inherited?: class-string,
+ *      originalClass?: class-string,
+ *      originalField?: string,
+ *      quoted?: bool,
+ *      requireSQLConversion?: bool,
+ *      declared?: class-string,
+ *      declaredField?: string,
+ *      options?: array<string, mixed>
+ * }
  */
 class ClassMetadataInfo implements ClassMetadata
 {
