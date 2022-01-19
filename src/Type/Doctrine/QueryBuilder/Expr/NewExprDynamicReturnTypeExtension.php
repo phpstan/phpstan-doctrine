@@ -13,6 +13,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use function class_exists;
 
 class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension, BrokerAwareExtension
 {
@@ -58,6 +59,10 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 
 		$className = $scope->resolveName($methodCall->class);
 		if (!$this->broker->hasClass($className)) {
+			return new ObjectType($className);
+		}
+
+		if (!class_exists($className)) {
 			return new ObjectType($className);
 		}
 
