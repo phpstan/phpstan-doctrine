@@ -15,6 +15,8 @@ parameters:
 			- Doctrine\ORM\Mapping\ClassMetadata
 			- Doctrine\ORM\Mapping\ClassMetadataInfo
 			- Doctrine\Persistence\Mapping\ClassMetadata
+			- Doctrine\ORM\AbstractQuery
+			- Doctrine\ORM\Query
 	stubFiles:
 		- stubs/Criteria.stub
 		- stubs/DocumentManager.stub
