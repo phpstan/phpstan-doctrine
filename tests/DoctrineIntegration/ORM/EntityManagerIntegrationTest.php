@@ -14,7 +14,7 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 	public function dataTopics(): array
 	{
 		$version = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal3 = $version !== null && strpos(InstalledVersions::getVersion('doctrine/dbal'), '3.') === 0;
+		$hasDbal3 = $version !== null && strpos($version, '3.') === 0;
 		return [
 			['entityManagerDynamicReturn'],
 			['entityManagerMergeReturn'],

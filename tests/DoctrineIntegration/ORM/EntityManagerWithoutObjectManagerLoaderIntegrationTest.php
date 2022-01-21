@@ -2,7 +2,9 @@
 
 namespace PHPStan\DoctrineIntegration\ORM;
 
+use Composer\InstalledVersions;
 use PHPStan\Testing\LevelsTestCase;
+use function strpos;
 
 final class EntityManagerWithoutObjectManagerLoaderIntegrationTest extends LevelsTestCase
 {
@@ -12,11 +14,14 @@ final class EntityManagerWithoutObjectManagerLoaderIntegrationTest extends Level
 	 */
 	public function dataTopics(): array
 	{
+		$version = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal3 = $version !== null && strpos($version, '3.') === 0;
+
 		return [
 			['entityManagerDynamicReturn'],
 			['entityManagerMergeReturn'],
 			['customRepositoryUsage'],
-			['dbalQueryBuilderExecuteDynamicReturn'],
+			[$hasDbal3 ? 'dbalQueryBuilderExecuteDynamicReturnDbal3' : 'dbalQueryBuilderExecuteDynamicReturn'],
 		];
 	}
 
