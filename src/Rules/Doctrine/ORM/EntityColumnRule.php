@@ -72,28 +72,9 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
-			return [];
-		}
-
 		$className = $class->getName();
-		try {
-			if ($objectManager->getMetadataFactory()->isTransient($className)) {
-				return [];
-			}
-		} catch (\ReflectionException $e) {
-			return [];
-		}
-
-		try {
-			$metadata = $objectManager->getClassMetadata($className);
-		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
-			return [];
-		}
-
-		$classMetadataInfo = 'Doctrine\ORM\Mapping\ClassMetadataInfo';
-		if (!$metadata instanceof $classMetadataInfo) {
+		$metadata = $this->objectMetadataResolver->getClassMetadata($className);
+		if ($metadata === null) {
 			return [];
 		}
 

@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Reflection\ReflectionProvider;
 use function is_file;
@@ -58,6 +59,56 @@ final class ObjectMetadataResolver
 		return $this->objectManager;
 	}
 
+	/**
+	 * @param class-string $className
+	 * @return bool
+	 */
+	public function isTransient(string $className): bool
+	{
+		$objectManager = $this->getObjectManager();
+		if ($objectManager === null) {
+			return true;
+		}
+
+		try {
+			return $objectManager->getMetadataFactory()->isTransient($className);
+		} catch (\ReflectionException $e) {
+			return true;
+		}
+	}
+
+	/**
+	 * @template T of object
+	 * @param class-string<T> $className
+	 * @return ClassMetadataInfo<T>|null
+	 */
+	public function getClassMetadata(string $className): ?ClassMetadataInfo
+	{
+		$objectManager = $this->getObjectManager();
+		if ($objectManager === null) {
+			return null;
+		}
+
+		if ($this->isTransient($className)) {
+			return null;
+		}
+
+		try {
+			$metadata = $objectManager->getClassMetadata($className);
+		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+			return null;
+		}
+
+		if (!$metadata instanceof ClassMetadataInfo) {
+			return null;
+		}
+
+		/** @var \Doctrine\ORM\Mapping\ClassMetadataInfo<T> $ormMetadata */
+		$ormMetadata = $metadata;
+
+		return $ormMetadata;
+	}
+
 	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
 	{
 		if (!is_file($objectManagerLoader)) {
@@ -97,11 +148,6 @@ final class ObjectMetadataResolver
 
 	public function getRepositoryClass(string $className): string
 	{
-		$objectManager = $this->getObjectManager();
-		if ($objectManager === null) {
-			return $this->getResolvedRepositoryClass();
-		}
-
 		if (!$this->reflectionProvider->hasClass($className)) {
 			return $this->getResolvedRepositoryClass();
 		}
@@ -111,15 +157,17 @@ final class ObjectMetadataResolver
 			return $this->getResolvedRepositoryClass();
 		}
 
-		$metadata = $objectManager->getClassMetadata($classReflection->getName());
-
-		$ormMetadataClass = 'Doctrine\ORM\Mapping\ClassMetadata';
-		if ($metadata instanceof $ormMetadataClass) {
-			/** @var \Doctrine\ORM\Mapping\ClassMetadata<object> $ormMetadata */
-			$ormMetadata = $metadata;
-			return $ormMetadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
+		$metadata = $this->getClassMetadata($classReflection->getName());
+		if ($metadata !== null) {
+			return $metadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
 		}
 
+		$objectManager = $this->getObjectManager();
+		if ($objectManager === null) {
+			return $this->getResolvedRepositoryClass();
+		}
+
+		$metadata = $objectManager->getClassMetadata($classReflection->getName());
 		$odmMetadataClass = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadata';
 		if ($metadata instanceof $odmMetadataClass) {
 			/** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata<object> $odmMetadata */

@@ -60,18 +60,16 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 			return false;
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
-			return false;
-		}
-
 		$classReflection = $entityClassType->getClassReflection();
 		if ($classReflection === null) {
 			return false;
 		}
 
 		$fieldName = $this->classify($methodFieldName);
-		$classMetadata = $objectManager->getClassMetadata($classReflection->getName());
+		$classMetadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
+		if ($classMetadata === null) {
+			return false;
+		}
 
 		return $classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName);
 	}

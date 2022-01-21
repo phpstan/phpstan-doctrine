@@ -20,7 +20,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 	public function isAlwaysRead(PropertyReflection $property, string $propertyName): bool
 	{
 		$className = $property->getDeclaringClass()->getName();
-		$metadata = $this->findMetadata($className);
+		$metadata = $this->objectMetadataResolver->getClassMetadata($className);
 		if ($metadata === null) {
 			return false;
 		}
@@ -28,44 +28,11 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 		return $metadata->hasField($propertyName) || $metadata->hasAssociation($propertyName);
 	}
 
-	/**
-	 * @param class-string $className
-	 * @return \Doctrine\ORM\Mapping\ClassMetadataInfo<object>
-	 */
-	private function findMetadata(string $className): ?\Doctrine\ORM\Mapping\ClassMetadataInfo
-	{
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
-			return null;
-		}
-
-		try {
-			if ($objectManager->getMetadataFactory()->isTransient($className)) {
-				return null;
-			}
-		} catch (\ReflectionException $e) {
-			return null;
-		}
-
-		try {
-			$metadata = $objectManager->getClassMetadata($className);
-		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
-			return null;
-		}
-
-		$classMetadataInfo = 'Doctrine\ORM\Mapping\ClassMetadataInfo';
-		if (!$metadata instanceof $classMetadataInfo) {
-			return null;
-		}
-
-		return $metadata;
-	}
-
 	public function isAlwaysWritten(PropertyReflection $property, string $propertyName): bool
 	{
 		$declaringClass = $property->getDeclaringClass();
 		$className = $declaringClass->getName();
-		$metadata = $this->findMetadata($className);
+		$metadata = $this->objectMetadataResolver->getClassMetadata($className);
 		if ($metadata === null) {
 			return false;
 		}
@@ -100,7 +67,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 	{
 		$declaringClass = $property->getDeclaringClass();
 		$className = $declaringClass->getName();
-		$metadata = $this->findMetadata($className);
+		$metadata = $this->objectMetadataResolver->getClassMetadata($className);
 		if ($metadata === null) {
 			return false;
 		}

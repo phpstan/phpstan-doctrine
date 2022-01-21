@@ -38,16 +38,7 @@ class EntityNotFinalRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
-			return [];
-		}
-
-		try {
-			if ($objectManager->getMetadataFactory()->isTransient($classReflection->getName())) {
-				return [];
-			}
-		} catch (\ReflectionException $e) {
+		if ($this->objectMetadataResolver->isTransient($classReflection->getName())) {
 			return [];
 		}
 

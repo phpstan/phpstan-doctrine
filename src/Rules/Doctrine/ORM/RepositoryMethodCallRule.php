@@ -77,12 +77,10 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
+		$classMetadata = $this->objectMetadataResolver->getClassMetadata($entityClassReflection->getName());
+		if ($classMetadata === null) {
 			return [];
 		}
-
-		$classMetadata = $objectManager->getClassMetadata($entityClassReflection->getName());
 
 		$messages = [];
 		foreach ($argType->getKeyTypes() as $keyType) {
