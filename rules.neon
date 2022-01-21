@@ -38,6 +38,7 @@ services:
 		arguments:
 			reportUnknownTypes: %doctrine.reportUnknownTypes%
 			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
+			bleedingEdge: %featureToggles.bleedingEdge%
 		tags:
 			- phpstan.rules.rule
 	-
@@ -48,5 +49,6 @@ services:
 		class: PHPStan\Rules\Doctrine\ORM\EntityRelationRule
 		arguments:
 			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
+			bleedingEdge: %featureToggles.bleedingEdge%
 		tags:
 			- phpstan.rules.rule
