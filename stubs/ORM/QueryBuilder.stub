@@ -15,7 +15,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @param literal-string|object|array $predicates
+	 * @param literal-string|object|array<mixed> $predicates
 	 * @return $this
 	 */
 	public function where($predicates)
