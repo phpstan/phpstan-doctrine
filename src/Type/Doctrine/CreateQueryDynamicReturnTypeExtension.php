@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\CommonException;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as NewDBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
@@ -85,7 +86,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 				try {
 					$query = $em->createQuery($queryString);
 					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
-				} catch (ORMException | DBALException | CommonException $e) {
+				} catch (ORMException | DBALException | NewDBALException | CommonException $e) {
 					return new QueryType($queryString, null);
 				}
 

@@ -1,0 +1,32 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Platforms\\\\MySQLPlatform referenced with incorrect case\\: Doctrine\\\\DBAL\\\\Platforms\\\\MySqlPlatform\\.$#"
+			count: 2
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: "#^Caught class Doctrine\\\\DBAL\\\\DBALException not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/CreateQueryDynamicReturnTypeExtension.php
+
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement not found\\.$#"
+			count: 2
+			path: src/Type/Doctrine/DBAL/QueryBuilder/QueryBuilderExecuteMethodExtension.php
+
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Types\\\\JsonArrayType not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/JsonArrayType.php
+
+		-
+			message: "#^Method PHPStan\\\\Type\\\\Doctrine\\\\Descriptors\\\\JsonArrayType\\:\\:getType\\(\\) should return class\\-string\\<Doctrine\\\\DBAL\\\\Types\\\\Type\\> but returns string\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/JsonArrayType.php
+
+		-
+			message: "#^Caught class Doctrine\\\\DBAL\\\\DBALException not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
+
