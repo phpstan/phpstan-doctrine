@@ -1,6 +1,7 @@
 includes:
 	- extension.neon
 	- rules.neon
+	- phpstan-baseline.neon
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 	- vendor/phpstan/phpstan-phpunit/rules.neon
@@ -12,6 +13,8 @@ parameters:
 		- tests/*/data-attributes/*
 		- tests/*/data-php-*/*
 		- tests/Rules/Doctrine/ORM/entity-manager.php
+
+	reportUnmatchedIgnoredErrors: false
 
 	ignoreErrors:
 		-

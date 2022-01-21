@@ -1,0 +1,9 @@
+includes:
+	- ../../../extension.neon
+	- ../../../rules.neon
+	- phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+	doctrine:
+		reportDynamicQueryBuilders: true
+		queryBuilderClass: PHPStan\DoctrineIntegration\ORM\QueryBuilder\CustomQueryBuilder

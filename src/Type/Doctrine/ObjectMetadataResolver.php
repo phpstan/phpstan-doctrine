@@ -2,7 +2,9 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Reflection\ReflectionProvider;
 use function is_file;
@@ -25,6 +27,9 @@ final class ObjectMetadataResolver
 
 	/** @var string|null */
 	private $resolvedRepositoryClass;
+
+	/** @var ClassMetadataFactory<ClassMetadata>|null */
+	private $metadataFactory;
 
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
@@ -66,15 +71,30 @@ final class ObjectMetadataResolver
 	public function isTransient(string $className): bool
 	{
 		$objectManager = $this->getObjectManager();
-		if ($objectManager === null) {
-			return true;
-		}
 
 		try {
+			if ($objectManager === null) {
+				return $this->getMetadataFactory()->isTransient($className);
+			}
+
 			return $objectManager->getMetadataFactory()->isTransient($className);
 		} catch (\ReflectionException $e) {
 			return true;
 		}
+	}
+
+	/**
+	 * @return ClassMetadataFactory<ClassMetadata>
+	 */
+	private function getMetadataFactory(): ClassMetadataFactory
+	{
+		if ($this->metadataFactory !== null) {
+			return $this->metadataFactory;
+		}
+
+		$metadataFactory = new \PHPStan\Doctrine\Mapping\ClassMetadataFactory();
+
+		return $this->metadataFactory = $metadataFactory;
 	}
 
 	/**
@@ -84,17 +104,18 @@ final class ObjectMetadataResolver
 	 */
 	public function getClassMetadata(string $className): ?ClassMetadataInfo
 	{
-		$objectManager = $this->getObjectManager();
-		if ($objectManager === null) {
-			return null;
-		}
-
 		if ($this->isTransient($className)) {
 			return null;
 		}
 
+		$objectManager = $this->getObjectManager();
+
 		try {
-			$metadata = $objectManager->getClassMetadata($className);
+			if ($objectManager === null) {
+				$metadata = $this->getMetadataFactory()->getMetadataFor($className);
+			} else {
+				$metadata = $objectManager->getClassMetadata($className);
+			}
 		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
 			return null;
 		}

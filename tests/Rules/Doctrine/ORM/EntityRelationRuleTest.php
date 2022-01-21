@@ -16,10 +16,13 @@ class EntityRelationRuleTest extends RuleTestCase
 	/** @var bool */
 	private $allowNullablePropertyForRequiredField;
 
+	/** @var string|null */
+	private $objectManagerLoader;
+
 	protected function getRule(): Rule
 	{
 		return new EntityRelationRule(
-			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null),
+			new ObjectMetadataResolver($this->createReflectionProvider(), $this->objectManagerLoader, null),
 			$this->allowNullablePropertyForRequiredField
 		);
 	}
@@ -32,6 +35,19 @@ class EntityRelationRuleTest extends RuleTestCase
 	public function testRule(string $file, array $expectedErrors): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = __DIR__ . '/entity-manager.php';
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	/**
+	 * @dataProvider ruleProvider
+	 * @param string $file
+	 * @param mixed[] $expectedErrors
+	 */
+	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
+	{
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = null;
 		$this->analyse([$file], $expectedErrors);
 	}
 
@@ -167,6 +183,19 @@ class EntityRelationRuleTest extends RuleTestCase
 	public function testRuleWithAllowedNullableProperty(string $file, array $expectedErrors): void
 	{
 		$this->allowNullablePropertyForRequiredField = true;
+		$this->objectManagerLoader = __DIR__ . '/entity-manager.php';
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	/**
+	 * @dataProvider ruleWithAllowedNullablePropertyProvider
+	 * @param string $file
+	 * @param mixed[] $expectedErrors
+	 */
+	public function testRuleWithAllowedNullablePropertyWithoutObjectManagerLoader(string $file, array $expectedErrors): void
+	{
+		$this->allowNullablePropertyForRequiredField = true;
+		$this->objectManagerLoader = null;
 		$this->analyse([$file], $expectedErrors);
 	}
 
