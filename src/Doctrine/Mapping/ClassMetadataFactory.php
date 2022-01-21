@@ -19,9 +19,10 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		$driverProperty = $parentReflection->getProperty('driver');
 		$driverProperty->setAccessible(true);
 
-		$drivers = [
-			new AnnotationDriver(new AnnotationReader()),
-		];
+		$drivers = [];
+		if (class_exists(AnnotationReader::class)) {
+			$drivers[] = new AnnotationDriver(new AnnotationReader());
+		}
 		if (class_exists(AttributeDriver::class) && PHP_VERSION_ID >= 80000) {
 			$drivers[] = new AttributeDriver([]);
 		}
