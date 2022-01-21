@@ -30,7 +30,6 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
 	public function testRule(string $file, array $expectedErrors): void
@@ -42,7 +41,6 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
 	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
@@ -53,7 +51,7 @@ class EntityRelationRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @return \Iterator<mixed[]>
+	 * @return Iterator<mixed[]>
 	 */
 	public function ruleProvider(): Iterator
 	{
@@ -178,7 +176,6 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleWithAllowedNullablePropertyProvider
-	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
 	public function testRuleWithAllowedNullableProperty(string $file, array $expectedErrors): void
@@ -190,7 +187,6 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleWithAllowedNullablePropertyProvider
-	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
 	public function testRuleWithAllowedNullablePropertyWithoutObjectManagerLoader(string $file, array $expectedErrors): void
@@ -201,7 +197,7 @@ class EntityRelationRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @return \Iterator<mixed[]>
+	 * @return Iterator<mixed[]>
 	 */
 	public function ruleWithAllowedNullablePropertyProvider(): Iterator
 	{

@@ -2,6 +2,8 @@
 
 namespace PHPStan\Type\Doctrine\Query;
 
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -33,6 +35,12 @@ use QueryResult\Entities\NestedEmbedded;
 use QueryResult\Entities\One;
 use QueryResult\Entities\OneId;
 use QueryResult\Entities\SingleTableChild;
+use Throwable;
+use function array_merge;
+use function array_shift;
+use function class_exists;
+use function count;
+use function sprintf;
 
 final class QueryResultTypeWalkerTest extends PHPStanTestCase
 {
@@ -106,14 +114,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$one->manies = new ArrayCollection();
 
 			foreach (self::combinations($dataMany) as $combinationMany) {
-				[$intColumnMany, $stringColumnMany, $stringNullColumnMany] = $combination;
+				[$intColumnMany, $stringColumnMany, $stringNullColumnMany] = $combinationMany;
 				$many = new Many();
 				$many->id = (string) $id++;
 				$many->intColumn = $intColumnMany;
 				$many->stringColumn = $stringColumnMany;
 				$many->stringNullColumn = $stringNullColumnMany;
-				$many->datetimeColumn = new \DateTime('2001-01-01 00:00:00');
-				$many->datetimeImmutableColumn = new \DateTimeImmutable('2001-01-01 00:00:00');
+				$many->datetimeColumn = new DateTime('2001-01-01 00:00:00');
+				$many->datetimeImmutableColumn = new DateTimeImmutable('2001-01-01 00:00:00');
 				$many->one = $one;
 				$one->manies->add($many);
 				$em->persist($many);
@@ -179,7 +187,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		$query = $em->createQuery($dql);
 
 		if ($expectedExceptionMessage !== null) {
-			$this->expectException(\Throwable::class);
+			$this->expectException(Throwable::class);
 			$this->expectExceptionMessage($expectedExceptionMessage);
 		}
 
@@ -383,8 +391,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					[new ConstantStringType('intColumn'), new IntegerType()],
 					[new ConstantStringType('stringColumn'), new StringType()],
 					[new ConstantStringType('stringNullColumn'), TypeCombinator::addNull(new StringType())],
-					[new ConstantStringType('datetimeColumn'), new ObjectType(\DateTime::class)],
-					[new ConstantStringType('datetimeImmutableColumn'), new ObjectType(\DateTimeImmutable::class)],
+					[new ConstantStringType('datetimeColumn'), new ObjectType(DateTime::class)],
+					[new ConstantStringType('datetimeImmutableColumn'), new ObjectType(DateTimeImmutable::class)],
 				]),
 				'
 					SELECT		m.intColumn, m.stringColumn, m.stringNullColumn,

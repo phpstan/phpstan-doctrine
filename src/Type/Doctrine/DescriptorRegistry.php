@@ -8,11 +8,11 @@ use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 class DescriptorRegistry
 {
 
-	/** @var array<class-string<\Doctrine\DBAL\Types\Type>, \PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor> */
+	/** @var array<class-string<Type>, DoctrineTypeDescriptor> */
 	private $descriptors = [];
 
 	/**
-	 * @param \PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor[] $descriptors
+	 * @param DoctrineTypeDescriptor[] $descriptors
 	 */
 	public function __construct(array $descriptors)
 	{
@@ -25,13 +25,13 @@ class DescriptorRegistry
 	{
 		$typesMap = Type::getTypesMap();
 		if (!isset($typesMap[$type])) {
-			throw new \PHPStan\Type\Doctrine\DescriptorNotRegisteredException();
+			throw new DescriptorNotRegisteredException();
 		}
 
-		/** @var class-string<\Doctrine\DBAL\Types\Type> $typeClass */
+		/** @var class-string<Type> $typeClass */
 		$typeClass = $typesMap[$type];
 		if (!isset($this->descriptors[$typeClass])) {
-			throw new \PHPStan\Type\Doctrine\DescriptorNotRegisteredException();
+			throw new DescriptorNotRegisteredException();
 		}
 		return $this->descriptors[$typeClass];
 	}

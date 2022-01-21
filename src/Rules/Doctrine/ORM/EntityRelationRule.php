@@ -14,6 +14,9 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
+use Throwable;
+use function get_class;
+use function in_array;
 use function sprintf;
 
 /**
@@ -22,7 +25,7 @@ use function sprintf;
 class EntityRelationRule implements Rule
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
 	/** @var bool */
@@ -78,7 +81,7 @@ class EntityRelationRule implements Rule
 		$identifiers = [];
 		try {
 			$identifiers = $metadata->getIdentifierFieldNames();
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
 			if (!$e instanceof $mappingException) {
 				throw $e;

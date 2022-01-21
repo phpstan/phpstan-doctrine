@@ -13,6 +13,7 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use function array_unshift;
 
 class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

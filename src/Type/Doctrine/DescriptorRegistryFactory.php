@@ -9,7 +9,7 @@ class DescriptorRegistryFactory
 
 	public const TYPE_DESCRIPTOR_TAG = 'phpstan.doctrine.typeDescriptor';
 
-	/** @var \PHPStan\DependencyInjection\Container */
+	/** @var Container */
 	private $container;
 
 	public function __construct(Container $container)

@@ -2,6 +2,8 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -10,6 +12,10 @@ use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
+use Throwable;
+use function count;
+use function sprintf;
+use function strpos;
 
 /**
  * @implements Rule<Node\Expr\MethodCall>
@@ -63,7 +69,7 @@ class QueryBuilderDqlRule implements Rule
 
 		try {
 			$dqlType = $scope->getType(new MethodCall($node, new Node\Identifier('getDQL'), []));
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			return [sprintf('Internal error: %s', $e->getMessage())];
 		}
 
@@ -87,14 +93,14 @@ class QueryBuilderDqlRule implements Rule
 			return [];
 		}
 
-		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		/** @var EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
 		$messages = [];
 		foreach ($dqls as $dql) {
 			try {
 				$objectManager->createQuery($dql->getValue())->getAST();
-			} catch (\Doctrine\ORM\Query\QueryException $e) {
+			} catch (QueryException $e) {
 				$message = sprintf('QueryBuilder: %s', $e->getMessage());
 				if (strpos($e->getMessage(), '[Syntax Error]') === 0) {
 					$message .= sprintf("\nDQL: %s", $dql->getValue());

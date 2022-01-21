@@ -4,11 +4,15 @@ namespace PHPStan\Type\Doctrine\Collection;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
+use PHPStan\Type\VerbosityLevel;
+use function is_string;
+use function sprintf;
 
 /**
- * @implements \PHPStan\Rules\Rule<Node\Expr\Variable>
+ * @implements Rule<Node\Expr\Variable>
  */
-class VariableTypeReportingRule implements \PHPStan\Rules\Rule
+class VariableTypeReportingRule implements Rule
 {
 
 	public function getNodeType(): string
@@ -23,7 +27,7 @@ class VariableTypeReportingRule implements \PHPStan\Rules\Rule
 		}
 		if (!$scope->isInFirstLevelStatement()) {
 			return [];
-		};
+		}
 
 		if ($scope->isInExpressionAssign($node)) {
 			return [];
@@ -33,7 +37,7 @@ class VariableTypeReportingRule implements \PHPStan\Rules\Rule
 			sprintf(
 				'Variable $%s is: %s',
 				$node->name,
-				$scope->getType($node)->describe(\PHPStan\Type\VerbosityLevel::value())
+				$scope->getType($node)->describe(VerbosityLevel::value())
 			),
 		];
 	}

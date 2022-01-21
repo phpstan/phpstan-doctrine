@@ -9,6 +9,7 @@ use PHPStan\Broker\Broker;
 use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
@@ -18,13 +19,13 @@ use function class_exists;
 class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension, BrokerAwareExtension
 {
 
-	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
+	/** @var ArgumentsProcessor */
 	private $argumentsProcessor;
 
 	/** @var string */
 	private $class;
 
-	/** @var \PHPStan\Broker\Broker */
+	/** @var Broker */
 	private $broker;
 
 	public function __construct(
@@ -54,7 +55,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 	public function getTypeFromStaticMethodCall(MethodReflection $methodReflection, StaticCall $methodCall, Scope $scope): Type
 	{
 		if (!$methodCall->class instanceof Name) {
-			throw new \PHPStan\ShouldNotHappenException();
+			throw new ShouldNotHappenException();
 		}
 
 		$className = $scope->resolveName($methodCall->class);

@@ -11,8 +11,7 @@ class DoctrineTypeUtils
 {
 
 	/**
-	 * @param \PHPStan\Type\Type $type
-	 * @return \PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderType[]
+	 * @return QueryBuilderType[]
 	 */
 	public static function getQueryBuilderTypes(Type $type): array
 	{
@@ -37,8 +36,7 @@ class DoctrineTypeUtils
 	}
 
 	/**
-	 * @param \PHPStan\Type\Type $type
-	 * @return \PHPStan\Type\Doctrine\Query\QueryType[]
+	 * @return QueryType[]
 	 */
 	public static function getQueryTypes(Type $type): array
 	{

@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -30,36 +31,34 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
+use function assert;
+use function class_exists;
+use function count;
+use function floatval;
+use function get_class;
+use function gettype;
+use function intval;
+use function is_array;
+use function is_numeric;
+use function is_object;
+use function is_string;
+use function serialize;
+use function sprintf;
+use function unserialize;
 
 /**
  * QueryResultTypeWalker is a TreeWalker that uses a QueryResultTypeBuilder to build the result type of a Query
  *
  * It extends SqlkWalker because AST\Node::dispatch() accepts SqlWalker only
  *
- * @phpstan-type QueryComponent array{
- *  metadata: \Doctrine\ORM\Mapping\ClassMetadata<object>,
- *  parent: mixed,
- *  relation: ?array{
- *   orderBy: array<array-key,string>,
- *   indexBy: ?string,
- *   fieldName: string,
- *   targetEntity: string,
- *   sourceEntity: string,
- *   isOwningSide: bool,
- *   mappedBy: string,
- *   type: int,
- *  },
- *  map: mixed,
- *  nestingLevel: int,
- *  token: mixed,
- * }
+ * @phpstan-type QueryComponent array{metadata: ClassMetadata<object>, parent: mixed, relation: ?array{orderBy: array<array-key, string>, indexBy: ?string, fieldName: string, targetEntity: string, sourceEntity: string, isOwningSide: bool, mappedBy: string, type: int}, map: mixed, nestingLevel: int, token: mixed}
  */
 class QueryResultTypeWalker extends SqlWalker
 {
 
-	private const HINT_TYPE_MAPPING = __CLASS__ . '::HINT_TYPE_MAPPING';
+	private const HINT_TYPE_MAPPING = self::class . '::HINT_TYPE_MAPPING';
 
-	private const HINT_DESCRIPTOR_REGISTRY = __CLASS__ . '::HINT_DESCRIPTOR_REGISTRY';
+	private const HINT_DESCRIPTOR_REGISTRY = self::class . '::HINT_DESCRIPTOR_REGISTRY';
 
 	/**
 	 * Counter for generating unique scalar result.
@@ -268,7 +267,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				assert(is_string($typeName));
 
-				$nullable = ((bool) ($joinColumn['nullable'] ?? true)) || $this->isAggregated;
+				$nullable = (bool) ($joinColumn['nullable'] ?? true) || $this->isAggregated;
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
 
@@ -344,14 +343,14 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkFunction($function)
 	{
 		switch (true) {
-			case ($function instanceof AST\Functions\AvgFunction):
-			case ($function instanceof AST\Functions\MaxFunction):
-			case ($function instanceof AST\Functions\MinFunction):
-			case ($function instanceof AST\Functions\SumFunction):
-			case ($function instanceof AST\Functions\CountFunction):
+			case $function instanceof AST\Functions\AvgFunction:
+			case $function instanceof AST\Functions\MaxFunction:
+			case $function instanceof AST\Functions\MinFunction:
+			case $function instanceof AST\Functions\SumFunction:
+			case $function instanceof AST\Functions\CountFunction:
 				return $function->getSql($this);
 
-			case ($function instanceof AST\Functions\AbsFunction):
+			case $function instanceof AST\Functions\AbsFunction:
 				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
 
 				$type = TypeCombinator::union(
@@ -365,8 +364,8 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\BitAndFunction):
-			case ($function instanceof AST\Functions\BitOrFunction):
+			case $function instanceof AST\Functions\BitAndFunction:
+			case $function instanceof AST\Functions\BitOrFunction:
 				$firstExprType = $this->unmarshalType($function->firstArithmetic->dispatch($this));
 				$secondExprType = $this->unmarshalType($function->secondArithmetic->dispatch($this));
 
@@ -377,7 +376,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\ConcatFunction):
+			case $function instanceof AST\Functions\ConcatFunction:
 				$hasNull = false;
 
 				foreach ($function->concatExpressions as $expr) {
@@ -392,13 +391,13 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\CurrentDateFunction):
-			case ($function instanceof AST\Functions\CurrentTimeFunction):
-			case ($function instanceof AST\Functions\CurrentTimestampFunction):
+			case $function instanceof AST\Functions\CurrentDateFunction:
+			case $function instanceof AST\Functions\CurrentTimeFunction:
+			case $function instanceof AST\Functions\CurrentTimestampFunction:
 				return $this->marshalType(new StringType());
 
-			case ($function instanceof AST\Functions\DateAddFunction):
-			case ($function instanceof AST\Functions\DateSubFunction):
+			case $function instanceof AST\Functions\DateAddFunction:
+			case $function instanceof AST\Functions\DateSubFunction:
 				$dateExprType = $this->unmarshalType($function->firstDateExpression->dispatch($this));
 				$intervalExprType = $this->unmarshalType($function->intervalExpression->dispatch($this));
 
@@ -409,7 +408,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\DateDiffFunction):
+			case $function instanceof AST\Functions\DateDiffFunction:
 				$date1ExprType = $this->unmarshalType($function->date1->dispatch($this));
 				$date2ExprType = $this->unmarshalType($function->date2->dispatch($this));
 
@@ -423,7 +422,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\LengthFunction):
+			case $function instanceof AST\Functions\LengthFunction:
 				$stringPrimaryType = $this->unmarshalType($function->stringPrimary->dispatch($this));
 
 				$type = IntegerRangeType::fromInterval(0, null);
@@ -433,7 +432,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\LocateFunction):
+			case $function instanceof AST\Functions\LocateFunction:
 				$firstExprType = $this->unmarshalType($function->firstStringPrimary->dispatch($this));
 				$secondExprType = $this->unmarshalType($function->secondStringPrimary->dispatch($this));
 
@@ -444,9 +443,9 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\LowerFunction):
-			case ($function instanceof AST\Functions\TrimFunction):
-			case ($function instanceof AST\Functions\UpperFunction):
+			case $function instanceof AST\Functions\LowerFunction:
+			case $function instanceof AST\Functions\TrimFunction:
+			case $function instanceof AST\Functions\UpperFunction:
 				$stringPrimaryType = $this->unmarshalType($function->stringPrimary->dispatch($this));
 
 				$type = new StringType();
@@ -456,7 +455,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\ModFunction):
+			case $function instanceof AST\Functions\ModFunction:
 				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
 				$secondExprType = $this->unmarshalType($function->secondSimpleArithmeticExpression->dispatch($this));
 
@@ -472,7 +471,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\SqrtFunction):
+			case $function instanceof AST\Functions\SqrtFunction:
 				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
 
 				$type = new FloatType();
@@ -482,7 +481,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
-			case ($function instanceof AST\Functions\SubstringFunction):
+			case $function instanceof AST\Functions\SubstringFunction:
 				$stringType = $this->unmarshalType($function->stringPrimary->dispatch($this));
 				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
 
@@ -537,13 +536,13 @@ class QueryResultTypeWalker extends SqlWalker
 		$joinDeclaration = $join->joinAssociationDeclaration;
 
 		switch (true) {
-			case ($joinDeclaration instanceof AST\RangeVariableDeclaration):
+			case $joinDeclaration instanceof AST\RangeVariableDeclaration:
 				$dqlAlias = $joinDeclaration->aliasIdentificationVariable;
 
 				$this->nullableQueryComponents[$dqlAlias] = $joinType === AST\Join::JOIN_TYPE_LEFT || $joinType === AST\Join::JOIN_TYPE_LEFTOUTER;
 
 				break;
-			case ($joinDeclaration instanceof AST\JoinAssociationDeclaration):
+			case $joinDeclaration instanceof AST\JoinAssociationDeclaration:
 				$dqlAlias = $joinDeclaration->aliasIdentificationVariable;
 
 				$this->nullableQueryComponents[$dqlAlias] = $joinType === AST\Join::JOIN_TYPE_LEFT || $joinType === AST\Join::JOIN_TYPE_LEFTOUTER;
@@ -750,7 +749,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
 				$enforcedType = $this->resolveDoctrineType($expr->getReturnType()->getName());
-				$type = TypeTraverser::map($type, function (Type $type, callable $traverse) use ($enforcedType): Type {
+				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
 					}
@@ -776,7 +775,7 @@ class QueryResultTypeWalker extends SqlWalker
 				// the driver and PHP version.
 				// Here we assume that the value may or may not be casted to
 				// string by the driver.
-				$type = TypeTraverser::map($type, function (Type $type, callable $traverse): Type {
+				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
 					}
@@ -843,7 +842,7 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkNewObject($newObjectExpression, $newObjectResultAlias = null)
 	{
-		foreach ($newObjectExpression->args as $e) {
+		for ($i = 0; $i < count($newObjectExpression->args); $i++) {
 			$this->scalarResultCounter++;
 		}
 
@@ -1272,7 +1271,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 	private function toNumericOrNull(Type $type): Type
 	{
-		return TypeTraverser::map($type, function (Type $type, callable $traverse): Type {
+		return TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
 			if ($type instanceof UnionType || $type instanceof IntersectionType) {
 				return $traverse($type);
 			}
@@ -1303,12 +1302,12 @@ class QueryResultTypeWalker extends SqlWalker
 			$expression = $selectExpression->expression;
 
 			switch (true) {
-				case ($expression instanceof AST\Functions\AvgFunction):
-				case ($expression instanceof AST\Functions\CountFunction):
-				case ($expression instanceof AST\Functions\MaxFunction):
-				case ($expression instanceof AST\Functions\MinFunction):
-				case ($expression instanceof AST\Functions\SumFunction):
-				case ($expression instanceof AST\AggregateExpression):
+				case $expression instanceof AST\Functions\AvgFunction:
+				case $expression instanceof AST\Functions\CountFunction:
+				case $expression instanceof AST\Functions\MaxFunction:
+				case $expression instanceof AST\Functions\MinFunction:
+				case $expression instanceof AST\Functions\SumFunction:
+				case $expression instanceof AST\AggregateExpression:
 					return true;
 				default:
 					break;

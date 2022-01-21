@@ -49,10 +49,10 @@ class EntityColumnRuleTest extends RuleTestCase
 			Type::addType(UuidType::NAME, UuidType::class);
 		}
 		if (!Type::hasType('carbon')) {
-			Type::addType('carbon', \Carbon\Doctrine\CarbonType::class);
+			Type::addType('carbon', CarbonType::class);
 		}
 		if (!Type::hasType('carbon_immutable')) {
-			Type::addType('carbon_immutable', \Carbon\Doctrine\CarbonImmutableType::class);
+			Type::addType('carbon_immutable', CarbonImmutableType::class);
 		}
 
 		return new EntityColumnRule(
@@ -241,7 +241,6 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider generatedIdsProvider
-	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
 	public function testGeneratedIds(string $file, array $expectedErrors, ?string $objectManagerLoader): void
@@ -252,7 +251,7 @@ class EntityColumnRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @return \Iterator<string, mixed[]>
+	 * @return Iterator<string, mixed[]>
 	 */
 	public function generatedIdsProvider(): Iterator
 	{

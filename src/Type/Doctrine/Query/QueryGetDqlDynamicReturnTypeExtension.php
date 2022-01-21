@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use function count;
 
 class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

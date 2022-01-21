@@ -4,17 +4,21 @@ namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use ReflectionClass;
 use function class_exists;
+use function count;
+use const PHP_VERSION_ID;
 
 class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 {
 
 	protected function initialize(): void
 	{
-		$parentReflection = new \ReflectionClass(parent::class);
+		$parentReflection = new ReflectionClass(parent::class);
 		$driverProperty = $parentReflection->getProperty('driver');
 		$driverProperty->setAccessible(true);
 
@@ -36,8 +40,8 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		$targetPlatformProperty = $parentReflection->getProperty('targetPlatform');
 		$targetPlatformProperty->setAccessible(true);
 
-		if (class_exists(\Doctrine\DBAL\Platforms\MySqlPlatform::class)) {
-			$platform = new \Doctrine\DBAL\Platforms\MySqlPlatform();
+		if (class_exists(MySqlPlatform::class)) {
+			$platform = new MySqlPlatform();
 		} else {
 			$platform = new \Doctrine\DBAL\Platforms\MySQLPlatform();
 		}
@@ -45,6 +49,10 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		$targetPlatformProperty->setValue($this, $platform);
 	}
 
+	/**
+	 * @param string $className
+	 * @return ClassMetadata
+	 */
 	protected function newClassMetadataInstance($className)
 	{
 		return new ClassMetadata($className);

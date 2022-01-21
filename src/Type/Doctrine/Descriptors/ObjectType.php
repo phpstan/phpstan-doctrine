@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 class ObjectType implements DoctrineTypeDescriptor
@@ -25,7 +26,7 @@ class ObjectType implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 }

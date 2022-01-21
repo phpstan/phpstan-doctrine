@@ -5,9 +5,10 @@ namespace PHPStan\Type\Doctrine;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 
-class DoctrineSelectableDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class DoctrineSelectableDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string

@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
+use function count;
 
 class SimpleQueryBuilderType extends QueryBuilderType
 {

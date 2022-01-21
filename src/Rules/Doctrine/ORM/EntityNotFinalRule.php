@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function sprintf;
 
@@ -15,7 +16,7 @@ use function sprintf;
 class EntityNotFinalRule implements Rule
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
@@ -32,7 +33,7 @@ class EntityNotFinalRule implements Rule
 	{
 		$classReflection = $scope->getClassReflection();
 		if ($classReflection === null) {
-			throw new \PHPStan\ShouldNotHappenException();
+			throw new ShouldNotHappenException();
 		}
 		if (!$classReflection->isFinalByKeyword()) {
 			return [];

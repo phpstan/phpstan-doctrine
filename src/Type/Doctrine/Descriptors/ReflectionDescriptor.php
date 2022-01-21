@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -13,12 +14,11 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 	/** @var class-string<\Doctrine\DBAL\Types\Type> */
 	private $type;
 
-	/** @var \PHPStan\Broker\Broker */
+	/** @var Broker */
 	private $broker;
 
 	/**
 	 * @param class-string<\Doctrine\DBAL\Types\Type> $type
-	 * @param \PHPStan\Broker\Broker $broker
 	 */
 	public function __construct(string $type, Broker $broker)
 	{
@@ -47,7 +47,7 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\MixedType();
+		return new MixedType();
 	}
 
 }

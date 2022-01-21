@@ -2,11 +2,13 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Mapping\MappingException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use ReflectionException;
 
 /**
  * @implements Rule<InClassNode>
@@ -14,7 +16,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 class EntityMappingExceptionRule implements Rule
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
 	public function __construct(
@@ -46,13 +48,13 @@ class EntityMappingExceptionRule implements Rule
 			if ($objectManager->getMetadataFactory()->isTransient($className)) {
 				return [];
 			}
-		} catch (\ReflectionException $e) {
+		} catch (ReflectionException $e) {
 			return [];
 		}
 
 		try {
 			$objectManager->getClassMetadata($className);
-		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+		} catch (MappingException $e) {
 			return [$e->getMessage()];
 		}
 

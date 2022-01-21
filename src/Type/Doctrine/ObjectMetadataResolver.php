@@ -4,10 +4,14 @@ namespace PHPStan\Type\Doctrine;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
+use PHPStan\ShouldNotHappenException;
+use ReflectionException;
 use function is_file;
 use function is_readable;
+use function sprintf;
 
 final class ObjectMetadataResolver
 {
@@ -15,7 +19,7 @@ final class ObjectMetadataResolver
 	/** @var string|null */
 	private $objectManagerLoader;
 
-	/** @var ObjectManager|null|false */
+	/** @var ObjectManager|false|null */
 	private $objectManager;
 
 	/** @var ClassMetadataFactory<ClassMetadata>|null */
@@ -57,7 +61,6 @@ final class ObjectMetadataResolver
 
 	/**
 	 * @param class-string $className
-	 * @return bool
 	 */
 	public function isTransient(string $className): bool
 	{
@@ -69,7 +72,7 @@ final class ObjectMetadataResolver
 			}
 
 			return $objectManager->getMetadataFactory()->isTransient($className);
-		} catch (\ReflectionException $e) {
+		} catch (ReflectionException $e) {
 			return true;
 		}
 	}
@@ -107,7 +110,7 @@ final class ObjectMetadataResolver
 			} else {
 				$metadata = $objectManager->getClassMetadata($className);
 			}
-		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+		} catch (MappingException $e) {
 			return null;
 		}
 
@@ -115,7 +118,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		/** @var \Doctrine\ORM\Mapping\ClassMetadataInfo<T> $ormMetadata */
+		/** @var ClassMetadataInfo<T> $ormMetadata */
 		$ormMetadata = $metadata;
 
 		return $ormMetadata;
@@ -124,14 +127,14 @@ final class ObjectMetadataResolver
 	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
 	{
 		if (!is_file($objectManagerLoader)) {
-			throw new \PHPStan\ShouldNotHappenException(sprintf(
+			throw new ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" does not exist',
 				$objectManagerLoader
 			));
 		}
 
 		if (!is_readable($objectManagerLoader)) {
-			throw new \PHPStan\ShouldNotHappenException(sprintf(
+			throw new ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" is not readable',
 				$objectManagerLoader
 			));

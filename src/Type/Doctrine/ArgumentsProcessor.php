@@ -2,20 +2,20 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use PhpParser\Node\Arg;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
+use function strpos;
 
 /** @api */
 class ArgumentsProcessor
 {
 
 	/**
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @param string $methodName
-	 * @param \PhpParser\Node\Arg[] $methodCallArgs
+	 * @param Arg[] $methodCallArgs
 	 * @return mixed[]
 	 * @throws DynamicQueryBuilderArgumentException
 	 */

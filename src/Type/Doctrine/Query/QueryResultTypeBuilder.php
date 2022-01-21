@@ -8,6 +8,9 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VoidType;
+use function array_key_last;
+use function count;
+use function is_int;
 
 /**
  * QueryResultTypeBuilder helps building the result type of a query

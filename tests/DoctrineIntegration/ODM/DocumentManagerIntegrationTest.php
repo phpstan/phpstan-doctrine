@@ -3,6 +3,7 @@
 namespace PHPStan\DoctrineIntegration\ODM;
 
 use PHPStan\Testing\LevelsTestCase;
+use const PHP_VERSION_ID;
 
 final class DocumentManagerIntegrationTest extends LevelsTestCase
 {

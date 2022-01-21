@@ -3,17 +3,27 @@
 namespace PHPStan\Reflection\Doctrine;
 
 use Doctrine\Persistence\ObjectRepository;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\MethodsClassReflectionExtension;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
+use function lcfirst;
+use function str_replace;
+use function strlen;
+use function strpos;
+use function substr;
+use function ucwords;
 
-class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\MethodsClassReflectionExtension
+class EntityRepositoryClassReflectionExtension implements MethodsClassReflectionExtension
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
@@ -21,7 +31,7 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 		$this->objectMetadataResolver = $objectMetadataResolver;
 	}
 
-	public function hasMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): bool
+	public function hasMethod(ClassReflection $classReflection, string $methodName): bool
 	{
 		if (
 			strpos($methodName, 'findBy') === 0
@@ -44,7 +54,7 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			$repositoryAncesor = $classReflection->getAncestorWithClassName(\Doctrine\Persistence\ObjectRepository::class);
+			$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 			if ($repositoryAncesor === null) {
 				return false;
 			}
@@ -79,20 +89,20 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 		return lcfirst(str_replace([' ', '_', '-'], '', ucwords($word, ' _-')));
 	}
 
-	public function getMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName): \PHPStan\Reflection\MethodReflection
+	public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
 	{
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			$repositoryAncesor = $classReflection->getAncestorWithClassName(\Doctrine\Persistence\ObjectRepository::class);
+			$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 			if ($repositoryAncesor === null) {
-				throw new \PHPStan\ShouldNotHappenException();
+				throw new ShouldNotHappenException();
 			}
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
 		$entityClassType = $templateTypeMap->getType('TEntityClass');
 		if ($entityClassType === null) {
-			throw new \PHPStan\ShouldNotHappenException();
+			throw new ShouldNotHappenException();
 		}
 
 		if (
@@ -108,7 +118,7 @@ class EntityRepositoryClassReflectionExtension implements \PHPStan\Reflection\Me
 		) {
 			$returnType = new IntegerType();
 		} else {
-			throw new \PHPStan\ShouldNotHappenException();
+			throw new ShouldNotHappenException();
 		}
 
 		return new MagicRepositoryMethodReflection($repositoryAncesor, $methodName, $returnType);

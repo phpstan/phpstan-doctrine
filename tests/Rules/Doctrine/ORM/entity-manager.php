@@ -1,6 +1,8 @@
 <?php declare(strict_types = 1);
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -29,9 +31,9 @@ if (PHP_VERSION_ID >= 80100) {
 
 $config->setMetadataDriverImpl($metadataDriver);
 
-\Doctrine\DBAL\Types\Type::overrideType(
+Type::overrideType(
 	'date',
-	\Doctrine\DBAL\Types\DateTimeImmutableType::class
+	DateTimeImmutableType::class
 );
 
 return EntityManager::create(

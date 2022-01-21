@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use DateInterval;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 class DateIntervalType implements DoctrineTypeDescriptor
@@ -26,7 +27,7 @@ class DateIntervalType implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 }

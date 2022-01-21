@@ -2,18 +2,20 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\Common\Collections\Collection;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use PHPUnit\Framework\TestCase;
 
 final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 {
 
-	/** @var \PHPStan\Type\Doctrine\DoctrineSelectableDynamicReturnTypeExtension */
+	/** @var DoctrineSelectableDynamicReturnTypeExtension */
 	private $extension;
 
 	protected function setUp(): void
@@ -35,8 +37,6 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsMethodSupported
-	 * @param string $method
-	 * @param bool $expectedResult
 	 */
 	public function testIsMethodSupported(string $method, bool $expectedResult): void
 	{
@@ -52,8 +52,8 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 		$scope = $this->createMock(Scope::class);
 		$scope->method('getType')->will(
 			self::returnCallback(
-				function (): Type {
-					return new ObjectType(\Doctrine\Common\Collections\Collection::class);
+				static function (): Type {
+					return new ObjectType(Collection::class);
 				}
 			)
 		);
@@ -65,7 +65,7 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 		$resultType = $this->extension->getTypeFromMethodCall($methodReflection, $methodCall, $scope);
 
 		self::assertInstanceOf(ObjectType::class, $resultType);
-		self::assertSame(\Doctrine\Common\Collections\Collection::class, $resultType->describe(\PHPStan\Type\VerbosityLevel::value()));
+		self::assertSame(Collection::class, $resultType->describe(VerbosityLevel::value()));
 	}
 
 }

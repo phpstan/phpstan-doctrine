@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -26,8 +27,8 @@ class BooleanType implements DoctrineTypeDescriptor
 	public function getDatabaseInternalType(): Type
 	{
 		return TypeCombinator::union(
-			new \PHPStan\Type\Constant\ConstantIntegerType(0),
-			new \PHPStan\Type\Constant\ConstantIntegerType(1)
+			new ConstantIntegerType(0),
+			new ConstantIntegerType(1)
 		);
 	}
 

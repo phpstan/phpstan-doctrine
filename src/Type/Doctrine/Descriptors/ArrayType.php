@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 class ArrayType implements DoctrineTypeDescriptor
@@ -25,7 +26,7 @@ class ArrayType implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 }

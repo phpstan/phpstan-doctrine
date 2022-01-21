@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 class TextType implements DoctrineTypeDescriptor
@@ -14,17 +15,17 @@ class TextType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 }

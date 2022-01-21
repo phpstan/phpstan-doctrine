@@ -4,6 +4,8 @@ namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
+use function array_keys;
+use function count;
 
 class BranchingQueryBuilderType extends QueryBuilderType
 {
@@ -15,13 +17,13 @@ class BranchingQueryBuilderType extends QueryBuilderType
 				return false;
 			}
 
-			foreach ($this->getMethodCalls() as $id => $methodCall) {
+			foreach (array_keys($this->getMethodCalls()) as $id) {
 				if (!isset($type->getMethodCalls()[$id])) {
 					return false;
 				}
 			}
 
-			foreach ($type->getMethodCalls() as $id => $methodCall) {
+			foreach (array_keys($type->getMethodCalls()) as $id) {
 				if (!isset($this->getMethodCalls()[$id])) {
 					return false;
 				}

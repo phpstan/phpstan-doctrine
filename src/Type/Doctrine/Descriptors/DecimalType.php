@@ -3,6 +3,9 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -16,17 +19,17 @@ class DecimalType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return TypeCombinator::intersect(new \PHPStan\Type\StringType(), new AccessoryNumericStringType());
+		return TypeCombinator::intersect(new StringType(), new AccessoryNumericStringType());
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return TypeCombinator::union(new \PHPStan\Type\StringType(), new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
+		return TypeCombinator::union(new StringType(), new FloatType(), new IntegerType());
 	}
 
 	public function getDatabaseInternalType(): Type
 	{
-		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new \PHPStan\Type\IntegerType());
+		return TypeCombinator::union(new FloatType(), new IntegerType());
 	}
 
 }

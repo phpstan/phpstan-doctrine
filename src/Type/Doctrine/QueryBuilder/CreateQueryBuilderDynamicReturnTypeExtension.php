@@ -5,9 +5,10 @@ namespace PHPStan\Type\Doctrine\QueryBuilder;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 
-class CreateQueryBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	/** @var string|null */

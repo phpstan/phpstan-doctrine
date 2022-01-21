@@ -5,6 +5,9 @@ namespace PHPStan\Type\Doctrine\QueryBuilder;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use function md5;
+use function substr;
+use function uniqid;
 
 /** @api */
 abstract class QueryBuilderType extends ObjectType

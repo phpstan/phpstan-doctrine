@@ -2,7 +2,9 @@
 
 namespace PHPStan\Type\Doctrine;
 
-class DescriptorNotRegisteredException extends \RuntimeException
+use RuntimeException;
+
+class DescriptorNotRegisteredException extends RuntimeException
 {
 
 }

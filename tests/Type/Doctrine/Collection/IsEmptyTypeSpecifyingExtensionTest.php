@@ -3,11 +3,12 @@
 namespace PHPStan\Type\Doctrine\Collection;
 
 use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends \PHPStan\Testing\RuleTestCase<VariableTypeReportingRule>
+ * @extends RuleTestCase<VariableTypeReportingRule>
  */
-class IsEmptyTypeSpecifyingExtensionTest extends \PHPStan\Testing\RuleTestCase
+class IsEmptyTypeSpecifyingExtensionTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

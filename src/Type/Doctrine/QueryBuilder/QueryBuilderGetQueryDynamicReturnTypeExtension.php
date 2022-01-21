@@ -19,19 +19,21 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeWalker;
 use PHPStan\Type\Doctrine\Query\QueryType;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use function count;
 use function in_array;
 use function method_exists;
 use function strtolower;
 
-class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
+	/** @var ArgumentsProcessor */
 	private $argumentsProcessor;
 
 	/** @var string|null */
@@ -89,7 +91,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 			return $defaultReturnType;
 		}
 
-		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		/** @var EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
 		$resultTypes = [];

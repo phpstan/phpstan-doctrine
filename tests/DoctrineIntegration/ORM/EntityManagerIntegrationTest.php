@@ -4,6 +4,7 @@ namespace PHPStan\DoctrineIntegration\ORM;
 
 use Composer\InstalledVersions;
 use PHPStan\Testing\LevelsTestCase;
+use function strpos;
 
 final class EntityManagerIntegrationTest extends LevelsTestCase
 {

@@ -12,7 +12,6 @@ class ExprType extends ObjectType
 	private $exprObject;
 
 	/**
-	 * @param string $className
 	 * @param object $exprObject
 	 */
 	public function __construct(string $className, $exprObject)

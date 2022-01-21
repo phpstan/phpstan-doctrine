@@ -3,22 +3,27 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\MappingException;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use function count;
 
-class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	/** @var ReflectionProvider */
@@ -104,7 +109,7 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 
 		try {
 			$repositoryClass = $this->getRepositoryClass($objectName, $defaultRepositoryClass);
-		} catch (\Doctrine\ORM\Mapping\MappingException $e) {
+		} catch (MappingException $e) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
 
@@ -114,10 +119,7 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 	}
 
 	/**
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @param \PhpParser\Node\Arg[] $args
-	 * @param \PHPStan\Reflection\MethodReflection $methodReflection
-	 * @return \PHPStan\Type\Type
+	 * @param Arg[] $args
 	 */
 	private function getDefaultReturnType(Scope $scope, array $args, MethodReflection $methodReflection, string $defaultRepositoryClass): Type
 	{
@@ -160,7 +162,7 @@ class GetRepositoryDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMe
 		$metadata = $objectManager->getClassMetadata($classReflection->getName());
 		$odmMetadataClass = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadata';
 		if ($metadata instanceof $odmMetadataClass) {
-			/** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata<object> $odmMetadata */
+			/** @var ClassMetadata<object> $odmMetadata */
 			$odmMetadata = $metadata;
 			return $odmMetadata->customRepositoryClassName ?? $defaultRepositoryClass;
 		}

@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -11,6 +12,9 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use function get_class;
+use function is_object;
+use function method_exists;
 
 class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -18,7 +22,7 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	/** @var \PHPStan\Type\Doctrine\ArgumentsProcessor */
+	/** @var ArgumentsProcessor */
 	private $argumentsProcessor;
 
 	public function __construct(
@@ -53,7 +57,7 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 			return $defaultReturnType;
 		}
 
-		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		/** @var EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
 		$queryBuilder = $objectManager->createQueryBuilder();

@@ -2,7 +2,7 @@ parameters:
 	ignoreErrors:
 		-
 			message: "#^Class Doctrine\\\\DBAL\\\\Platforms\\\\MySQLPlatform referenced with incorrect case\\: Doctrine\\\\DBAL\\\\Platforms\\\\MySqlPlatform\\.$#"
-			count: 2
+			count: 3
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-

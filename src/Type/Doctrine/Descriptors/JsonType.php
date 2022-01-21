@@ -13,16 +13,17 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use stdClass;
 
 class JsonType implements DoctrineTypeDescriptor
 {
 
-	private static function getJsonType(): \PHPStan\Type\UnionType
+	private static function getJsonType(): UnionType
 	{
 		$mixedType = new MixedType();
 
-		return new \PHPStan\Type\UnionType([
+		return new UnionType([
 			new ArrayType($mixedType, $mixedType),
 			new BooleanType(),
 			new FloatType(),

@@ -5,11 +5,13 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use Throwable;
+use function in_array;
 
 class PropertiesExtension implements ReadWritePropertiesExtension
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
@@ -51,7 +53,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 		try {
 			$identifiers = $metadata->getIdentifierFieldNames();
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
 			if (!$e instanceof $mappingException) {
 				throw $e;

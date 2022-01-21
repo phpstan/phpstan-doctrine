@@ -2,7 +2,9 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 class JsonArrayType implements DoctrineTypeDescriptor
@@ -15,17 +17,17 @@ class JsonArrayType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\ArrayType(new MixedType(), new MixedType());
+		return new ArrayType(new MixedType(), new MixedType());
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return new \PHPStan\Type\ArrayType(new MixedType(), new MixedType());
+		return new ArrayType(new MixedType(), new MixedType());
 	}
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 }

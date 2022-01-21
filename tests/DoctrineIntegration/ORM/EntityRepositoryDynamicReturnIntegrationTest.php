@@ -3,6 +3,8 @@
 namespace PHPStan\DoctrineIntegration\ORM;
 
 use PHPStan\Testing\LevelsTestCase;
+use const PHP_MAJOR_VERSION;
+use const PHP_MINOR_VERSION;
 
 final class EntityRepositoryDynamicReturnIntegrationTest extends LevelsTestCase
 {

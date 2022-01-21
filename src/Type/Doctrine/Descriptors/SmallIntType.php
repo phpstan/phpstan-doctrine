@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 
 class SmallIntType implements DoctrineTypeDescriptor
@@ -14,17 +15,17 @@ class SmallIntType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\IntegerType();
+		return new IntegerType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return new \PHPStan\Type\IntegerType();
+		return new IntegerType();
 	}
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\IntegerType();
+		return new IntegerType();
 	}
 
 }

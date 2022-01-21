@@ -2,9 +2,11 @@
 
 namespace PHPStan\Reflection\Doctrine;
 
+use PHPStan\Reflection\ClassMemberReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariant;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\TemplateTypeMap;
@@ -14,11 +16,12 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use function strpos;
 
 class MagicRepositoryMethodReflection implements MethodReflection
 {
 
-	/** @var \PHPStan\Reflection\ClassReflection */
+	/** @var ClassReflection */
 	private $declaringClass;
 
 	/** @var string */
@@ -38,7 +41,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		$this->type = $type;
 	}
 
-	public function getDeclaringClass(): \PHPStan\Reflection\ClassReflection
+	public function getDeclaringClass(): ClassReflection
 	{
 		return $this->declaringClass;
 	}
@@ -68,7 +71,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		return $this->name;
 	}
 
-	public function getPrototype(): \PHPStan\Reflection\ClassMemberReflection
+	public function getPrototype(): ClassMemberReflection
 	{
 		return $this;
 	}
@@ -92,7 +95,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 				new DummyParameter('argument', new MixedType(), false, null, false, null),
 			];
 		} else {
-			throw new \PHPStan\ShouldNotHappenException();
+			throw new ShouldNotHappenException();
 		}
 
 		return [
@@ -106,7 +109,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		];
 	}
 
-	public function isDeprecated(): \PHPStan\TrinaryLogic
+	public function isDeprecated(): TrinaryLogic
 	{
 		return TrinaryLogic::createNo();
 	}
@@ -116,12 +119,12 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		return null;
 	}
 
-	public function isFinal(): \PHPStan\TrinaryLogic
+	public function isFinal(): TrinaryLogic
 	{
 		return TrinaryLogic::createNo();
 	}
 
-	public function isInternal(): \PHPStan\TrinaryLogic
+	public function isInternal(): TrinaryLogic
 	{
 		return TrinaryLogic::createNo();
 	}
@@ -131,7 +134,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 		return null;
 	}
 
-	public function hasSideEffects(): \PHPStan\TrinaryLogic
+	public function hasSideEffects(): TrinaryLogic
 	{
 		return TrinaryLogic::createNo();
 	}

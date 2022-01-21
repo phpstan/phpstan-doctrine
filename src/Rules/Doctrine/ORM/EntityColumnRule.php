@@ -20,7 +20,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
-
+use function get_class;
 use function in_array;
 use function sprintf;
 
@@ -30,10 +30,10 @@ use function sprintf;
 class EntityColumnRule implements Rule
 {
 
-	/** @var \PHPStan\Type\Doctrine\ObjectMetadataResolver */
+	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	/** @var \PHPStan\Type\Doctrine\DescriptorRegistry */
+	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
 	/** @var ReflectionProvider */
@@ -161,7 +161,7 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		$transformArrays = function (Type $type, callable $traverse): Type {
+		$transformArrays = static function (Type $type, callable $traverse): Type {
 			if ($type instanceof ArrayType) {
 				return new ArrayType(new MixedType(), new MixedType());
 			}

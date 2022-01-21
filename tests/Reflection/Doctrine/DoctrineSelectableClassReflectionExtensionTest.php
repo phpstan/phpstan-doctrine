@@ -2,13 +2,17 @@
 
 namespace PHPStan\Reflection\Doctrine;
 
-final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Testing\PHPStanTestCase
+use Doctrine\Common\Collections\Collection;
+use PHPStan\Broker\Broker;
+use PHPStan\Testing\PHPStanTestCase;
+
+final class DoctrineSelectableClassReflectionExtensionTest extends PHPStanTestCase
 {
 
-	/** @var \PHPStan\Broker\Broker */
+	/** @var Broker */
 	private $broker;
 
-	/** @var \PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension */
+	/** @var DoctrineSelectableClassReflectionExtension */
 	private $extension;
 
 	protected function setUp(): void
@@ -25,16 +29,13 @@ final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Test
 	public function dataHasMethod(): array
 	{
 		return [
-			[\Doctrine\Common\Collections\Collection::class, 'matching', true],
-			[\Doctrine\Common\Collections\Collection::class, 'foo', false],
+			[Collection::class, 'matching', true],
+			[Collection::class, 'foo', false],
 		];
 	}
 
 	/**
 	 * @dataProvider dataHasMethod
-	 * @param string $className
-	 * @param string $method
-	 * @param bool $expectedResult
 	 */
 	public function testHasMethod(string $className, string $method, bool $expectedResult): void
 	{
@@ -44,7 +45,7 @@ final class DoctrineSelectableClassReflectionExtensionTest extends \PHPStan\Test
 
 	public function testGetMethod(): void
 	{
-		$classReflection = $this->broker->getClass(\Doctrine\Common\Collections\Collection::class);
+		$classReflection = $this->broker->getClass(Collection::class);
 		$methodReflection = $this->extension->getMethod($classReflection, 'matching');
 		self::assertSame('matching', $methodReflection->getName());
 	}

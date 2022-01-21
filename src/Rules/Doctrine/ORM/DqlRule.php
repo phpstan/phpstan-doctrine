@@ -2,12 +2,16 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
+use function count;
+use function sprintf;
 
 /**
  * @implements Rule<Node\Expr\MethodCall>
@@ -62,7 +66,7 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		/** @var \Doctrine\ORM\EntityManagerInterface $objectManager */
+		/** @var EntityManagerInterface $objectManager */
 		$objectManager = $objectManager;
 
 		$messages = [];
@@ -70,7 +74,7 @@ class DqlRule implements Rule
 			$query = $objectManager->createQuery($dql->getValue());
 			try {
 				$query->getAST();
-			} catch (\Doctrine\ORM\Query\QueryException $e) {
+			} catch (QueryException $e) {
 				$messages[] = sprintf('DQL: %s', $e->getMessage());
 			}
 		}

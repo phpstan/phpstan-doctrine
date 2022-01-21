@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
@@ -22,22 +23,27 @@ use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
+use function count;
+use function in_array;
+use function is_array;
+use function strtolower;
 
-class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension, BrokerAwareExtension
+class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, BrokerAwareExtension
 {
 
 	private const MAX_COMBINATIONS = 16;
 
-	/** @var \PHPStan\DependencyInjection\Container */
+	/** @var Container */
 	private $container;
 
-	/** @var \PHPStan\Parser\Parser */
+	/** @var Parser */
 	private $parser;
 
 	/** @var string|null */
@@ -46,7 +52,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	/** @var bool */
 	private $descendIntoOtherMethods;
 
-	/** @var \PHPStan\Broker\Broker */
+	/** @var Broker */
 	private $broker;
 
 	public function __construct(
@@ -126,9 +132,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	}
 
 	/**
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @param \PhpParser\Node\Expr\MethodCall $methodCall
-	 * @return \PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderType[]
+	 * @return QueryBuilderType[]
 	 */
 	private function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodCall $methodCall): array
 	{
@@ -168,10 +172,10 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 			return [];
 		}
 
-		/** @var \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver */
+		/** @var NodeScopeResolver $nodeScopeResolver */
 		$nodeScopeResolver = $this->container->getByType(NodeScopeResolver::class);
 
-		/** @var \PHPStan\Analyser\ScopeFactory $scopeFactory */
+		/** @var ScopeFactory $scopeFactory */
 		$scopeFactory = $this->container->getByType(ScopeFactory::class);
 
 		$methodScope = $scopeFactory->create(
@@ -184,7 +188,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 
 		$queryBuilderTypes = [];
 
-		$nodeScopeResolver->processNodes($methodNode->stmts, $methodScope, function (Node $node, Scope $scope) use (&$queryBuilderTypes): void {
+		$nodeScopeResolver->processNodes($methodNode->stmts, $methodScope, static function (Node $node, Scope $scope) use (&$queryBuilderTypes): void {
 			if (!$node instanceof Return_ || $node->expr === null) {
 				return;
 			}
@@ -201,9 +205,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	}
 
 	/**
-	 * @param string $className
-	 * @param \PhpParser\Node[] $nodes
-	 * @return \PhpParser\Node\Stmt\Class_|null
+	 * @param Node[] $nodes
 	 */
 	private function findClassNode(string $className, array $nodes): ?Class_
 	{
@@ -242,9 +244,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements \PHPStan\Type\Dyna
 	}
 
 	/**
-	 * @param string $methodName
-	 * @param \PhpParser\Node\Stmt[] $classStatements
-	 * @return \PhpParser\Node\Stmt\ClassMethod|null
+	 * @param Stmt[] $classStatements
 	 */
 	private function findMethodNode(string $methodName, array $classStatements): ?ClassMethod
 	{

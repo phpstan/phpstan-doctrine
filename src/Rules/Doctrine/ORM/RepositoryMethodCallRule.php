@@ -12,6 +12,9 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\GenericTypeVariableResolver;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
+use function count;
+use function in_array;
+use function sprintf;
 
 /**
  * @implements Rule<Node\Expr\MethodCall>
@@ -50,7 +53,7 @@ class RepositoryMethodCallRule implements Rule
 		}
 		$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
 		if ($entityClassType === null) {
-			$entityClassType = GenericTypeVariableResolver::getType($calledOnType, \Doctrine\Persistence\ObjectRepository::class, 'TEntityClass');
+			$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
 			if ($entityClassType === null) {
 				return [];
 			}

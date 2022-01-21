@@ -2,6 +2,8 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -15,17 +17,17 @@ class BigIntType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new \PHPStan\Type\StringType();
+		return new StringType();
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return TypeCombinator::union(new \PHPStan\Type\StringType(), new \PHPStan\Type\IntegerType());
+		return TypeCombinator::union(new StringType(), new IntegerType());
 	}
 
 	public function getDatabaseInternalType(): Type
 	{
-		return new \PHPStan\Type\IntegerType();
+		return new IntegerType();
 	}
 
 }
