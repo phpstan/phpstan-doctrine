@@ -4,7 +4,6 @@ namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
@@ -36,7 +35,14 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 
 		$targetPlatformProperty = $parentReflection->getProperty('targetPlatform');
 		$targetPlatformProperty->setAccessible(true);
-		$targetPlatformProperty->setValue($this, new MySqlPlatform());
+
+		if (class_exists(\Doctrine\DBAL\Platforms\MySqlPlatform::class)) {
+			$platform = new \Doctrine\DBAL\Platforms\MySqlPlatform();
+		} else {
+			$platform = new \Doctrine\DBAL\Platforms\MySQLPlatform();
+		}
+
+		$targetPlatformProperty->setValue($this, $platform);
 	}
 
 	protected function newClassMetadataInstance($className)

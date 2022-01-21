@@ -9,4 +9,5 @@ Makefile export-ignore
 phpcs.xml export-ignore
 phpstan.neon export-ignore
 phpstan-baseline.neon export-ignore
+phpstan-baseline-dbal-3.neon export-ignore
 phpunit.xml export-ignore

@@ -2,6 +2,7 @@ includes:
 	- extension.neon
 	- rules.neon
 	- phpstan-baseline.neon
+	- phpstan-baseline-dbal-3.neon
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 	- vendor/phpstan/phpstan-phpunit/rules.neon

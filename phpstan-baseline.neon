@@ -6,6 +6,11 @@ parameters:
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Platforms\\\\MySqlPlatform referenced with incorrect case\\: Doctrine\\\\DBAL\\\\Platforms\\\\MySQLPlatform\\.$#"
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<T of object\\>, string given\\.$#"
 			count: 1
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
