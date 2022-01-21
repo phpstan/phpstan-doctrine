@@ -23,4 +23,9 @@ class JsonArrayType implements DoctrineTypeDescriptor
 		return new \PHPStan\Type\ArrayType(new MixedType(), new MixedType());
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

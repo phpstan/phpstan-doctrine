@@ -22,4 +22,9 @@ class SmallIntType implements DoctrineTypeDescriptor
 		return new \PHPStan\Type\IntegerType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\IntegerType();
+	}
+
 }

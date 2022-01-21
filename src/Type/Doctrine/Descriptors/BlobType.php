@@ -24,4 +24,9 @@ class BlobType implements DoctrineTypeDescriptor
 		return new MixedType();
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new MixedType();
+	}
+
 }

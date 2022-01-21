@@ -24,4 +24,9 @@ class DateIntervalType implements DoctrineTypeDescriptor
 		return new ObjectType(DateInterval::class);
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\StringType();
+	}
+
 }

@@ -34,6 +34,9 @@ class EntityColumnRuleTest extends RuleTestCase
 	/** @var bool */
 	private $allowNullablePropertyForRequiredField;
 
+	/** @var string|null */
+	private $objectManagerLoader;
+
 	protected function getRule(): Rule
 	{
 		if (!Type::hasType(CustomType::NAME)) {
@@ -53,7 +56,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		}
 
 		return new EntityColumnRule(
-			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null),
+			new ObjectMetadataResolver($this->createReflectionProvider(), $this->objectManagerLoader, null),
 			new DescriptorRegistry([
 				new ArrayType(),
 				new BigIntType(),
@@ -77,9 +80,24 @@ class EntityColumnRuleTest extends RuleTestCase
 		);
 	}
 
-	public function testRule(): void
+	/**
+	 * @return array<array{string|null}>
+	 */
+	public function dataObjectManagerLoader(): array
+	{
+		return [
+			[__DIR__ . '/entity-manager.php'],
+			[null],
+		];
+	}
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testRule(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
@@ -140,9 +158,13 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testRuleWithAllowedNullableProperty(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testRuleWithAllowedNullableProperty(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = true;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
@@ -191,15 +213,23 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testRuleOnMyEntity(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testRuleOnMyEntity(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/MyEntity.php'], []);
 	}
 
-	public function testSuperclass(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testSuperclass(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
@@ -213,9 +243,10 @@ class EntityColumnRuleTest extends RuleTestCase
 	 * @param string $file
 	 * @param mixed[] $expectedErrors
 	 */
-	public function testGeneratedIds(string $file, array $expectedErrors): void
+	public function testGeneratedIds(string $file, array $expectedErrors, ?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([$file], $expectedErrors);
 	}
 
@@ -224,7 +255,8 @@ class EntityColumnRuleTest extends RuleTestCase
 	 */
 	public function generatedIdsProvider(): Iterator
 	{
-		yield 'not nullable' => [__DIR__ . '/data/GeneratedIdEntity1.php', []];
+		yield 'not nullable' => [__DIR__ . '/data/GeneratedIdEntity1.php', [], __DIR__ . '/entity-manager.php'];
+		yield 'not nullable 2' => [__DIR__ . '/data/GeneratedIdEntity1.php', [], null];
 		yield 'nullable column' => [
 			__DIR__ . '/data/GeneratedIdEntity2.php',
 			[
@@ -233,22 +265,47 @@ class EntityColumnRuleTest extends RuleTestCase
 					19,
 				],
 			],
+			__DIR__ . '/entity-manager.php',
 		];
-		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', []];
-		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', []];
-		yield 'composite' => [__DIR__ . '/data/CompositePrimaryKeyEntity1.php', []];
-		yield 'no generated value 1' => [__DIR__ . '/data/GeneratedIdEntity5.php', []];
+		yield 'nullable column 2' => [
+			__DIR__ . '/data/GeneratedIdEntity2.php',
+			[
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
+					19,
+				],
+			],
+			null,
+		];
+		yield 'nullable property' => [__DIR__ . '/data/GeneratedIdEntity3.php', [], __DIR__ . '/entity-manager.php'];
+		yield 'nullable property 2' => [__DIR__ . '/data/GeneratedIdEntity3.php', [], null];
+		yield 'nullable both' => [__DIR__ . '/data/GeneratedIdEntity4.php', [], __DIR__ . '/entity-manager.php'];
+		yield 'nullable both 2' => [__DIR__ . '/data/GeneratedIdEntity4.php', [], null];
+		yield 'composite' => [__DIR__ . '/data/CompositePrimaryKeyEntity1.php', [], __DIR__ . '/entity-manager.php'];
+		yield 'composite 2' => [__DIR__ . '/data/CompositePrimaryKeyEntity1.php', [], null];
+		yield 'no generated value 1' => [__DIR__ . '/data/GeneratedIdEntity5.php', [], __DIR__ . '/entity-manager.php'];
+		yield 'no generated value 1 2' => [__DIR__ . '/data/GeneratedIdEntity5.php', [], null];
 		yield 'no generated value 2' => [__DIR__ . '/data/GeneratedIdEntity6.php', [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity6::$id type mapping mismatch: property can contain int|null but database expects int.',
 				18,
 			],
-		]];
+		], __DIR__ . '/entity-manager.php'];
+		yield 'no generated value 2 2' => [__DIR__ . '/data/GeneratedIdEntity6.php', [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity6::$id type mapping mismatch: property can contain int|null but database expects int.',
+				18,
+			],
+		], null];
 	}
 
-	public function testCustomType(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testCustomType(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/EntityWithCustomType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: database can contain DateTimeInterface but property expects int.',
@@ -265,9 +322,13 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testUnknownType(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testUnknownType(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/EntityWithUnknownType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithUnknownType::$foo: Doctrine type "unknown" does not have any registered descriptor.',
@@ -276,13 +337,17 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testEnumType(): void
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testEnumType(?string $objectManagerLoader): void
 	{
 		if (PHP_VERSION_ID < 80100) {
 			self::markTestSkipped('Test requires PHP 8.1.');
 		}
 
 		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data-attributes/enum-type.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORMAttributes\FooEnum but property expects PHPStan\Rules\Doctrine\ORMAttributes\BarEnum.',

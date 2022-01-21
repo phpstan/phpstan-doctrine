@@ -23,4 +23,9 @@ class BigIntType implements DoctrineTypeDescriptor
 		return TypeCombinator::union(new \PHPStan\Type\StringType(), new \PHPStan\Type\IntegerType());
 	}
 
+	public function getDatabaseInternalType(): Type
+	{
+		return new \PHPStan\Type\IntegerType();
+	}
+
 }

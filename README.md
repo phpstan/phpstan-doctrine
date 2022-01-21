@@ -58,7 +58,7 @@ parameters:
 		repositoryClass: MyApp\Doctrine\BetterEntityRepository
 ```
 
-You can opt in for more advanced analysis by providing the object manager from your own application. This will allow DQL validation, and the correct entity `repositoryClass` to be inferred when accessing `$entityManager->getRepository()`:
+You can opt in for more advanced analysis by providing the object manager from your own application. This will enable DQL validation:
 
 ```neon
 parameters:

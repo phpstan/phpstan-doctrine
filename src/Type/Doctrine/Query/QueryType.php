@@ -3,19 +3,21 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use PHPStan\TrinaryLogic;
-use PHPStan\Type\ObjectType;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
 /** @api */
-class QueryType extends ObjectType
+class QueryType extends GenericObjectType
 {
 
 	/** @var string */
 	private $dql;
 
-	public function __construct(string $dql)
+	public function __construct(string $dql, ?Type $resultType = null)
 	{
-		parent::__construct('Doctrine\ORM\Query');
+		$resultType = $resultType ?? new MixedType();
+		parent::__construct('Doctrine\ORM\Query', [$resultType]);
 		$this->dql = $dql;
 	}
 
