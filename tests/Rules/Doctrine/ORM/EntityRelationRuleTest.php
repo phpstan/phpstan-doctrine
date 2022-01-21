@@ -22,7 +22,7 @@ class EntityRelationRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new EntityRelationRule(
-			new ObjectMetadataResolver($this->createReflectionProvider(), $this->objectManagerLoader, null),
+			new ObjectMetadataResolver($this->objectManagerLoader),
 			$this->allowNullablePropertyForRequiredField,
 			true
 		);

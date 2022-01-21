@@ -16,7 +16,7 @@ class EntityMappingExceptionRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new EntityMappingExceptionRule(
-			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null)
+			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php')
 		);
 	}
 

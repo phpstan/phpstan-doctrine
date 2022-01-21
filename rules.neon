@@ -7,6 +7,8 @@ parameters:
 parametersSchema:
 	doctrine: structure([
 		repositoryClass: schema(string(), nullable())
+		ormRepositoryClass: schema(string(), nullable())
+		odmRepositoryClass: schema(string(), nullable())
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())

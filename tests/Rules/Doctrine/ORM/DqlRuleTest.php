@@ -14,7 +14,7 @@ class DqlRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new DqlRule(new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null));
+		return new DqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php'));
 	}
 
 	public function testRule(): void

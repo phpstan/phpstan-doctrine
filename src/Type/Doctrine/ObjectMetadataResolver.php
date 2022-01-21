@@ -6,15 +6,11 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
-use PHPStan\Reflection\ReflectionProvider;
 use function is_file;
 use function is_readable;
 
 final class ObjectMetadataResolver
 {
-
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
 
 	/** @var string|null */
 	private $objectManagerLoader;
@@ -22,24 +18,14 @@ final class ObjectMetadataResolver
 	/** @var ObjectManager|null|false */
 	private $objectManager;
 
-	/** @var string|null */
-	private $repositoryClass;
-
-	/** @var string|null */
-	private $resolvedRepositoryClass;
-
 	/** @var ClassMetadataFactory<ClassMetadata>|null */
 	private $metadataFactory;
 
 	public function __construct(
-		ReflectionProvider $reflectionProvider,
 		?string $objectManagerLoader,
-		?string $repositoryClass
 	)
 	{
-		$this->reflectionProvider = $reflectionProvider;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->repositoryClass = $repositoryClass;
 	}
 
 	public function hasObjectManagerLoader(): bool
@@ -152,56 +138,6 @@ final class ObjectMetadataResolver
 		}
 
 		return require $objectManagerLoader;
-	}
-
-	public function getResolvedRepositoryClass(): string
-	{
-		if ($this->resolvedRepositoryClass !== null) {
-			return $this->resolvedRepositoryClass;
-		}
-
-		$objectManager = $this->getObjectManager();
-		if ($this->repositoryClass !== null) {
-			return $this->resolvedRepositoryClass = $this->repositoryClass;
-		}
-
-		if ($objectManager !== null && get_class($objectManager) === 'Doctrine\ODM\MongoDB\DocumentManager') {
-			return $this->resolvedRepositoryClass = 'Doctrine\ODM\MongoDB\Repository\DocumentRepository';
-		}
-
-		return $this->resolvedRepositoryClass = 'Doctrine\ORM\EntityRepository';
-	}
-
-	public function getRepositoryClass(string $className): string
-	{
-		if (!$this->reflectionProvider->hasClass($className)) {
-			return $this->getResolvedRepositoryClass();
-		}
-
-		$classReflection = $this->reflectionProvider->getClass($className);
-		if ($classReflection->isInterface() || $classReflection->isTrait()) {
-			return $this->getResolvedRepositoryClass();
-		}
-
-		$metadata = $this->getClassMetadata($classReflection->getName());
-		if ($metadata !== null) {
-			return $metadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
-		}
-
-		$objectManager = $this->getObjectManager();
-		if ($objectManager === null) {
-			return $this->getResolvedRepositoryClass();
-		}
-
-		$metadata = $objectManager->getClassMetadata($classReflection->getName());
-		$odmMetadataClass = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadata';
-		if ($metadata instanceof $odmMetadataClass) {
-			/** @var \Doctrine\ODM\MongoDB\Mapping\ClassMetadata<object> $odmMetadata */
-			$odmMetadata = $metadata;
-			return $odmMetadata->customRepositoryClassName ?? $this->getResolvedRepositoryClass();
-		}
-
-		return $this->getResolvedRepositoryClass();
 	}
 
 }

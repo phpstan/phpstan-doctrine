@@ -14,7 +14,7 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new QueryBuilderDqlRule(new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null), true);
+		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php'), true);
 	}
 
 	public function testRule(): void

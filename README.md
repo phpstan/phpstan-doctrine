@@ -55,7 +55,8 @@ If your repositories have a common base class, you can configure it in your `php
 ```neon
 parameters:
 	doctrine:
-		repositoryClass: MyApp\Doctrine\BetterEntityRepository
+		ormRepositoryClass: MyApp\Doctrine\BetterEntityRepository
+		odmRepositoryClass: MyApp\Doctrine\BetterDocumentRepository
 ```
 
 You can opt in for more advanced analysis by providing the object manager from your own application. This will enable DQL validation:

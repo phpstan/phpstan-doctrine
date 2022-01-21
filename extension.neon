@@ -1,6 +1,8 @@
 parameters:
 	doctrine:
 		repositoryClass: null
+		ormRepositoryClass: null
+		odmRepositoryClass: null
 		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
@@ -47,6 +49,8 @@ parameters:
 parametersSchema:
 	doctrine: structure([
 		repositoryClass: schema(string(), nullable())
+		ormRepositoryClass: schema(string(), nullable())
+		odmRepositoryClass: schema(string(), nullable())
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
@@ -90,7 +94,6 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
-			repositoryClass: %doctrine.repositoryClass%
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetDqlDynamicReturnTypeExtension
 		arguments:
@@ -155,6 +158,9 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Persistence\ManagerRegistry
+			repositoryClass: %doctrine.repositoryClass%
+			ormRepositoryClass: %doctrine.ormRepositoryClass%
+			odmRepositoryClass: %doctrine.odmRepositoryClass%
 
 	objectManagerGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
@@ -162,6 +168,9 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Persistence\ObjectManager
+			repositoryClass: %doctrine.repositoryClass%
+			ormRepositoryClass: %doctrine.ormRepositoryClass%
+			odmRepositoryClass: %doctrine.odmRepositoryClass%
 
 	persistenceManagerRegistryGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
@@ -169,6 +178,9 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Persistence\ManagerRegistry
+			repositoryClass: %doctrine.repositoryClass%
+			ormRepositoryClass: %doctrine.ormRepositoryClass%
+			odmRepositoryClass: %doctrine.odmRepositoryClass%
 
 	persistenceObjectManagerGetRepository:
 		class: PHPStan\Type\Doctrine\GetRepositoryDynamicReturnTypeExtension
@@ -176,6 +188,9 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 		arguments:
 			managerClass: Doctrine\Persistence\ObjectManager
+			repositoryClass: %doctrine.repositoryClass%
+			ormRepositoryClass: %doctrine.ormRepositoryClass%
+			odmRepositoryClass: %doctrine.odmRepositoryClass%
 
 	## NewExprDynamicReturnTypeExtensions
 
