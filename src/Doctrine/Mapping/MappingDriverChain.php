@@ -2,6 +2,7 @@
 
 namespace PHPStan\Doctrine\Mapping;
 
+use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 
@@ -25,12 +26,12 @@ class MappingDriverChain implements MappingDriver
 	public function loadMetadataForClass($className, ClassMetadata $metadata): void
 	{
 		foreach ($this->drivers as $driver) {
-			if ($driver->isTransient($className)) {
-				continue;
+			try {
+				$driver->loadMetadataForClass($className, $metadata);
+				return;
+			} catch (MappingException $e) {
+				// pass
 			}
-
-			$driver->loadMetadataForClass($className, $metadata);
-			return;
 		}
 	}
 
