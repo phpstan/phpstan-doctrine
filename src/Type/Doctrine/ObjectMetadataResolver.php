@@ -22,7 +22,7 @@ final class ObjectMetadataResolver
 	private $metadataFactory;
 
 	public function __construct(
-		?string $objectManagerLoader,
+		?string $objectManagerLoader
 	)
 	{
 		$this->objectManagerLoader = $objectManagerLoader;
