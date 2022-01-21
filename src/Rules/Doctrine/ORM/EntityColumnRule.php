@@ -45,12 +45,16 @@ class EntityColumnRule implements Rule
 	/** @var bool */
 	private $allowNullablePropertyForRequiredField;
 
+	/** @var bool */
+	private $bleedingEdge;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		DescriptorRegistry $descriptorRegistry,
 		ReflectionProvider $reflectionProvider,
 		bool $reportUnknownTypes,
-		bool $allowNullablePropertyForRequiredField
+		bool $allowNullablePropertyForRequiredField,
+		bool $bleedingEdge
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
@@ -58,6 +62,7 @@ class EntityColumnRule implements Rule
 		$this->reflectionProvider = $reflectionProvider;
 		$this->reportUnknownTypes = $reportUnknownTypes;
 		$this->allowNullablePropertyForRequiredField = $allowNullablePropertyForRequiredField;
+		$this->bleedingEdge = $bleedingEdge;
 	}
 
 	public function getNodeType(): string
@@ -67,6 +72,9 @@ class EntityColumnRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		if (!$this->bleedingEdge && !$this->objectMetadataResolver->hasObjectManagerLoader()) {
+			return [];
+		}
 		$class = $scope->getClassReflection();
 		if ($class === null) {
 			return [];

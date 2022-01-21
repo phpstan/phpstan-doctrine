@@ -28,13 +28,18 @@ class EntityRelationRule implements Rule
 	/** @var bool */
 	private $allowNullablePropertyForRequiredField;
 
+	/** @var bool */
+	private $bleedingEdge;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
-		bool $allowNullablePropertyForRequiredField
+		bool $allowNullablePropertyForRequiredField,
+		bool $bleedingEdge
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->allowNullablePropertyForRequiredField = $allowNullablePropertyForRequiredField;
+		$this->bleedingEdge = $bleedingEdge;
 	}
 
 	public function getNodeType(): string
@@ -44,6 +49,10 @@ class EntityRelationRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		if (!$this->bleedingEdge && !$this->objectMetadataResolver->hasObjectManagerLoader()) {
+			return [];
+		}
+
 		$class = $scope->getClassReflection();
 		if ($class === null) {
 			return [];

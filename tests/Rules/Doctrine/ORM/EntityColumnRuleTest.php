@@ -76,7 +76,8 @@ class EntityColumnRuleTest extends RuleTestCase
 			]),
 			$this->createReflectionProvider(),
 			true,
-			$this->allowNullablePropertyForRequiredField
+			$this->allowNullablePropertyForRequiredField,
+			true
 		);
 	}
 
