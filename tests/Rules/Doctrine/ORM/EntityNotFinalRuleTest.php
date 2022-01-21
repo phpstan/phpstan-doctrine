@@ -13,10 +13,13 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 class EntityNotFinalRuleTest extends RuleTestCase
 {
 
+	/** @var string|null */
+	private $objectManagerLoader;
+
 	protected function getRule(): Rule
 	{
 		return new EntityNotFinalRule(
-			new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', null)
+			new ObjectMetadataResolver($this->createReflectionProvider(), $this->objectManagerLoader, null)
 		);
 	}
 
@@ -27,6 +30,18 @@ class EntityNotFinalRuleTest extends RuleTestCase
 	 */
 	public function testRule(string $file, array $expectedErrors): void
 	{
+		$this->objectManagerLoader = __DIR__ . '/entity-manager.php';
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	/**
+	 * @dataProvider ruleProvider
+	 * @param string $file
+	 * @param mixed[] $expectedErrors
+	 */
+	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
+	{
+		$this->objectManagerLoader = null;
 		$this->analyse([$file], $expectedErrors);
 	}
 

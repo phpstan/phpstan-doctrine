@@ -1,0 +1,32 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$drivers of class PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain constructor expects array\\<Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\>, array\\<int, Doctrine\\\\ORM\\\\Mapping\\\\Driver\\\\AnnotationDriver\\|Doctrine\\\\ORM\\\\Mapping\\\\Driver\\\\AttributeDriver\\> given\\.$#"
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<T of object\\>, string given\\.$#"
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$className \\(class\\-string\\) of method PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain\\:\\:isTransient\\(\\) should be contravariant with parameter \\$className \\(string\\) of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\:\\:isTransient\\(\\)$#"
+			count: 1
+			path: src/Doctrine/Mapping/MappingDriverChain.php
+
+		-
+			message: "#^Parameter \\#1 \\$className \\(class\\-string\\) of method PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain\\:\\:loadMetadataForClass\\(\\) should be contravariant with parameter \\$className \\(string\\) of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\:\\:loadMetadataForClass\\(\\)$#"
+			count: 1
+			path: src/Doctrine/Mapping/MappingDriverChain.php
+
+		-
+			message: "#^PHPDoc tag @return contains generic type Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory\\<Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\> but interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory is not generic\\.$#"
+			count: 1
+			path: src/Type/Doctrine/ObjectMetadataResolver.php
+
+		-
+			message: "#^PHPDoc tag @var for property PHPStan\\\\Type\\\\Doctrine\\\\ObjectMetadataResolver\\:\\:\\$metadataFactory contains generic type Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory\\<Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\> but interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory is not generic\\.$#"
+			count: 1
+			path: src/Type/Doctrine/ObjectMetadataResolver.php
+
