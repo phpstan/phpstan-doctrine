@@ -2,6 +2,7 @@
 
 namespace PHPStan\Doctrine\Mapping;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -29,7 +30,7 @@ class MappingDriverChain implements MappingDriver
 			try {
 				$driver->loadMetadataForClass($className, $metadata);
 				return;
-			} catch (MappingException $e) {
+			} catch (MappingException | AnnotationException $e) {
 				// pass
 			}
 		}

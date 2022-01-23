@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
@@ -109,7 +110,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 
 		try {
 			$repositoryClass = $this->getRepositoryClass($objectName, $defaultRepositoryClass);
-		} catch (MappingException $e) {
+		} catch (MappingException | AnnotationException $e) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
 

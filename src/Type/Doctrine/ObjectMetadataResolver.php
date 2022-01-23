@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
@@ -110,7 +111,7 @@ final class ObjectMetadataResolver
 			} else {
 				$metadata = $objectManager->getClassMetadata($className);
 			}
-		} catch (MappingException $e) {
+		} catch (MappingException | AnnotationException $e) {
 			return null;
 		}
 

@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\Mapping\MappingException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -54,7 +55,7 @@ class EntityMappingExceptionRule implements Rule
 
 		try {
 			$objectManager->getClassMetadata($className);
-		} catch (MappingException $e) {
+		} catch (MappingException | AnnotationException $e) {
 			return [$e->getMessage()];
 		}
 
