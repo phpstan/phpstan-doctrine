@@ -54,11 +54,15 @@ class MappingDriverChain implements MappingDriver
 	public function isTransient($className)
 	{
 		foreach ($this->drivers as $driver) {
-			if ($driver->isTransient($className)) {
-				continue;
-			}
+			try {
+				if ($driver->isTransient($className)) {
+					continue;
+				}
 
-			return false;
+				return false;
+			} catch (MappingException | AnnotationException $e) {
+				// pass
+			}
 		}
 
 		return true;
