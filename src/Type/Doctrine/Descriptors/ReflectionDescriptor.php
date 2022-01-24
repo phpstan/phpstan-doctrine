@@ -7,6 +7,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use ReflectionClass;
 
 class ReflectionDescriptor implements DoctrineTypeDescriptor
 {
@@ -22,6 +23,18 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 	 */
 	public function __construct(string $type, Broker $broker)
 	{
+		$reflector = new ReflectionClass($type);
+		$methodReflector = $reflector->getMethod('getName');
+		if ($methodReflector->isStatic()) {
+			$name = $type::getName();
+		} else {
+			$name = (new $type)->getName();
+		}
+
+		if (!\Doctrine\DBAL\Types\Type::hasType($name)) {
+			\Doctrine\DBAL\Types\Type::addType($name, $type);
+		}
+
 		$this->type = $type;
 		$this->broker = $broker;
 	}

@@ -72,7 +72,7 @@ class EntityColumnRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (!$this->bleedingEdge && !$this->objectMetadataResolver->hasObjectManagerLoader()) {
+		if (!$this->bleedingEdge) {
 			return [];
 		}
 		$class = $scope->getClassReflection();

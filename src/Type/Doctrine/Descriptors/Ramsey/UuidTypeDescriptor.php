@@ -12,6 +12,7 @@ use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
+use ReflectionClass;
 use function in_array;
 use function sprintf;
 
@@ -39,6 +40,18 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 				'Unexpected UUID column type "%s" provided',
 				$uuidTypeName
 			));
+		}
+
+		$reflector = new ReflectionClass($uuidTypeName);
+		$methodReflector = $reflector->getMethod('getName');
+		if ($methodReflector->isStatic()) {
+			$name = $uuidTypeName::getName();
+		} else {
+			$name = (new $uuidTypeName)->getName();
+		}
+
+		if (!\Doctrine\DBAL\Types\Type::hasType($name)) {
+			\Doctrine\DBAL\Types\Type::addType($name, $uuidTypeName);
 		}
 
 		$this->uuidTypeName = $uuidTypeName;
