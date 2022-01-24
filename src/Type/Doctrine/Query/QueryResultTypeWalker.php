@@ -97,7 +97,10 @@ class QueryResultTypeWalker extends SqlWalker
 	private $descriptorRegistry;
 
 	/** @var bool */
-	private $isAggregated;
+	private $hasAggregateFunction;
+
+	/** @var bool */
+	private $hasGroupByClause;
 
 	/**
 	 * @param Query<mixed> $query
@@ -125,7 +128,8 @@ class QueryResultTypeWalker extends SqlWalker
 		$this->em = $query->getEntityManager();
 		$this->queryComponents = $queryComponents;
 		$this->nullableQueryComponents = [];
-		$this->isAggregated = false;
+		$this->hasAggregateFunction = false;
+		$this->hasGroupByClause = false;
 
 		// The object is instantiated by Doctrine\ORM\Query\Parser, so receiving
 		// dependencies through the constructor is not an option. Instead, we
@@ -166,7 +170,8 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkSelectStatement(AST\SelectStatement $AST)
 	{
 		$this->typeBuilder->setSelectQuery();
-		$this->isAggregated = $this->isAggregated($AST);
+		$this->hasAggregateFunction = $this->hasAggregateFunction($AST);
+		$this->hasGroupByClause = $AST->groupByClause !== null;
 
 		$this->walkFromClause($AST->fromClause);
 
@@ -231,7 +236,9 @@ class QueryResultTypeWalker extends SqlWalker
 
 				assert(is_string($typeName));
 
-				$nullable = $this->isQueryComponentNullable($dqlAlias) || $class->isNullable($fieldName) || $this->isAggregated;
+				$nullable = $this->isQueryComponentNullable($dqlAlias)
+					|| $class->isNullable($fieldName)
+					|| $this->hasAggregateWithoutGroupBy();
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
 
@@ -267,7 +274,8 @@ class QueryResultTypeWalker extends SqlWalker
 
 				assert(is_string($typeName));
 
-				$nullable = (bool) ($joinColumn['nullable'] ?? true) || $this->isAggregated;
+				$nullable = (bool) ($joinColumn['nullable'] ?? true)
+					|| $this->hasAggregateWithoutGroupBy();
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
 
@@ -699,7 +707,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			$type = new ObjectType($class->name);
 
-			if ($this->isQueryComponentNullable($dqlAlias) || $this->isAggregated) {
+			if ($this->isQueryComponentNullable($dqlAlias) || $this->hasAggregateWithoutGroupBy()) {
 				$type = TypeCombinator::addNull($type);
 			}
 
@@ -725,7 +733,9 @@ class QueryResultTypeWalker extends SqlWalker
 
 			assert(is_string($typeName));
 
-			$nullable = $this->isQueryComponentNullable($dqlAlias) || $class->isNullable($fieldName) || $this->isAggregated;
+			$nullable = $this->isQueryComponentNullable($dqlAlias)
+				|| $class->isNullable($fieldName)
+				|| $this->hasAggregateWithoutGroupBy();
 
 			$type = $this->resolveDoctrineType($typeName, $nullable);
 
@@ -1288,12 +1298,22 @@ class QueryResultTypeWalker extends SqlWalker
 		});
 	}
 
-	private function isAggregated(AST\SelectStatement $AST): bool
+	/**
+	 * Returns whether the query has aggregate function and no group by clause
+	 *
+	 * Queries with aggregate functions and no group by clause always have
+	 * exactly 1 group. This implies that they return exactly 1 row, and that
+	 * all column can have a null value.
+	 *
+	 * c.f. SQL92, section 7.9, General Rules
+	 */
+	private function hasAggregateWithoutGroupBy(): bool
 	{
-		if ($AST->groupByClause !== null) {
-			return true;
-		}
+		return $this->hasAggregateFunction && !$this->hasGroupByClause;
+	}
 
+	private function hasAggregateFunction(AST\SelectStatement $AST): bool
+	{
 		foreach ($AST->selectClause->selectExpressions as $selectExpression) {
 			if (!$selectExpression instanceof AST\SelectExpression) {
 				continue;

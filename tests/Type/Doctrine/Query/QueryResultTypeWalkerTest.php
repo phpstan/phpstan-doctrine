@@ -538,7 +538,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				$this->constantArray([
 					[
 						new ConstantStringType('intColumn'),
-						TypeCombinator::addNull(new IntegerType()),
+						new IntegerType(),
 					],
 					[
 						new ConstantStringType('max'),
@@ -546,11 +546,11 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					],
 					[
 						new ConstantStringType('arithmetic'),
-						TypeCombinator::addNull($this->intStringified()),
+						$this->intStringified(),
 					],
 					[
 						new ConstantStringType('coalesce'),
-						TypeCombinator::addNull($this->intStringified()),
+						$this->intStringified(),
 					],
 					[
 						new ConstantStringType('count'),
