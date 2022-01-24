@@ -3,6 +3,7 @@
 namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -24,7 +25,9 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 
 		$drivers = [];
 		if (class_exists(AnnotationReader::class)) {
-			$drivers[] = new AnnotationDriver(new AnnotationReader());
+			$docParser = new DocParser();
+			$docParser->setIgnoreNotImportedAnnotations(true);
+			$drivers[] = new AnnotationDriver(new AnnotationReader($docParser));
 		}
 		if (class_exists(AttributeDriver::class) && PHP_VERSION_ID >= 80000) {
 			$drivers[] = new AttributeDriver([]);

@@ -364,4 +364,14 @@ class EntityColumnRuleTest extends RuleTestCase
 		]);
 	}
 
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testPhpStanBug6445(?string $objectManagerLoader): void
+	{
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->analyse([__DIR__ . '/data/phpstan-bug-6445.php'], []);
+	}
+
 }
