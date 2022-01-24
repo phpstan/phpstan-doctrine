@@ -93,10 +93,18 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		Type $queryResultType
 	): Type
 	{
-		if ($queryResultType instanceof VoidType) {
+		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
+
+		if ($isVoidType->yes()) {
 			// A void query result type indicates an UPDATE or DELETE query.
 			// In this case all methods return the number of affected rows.
 			return new IntegerType();
+		}
+
+		if ($isVoidType->maybe()) {
+			// We can't be sure what the query type is, so we return the
+			// declared return type of the method.
+			return $this->originalReturnType($methodReflection);
 		}
 
 		if (!$this->isObjectHydrationMode($hydrationMode)) {
