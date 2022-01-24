@@ -10,6 +10,7 @@ use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
+use function class_exists;
 use function is_file;
 use function is_readable;
 use function sprintf;
@@ -69,7 +70,12 @@ final class ObjectMetadataResolver
 
 		try {
 			if ($objectManager === null) {
-				return $this->getMetadataFactory()->isTransient($className);
+				$metadataFactory = $this->getMetadataFactory();
+				if ($metadataFactory === null) {
+					return true;
+				}
+
+				return $metadataFactory->isTransient($className);
 			}
 
 			return $objectManager->getMetadataFactory()->isTransient($className);
@@ -81,10 +87,14 @@ final class ObjectMetadataResolver
 	/**
 	 * @return ClassMetadataFactory<ClassMetadata>
 	 */
-	private function getMetadataFactory(): ClassMetadataFactory
+	private function getMetadataFactory(): ?ClassMetadataFactory
 	{
 		if ($this->metadataFactory !== null) {
 			return $this->metadataFactory;
+		}
+
+		if (!class_exists(\Doctrine\ORM\Mapping\ClassMetadataFactory::class)) {
+			return null;
 		}
 
 		$metadataFactory = new \PHPStan\Doctrine\Mapping\ClassMetadataFactory();
@@ -107,7 +117,12 @@ final class ObjectMetadataResolver
 
 		try {
 			if ($objectManager === null) {
-				$metadata = $this->getMetadataFactory()->getMetadataFor($className);
+				$metadataFactory = $this->getMetadataFactory();
+				if ($metadataFactory === null) {
+					return null;
+				}
+
+				$metadata = $metadataFactory->getMetadataFor($className);
 			} else {
 				$metadata = $objectManager->getClassMetadata($className);
 			}
