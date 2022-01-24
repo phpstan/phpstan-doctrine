@@ -4,6 +4,7 @@ namespace QueryResult\queryResult;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use function PHPStan\Testing\assertType;
 
 class QueryResultTest
@@ -208,6 +209,112 @@ class QueryResultTest
 		assertType(
 			'mixed',
 			$query->getOneOrNullResult($hydrationMode)
+		);
+	}
+
+	/**
+	 * Test that we return the original return type when ResultType may be
+	 * VoidType
+	 *
+	 * @param Query<mixed> $query
+	 */
+	public function testReturnTypeOfQueryMethodsWithReturnTypeIsMixed(EntityManagerInterface $em, Query $query): void
+	{
+		assertType(
+			'mixed',
+			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getSingleResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+	}
+
+	/**
+	 * Test that we return the original return type when ResultType may be
+	 * VoidType (TemplateType variant)
+	 *
+	 * @template T
+	 *
+	 * @param Query<T> $query
+	 */
+	public function testReturnTypeOfQueryMethodsWithReturnTypeIsTemplateMixedType(EntityManagerInterface $em, Query $query): void
+	{
+		assertType(
+			'mixed',
+			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getSingleResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+	}
+
+
+	/**
+	 * Test that we return ResultType return ResultType can not be VoidType
+	 *
+	 * @template T of array|object
+	 *
+	 * @param Query<T> $query
+	 */
+	public function testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(EntityManagerInterface $em, Query $query): void
+	{
+		assertType(
+			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)',
+			$query->getSingleResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+		assertType(
+			'(T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument))|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 	}
 }

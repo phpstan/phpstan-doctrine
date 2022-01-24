@@ -44,4 +44,26 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<mixed>', $query);
 	}
 
+	public function testQueryResultTypeIsVoidWithDeleteOrUpdate(EntityManagerInterface $em): void
+	{
+		$query = $em->getRepository(Many::class)
+				 ->createQueryBuilder('m')
+				 ->where('m.id IN (:ids)')
+				 ->setParameter('ids', $ids)
+				 ->delete()
+				 ->getQuery();
+
+		assertType('Doctrine\ORM\Query<void>', $query);
+
+		$query = $em->getRepository(Many::class)
+				 ->createQueryBuilder('m')
+				 ->where('m.id IN (:ids)')
+				 ->setParameter('ids', $ids)
+				 ->update()
+				 ->set('m.intColumn', '42')
+				 ->getQuery();
+
+		assertType('Doctrine\ORM\Query<void>', $query);
+
+	}
 }
