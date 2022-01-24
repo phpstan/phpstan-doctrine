@@ -110,7 +110,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 
 		try {
 			$repositoryClass = $this->getRepositoryClass($objectName, $defaultRepositoryClass);
-		} catch (MappingException | AnnotationException $e) {
+		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
 

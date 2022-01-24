@@ -55,7 +55,7 @@ class EntityMappingExceptionRule implements Rule
 
 		try {
 			$objectManager->getClassMetadata($className);
-		} catch (MappingException | AnnotationException $e) {
+		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 			return [$e->getMessage()];
 		}
 

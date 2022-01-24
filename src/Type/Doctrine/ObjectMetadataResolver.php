@@ -111,7 +111,7 @@ final class ObjectMetadataResolver
 			} else {
 				$metadata = $objectManager->getClassMetadata($className);
 			}
-		} catch (MappingException | AnnotationException $e) {
+		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 			return null;
 		}
 

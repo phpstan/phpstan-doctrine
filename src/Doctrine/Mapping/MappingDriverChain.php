@@ -30,7 +30,7 @@ class MappingDriverChain implements MappingDriver
 			try {
 				$driver->loadMetadataForClass($className, $metadata);
 				return;
-			} catch (MappingException | AnnotationException $e) {
+			} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 				// pass
 			}
 		}
@@ -60,7 +60,7 @@ class MappingDriverChain implements MappingDriver
 				}
 
 				return false;
-			} catch (MappingException | AnnotationException $e) {
+			} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 				// pass
 			}
 		}
