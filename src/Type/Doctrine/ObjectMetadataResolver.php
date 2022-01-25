@@ -66,6 +66,10 @@ final class ObjectMetadataResolver
 	 */
 	public function isTransient(string $className): bool
 	{
+		if (!class_exists($className)) {
+			return true;
+		}
+
 		$objectManager = $this->getObjectManager();
 
 		try {
