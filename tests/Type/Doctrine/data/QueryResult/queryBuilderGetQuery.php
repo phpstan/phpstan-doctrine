@@ -10,6 +10,24 @@ use function PHPStan\Testing\assertType;
 
 class QueryBuilderGetQuery
 {
+	private function getQueryBuilderMany(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+	}
+
+	public function addAndWhereAndGetQuery(EntityManagerInterface $em): void
+	{
+		$qb = $this->getQueryBuilderMany($em)->andWhere('m.intColumn = 1');
+		assertType('array<QueryResult\Entities\Many>', $qb->getQuery()->getResult());
+	}
+
+	public function getQueryDirectly(EntityManagerInterface $em): void
+	{
+		assertType('array<QueryResult\Entities\Many>', $this->getQueryBuilderMany($em)->getQuery()->getResult());
+	}
+
 	public function testQueryTypeParametersAreInfered(EntityManagerInterface $em): void
 	{
 		$query = $em->createQueryBuilder()
