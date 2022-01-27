@@ -5,6 +5,7 @@ namespace QueryResult\queryResult;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
+use QueryResult\Entities\Many;
 use function PHPStan\Testing\assertType;
 
 class QueryResultTest
@@ -315,6 +316,95 @@ class QueryResultTest
 		assertType(
 			'(T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument))|null',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+	}
+
+	public function testReturnTypeOfMixedResult(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m.intColumn, m
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'array<array{0: QueryResult\Entities\Many, intColumn: int}>',
+			$query->getResult()
+		);
+		assertType(
+			'array{0: QueryResult\Entities\Many, intColumn: int}|null',
+			$query->getOneOrNullResult()
+		);
+	}
+
+	public function testReturnTypeOfAggregateFunctions(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		COUNT(m) AS count, COUNT(DISTINCT m) AS count_distinct, SUM(m.intColumn) AS sum, AVG(m.intColumn) AS avg
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'array<array{count: int<0, max>|numeric-string, count_distinct: int<0, max>|numeric-string, sum: int|numeric-string|null, avg: int|numeric-string|null}>',
+			$query->getResult()
+		);
+		assertType(
+			'array{count: int<0, max>|numeric-string, count_distinct: int<0, max>|numeric-string, sum: int|numeric-string|null, avg: int|numeric-string|null}|null',
+			$query->getOneOrNullResult()
+		);
+	}
+
+	public function testReturnTypeOfDqlFunctions(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT
+						CONCAT(m.stringColumn, COALESCE(m.stringNullColumn, m.stringColumn)) AS concat_coalesce,
+						CASE
+							WHEN m.stringNullColumn IS NULL
+							THEN m.intColumn
+							ELSE 1
+						END AS case_int,
+						LENGTH(m.stringColumn) AS length_int,
+						SUBSTRING(m.stringColumn, 0, 1) AS substring_string,
+						LOWER(m.stringColumn) AS lower_string,
+						UPPER(m.stringColumn) AS upper_string,
+						IDENTITY(m.one) AS identity_string
+
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'array<array{concat_coalesce: string, case_int: int|numeric-string, length_int: int<0, max>|numeric-string, substring_string: string, lower_string: string, upper_string: string, identity_string: mixed}>',
+			$query->getResult()
+		);
+		assertType(
+			'array{concat_coalesce: string, case_int: int|numeric-string, length_int: int<0, max>|numeric-string}',
+			$query->getOneOrNullResult()
+		);
+	}
+
+	public function testReturnFieldTypesWithQueryBuilderAndDifferentSelectMethods(EntityManagerInterface $em): void
+	{
+		$query = $em->createQueryBuilder()
+			->addSelect('
+				m.id,
+				m.intColumn,
+				m.stringColumn AS stringColumnAlias
+			')
+			->addSelect('o.stringNullColumn')
+			->addSelect([
+				'm.datetimeColumn',
+				'm.datetimeImmutableColumn',
+			])
+			->from(Many::class, 'm')
+			->join('m.one', 'o');
+
+		assertType(
+			'array<array{id: string, intColumn: int, stringColumnAlias: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
+			$query->getQuery()->getResult()
+		);
+		assertType(
+			'array{id: string, intColumn: int, stringColumnAlias: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}',
+			$query->getQuery()->getOneOrNullResult()
 		);
 	}
 }
