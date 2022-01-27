@@ -377,7 +377,7 @@ class QueryResultTest
 			$query->getResult()
 		);
 		assertType(
-			'array{concat_coalesce: string, case_int: int|numeric-string, length_int: int<0, max>|numeric-string}',
+			'array{concat_coalesce: string, case_int: int|numeric-string, length_int: int<0, max>|numeric-string, substring_string: string, lower_string: string, upper_string: string, identity_string: mixed}|null',
 			$query->getOneOrNullResult()
 		);
 	}
@@ -403,7 +403,7 @@ class QueryResultTest
 			$query->getQuery()->getResult()
 		);
 		assertType(
-			'array{id: string, intColumn: int, stringColumnAlias: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}',
+			'array{id: string, intColumn: int, stringColumnAlias: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}|null',
 			$query->getQuery()->getOneOrNullResult()
 		);
 	}
