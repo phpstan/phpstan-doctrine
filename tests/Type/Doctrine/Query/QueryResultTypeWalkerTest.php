@@ -1152,6 +1152,29 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					FROM		QueryResult\Entities\Many m
 				',
 			],
+			'identity function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
+					[new ConstantIntegerType(2), $this->numericStringOrInt()],
+					[new ConstantIntegerType(3), TypeCombinator::addNull($this->numericStringOrInt())],
+					[new ConstantIntegerType(4), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(5), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(6), TypeCombinator::addNull($this->numericStringOrInt())],
+					[new ConstantIntegerType(7), TypeCombinator::addNull(new MixedType())],
+					[new ConstantIntegerType(8), TypeCombinator::addNull($this->numericStringOrInt())],
+				]),
+				'
+					SELECT		IDENTITY(m.oneNull),
+								IDENTITY(m.one),
+								IDENTITY(m.oneDefaultNullability),
+								IDENTITY(m.compoundPk),
+								IDENTITY(m.compoundPk, \'id\'),
+								IDENTITY(m.compoundPk, \'version\'),
+								IDENTITY(m.compoundPkAssoc),
+								IDENTITY(m.compoundPkAssoc, \'version\')
+					FROM		QueryResult\Entities\Many m
+				',
+			],
 			'select nullable association' => [
 				$this->constantArray([
 					[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],

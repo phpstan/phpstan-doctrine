@@ -506,6 +506,55 @@ class QueryResultTypeWalker extends SqlWalker
 
 				return $this->marshalType($type);
 
+			case $function instanceof AST\Functions\IdentityFunction:
+				$dqlAlias = $function->pathExpression->identificationVariable;
+				$assocField = $function->pathExpression->field;
+				$queryComp = $this->queryComponents[$dqlAlias];
+				$class = $queryComp['metadata'];
+				$assoc = $class->associationMappings[$assocField];
+				$targetClass = $this->em->getClassMetadata($assoc['targetEntity']);
+
+				if ($function->fieldMapping === null) {
+					$identifierFieldNames = $targetClass->getIdentifierFieldNames();
+					if (count($identifierFieldNames) === 0) {
+						throw new ShouldNotHappenException();
+					}
+
+					$targetFieldName = $identifierFieldNames[0];
+				} else {
+					$targetFieldName = $function->fieldMapping;
+				}
+
+				$typeName = $targetClass->getTypeOfField($targetFieldName);
+				if ($typeName === null) {
+					return $this->marshalType(new MixedType());
+				}
+
+				$fieldMapping = $targetClass->fieldMappings[$targetFieldName] ?? null;
+				if ($fieldMapping === null) {
+					return $this->marshalType(new MixedType());
+				}
+
+				$joinColumn = null;
+
+				foreach ($assoc['joinColumns'] as $item) {
+					if ($item['referencedColumnName'] === $fieldMapping['columnName']) {
+						$joinColumn = $item;
+						break;
+					}
+				}
+
+				if ($joinColumn === null) {
+					return $this->marshalType(new MixedType());
+				}
+
+				$nullable = (bool) ($joinColumn['nullable'] ?? true)
+					|| $this->hasAggregateWithoutGroupBy();
+
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
+
+				return $this->marshalType($fieldType);
+
 			default:
 				return $this->marshalType(new MixedType());
 		}

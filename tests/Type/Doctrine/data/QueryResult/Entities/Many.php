@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinColumns;
 use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
@@ -78,4 +79,26 @@ class Many
 	 * @var One|null
 	 */
 	public $oneDefaultNullability;
+
+	/**
+	 * @ManyToOne(targetEntity="QueryResult\Entities\CompoundPk")
+	 * @JoinColumns({
+	 *  @JoinColumn(name="compoundPk_id", referencedColumnName="id"),
+	 *  @JoinColumn(name="compoundPk_version", referencedColumnName="version")
+	 * })
+	 *
+	 * @var CompoundPk|null
+	 */
+	public $compoundPk;
+
+	/**
+	 * @ManyToOne(targetEntity="QueryResult\Entities\CompoundPkAssoc")
+	 * @JoinColumns({
+	 *  @JoinColumn(name="compoundPk_one", referencedColumnName="one_id"),
+	 *  @JoinColumn(name="compoundPk_version", referencedColumnName="version")
+	 * })
+	 *
+	 * @var CompoundPkAssoc|null
+	 */
+	public $compoundPkAssoc;
 }
