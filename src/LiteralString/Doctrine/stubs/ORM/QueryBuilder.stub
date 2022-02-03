@@ -1,0 +1,17 @@
+<?php
+
+namespace Doctrine\ORM;
+
+class QueryBuilder
+{
+
+	/**
+	 * @param literal-string|object|array $predicates
+	 * @return $this
+	 */
+	public function where($predicates)
+	{
+
+	}
+
+}

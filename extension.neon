@@ -148,6 +148,13 @@ services:
 		tags:
 			- phpstan.properties.readWriteExtension
 
+	-
+		class: PHPStan\LiteralString\Doctrine\LiteralStringStubFilesExtension
+		tags:
+			- phpstan.stubFilesExtension
+		arguments:
+			bleedingEdge: %featureToggles.bleedingEdge%
+
 	doctrineQueryBuilderArgumentsProcessor:
 		class: PHPStan\Type\Doctrine\ArgumentsProcessor
 		autowired: false
