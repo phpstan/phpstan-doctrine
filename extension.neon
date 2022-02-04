@@ -110,9 +110,7 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderMethodDynamicReturnTypeExtension
 		arguments:
-			parser: @defaultAnalysisParser
 			queryBuilderClass: %doctrine.queryBuilderClass%
-			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 
@@ -147,6 +145,11 @@ services:
 		class: PHPStan\Rules\Doctrine\ORM\PropertiesExtension
 		tags:
 			- phpstan.properties.readWriteExtension
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser
+		arguments:
+			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
+			parser: @defaultAnalysisParser
 
 	doctrineQueryBuilderArgumentsProcessor:
 		class: PHPStan\Type\Doctrine\ArgumentsProcessor

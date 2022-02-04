@@ -66,4 +66,19 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<void>', $query);
 
 	}
+
+	public function testQueryTypeIsInferredOnAcrossMethods(EntityManagerInterface $em): void
+	{
+		$query = $this->getQueryBuilder($em)
+			->getQuery();
+
+		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many>', $query);
+	}
+
+	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+	}
 }
