@@ -3,74 +3,39 @@
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use Doctrine\ORM\QueryBuilder;
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\Analyser\ScopeContext;
-use PHPStan\Analyser\ScopeFactory;
-use PHPStan\Broker\Broker;
-use PHPStan\DependencyInjection\Container;
-use PHPStan\Parser\Parser;
-use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use function count;
 use function in_array;
-use function is_array;
 use function strtolower;
 
-class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, BrokerAwareExtension
+class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	private const MAX_COMBINATIONS = 16;
 
-	/** @var Container */
-	private $container;
-
-	/** @var Parser */
-	private $parser;
-
 	/** @var string|null */
 	private $queryBuilderClass;
 
-	/** @var bool */
-	private $descendIntoOtherMethods;
-
-	/** @var Broker */
-	private $broker;
+	/** @var OtherMethodQueryBuilderParser */
+	private $otherMethodQueryBuilderParser;
 
 	public function __construct(
-		Container $container,
-		Parser $parser,
 		?string $queryBuilderClass,
-		bool $descendIntoOtherMethods
+		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
 	{
-		$this->container = $container;
-		$this->parser = $parser;
 		$this->queryBuilderClass = $queryBuilderClass;
-		$this->descendIntoOtherMethods = $descendIntoOtherMethods;
-	}
-
-	public function setBroker(Broker $broker): void
-	{
-		$this->broker = $broker;
+		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
 	}
 
 	public function getClass(): string
@@ -109,11 +74,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
-			if (!$this->descendIntoOtherMethods || !$methodCall->var instanceof MethodCall) {
-				return $calledOnType;
-			}
-
-			$queryBuilderTypes = $this->findQueryBuilderTypesInCalledMethod($scope, $methodCall->var);
+			$queryBuilderTypes = $this->otherMethodQueryBuilderParser->getQueryBuilderTypes($scope, $methodCall);
 			if (count($queryBuilderTypes) === 0) {
 				return $calledOnType;
 			}
@@ -129,135 +90,6 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 		}
 
 		return TypeCombinator::union(...$resultTypes);
-	}
-
-	/**
-	 * @return QueryBuilderType[]
-	 */
-	private function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodCall $methodCall): array
-	{
-		$methodCalledOnType = $scope->getType($methodCall->var);
-		if (!$methodCall->name instanceof Identifier) {
-			return [];
-		}
-
-		if (!$methodCalledOnType instanceof TypeWithClassName) {
-			return [];
-		}
-
-		if (!$this->broker->hasClass($methodCalledOnType->getClassName())) {
-			return [];
-		}
-
-		$classReflection = $this->broker->getClass($methodCalledOnType->getClassName());
-		$methodName = $methodCall->name->toString();
-		if (!$classReflection->hasNativeMethod($methodName)) {
-			return [];
-		}
-
-		$methodReflection = $classReflection->getNativeMethod($methodName);
-		$fileName = $methodReflection->getDeclaringClass()->getFileName();
-		if ($fileName === null) {
-			return [];
-		}
-
-		$nodes = $this->parser->parseFile($fileName);
-		$classNode = $this->findClassNode($methodReflection->getDeclaringClass()->getName(), $nodes);
-		if ($classNode === null) {
-			return [];
-		}
-
-		$methodNode = $this->findMethodNode($methodReflection->getName(), $classNode->stmts);
-		if ($methodNode === null || $methodNode->stmts === null) {
-			return [];
-		}
-
-		/** @var NodeScopeResolver $nodeScopeResolver */
-		$nodeScopeResolver = $this->container->getByType(NodeScopeResolver::class);
-
-		/** @var ScopeFactory $scopeFactory */
-		$scopeFactory = $this->container->getByType(ScopeFactory::class);
-
-		$methodScope = $scopeFactory->create(
-			ScopeContext::create($fileName),
-			$scope->isDeclareStrictTypes(),
-			[],
-			$methodReflection,
-			$scope->getNamespace()
-		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, TemplateTypeMap::createEmpty(), [], null, null, null, false, false, false);
-
-		$queryBuilderTypes = [];
-
-		$nodeScopeResolver->processNodes($methodNode->stmts, $methodScope, static function (Node $node, Scope $scope) use (&$queryBuilderTypes): void {
-			if (!$node instanceof Return_ || $node->expr === null) {
-				return;
-			}
-
-			$exprType = $scope->getType($node->expr);
-			if (!$exprType instanceof QueryBuilderType) {
-				return;
-			}
-
-			$queryBuilderTypes[] = $exprType;
-		});
-
-		return $queryBuilderTypes;
-	}
-
-	/**
-	 * @param Node[] $nodes
-	 */
-	private function findClassNode(string $className, array $nodes): ?Class_
-	{
-		foreach ($nodes as $node) {
-			if (
-				$node instanceof Class_
-				&& $node->namespacedName !== null
-				&& $node->namespacedName->toString() === $className
-			) {
-				return $node;
-			}
-
-			if (
-				!$node instanceof Namespace_
-				&& !$node instanceof Declare_
-			) {
-				continue;
-			}
-			$subNodeNames = $node->getSubNodeNames();
-			foreach ($subNodeNames as $subNodeName) {
-				$subNode = $node->{$subNodeName};
-				if (!is_array($subNode)) {
-					$subNode = [$subNode];
-				}
-
-				$result = $this->findClassNode($className, $subNode);
-				if ($result === null) {
-					continue;
-				}
-
-				return $result;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param Stmt[] $classStatements
-	 */
-	private function findMethodNode(string $methodName, array $classStatements): ?ClassMethod
-	{
-		foreach ($classStatements as $statement) {
-			if (
-				$statement instanceof ClassMethod
-				&& $statement->name->toString() === $methodName
-			) {
-				return $statement;
-			}
-		}
-
-		return null;
 	}
 
 }
