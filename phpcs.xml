@@ -107,7 +107,6 @@
 	</rule>
 	<rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
 	<rule ref="Consistence.NamingConventions.ValidVariableName.NotCamelCaps"/>
-	<exclude-pattern>tests/tmp</exclude-pattern>
 	<exclude-pattern>tests/*/data</exclude-pattern>
 	<exclude-pattern>tests/*/data-attributes</exclude-pattern>
 </ruleset>
