@@ -19,12 +19,14 @@ class LiteralStringStubFilesExtension implements StubFilesExtension
 
 	public function getFiles(): array
 	{
+		$path = __DIR__;
+
 		if ($this->bleedingEdge !== true) {
-			return [];
+			$path .= '/../../..';
 		}
 
 		return [
-			__DIR__ . '/stubs/ORM/QueryBuilder.stub',
+			$path . '/stubs/ORM/QueryBuilder.stub',
 		];
 	}
 
