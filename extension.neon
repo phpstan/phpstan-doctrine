@@ -38,7 +38,6 @@ parameters:
 		- stubs/Collections/ArrayCollection.stub
 		- stubs/Collections/Collection.stub
 		- stubs/Collections/Selectable.stub
-		- stubs/ORM/QueryBuilder.stub
 		- stubs/ORM/AbstractQuery.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
@@ -150,6 +149,13 @@ services:
 		arguments:
 			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 			parser: @defaultAnalysisParser
+
+	-
+		class: PHPStan\Stubs\Doctrine\StubFilesExtensionLoader
+		tags:
+			- phpstan.stubFilesExtension
+		arguments:
+			bleedingEdge: %featureToggles.bleedingEdge%
 
 	doctrineQueryBuilderArgumentsProcessor:
 		class: PHPStan\Type\Doctrine\ArgumentsProcessor
