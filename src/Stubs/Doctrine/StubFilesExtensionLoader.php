@@ -3,6 +3,7 @@
 namespace PHPStan\Stubs\Doctrine;
 
 use PHPStan\PhpDoc\StubFilesExtension;
+use function dirname;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
