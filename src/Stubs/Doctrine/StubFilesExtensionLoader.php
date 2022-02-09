@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\LiteralString\Doctrine;
+namespace PHPStan\Stubs\Doctrine;
 
 use PHPStan\PhpDoc\StubFilesExtension;
 
-class LiteralStringStubFilesExtension implements StubFilesExtension
+class StubFilesExtensionLoader implements StubFilesExtension
 {
 
 	/** @var bool */
@@ -19,14 +19,14 @@ class LiteralStringStubFilesExtension implements StubFilesExtension
 
 	public function getFiles(): array
 	{
-		$path = __DIR__;
+		$path = dirname(dirname(dirname(__DIR__))) . '/stubs';
 
-		if ($this->bleedingEdge !== true) {
-			$path .= '/../../..';
+		if ($this->bleedingEdge === true) {
+			$path .= '/bleedingEdge';
 		}
 
 		return [
-			$path . '/stubs/ORM/QueryBuilder.stub',
+			$path . '/ORM/QueryBuilder.stub',
 		];
 	}
 

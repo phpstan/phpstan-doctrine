@@ -148,7 +148,7 @@ services:
 			- phpstan.properties.readWriteExtension
 
 	-
-		class: PHPStan\LiteralString\Doctrine\LiteralStringStubFilesExtension
+		class: PHPStan\Stubs\Doctrine\StubFilesExtensionLoader
 		tags:
 			- phpstan.stubFilesExtension
 		arguments:
