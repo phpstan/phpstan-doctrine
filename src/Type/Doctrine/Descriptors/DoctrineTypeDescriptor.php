@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use PHPStan\Type\Type;
 
+/** @api */
 interface DoctrineTypeDescriptor
 {
 
