@@ -1,21 +1,21 @@
 [
     {
-        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int.",
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int|string.",
         "line": 43,
         "ignorable": true
     },
     {
-        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int.",
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int|string.",
         "line": 60,
         "ignorable": true
     },
     {
-        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int.",
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int|string.",
         "line": 76,
         "ignorable": true
     },
     {
-        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int.",
+        "message": "Cannot call method fetchAll() on Doctrine\\DBAL\\ForwardCompatibility\\Result|int|string.",
         "line": 87,
         "ignorable": true
     }
