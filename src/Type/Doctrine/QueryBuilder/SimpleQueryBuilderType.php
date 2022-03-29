@@ -24,7 +24,7 @@ class SimpleQueryBuilderType extends QueryBuilderType
 			$thisCount = count($this->getMethodCalls());
 			$thatCount = count($type->getMethodCalls());
 
-			return TrinaryLogic::createFromBoolean($thisCount >= $thatCount);
+			return TrinaryLogic::createFromBoolean($thisCount === $thatCount);
 		}
 
 		return parent::isSuperTypeOf($type);
