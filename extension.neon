@@ -7,10 +7,7 @@ parameters:
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 		searchOtherMethodsForQueryBuilderBeginning: true
-
-		# setting this to false might lead to performance problems
-		# it changes the braching logic - with false, queryBuilders from all branches are analysed separately
-		queryBuilderFastAlgorithm: true
+		queryBuilderFastAlgorithm: false
 	featureToggles:
 		skipCheckGenericClasses:
 			- Doctrine\ODM\MongoDB\Mapping\ClassMetadata
