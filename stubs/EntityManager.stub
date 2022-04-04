@@ -56,4 +56,13 @@ class EntityManager implements EntityManagerInterface
 	 */
 	public function copy($entity, $deep = false);
 
+	/**
+     * @param object|object[]|null $entity
+     * @return void
+     *
+     * @throws ORMException
+     * @throws \Doctrine\DBAL\Exception\UniqueConstraintViolationException
+     */
+    public function flush($entity = null);
+
 }
