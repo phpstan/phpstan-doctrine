@@ -18,6 +18,7 @@ parameters:
 			- Doctrine\ORM\Query
 	stubFiles:
 		- stubs/Criteria.stub
+		- stubs/DBAL/Exception/UniqueConstraintViolationException.stub
 		- stubs/DocumentManager.stub
 		- stubs/DocumentRepository.stub
 		- stubs/EntityManager.stub
@@ -38,6 +39,7 @@ parameters:
 		- stubs/ORM/AbstractQuery.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
+		- stubs/ORM/ORMException.stub
 		- stubs/ORM/Query.stub
 		- stubs/Persistence/Mapping/ClassMetadata.stub
 		- stubs/ServiceDocumentRepository.stub
