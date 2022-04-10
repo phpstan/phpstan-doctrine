@@ -13,7 +13,7 @@ class ExpressionBuilderGetQuery
 	public function isNullLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->isNull('field');
-		assertType('literal-string&non-empty-string', $result);
+		assertType("'field IS NULL'", $result); // A ConstantStringType isLiteralString
 	}
 
 	public function isNullNonLiteralString(EntityManagerInterface $em): void
@@ -26,7 +26,7 @@ class ExpressionBuilderGetQuery
 	public function isNotNullLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->isNotNull('field');
-		assertType('literal-string&non-empty-string', $result);
+		assertType("'field IS NOT NULL'", $result); // A ConstantStringType isLiteralString
 	}
 
 	public function isNotNullNonLiteralString(EntityManagerInterface $em): void
@@ -39,7 +39,7 @@ class ExpressionBuilderGetQuery
 	public function countDistinctLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->countDistinct('A', 'B', 'C');
-		assertType('literal-string&non-empty-string', $result);
+		assertType("'COUNT(DISTINCT A, B, C)'", $result); // A ConstantStringType isLiteralString
 	}
 
 	public function countDistinctNonLiteralString(EntityManagerInterface $em): void
@@ -52,7 +52,7 @@ class ExpressionBuilderGetQuery
 	public function betweenLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->between('field', "'value_1'", "'value_2'");
-		assertType('literal-string&non-empty-string', $result);
+		assertType("'field BETWEEN \'value_1\' AND \'value_2\''", $result); // A ConstantStringType isLiteralString
 	}
 
 	public function betweenNonLiteralString(EntityManagerInterface $em): void

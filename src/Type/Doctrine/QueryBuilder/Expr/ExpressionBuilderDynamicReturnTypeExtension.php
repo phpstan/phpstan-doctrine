@@ -52,7 +52,9 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{
-		if (in_array($methodReflection->getName(), ['countDistinct', 'isNull', 'isNotNull', 'between'], true)) {
+		$defaultReturnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+
+		if ($defaultReturnType instanceof StringType && in_array($methodReflection->getName(), ['countDistinct', 'isNull', 'isNotNull', 'between', 'abs'], true)) {
 			$args = $methodCall->getArgs();
 			if (count($args) > 0) {
 				$literalStringInput = true;
@@ -63,16 +65,14 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 					$literalStringInput = false;
 				}
 				if ($literalStringInput) {
-					return new IntersectionType([
-						new StringType(),
+					$defaultReturnType = new IntersectionType([
+						$defaultReturnType,
 						new AccessoryNonEmptyStringType(),
 						new AccessoryLiteralStringType(),
 					]);
 				}
 			}
 		}
-
-		$defaultReturnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
