@@ -6,6 +6,7 @@ use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<EntityRelationRule>
@@ -305,6 +306,21 @@ class EntityRelationRuleTest extends RuleTestCase
 			__DIR__ . '/data/CompositePrimaryKeyEntity2.php',
 			[],
 		];
+	}
+
+	public function testBug306(): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('Test requires PHP 8.0');
+		}
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = __DIR__ . '/entity-manager.php';
+		$this->analyse([__DIR__ . '/data/bug-306-relation.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\Bug306Relation\MyBrokenEntity::$genericCollection type mapping mismatch: property can contain Doctrine\Common\Collections\Collection but database expects Doctrine\Common\Collections\Collection&iterable<PHPStan\Rules\Doctrine\ORM\AnotherEntity>.',
+				25,
+			],
+		]);
 	}
 
 }

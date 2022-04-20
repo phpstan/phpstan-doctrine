@@ -374,4 +374,22 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/phpstan-bug-6445.php'], []);
 	}
 
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testBug306(?string $objectManagerLoader): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('Test requires PHP 8.0');
+		}
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->analyse([__DIR__ . '/data/bug-306.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\Bug306\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
+				25,
+			],
+		]);
+	}
+
 }

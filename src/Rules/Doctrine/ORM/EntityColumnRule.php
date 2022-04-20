@@ -4,6 +4,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\MissingPropertyFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
@@ -25,7 +26,7 @@ use function in_array;
 use function sprintf;
 
 /**
- * @implements Rule<Node\Stmt\PropertyProperty>
+ * @implements Rule<ClassPropertyNode>
  */
 class EntityColumnRule implements Rule
 {
@@ -67,7 +68,7 @@ class EntityColumnRule implements Rule
 
 	public function getNodeType(): string
 	{
-		return Node\Stmt\PropertyProperty::class;
+		return ClassPropertyNode::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array
@@ -86,7 +87,7 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		$propertyName = (string) $node->name;
+		$propertyName = $node->getName();
 		try {
 			$property = $class->getNativeProperty($propertyName);
 		} catch (MissingPropertyFromReflectionException $e) {
