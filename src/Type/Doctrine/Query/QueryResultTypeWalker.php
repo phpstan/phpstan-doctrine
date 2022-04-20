@@ -221,8 +221,6 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkPathExpression($pathExpr)
 	{
-		assert($pathExpr instanceof AST\PathExpression);
-
 		$fieldName = $pathExpr->field;
 		$dqlAlias = $pathExpr->identificationVariable;
 		$qComp = $this->queryComponents[$dqlAlias];
@@ -1083,10 +1081,6 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkLiteral($literal)
 	{
-		if (!$literal instanceof AST\Literal) {
-			return $this->marshalType(new MixedType());
-		}
-
 		switch ($literal->type) {
 			case AST\Literal::STRING:
 				$value = $literal->value;
