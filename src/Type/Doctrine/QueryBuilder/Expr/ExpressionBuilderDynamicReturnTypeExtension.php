@@ -59,10 +59,10 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 			if (count($args) > 0) {
 				$literalStringInput = true;
 				foreach ($args as $arg) {
-					if ($scope->getType($arg->value)->isLiteralString()->yes()) {
-						continue;
+					if (!$scope->getType($arg->value)->isLiteralString()->yes()) {
+						$literalStringInput = false;
+						break;
 					}
-					$literalStringInput = false;
 				}
 				if ($literalStringInput) {
 					$defaultReturnType = new IntersectionType([
