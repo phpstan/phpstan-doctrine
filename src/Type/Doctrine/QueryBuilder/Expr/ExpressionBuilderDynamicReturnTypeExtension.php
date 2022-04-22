@@ -8,17 +8,11 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
-use PHPStan\Type\Accessory\AccessoryLiteralStringType;
-use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use function count;
 use function get_class;
-use function in_array;
 use function is_object;
 use function method_exists;
 
@@ -53,26 +47,6 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{
 		$defaultReturnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
-
-		if ($defaultReturnType instanceof StringType && in_array($methodReflection->getName(), ['countDistinct', 'isNull', 'isNotNull', 'between', 'abs'], true)) {
-			$args = $methodCall->getArgs();
-			if (count($args) > 0) {
-				$literalStringInput = true;
-				foreach ($args as $arg) {
-					if (!$scope->getType($arg->value)->isLiteralString()->yes()) {
-						$literalStringInput = false;
-						break;
-					}
-				}
-				if ($literalStringInput) {
-					$defaultReturnType = new IntersectionType([
-						$defaultReturnType,
-						new AccessoryNonEmptyStringType(),
-						new AccessoryLiteralStringType(),
-					]);
-				}
-			}
-		}
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
