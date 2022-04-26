@@ -20,6 +20,12 @@ class MyEntity
 	private $id;
 
 	/**
+	 * @ORM\Column(type="integer")
+     * @ORM\Version
+	 */
+	private $version;
+
+	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
