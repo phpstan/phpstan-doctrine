@@ -5,19 +5,27 @@ namespace Doctrine\ORM;
 class QueryBuilder
 {
 
-	/**
-	 * @param \Doctrine\Common\Collections\ArrayCollection<array-key, mixed>|array<mixed> $parameters
-	 * @return static
-	 */
-	public function setParameters($parameters)
-	{
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection<array-key, mixed>|array<mixed> $parameters
+     * @return static
+     */
+    public function setParameters($parameters)
+    {
 
-	}
+    }
 
     /**
      * @return Query<mixed>
      */
     public function getQuery()
     {
+    }
+
+    /**
+    * @return list<literal-string>
+    */
+    public function getRootAliases()
+    {
+
     }
 }

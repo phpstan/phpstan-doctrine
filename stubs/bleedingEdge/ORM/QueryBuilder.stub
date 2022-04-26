@@ -22,6 +22,14 @@ class QueryBuilder
 	}
 
 	/**
+	 * @return list<literal-string>
+	 */
+	public function getRootAliases()
+	{
+
+	}
+
+	/**
 	 * @param literal-string|object|array<mixed> $predicates
 	 * @return $this
 	 */
