@@ -16,7 +16,7 @@ parameters:
 		- tests/Rules/Doctrine/ORM/entity-manager.php
 
 	propertyAlwaysWrittenTags:
-        - Version
+		- Version
 
 	reportUnmatchedIgnoredErrors: false
 
