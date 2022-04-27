@@ -51,6 +51,10 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
+		if ($metadata->versionField === $propertyName) {
+			return true;
+		}
+
 		try {
 			$identifiers = $metadata->getIdentifierFieldNames();
 		} catch (Throwable $e) {
