@@ -21,11 +21,4 @@ class QueryBuilder
     {
     }
 
-    /**
-    * @return list<literal-string>
-    */
-    public function getRootAliases()
-    {
-
-    }
 }

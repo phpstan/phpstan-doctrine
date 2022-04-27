@@ -22,9 +22,25 @@ class QueryBuilder
 	}
 
 	/**
+	 * @return literal-string
+	 */
+	public function getRootAlias()
+	{
+
+	}
+
+	/**
 	 * @return list<literal-string>
 	 */
 	public function getRootAliases()
+	{
+
+	}
+
+	/**
+	 * @return list<literal-string>
+	 */
+	public function getAllAlias()
 	{
 
 	}
