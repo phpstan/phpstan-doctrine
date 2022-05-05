@@ -244,8 +244,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 			case AST\PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION:
 				if (isset($class->associationMappings[$fieldName]['inherited'])) {
-					assert(is_string($class->associationMappings[$fieldName]['inherited']));
-					$class = $this->em->getClassMetadata($class->associationMappings[$fieldName]['inherited']);
+					$newClassName = $class->associationMappings[$fieldName]['inherited'];
+					assert(is_string($newClassName));
+					/** @var class-string $newClassName */
+					$class = $this->em->getClassMetadata($newClassName);
 				}
 
 				$assoc = $class->associationMappings[$fieldName];
@@ -258,9 +260,11 @@ class QueryResultTypeWalker extends SqlWalker
 
 				$joinColumn = $assoc['joinColumns'][0];
 				assert(is_array($joinColumn));
-				assert(is_string($assoc['targetEntity']));
+				$assocClassName = $assoc['targetEntity'];
+				assert(is_string($assocClassName));
+				/** @var class-string $assocClassName */
 
-				$targetClass = $this->em->getClassMetadata($assoc['targetEntity']);
+				$targetClass = $this->em->getClassMetadata($assocClassName);
 				$identifierFieldNames = $targetClass->getIdentifierFieldNames();
 
 				if (count($identifierFieldNames) !== 1) {
@@ -510,7 +514,9 @@ class QueryResultTypeWalker extends SqlWalker
 				$queryComp = $this->queryComponents[$dqlAlias];
 				$class = $queryComp['metadata'];
 				$assoc = $class->associationMappings[$assocField];
-				$targetClass = $this->em->getClassMetadata($assoc['targetEntity']);
+				/** @var class-string $assocClassName */
+				$assocClassName = $assoc['targetEntity'];
+				$targetClass = $this->em->getClassMetadata($assocClassName);
 
 				if ($function->fieldMapping === null) {
 					$identifierFieldNames = $targetClass->getIdentifierFieldNames();

@@ -22,6 +22,7 @@ final class EntityManagerIntegrationTest extends LevelsTestCase
 			['customRepositoryUsage'],
 			['queryBuilder'],
 			[$hasDbal3 ? 'dbalQueryBuilderExecuteDynamicReturnDbal3' : 'dbalQueryBuilderExecuteDynamicReturn'],
+			['getClassMetadata'],
 		];
 	}
 
