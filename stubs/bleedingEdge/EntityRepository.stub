@@ -64,11 +64,11 @@ class EntityRepository implements ObjectRepository
 	public function matching(Criteria $criteria);
 
 	/**
-     * @param literal-string      $alias
-     * @param literal-string|null $indexBy
-     *
-     * @return QueryBuilder
-     */
-    public function createQueryBuilder($alias, $indexBy = null);
+	 * @param literal-string      $alias
+	 * @param literal-string|null $indexBy
+	 *
+	 * @return QueryBuilder
+	 */
+	public function createQueryBuilder($alias, $indexBy = null);
 
 }
