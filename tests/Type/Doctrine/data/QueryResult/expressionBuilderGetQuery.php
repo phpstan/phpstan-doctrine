@@ -20,7 +20,7 @@ class ExpressionBuilderGetQuery
 	{
 		$field = strtolower('field'); // Non literal-string, e.g. $_POST['field'];
 		$result = $em->createQueryBuilder()->expr()->isNull($field);
-		assertType('string', $result);
+		assertType("'field IS NULL'", $result);
 	}
 
 	public function isNotNullLiteralString(EntityManagerInterface $em): void
@@ -33,7 +33,7 @@ class ExpressionBuilderGetQuery
 	{
 		$field = strtolower('field'); // Non literal-string, e.g. $_POST['field'];
 		$result = $em->createQueryBuilder()->expr()->isNotNull($field);
-		assertType('string', $result);
+		assertType("'field IS NOT NULL'", $result);
 	}
 
 	public function countDistinctLiteralString(EntityManagerInterface $em): void
@@ -46,7 +46,7 @@ class ExpressionBuilderGetQuery
 	{
 		$field = strtolower('B'); // Non literal-string, e.g. $_POST['field'];
 		$result = $em->createQueryBuilder()->expr()->countDistinct('A', $field, 'C');
-		assertType('string', $result);
+		assertType("'COUNT(DISTINCT A, b, C)'", $result);
 	}
 
 	public function betweenLiteralString(EntityManagerInterface $em): void
@@ -59,7 +59,7 @@ class ExpressionBuilderGetQuery
 	{
 		$value_1 = strtolower('B'); // Non literal-string, e.g. $_POST['field'];
 		$result = $em->createQueryBuilder()->expr()->between('field', "'" . $value_1 . "'", "'value_2'");
-		assertType('string', $result);
+		assertType("'field BETWEEN \'b\' AND \'value_2\''", $result);
 	}
 
 	// Might be a problem, as these do not return a 'literal-string'.
