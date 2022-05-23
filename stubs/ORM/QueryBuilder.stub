@@ -14,10 +14,11 @@ class QueryBuilder
 
 	}
 
-    /**
-     * @return Query<mixed>
-     */
-    public function getQuery()
-    {
-    }
+	/**
+	 * @return Query<mixed>
+	 */
+	public function getQuery()
+	{
+	}
+
 }

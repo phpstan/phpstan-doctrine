@@ -28,6 +28,7 @@ class StubFilesExtensionLoader implements StubFilesExtension
 
 		return [
 			$path . '/ORM/QueryBuilder.stub',
+			$path . '/EntityRepository.stub',
 		];
 	}
 
