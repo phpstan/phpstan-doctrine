@@ -667,6 +667,82 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					FROM		QueryResult\Entities\Many m
 				',
 			],
+			'Issue 311' => [
+				$this->constantArray([
+					[
+						new ConstantIntegerType(1),
+						TypeCombinator::union(
+							new ConstantIntegerType(0),
+							new ConstantIntegerType(1),
+							new ConstantStringType('0'),
+							new ConstantStringType('1')
+						),
+					],
+				]),
+				'
+					SELECT		CASE
+									WHEN m.intColumn < 10 THEN true
+									ELSE false
+								END
+					FROM		QueryResult\Entities\Many m
+				',
+			],
+			'Issue 311 - 2' => [
+				$this->constantArray([
+					[
+						new ConstantIntegerType(1),
+						TypeCombinator::union(
+							new ConstantIntegerType(0),
+							new ConstantIntegerType(1),
+							new ConstantStringType('0'),
+							new ConstantStringType('1')
+						),
+					],
+				]),
+				'
+					SELECT		CASE
+									WHEN m.intColumn < 10 THEN TRUE
+									ELSE FALSE
+								END
+					FROM		QueryResult\Entities\Many m
+				',
+			],
+			'Issue 311 - 3' => [
+				$this->constantArray([
+					[
+						new ConstantIntegerType(1),
+						TypeCombinator::union(
+							new ConstantIntegerType(1),
+							new ConstantStringType('1')
+						),
+					],
+					[
+						new ConstantIntegerType(2),
+						TypeCombinator::union(
+							new ConstantIntegerType(0),
+							new ConstantStringType('0')
+						),
+					],
+					[
+						new ConstantIntegerType(3),
+						TypeCombinator::union(
+							new ConstantIntegerType(1),
+							new ConstantStringType('1')
+						),
+					],
+					[
+						new ConstantIntegerType(4),
+						TypeCombinator::union(
+							new ConstantIntegerType(0),
+							new ConstantStringType('0')
+						),
+					],
+				]),
+				'
+					SELECT		(TRUE), (FALSE), (true), (false)
+					FROM		QueryResult\Entities\Many m
+				',
+			],
 			'new' => [
 				new ObjectType(ManyId::class),
 				'
