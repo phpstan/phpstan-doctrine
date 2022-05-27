@@ -44,6 +44,7 @@ use function is_object;
 use function is_string;
 use function serialize;
 use function sprintf;
+use function strtolower;
 use function unserialize;
 
 /**
@@ -1095,7 +1096,7 @@ class QueryResultTypeWalker extends SqlWalker
 				break;
 
 			case AST\Literal::BOOLEAN:
-				$value = $literal->value === 'true' ? 1 : 0;
+				$value = strtolower($literal->value) === 'true' ? 1 : 0;
 				$type = new ConstantIntegerType($value);
 				break;
 
