@@ -18,6 +18,7 @@ This extension provides following features:
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
 * Also supports Doctrine ODM.
 * Analysis of discrepancies between entity column types and property field types. This can be relaxed with the `allowNullablePropertyForRequiredField: true` setting.
+* Provides return type for `Doctrine\ORM\Query::getResult`, `getOneOrNullResult`, `getSingleResult`, and `execute` in `HYDRATE_OBJECT` mode (see bellow).
 
 ## Installation
 
@@ -96,6 +97,60 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
+
+## Query type inference
+
+This extension can infer the result type of DQL queries when an `objectManagerLoader` is provided.
+
+Examples:
+
+```php
+$query = $entityManager->createQuery('SELECT u FROM Acme\User u');
+$query->getResult(); // array<Acme\User>
+
+$query = $entityManager->createQuery('SELECT u.id, u.email, u.name FROM Acme\User u');
+$query->getResult(); // array<array{id: int, email: string, name: string|null}>
+
+$query = $entityManager->createQuery('
+    SELECT u.id, u.email, COALESCE(u.name, "Anonymous") AS name
+    FROM   Acme\User u
+');
+$query->getSingleResult(Query::HYDRATE_OBJECT); // array{id: int, email: string, name: string}>
+
+$query = $entityManager->createQueryBuiler()
+    ->select('u')
+    ->from(User::class, 'u')
+    ->getQuery();
+$query->getResult(); // array<Acme\User>
+```
+
+Queries are analyzed statically and do not require a running database server. This makes use of the Doctrine DQL parser and entities metadata.
+
+Most DQL features are supported, including `GROUP BY`, `DISTINCT`, all flavors of `JOIN`, arithmetic expressions, functions, aggregations, `NEW`, etc. Sub queries and `INDEX BY` are not yet supported (infered type will be `mixed`).
+
+### Supported methods
+
+The `getResult` method is supported when called without argument, or with the hydrateMode argument set to `Query::HYDRATE_OBJECT`:
+
+``` php
+$query = $entityManager->createQuery('SELECT u FROM Acme\User u');
+
+$query->getResult(); // array<User>
+
+$query->getResult(Query::HYDRATE_OBJECT); // array<User>
+```
+
+The methods `getOneOrNullResult`, `getSingleResult`, and `execute` are supported when the hydrateMode argument is explicitly set to `Query::HYDRATE_OBJECT`:
+
+``` php
+$query = $entityManager->createQuery('SELECT u FROM Acme\User u');
+
+$query->getOneOrNullResult(); // mixed
+
+$query->getOneOrNullResult(Query::HYDRATE_OBJECT); // User
+```
+
+This is due to the design of the `Query` class preventing from determining the hydration mode used by these functions unless it is specified explicitly during the call.
 
 ## Custom types
 
