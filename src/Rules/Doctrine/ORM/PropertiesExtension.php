@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
@@ -43,6 +44,10 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
+		if ($this->isGeneratedIdentifier($metadata, $propertyName)) {
+			return true;
+		}
+
 		if ($metadata->isReadOnly && !$declaringClass->hasConstructor()) {
 			return true;
 		}
@@ -82,7 +87,20 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
+		if ($this->isGeneratedIdentifier($metadata, $propertyName)) {
+			return true;
+		}
+
 		return $metadata->isReadOnly && !$declaringClass->hasConstructor();
+	}
+
+	private function isGeneratedIdentifier(ClassMetadataInfo $metadata, string $propertyName): bool
+	{
+		if (!in_array($propertyName, $metadata->getIdentifierFieldNames(), true)) {
+			return false;
+		}
+
+		return $metadata->generatorType !== ClassMetadataInfo::GENERATOR_TYPE_NONE;
 	}
 
 }
