@@ -44,34 +44,15 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
-		if ($this->isGeneratedIdentifier($metadata, $propertyName)) {
-			return true;
-		}
-
 		if ($metadata->isReadOnly && !$declaringClass->hasConstructor()) {
 			return true;
-		}
-
-		if ($metadata->isIdentifierNatural()) {
-			return false;
 		}
 
 		if ($metadata->versionField === $propertyName) {
 			return true;
 		}
 
-		try {
-			$identifiers = $metadata->getIdentifierFieldNames();
-		} catch (Throwable $e) {
-			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
-			if (!$e instanceof $mappingException) {
-				throw $e;
-			}
-
-			return false;
-		}
-
-		return in_array($propertyName, $identifiers, true);
+		return $this->isGeneratedIdentifier($metadata, $propertyName);
 	}
 
 	public function isInitialized(PropertyReflection $property, string $propertyName): bool
@@ -96,11 +77,20 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 	private function isGeneratedIdentifier(ClassMetadataInfo $metadata, string $propertyName): bool
 	{
-		if (!in_array($propertyName, $metadata->getIdentifierFieldNames(), true)) {
+		if ($metadata->isIdentifierNatural()) {
 			return false;
 		}
 
-		return $metadata->generatorType !== ClassMetadataInfo::GENERATOR_TYPE_NONE;
+		try {
+			return in_array($propertyName, $metadata->getIdentifierFieldNames(), true);
+		} catch (Throwable $e) {
+			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
+			if (!$e instanceof $mappingException) {
+				throw $e;
+			}
+
+			return false;
+		}
 	}
 
 }
