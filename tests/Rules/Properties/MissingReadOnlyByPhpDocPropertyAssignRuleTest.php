@@ -28,7 +28,20 @@ class MissingReadOnlyByPhpDocPropertyAssignRuleTest extends RuleTestCase
 			self::markTestSkipped('Test requires PHP 7.4.');
 		}
 
-		$this->analyse([__DIR__ . '/data/missing-readonly-property-assign-phpdoc.php'], []);
+		$this->analyse([__DIR__ . '/data/missing-readonly-property-assign-phpdoc.php'], [
+			[
+				'Class MissingReadOnlyPropertyAssignPhpDoc\EntityWithAGeneratedId has an uninitialized @readonly property $unassigned. Assign it in the constructor.',
+				25,
+			],
+			[
+				'@readonly property MissingReadOnlyPropertyAssignPhpDoc\EntityWithAGeneratedId::$doubleAssigned is already assigned.',
+				36,
+			],
+			[
+				'Class MissingReadOnlyPropertyAssignPhpDoc\ReadOnlyEntityWithConstructor has an uninitialized @readonly property $id. Assign it in the constructor.',
+				67,
+			],
+		]);
 	}
 
 }
