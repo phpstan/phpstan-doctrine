@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
@@ -47,26 +48,11 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return true;
 		}
 
-		if ($metadata->isIdentifierNatural()) {
-			return false;
-		}
-
 		if ($metadata->versionField === $propertyName) {
 			return true;
 		}
 
-		try {
-			$identifiers = $metadata->getIdentifierFieldNames();
-		} catch (Throwable $e) {
-			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
-			if (!$e instanceof $mappingException) {
-				throw $e;
-			}
-
-			return false;
-		}
-
-		return in_array($propertyName, $identifiers, true);
+		return $this->isGeneratedIdentifier($metadata, $propertyName);
 	}
 
 	public function isInitialized(PropertyReflection $property, string $propertyName): bool
@@ -82,7 +68,29 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
+		if ($this->isGeneratedIdentifier($metadata, $propertyName)) {
+			return true;
+		}
+
 		return $metadata->isReadOnly && !$declaringClass->hasConstructor();
+	}
+
+	private function isGeneratedIdentifier(ClassMetadataInfo $metadata, string $propertyName): bool
+	{
+		if ($metadata->isIdentifierNatural()) {
+			return false;
+		}
+
+		try {
+			return in_array($propertyName, $metadata->getIdentifierFieldNames(), true);
+		} catch (Throwable $e) {
+			$mappingException = 'Doctrine\ORM\Mapping\MappingException';
+			if (!$e instanceof $mappingException) {
+				throw $e;
+			}
+
+			return false;
+		}
 	}
 
 }
