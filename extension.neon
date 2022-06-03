@@ -40,6 +40,9 @@ parameters:
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
 		- stubs/ORM/ORMException.stub
 		- stubs/ORM/Query.stub
+		- stubs/ORM/Query/Expr/Comparison.stub
+		- stubs/ORM/Query/Expr/Composite.stub
+		- stubs/ORM/Query/Expr/Join.stub
 		- stubs/Persistence/Mapping/ClassMetadata.stub
 		- stubs/ServiceDocumentRepository.stub
 
