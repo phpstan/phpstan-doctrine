@@ -43,7 +43,8 @@ class EntityNotFinalRule implements Rule
 			return [];
 		}
 
-		if ($this->objectMetadataResolver->getClassMetadata($classReflection->getName())->isEmbeddedClass === true) {
+		$metadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
+		if ($metadata !== null && $metadata->isEmbeddedClass === true) {
 			return [];
 		}
 
