@@ -72,6 +72,16 @@ class EntityNotFinalRuleTest extends RuleTestCase
 			__DIR__ . '/data/MyEntity.php',
 			[],
 		];
+
+		yield 'final embeddable' => [
+			__DIR__ . '/data/FinalEmbeddable.php',
+			[],
+		];
+
+		yield 'non final embeddable' => [
+			__DIR__ . '/data/MyEmbeddable.php',
+			[],
+		];
 	}
 
 }
