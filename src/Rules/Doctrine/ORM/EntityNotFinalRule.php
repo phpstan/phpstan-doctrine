@@ -43,6 +43,11 @@ class EntityNotFinalRule implements Rule
 			return [];
 		}
 
+		$metadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
+		if ($metadata !== null && $metadata->isEmbeddedClass === true) {
+			return [];
+		}
+
 		return [sprintf(
 			'Entity class %s is final which can cause problems with proxies.',
 			$classReflection->getDisplayName()
