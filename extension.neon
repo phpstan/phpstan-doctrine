@@ -39,6 +39,7 @@ parameters:
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
 		- stubs/ORM/ORMException.stub
+		- stubs/ORM/Query/Expr.stub
 		- stubs/ORM/Query.stub
 		- stubs/ORM/Query/Expr/Comparison.stub
 		- stubs/ORM/Query/Expr/Composite.stub
