@@ -8,7 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use QueryResult\Entities\Many;
 use function PHPStan\Testing\assertType;
 
-class ExpressionBuilderGetQuery
+class ExpressionBuilderGetQueryNoObjectManager
 {
 	private function nonLiteralString(string $value): string {
 		return $value; // Using the 'string' return type to provide a non `literal-string`, e.g. $_POST['field'];
@@ -17,7 +17,7 @@ class ExpressionBuilderGetQuery
 	public function isNullLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->isNull('field');
-		assertType("'field IS NULL'", $result); // A ConstantStringType isLiteralString
+		assertType('literal-string&non-empty-string', $result);
 	}
 
 	public function isNullNonLiteralString(EntityManagerInterface $em): void
@@ -30,7 +30,7 @@ class ExpressionBuilderGetQuery
 	public function isNotNullLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->isNotNull('field');
-		assertType("'field IS NOT NULL'", $result); // A ConstantStringType isLiteralString
+		assertType('literal-string&non-empty-string', $result);
 	}
 
 	public function isNotNullNonLiteralString(EntityManagerInterface $em): void
@@ -43,7 +43,7 @@ class ExpressionBuilderGetQuery
 	public function betweenLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->between('field', "'value_1'", "'value_2'");
-		assertType("'field BETWEEN \'value_1\' AND \'value_2\''", $result); // A ConstantStringType isLiteralString
+		assertType('literal-string&non-empty-string', $result);
 	}
 
 	public function betweenNonLiteralString1(EntityManagerInterface $em): void
