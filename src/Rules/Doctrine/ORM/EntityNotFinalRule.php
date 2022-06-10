@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -44,7 +45,7 @@ class EntityNotFinalRule implements Rule
 		}
 
 		$metadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
-		if ($metadata !== null && $metadata->isEmbeddedClass === true) {
+		if ($metadata instanceof ClassMetadataInfo && $metadata->isEmbeddedClass === true) {
 			return [];
 		}
 

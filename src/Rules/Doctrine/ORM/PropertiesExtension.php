@@ -68,7 +68,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
-		if ($this->isGeneratedIdentifier($metadata, $propertyName)) {
+		if ($metadata instanceof ClassMetadataInfo && $this->isGeneratedIdentifier($metadata, $propertyName)) {
 			return true;
 		}
 

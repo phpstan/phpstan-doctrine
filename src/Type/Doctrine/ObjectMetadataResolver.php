@@ -3,9 +3,8 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\ShouldNotHappenException;
@@ -109,9 +108,9 @@ final class ObjectMetadataResolver
 	/**
 	 * @template T of object
 	 * @param class-string<T> $className
-	 * @return ClassMetadataInfo<T>|null
+	 * @return ClassMetadata<T>|null
 	 */
-	public function getClassMetadata(string $className): ?ClassMetadataInfo
+	public function getClassMetadata(string $className): ?ClassMetadata
 	{
 		if ($this->isTransient($className)) {
 			return null;
@@ -134,14 +133,8 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		if (!$metadata instanceof ClassMetadataInfo) {
-			return null;
-		}
-
-		/** @var ClassMetadataInfo<T> $ormMetadata */
-		$ormMetadata = $metadata;
-
-		return $ormMetadata;
+		/** @var ClassMetadata<T> $metadata */
+		return $metadata;
 	}
 
 	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
