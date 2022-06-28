@@ -1,37 +1,32 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$drivers of class PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain constructor expects array\\<Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\>, array\\<int, Doctrine\\\\ORM\\\\Mapping\\\\Driver\\\\AnnotationDriver\\|Doctrine\\\\ORM\\\\Mapping\\\\Driver\\\\AttributeDriver\\> given\\.$#"
-			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
-
-		-
-			message: "#^Class Doctrine\\\\DBAL\\\\Platforms\\\\MySqlPlatform referenced with incorrect case\\: Doctrine\\\\DBAL\\\\Platforms\\\\MySQLPlatform\\.$#"
-			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
-
-		-
 			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<T of object\\>, string given\\.$#"
 			count: 1
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
-			message: "#^Parameter \\#1 \\$className \\(class\\-string\\) of method PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain\\:\\:isTransient\\(\\) should be contravariant with parameter \\$className \\(string\\) of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\:\\:isTransient\\(\\)$#"
+			message: "#^Accessing PHPStan\\\\Rules\\\\DeadCode\\\\UnusedPrivatePropertyRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
-			path: src/Doctrine/Mapping/MappingDriverChain.php
+			path: tests/Rules/DeadCode/UnusedPrivatePropertyRuleTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$className \\(class\\-string\\) of method PHPStan\\\\Doctrine\\\\Mapping\\\\MappingDriverChain\\:\\:loadMetadataForClass\\(\\) should be contravariant with parameter \\$className \\(string\\) of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver\\:\\:loadMetadataForClass\\(\\)$#"
+			message: "#^Accessing PHPStan\\\\Rules\\\\Methods\\\\CallMethodsRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
-			path: src/Doctrine/Mapping/MappingDriverChain.php
+			path: tests/Rules/Doctrine/ORM/MagicRepositoryMethodCallRuleTest.php
 
 		-
-			message: "#^PHPDoc tag @return contains generic type Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory\\<Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\> but interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory is not generic\\.$#"
+			message: "#^Accessing PHPStan\\\\Rules\\\\Exceptions\\\\CatchWithUnthrownExceptionRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
-			path: src/Type/Doctrine/ObjectMetadataResolver.php
+			path: tests/Rules/Exceptions/CatchWithUnthrownExceptionRuleTest.php
 
 		-
-			message: "#^PHPDoc tag @var for property PHPStan\\\\Type\\\\Doctrine\\\\ObjectMetadataResolver\\:\\:\\$metadataFactory contains generic type Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory\\<Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\> but interface Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadataFactory is not generic\\.$#"
+			message: "#^Accessing PHPStan\\\\Rules\\\\Properties\\\\MissingReadOnlyByPhpDocPropertyAssignRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
-			path: src/Type/Doctrine/ObjectMetadataResolver.php
+			path: tests/Rules/Properties/MissingReadOnlyByPhpDocPropertyAssignRuleTest.php
+
+		-
+			message: "#^Accessing PHPStan\\\\Rules\\\\Properties\\\\MissingReadOnlyPropertyAssignRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
+			count: 1
+			path: tests/Rules/Properties/MissingReadOnlyPropertyAssignRuleTest.php
 
