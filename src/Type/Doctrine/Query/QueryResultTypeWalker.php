@@ -2,8 +2,10 @@
 
 namespace PHPStan\Type\Doctrine\Query;
 
+use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -15,6 +17,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\FloatType;
@@ -31,6 +34,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
+use function array_map;
 use function assert;
 use function class_exists;
 use function count;
@@ -42,6 +46,7 @@ use function is_array;
 use function is_numeric;
 use function is_object;
 use function is_string;
+use function is_subclass_of;
 use function serialize;
 use function sprintf;
 use function strtolower;
@@ -231,15 +236,13 @@ class QueryResultTypeWalker extends SqlWalker
 
 		switch ($pathExpr->type) {
 			case AST\PathExpression::TYPE_STATE_FIELD:
-				$typeName = $class->getTypeOfField($fieldName);
-
-				assert(is_string($typeName));
+				[$typeName, $enumType] = $this->getTypeOfField($class, $fieldName);
 
 				$nullable = $this->isQueryComponentNullable($dqlAlias)
 					|| $class->isNullable($fieldName)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -273,14 +276,12 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$targetFieldName = $identifierFieldNames[0];
-				$typeName = $targetClass->getTypeOfField($targetFieldName);
-
-				assert(is_string($typeName));
+				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
 				$nullable = (bool) ($joinColumn['nullable'] ?? true)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -530,15 +531,12 @@ class QueryResultTypeWalker extends SqlWalker
 					$targetFieldName = $function->fieldMapping;
 				}
 
-				$typeName = $targetClass->getTypeOfField($targetFieldName);
-				if ($typeName === null) {
-					return $this->marshalType(new MixedType());
-				}
-
 				$fieldMapping = $targetClass->fieldMappings[$targetFieldName] ?? null;
 				if ($fieldMapping === null) {
 					return $this->marshalType(new MixedType());
 				}
+
+				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
 				$joinColumn = null;
 
@@ -556,7 +554,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$nullable = (bool) ($joinColumn['nullable'] ?? true)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -783,15 +781,13 @@ class QueryResultTypeWalker extends SqlWalker
 			$qComp = $this->queryComponents[$dqlAlias];
 			$class = $qComp['metadata'];
 
-			$typeName = $class->getTypeOfField($fieldName);
-
-			assert(is_string($typeName));
+			[$typeName, $enumType] = $this->getTypeOfField($class, $fieldName);
 
 			$nullable = $this->isQueryComponentNullable($dqlAlias)
 				|| $class->isNullable($fieldName)
 				|| $this->hasAggregateWithoutGroupBy();
 
-			$type = $this->resolveDoctrineType($typeName, $nullable);
+			$type = $this->resolveDoctrineType($typeName, $enumType, $nullable);
 
 			$this->typeBuilder->addScalar($resultAlias, $type);
 
@@ -1295,14 +1291,37 @@ class QueryResultTypeWalker extends SqlWalker
 		return $this->nullableQueryComponents[$dqlAlias] ?? false;
 	}
 
-	private function resolveDoctrineType(string $typeName, bool $nullable = false): Type
+	/** @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field */
+	private function getTypeOfField(ClassMetadataInfo $class, string $fieldName): array
 	{
-		try {
-			$type = $this->descriptorRegistry
-				->get($typeName)
-				->getWritableToPropertyType();
-		} catch (DescriptorNotRegisteredException $e) {
-			$type = new MixedType();
+		assert(isset($class->fieldMappings[$fieldName]));
+
+		/** @var array{type: string, enumType?: ?string} $metadata */
+		$metadata = $class->fieldMappings[$fieldName];
+
+		$type = $metadata['type'];
+		$enumType = $metadata['enumType'] ?? null;
+
+		if (!is_string($enumType) || !class_exists($enumType) || !is_subclass_of($enumType, BackedEnum::class)) {
+			$enumType = null;
+		}
+
+		return [$type, $enumType];
+	}
+
+	/** @param ?class-string<BackedEnum> $enumType */
+	private function resolveDoctrineType(string $typeName, ?string $enumType = null, bool $nullable = false): Type
+	{
+		if ($enumType !== null) {
+			$type = new ObjectType($enumType);
+		} else {
+			try {
+				$type = $this->descriptorRegistry
+					->get($typeName)
+					->getWritableToPropertyType();
+			} catch (DescriptorNotRegisteredException $e) {
+				$type = new MixedType();
+			}
 		}
 
 		if ($nullable) {
@@ -1312,7 +1331,8 @@ class QueryResultTypeWalker extends SqlWalker
 		return $type;
 	}
 
-	private function resolveDatabaseInternalType(string $typeName, bool $nullable = false): Type
+	/** @param ?class-string<BackedEnum> $enumType */
+	private function resolveDatabaseInternalType(string $typeName, ?string $enumType = null, bool $nullable = false): Type
 	{
 		try {
 			$type = $this->descriptorRegistry
@@ -1320,6 +1340,15 @@ class QueryResultTypeWalker extends SqlWalker
 				->getDatabaseInternalType();
 		} catch (DescriptorNotRegisteredException $e) {
 			$type = new MixedType();
+		}
+
+		if ($enumType !== null) {
+			$enumTypes = array_map(static function ($enumType) {
+				return ConstantTypeHelper::getTypeFromValue($enumType->value);
+			}, $enumType::cases());
+			$enumType = TypeCombinator::union(...$enumTypes);
+			$enumType = TypeCombinator::union($enumType, $enumType->toString());
+			$type = TypeCombinator::intersect($enumType, $type);
 		}
 
 		if ($nullable) {
