@@ -18,7 +18,7 @@ This extension provides following features:
 * Adds missing `matching` method on `Doctrine\Common\Collections\Collection`. This can be turned off by setting `parameters.doctrine.allCollectionsSelectable` to `false`.
 * Also supports Doctrine ODM.
 * Analysis of discrepancies between entity column types and property field types. This can be relaxed with the `allowNullablePropertyForRequiredField: true` setting.
-* Provides return type for `Doctrine\ORM\Query::getResult`, `getOneOrNullResult`, `getSingleResult`, and `execute` in `HYDRATE_OBJECT` mode (see bellow).
+* Provides return type for `Doctrine\ORM\Query::getResult`, `getOneOrNullResult`, `getSingleResult`, `toIterate` and `execute` in `HYDRATE_OBJECT` mode (see bellow).
 
 ## Installation
 
@@ -140,7 +140,7 @@ $query->getResult(); // array<User>
 $query->getResult(Query::HYDRATE_OBJECT); // array<User>
 ```
 
-The methods `getOneOrNullResult`, `getSingleResult`, and `execute` are supported when the hydrateMode argument is explicitly set to `Query::HYDRATE_OBJECT`:
+The methods `getOneOrNullResult`, `getSingleResult`, `toIterate`, and `execute` are supported when the hydrateMode argument is explicitly set to `Query::HYDRATE_OBJECT`:
 
 ``` php
 $query = $entityManager->createQuery('SELECT u FROM Acme\User u');

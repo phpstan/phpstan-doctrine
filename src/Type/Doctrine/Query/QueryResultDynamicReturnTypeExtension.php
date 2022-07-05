@@ -13,6 +13,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -24,6 +25,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	private const METHOD_HYDRATION_MODE_ARG = [
 		'getResult' => 0,
+		'toIterable' => 1,
 		'execute' => 1,
 		'executeIgnoreQueryCache' => 1,
 		'executeUsingQueryCache' => 1,
@@ -118,6 +120,11 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				return $queryResultType;
 			case 'getOneOrNullResult':
 				return TypeCombinator::addNull($queryResultType);
+			case 'toIterable':
+				return new IterableType(
+					new MixedType(),
+					$queryResultType
+				);
 			default:
 				return new ArrayType(
 					new MixedType(),
