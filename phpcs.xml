@@ -79,6 +79,11 @@
 	<rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"/>
 	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
+	<!-- Disallow trailing comma in function calls, since this breaks on PHP < 7.3 -->
+	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall"/>
+	<!-- Disallow trailing comma in closure use and function declarations, since this breaks on PHP < 8.0 -->
+	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse" />
+	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration" />
 	<!--<rule ref="SlevomatCodingStandard.Functions.UnusedParameter"/>-->
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
