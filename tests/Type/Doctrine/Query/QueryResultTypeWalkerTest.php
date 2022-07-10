@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Query;
 
+use Composer\InstalledVersions;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
-use PackageVersions\Versions;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
@@ -1580,7 +1580,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 	private function isDoctrine211(): bool
 	{
-		$version = Versions::getVersion('doctrine/orm');
+		$version = InstalledVersions::getVersion('doctrine/orm');
 
 		return version_compare($version, '2.11', '>=')
 			&& version_compare($version, '2.12', '<');
