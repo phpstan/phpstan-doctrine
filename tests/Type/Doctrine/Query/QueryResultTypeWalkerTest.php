@@ -1582,7 +1582,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	{
 		$version = InstalledVersions::getVersion('doctrine/orm');
 
-		return version_compare($version, '2.11', '>=')
+		return $version !== null
+			&& version_compare($version, '2.11', '>=')
 			&& version_compare($version, '2.12', '<');
 	}
 
