@@ -17,6 +17,10 @@ parameters:
 
 	reportUnmatchedIgnoredErrors: false
 
+	bootstrapFiles:
+		- stubs/runtime/Enum/UnitEnum.php
+		- stubs/runtime/Enum/BackedEnum.php
+
 	ignoreErrors:
 		-
 			message: '~^Variable method call on Doctrine\\ORM\\QueryBuilder~'
