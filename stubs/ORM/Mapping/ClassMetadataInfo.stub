@@ -32,6 +32,14 @@ use ReflectionClass;
  *      declaredField?: string,
  *      options?: array<string, mixed>
  * }
+ * @psalm-type JoinColumnData = array{
+ *     name: string,
+ *     referencedColumnName: string,
+ *     unique?: bool,
+ *     quoted?: bool,
+ *     fieldName?: string,
+ *     onDelete?: string,
+ * }
  * @psalm-type AssociationMapping = array{
  *     cache?: array,
  *     cascade: array<string>,
@@ -49,7 +57,7 @@ use ReflectionClass;
  *     isCascadeDetach: bool,
  *     isOnDeleteCascade?: bool,
  *     isOwningSide: bool,
- *     joinColumns?: array,
+ *     joinColumns?: array<JoinColumnData>,
  *     joinColumnFieldNames?: array<string, string>,
  *     joinTable?: array,
  *     joinTableColumns?: list<mixed>,
