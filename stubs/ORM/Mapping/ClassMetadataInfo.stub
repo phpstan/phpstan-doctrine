@@ -39,6 +39,8 @@ use ReflectionClass;
  *     quoted?: bool,
  *     fieldName?: string,
  *     onDelete?: string,
+ *     columnDefinition?: string,
+ *     nullable?: bool,
  * }
  * @psalm-type AssociationMapping = array{
  *     cache?: array,
