@@ -42,7 +42,6 @@ use function floatval;
 use function get_class;
 use function gettype;
 use function intval;
-use function is_array;
 use function is_numeric;
 use function is_object;
 use function is_string;
@@ -249,24 +248,21 @@ class QueryResultTypeWalker extends SqlWalker
 			case AST\PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION:
 				if (isset($class->associationMappings[$fieldName]['inherited'])) {
 					$newClassName = $class->associationMappings[$fieldName]['inherited'];
-					assert(is_string($newClassName));
-					/** @var class-string $newClassName */
 					$class = $this->em->getClassMetadata($newClassName);
 				}
 
 				$assoc = $class->associationMappings[$fieldName];
 
-				assert(is_array($assoc['joinColumns']));
-
-				if (!((bool) $assoc['isOwningSide']) || count($assoc['joinColumns']) !== 1) {
+				if (
+					!$assoc['isOwningSide']
+					|| !isset($assoc['joinColumns'])
+					|| count($assoc['joinColumns']) !== 1
+				) {
 					throw new ShouldNotHappenException();
 				}
 
 				$joinColumn = $assoc['joinColumns'][0];
-				assert(is_array($joinColumn));
 				$assocClassName = $assoc['targetEntity'];
-				assert(is_string($assocClassName));
-				/** @var class-string $assocClassName */
 
 				$targetClass = $this->em->getClassMetadata($assocClassName);
 				$identifierFieldNames = $targetClass->getIdentifierFieldNames();
@@ -278,7 +274,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$targetFieldName = $identifierFieldNames[0];
 				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
-				$nullable = (bool) ($joinColumn['nullable'] ?? true)
+				$nullable = ($joinColumn['nullable'] ?? true)
 					|| $this->hasAggregateWithoutGroupBy();
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
@@ -516,7 +512,6 @@ class QueryResultTypeWalker extends SqlWalker
 				$queryComp = $this->queryComponents[$dqlAlias];
 				$class = $queryComp['metadata'];
 				$assoc = $class->associationMappings[$assocField];
-				/** @var class-string $assocClassName */
 				$assocClassName = $assoc['targetEntity'];
 				$targetClass = $this->em->getClassMetadata($assocClassName);
 
@@ -538,6 +533,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
+				if (!isset($assoc['joinColumns'])) {
+					return $this->marshalType(new MixedType());
+				}
+
 				$joinColumn = null;
 
 				foreach ($assoc['joinColumns'] as $item) {
@@ -551,7 +550,7 @@ class QueryResultTypeWalker extends SqlWalker
 					return $this->marshalType(new MixedType());
 				}
 
-				$nullable = (bool) ($joinColumn['nullable'] ?? true)
+				$nullable = ($joinColumn['nullable'] ?? true)
 					|| $this->hasAggregateWithoutGroupBy();
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
@@ -1296,7 +1295,6 @@ class QueryResultTypeWalker extends SqlWalker
 	{
 		assert(isset($class->fieldMappings[$fieldName]));
 
-		/** @var array{type: string, enumType?: ?string} $metadata */
 		$metadata = $class->fieldMappings[$fieldName];
 
 		$type = $metadata['type'];
