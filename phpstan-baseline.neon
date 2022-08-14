@@ -6,6 +6,11 @@ parameters:
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
+			message: "#^Call to method getProperty\\(\\) on an unknown class PHPStan\\\\BetterReflection\\\\Reflection\\\\Adapter\\\\ReflectionEnum\\.$#"
+			count: 1
+			path: src/Rules/Gedmo/PropertiesExtension.php
+
+		-
 			message: "#^Accessing PHPStan\\\\Rules\\\\DeadCode\\\\UnusedPrivatePropertyRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
 			path: tests/Rules/DeadCode/UnusedPrivatePropertyRuleTest.php
@@ -19,6 +24,16 @@ parameters:
 			message: "#^Accessing PHPStan\\\\Rules\\\\Exceptions\\\\CatchWithUnthrownExceptionRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
 			count: 1
 			path: tests/Rules/Exceptions/CatchWithUnthrownExceptionRuleTest.php
+
+		-
+			message: "#^Accessing PHPStan\\\\Rules\\\\DeadCode\\\\UnusedPrivatePropertyRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
+			count: 1
+			path: tests/Rules/Properties/MissingGedmoByPhpDocPropertyAssignRuleTest.php
+
+		-
+			message: "#^Accessing PHPStan\\\\Rules\\\\DeadCode\\\\UnusedPrivatePropertyRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
+			count: 1
+			path: tests/Rules/Properties/MissingGedmoPropertyAssignRuleTest.php
 
 		-
 			message: "#^Accessing PHPStan\\\\Rules\\\\Properties\\\\MissingReadOnlyByPhpDocPropertyAssignRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"
