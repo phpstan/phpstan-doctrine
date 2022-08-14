@@ -371,3 +371,8 @@ services:
 		class: PHPStan\Type\Doctrine\Collection\IsEmptyTypeSpecifyingExtension
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
+
+	-
+		class: PHPStan\Rules\Gedmo\PropertiesExtension
+		tags:
+			- phpstan.properties.readWriteExtension
