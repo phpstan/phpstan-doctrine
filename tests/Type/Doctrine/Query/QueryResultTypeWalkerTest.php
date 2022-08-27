@@ -364,12 +364,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'arbitrary inner join selected, and scalars (selection order variation)' => [
 			TypeCombinator::union(
 				$this->constantArray([
-					[new ConstantIntegerType(0), new ObjectType(Many::class)],
+					[new ConstantIntegerType(0), new ObjectType(One::class)],
 				]),
 				$this->constantArray([
-					[new ConstantIntegerType(0), new ObjectType(One::class)],
-					[new ConstantStringType('id'), new StringType()],
-					[new ConstantStringType('intColumn'), new IntegerType()],
+					[new ConstantIntegerType(0), new ObjectType(Many::class)],
+					[new ConstantStringType('id'), new StringType(), true],
+					[new ConstantStringType('intColumn'), new IntegerType(), true],
 				])
 			),
 			'
@@ -1474,14 +1474,17 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	}
 
 	/**
-	 * @param array<int,array{ConstantIntegerType|ConstantStringType,Type}> $elements
+	 * @param array<int,array{0: ConstantIntegerType|ConstantStringType, 1: Type, 2?: bool}> $elements
 	 */
 	private function constantArray(array $elements): Type
 	{
 		$builder = ConstantArrayTypeBuilder::createEmpty();
 
-		foreach ($elements as [$offsetType, $valueType]) {
-			$builder->setOffsetValueType($offsetType, $valueType);
+		foreach ($elements as $element) {
+			$offsetType = $element[0];
+			$valueType = $element[1];
+			$optional = $element[2] ?? false;
+			$builder->setOffsetValueType($offsetType, $valueType, $optional);
 		}
 
 		return $builder->getArray();
