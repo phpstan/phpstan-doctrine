@@ -31,4 +31,12 @@ class Expr
 	{
 	}
 
+	/**
+	 * @template T of string
+	 * @param T ...$x
+	 * @return (T is literal-string ? literal-string : string)
+	 */
+	public function countDistinct(...$x) {
+	}
+
 }
