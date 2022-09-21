@@ -67,6 +67,44 @@ class ExpressionBuilderGetQueryNoObjectManager
 		assertType('string', $result);
 	}
 
+	public function countDistinctLiteralString(EntityManagerInterface $em): void
+	{
+		$result = $em->createQueryBuilder()->expr()->countDistinct('A', 'B', 'C');
+		assertType('literal-string', $result);
+	}
+
+	public function countDistinctNonLiteralString1(EntityManagerInterface $em): void
+	{
+		$value = $this->nonLiteralString('A');
+		$result = $em->createQueryBuilder()->expr()->countDistinct($value);
+		assertType('string', $result);
+	}
+
+	public function countDistinctNonLiteralString2(EntityManagerInterface $em): void
+	{
+		$value = $this->nonLiteralString('A');
+		$result = $em->createQueryBuilder()->expr()->countDistinct($value, 'B', 'C');
+		assertType('string', $result);
+	}
+
+	// Disabled until Doctrine ORM 3.0.0, as the countDistinct() function definition does not use `countDistinct(...$x)`
+	//   https://github.com/doctrine/orm/pull/9911
+	//   https://github.com/phpstan/phpstan-doctrine/pull/352
+	//
+	// public function countDistinctNonLiteralString3(EntityManagerInterface $em): void
+	// {
+	// 	$value = $this->nonLiteralString('B');
+	// 	$result = $em->createQueryBuilder()->expr()->countDistinct('A', $value, 'C');
+	// 	assertType('string', $result);
+	// }
+	//
+	// public function countDistinctNonLiteralString4(EntityManagerInterface $em): void
+	// {
+	// 	$value = $this->nonLiteralString('C');
+	// 	$result = $em->createQueryBuilder()->expr()->countDistinct('A', 'B', $value);
+	// 	assertType('string', $result);
+	// }
+
 	// Might be a problem, as these do not return a 'literal-string'.
 	// As in, functions to support MOD() and ABS() return stringable value objects (Expr\Func).
 	public function isNullNonLiteralStringExprFunc(EntityManagerInterface $em): void
