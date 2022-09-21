@@ -40,8 +40,8 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
-		if (!$metadata->hasField($propertyName) && !$metadata->hasAssociation($propertyName)) {
-			return false;
+		if ($metadata->hasField($propertyName) || $metadata->hasAssociation($propertyName)) {
+			return true;
 		}
 
 		if ($metadata->isReadOnly && !$declaringClass->hasConstructor()) {
