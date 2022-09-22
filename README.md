@@ -117,7 +117,7 @@ $query = $entityManager->createQuery('
 ');
 $query->getSingleResult(Query::HYDRATE_OBJECT); // array{id: int, email: string, name: string}>
 
-$query = $entityManager->createQueryBuiler()
+$query = $entityManager->createQueryBuilder()
     ->select('u')
     ->from(User::class, 'u')
     ->getQuery();
