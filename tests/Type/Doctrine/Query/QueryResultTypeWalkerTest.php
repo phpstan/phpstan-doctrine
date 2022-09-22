@@ -368,8 +368,11 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(Many::class)],
-					[new ConstantStringType('id'), new StringType(), true],
-					[new ConstantStringType('intColumn'), new IntegerType(), true],
+				]),
+				$this->constantArray([
+					[new ConstantIntegerType(0), new ObjectType(Many::class)],
+					[new ConstantStringType('id'), new StringType()],
+					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
 			'
