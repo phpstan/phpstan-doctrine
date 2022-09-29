@@ -34,6 +34,7 @@ parameters:
 		- stubs/RepositoryFactory.stub
 		- stubs/Collections/ArrayCollection.stub
 		- stubs/Collections/Collection.stub
+		- stubs/Collections/ReadableCollection.stub
 		- stubs/Collections/Selectable.stub
 		- stubs/ORM/AbstractQuery.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub

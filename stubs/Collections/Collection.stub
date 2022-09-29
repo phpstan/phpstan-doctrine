@@ -11,8 +11,9 @@ use IteratorAggregate;
  * @template T
  * @extends IteratorAggregate<TKey, T>
  * @extends ArrayAccess<TKey|null, T>
+ * @extends ReadableCollection<TKey, T>
  */
-interface Collection extends Countable, IteratorAggregate, ArrayAccess
+interface Collection extends Countable, IteratorAggregate, ArrayAccess, ReadableCollection
 {
 
 }
