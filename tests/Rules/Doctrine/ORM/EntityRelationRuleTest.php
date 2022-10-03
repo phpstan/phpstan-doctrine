@@ -31,7 +31,7 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRule(string $file, array $expectedErrors): void
 	{
@@ -42,7 +42,7 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
 	{
@@ -177,7 +177,7 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleWithAllowedNullablePropertyProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRuleWithAllowedNullableProperty(string $file, array $expectedErrors): void
 	{
@@ -188,7 +188,7 @@ class EntityRelationRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleWithAllowedNullablePropertyProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRuleWithAllowedNullablePropertyWithoutObjectManagerLoader(string $file, array $expectedErrors): void
 	{

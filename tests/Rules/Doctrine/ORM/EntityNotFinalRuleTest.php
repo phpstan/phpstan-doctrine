@@ -25,7 +25,7 @@ class EntityNotFinalRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRule(string $file, array $expectedErrors): void
 	{
@@ -35,7 +35,7 @@ class EntityNotFinalRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider ruleProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
 	{

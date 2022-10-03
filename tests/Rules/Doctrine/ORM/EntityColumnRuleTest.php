@@ -241,7 +241,7 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	/**
 	 * @dataProvider generatedIdsProvider
-	 * @param mixed[] $expectedErrors
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
 	 */
 	public function testGeneratedIds(string $file, array $expectedErrors, ?string $objectManagerLoader): void
 	{
