@@ -18,4 +18,9 @@ interface ClassMetadata
      * @return ReflectionClass<T>
      */
     public function getReflectionClass();
+
+    /**
+     * @return list<string>
+     */
+    public function getIdentifier();
 }
