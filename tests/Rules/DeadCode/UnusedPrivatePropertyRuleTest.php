@@ -19,7 +19,10 @@ class UnusedPrivatePropertyRuleTest extends RuleTestCase
 
 	public static function getAdditionalConfigFiles(): array
 	{
-		return [__DIR__ . '/../../../extension.neon'];
+		return [
+			__DIR__ . '/../../../extension.neon',
+			__DIR__ . '/entity-manager.neon',
+		];
 	}
 
 	public function testRule(): void
@@ -42,6 +45,31 @@ class UnusedPrivatePropertyRuleTest extends RuleTestCase
 			[
 				'Property UnusedPrivateProperty\ReadOnlyEntityWithConstructor::$id is never written, only read.',
 				53,
+				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
+			],
+		]);
+	}
+
+	public function testBug383(): void
+	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('Test requires PHP 8.1.');
+		}
+
+		$this->analyse([__DIR__ . '/data/bug-383.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Bug383\Campus::$id is never written, only read.',
+				13,
+				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Bug383\Campus::$students is never written, only read.',
+				19,
+				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Bug383\Student::$campus is unused.',
+				29,
 				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
 			],
 		]);
