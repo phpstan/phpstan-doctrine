@@ -33,17 +33,17 @@ class UnusedPrivatePropertyRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/unused-private-property.php'], [
 			[
-				'Property UnusedPrivateProperty\EntityWithAGeneratedId::$unused is never written, only read.',
+				'Property PHPStan\Rules\Doctrine\ORM\UnusedPrivateProperty\EntityWithAGeneratedId::$unused is never written, only read.',
 				23,
 				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
 			],
 			[
-				'Property UnusedPrivateProperty\EntityWithAGeneratedId::$unused2 is unused.',
+				'Property PHPStan\Rules\Doctrine\ORM\UnusedPrivateProperty\EntityWithAGeneratedId::$unused2 is unused.',
 				25,
 				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
 			],
 			[
-				'Property UnusedPrivateProperty\ReadOnlyEntityWithConstructor::$id is never written, only read.',
+				'Property PHPStan\Rules\Doctrine\ORM\UnusedPrivateProperty\ReadOnlyEntityWithConstructor::$id is never written, only read.',
 				53,
 				'See: https://phpstan.org/developing-extensions/always-read-written-properties',
 			],

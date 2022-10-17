@@ -1,6 +1,6 @@
 <?php // lint >= 7.4
 
-namespace UnusedPrivateProperty;
+namespace PHPStan\Rules\Doctrine\ORM\UnusedPrivateProperty;
 
 use Doctrine\ORM\Mapping as ORM;
 
