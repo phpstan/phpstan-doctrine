@@ -55,5 +55,57 @@ class ReadOnlyEntityWithConstructor
 	public function __construct()
 	{
 	}
-
 }
+
+/**
+ * @ORM\Entity
+ */
+class EntityWithGeneratedField
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column
+	 */
+	public int $id;
+
+	/**
+	 * @ORM\Column(type="int", insertable=false, updatable=false, generated="ALWAYS",
+	 *     columnDefinition="int GENERATED ALWAYS AS (1 + 2)")
+	 */
+	private int $generated;
+
+	public function __construct()
+	{
+	}
+}
+
+/**
+ * @ORM\Entity
+ */
+class EntityWithGeneratedFieldWithGetter
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column
+	 */
+	public int $id;
+
+	/**
+	 * @ORM\Column(type="int", insertable=false, updatable=false, generated="ALWAYS",
+	 *     columnDefinition="int GENERATED ALWAYS AS (1 + 2)")
+	 */
+	private int $generated;
+
+	public function __construct()
+	{
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGenerated(): int
+	{
+		return $this->generated;
+	}
+}
+
