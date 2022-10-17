@@ -8,6 +8,7 @@ tests:
 .PHONY: lint
 lint:
 	php vendor/bin/parallel-lint --colors \
+		--exclude tests/Rules/DeadCode/data/bug-383.php \
 		src tests
 
 .PHONY: cs
