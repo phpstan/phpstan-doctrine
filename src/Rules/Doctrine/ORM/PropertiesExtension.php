@@ -44,6 +44,11 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 			return false;
 		}
 
+		$mapping = $metadata->getFieldMapping($propertyName);
+		if (array_key_exists('generated', $mapping) && $mapping['generated'] !== ClassMetadataInfo::GENERATED_NEVER) {
+			return true;
+		}
+
 		if ($metadata->isReadOnly && !$declaringClass->hasConstructor()) {
 			return true;
 		}
