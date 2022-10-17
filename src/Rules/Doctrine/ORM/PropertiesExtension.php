@@ -7,6 +7,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use Throwable;
+use function array_key_exists;
 use function in_array;
 
 class PropertiesExtension implements ReadWritePropertiesExtension
