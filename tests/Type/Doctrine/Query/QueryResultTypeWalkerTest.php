@@ -1318,7 +1318,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				SELECT		MOD(10, NULLIF(m.intColumn, m.intColumn))
 				FROM		QueryResult\Entities\Many m
 			',
-			'Modulo by zero',
+			PHP_VERSION_ID < 70400 ? 'Modulo by zero' : null,
 		];
 
 		yield 'substring function' => [
