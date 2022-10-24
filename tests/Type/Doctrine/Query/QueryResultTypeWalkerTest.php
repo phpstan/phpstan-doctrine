@@ -229,7 +229,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	}
 
 	/**
-	 * @return iterable<string,array{Type,string,2?:string}>
+	 * @return iterable<string,array{Type,string,2?:string|null}>
 	 */
 	public function getTestData(): iterable
 	{
