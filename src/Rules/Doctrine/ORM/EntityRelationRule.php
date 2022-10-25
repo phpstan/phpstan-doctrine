@@ -5,7 +5,6 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
-use PHPStan\Reflection\MissingPropertyFromReflectionException;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ErrorType;
@@ -13,7 +12,9 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
 use function get_class;
@@ -69,12 +70,6 @@ class EntityRelationRule implements Rule
 		}
 
 		$propertyName = $node->getName();
-		try {
-			$property = $class->getNativeProperty($propertyName);
-		} catch (MissingPropertyFromReflectionException $e) {
-			return [];
-		}
-
 		if (!isset($metadata->associationMappings[$propertyName])) {
 			return [];
 		}
@@ -110,46 +105,49 @@ class EntityRelationRule implements Rule
 			);
 		}
 
+		$phpDocType = $node->getPhpDocType();
+		$nativeType = $node->getNativeType() !== null ? ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $scope->getClassReflection()) : new MixedType();
+		$propertyType = TypehintHelper::decideType($nativeType, $phpDocType);
+
 		$errors = [];
 		if ($columnType !== null) {
-			$propertyWritableType = $property->getWritableType();
-			if (get_class($propertyWritableType) === MixedType::class || $propertyWritableType instanceof ErrorType || $propertyWritableType instanceof NeverType) {
+			if (get_class($propertyType) === MixedType::class || $propertyType instanceof ErrorType || $propertyType instanceof NeverType) {
 				return [];
 			}
 
 			$collectionObjectType = new ObjectType('Doctrine\Common\Collections\Collection');
-			$propertyWritableTypeToCheckAgainst = $propertyWritableType;
+			$propertyTypeToCheckAgainst = $propertyType;
 			if (
 				$toMany
-				&& $collectionObjectType->isSuperTypeOf($propertyWritableType)->yes()
-				&& $propertyWritableType->isIterable()->yes()
+				&& $collectionObjectType->isSuperTypeOf($propertyType)->yes()
+				&& $propertyType->isIterable()->yes()
 			) {
-				$propertyWritableTypeToCheckAgainst = TypeCombinator::intersect(
+				$propertyTypeToCheckAgainst = TypeCombinator::intersect(
 					$collectionObjectType,
-					new IterableType(new MixedType(true), $propertyWritableType->getIterableValueType())
+					new IterableType(new MixedType(true), $propertyType->getIterableValueType())
 				);
 			}
-			if (!$propertyWritableTypeToCheckAgainst->isSuperTypeOf($columnType)->yes()) {
+			if (!$propertyTypeToCheckAgainst->isSuperTypeOf($columnType)->yes()) {
 				$errors[] = sprintf(
 					'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
 					$className,
 					$propertyName,
 					$columnType->describe(VerbosityLevel::typeOnly()),
-					$propertyWritableType->describe(VerbosityLevel::typeOnly())
+					$propertyType->describe(VerbosityLevel::typeOnly())
 				);
 			}
 			if (
 				!$columnType->isSuperTypeOf(
 					$this->allowNullablePropertyForRequiredField
-						? TypeCombinator::removeNull($property->getReadableType())
-						: $property->getReadableType()
+						? TypeCombinator::removeNull($propertyType)
+						: $propertyType
 				)->yes()
 			) {
 				$errors[] = sprintf(
 					'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 					$className,
 					$propertyName,
-					$property->getReadableType()->describe(VerbosityLevel::typeOnly()),
+					$propertyType->describe(VerbosityLevel::typeOnly()),
 					$columnType->describe(VerbosityLevel::typeOnly())
 				);
 			}

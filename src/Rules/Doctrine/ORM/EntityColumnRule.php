@@ -5,7 +5,6 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
-use PHPStan\Reflection\MissingPropertyFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ArrayType;
@@ -16,8 +15,10 @@ use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
@@ -88,12 +89,6 @@ class EntityColumnRule implements Rule
 		}
 
 		$propertyName = $node->getName();
-		try {
-			$property = $class->getNativeProperty($propertyName);
-		} catch (MissingPropertyFromReflectionException $e) {
-			return [];
-		}
-
 		if (!isset($metadata->fieldMappings[$propertyName])) {
 			return [];
 		}
@@ -157,8 +152,11 @@ class EntityColumnRule implements Rule
 			$writableToDatabaseType = TypeCombinator::addNull($writableToDatabaseType);
 		}
 
-		$propertyWritableType = $property->getWritableType();
-		if (get_class($propertyWritableType) === MixedType::class || $propertyWritableType instanceof ErrorType || $propertyWritableType instanceof NeverType) {
+		$phpDocType = $node->getPhpDocType();
+		$nativeType = $node->getNativeType() !== null ? ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $scope->getClassReflection()) : new MixedType();
+		$propertyType = TypehintHelper::decideType($nativeType, $phpDocType);
+
+		if (get_class($propertyType) === MixedType::class || $propertyType instanceof ErrorType || $propertyType instanceof NeverType) {
 			return [];
 		}
 
@@ -170,32 +168,31 @@ class EntityColumnRule implements Rule
 			return $traverse($type);
 		};
 
-		$propertyWritableType = TypeTraverser::map($propertyWritableType, $transformArrays);
+		$propertyTransformedType = TypeTraverser::map($propertyType, $transformArrays);
 
-		if (!$propertyWritableType->isSuperTypeOf($writableToPropertyType)->yes()) {
+		if (!$propertyTransformedType->isSuperTypeOf($writableToPropertyType)->yes()) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: database can contain %s but property expects %s.',
 				$className,
 				$propertyName,
-				$writableToPropertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyWritableType, $writableToPropertyType)),
-				$property->getWritableType()->describe(VerbosityLevel::getRecommendedLevelByType($propertyWritableType, $writableToPropertyType))
+				$writableToPropertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyTransformedType, $writableToPropertyType)),
+				$propertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyTransformedType, $writableToPropertyType))
 			);
 		}
-		$propertyReadableType = TypeTraverser::map($property->getReadableType(), $transformArrays);
 
 		if (
 			!$writableToDatabaseType->isSuperTypeOf(
 				$this->allowNullablePropertyForRequiredField || (in_array($propertyName, $identifiers, true) && !$nullable)
-					? TypeCombinator::removeNull($propertyReadableType)
-					: $propertyReadableType
+					? TypeCombinator::removeNull($propertyTransformedType)
+					: $propertyTransformedType
 			)->yes()
 		) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 				$className,
 				$propertyName,
-				$propertyReadableType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyReadableType)),
-				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyReadableType))
+				$propertyTransformedType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyTransformedType)),
+				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyTransformedType))
 			);
 		}
 		return $errors;
