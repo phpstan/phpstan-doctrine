@@ -16,15 +16,14 @@ class QueryResultTest
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, mixed>', $query);
 
 		$query = $em->createQuery('
 			SELECT		m.intColumn, m.stringNullColumn
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}>', $query);
-
+		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, mixed>', $query);
 	}
 
 	/**
@@ -41,7 +40,7 @@ class QueryResultTest
 		');
 
 		assertType(
-			'array<QueryResult\Entities\Many>',
+			'list<QueryResult\Entities\Many>',
 			$query->getResult()
 		);
 		assertType(
@@ -83,7 +82,7 @@ class QueryResultTest
 		');
 
 		assertType(
-			'array<QueryResult\Entities\Many>',
+			'list<QueryResult\Entities\Many>',
 			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
@@ -91,15 +90,15 @@ class QueryResultTest
 			$query->toIterable([], AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<QueryResult\Entities\Many>',
+			'list<QueryResult\Entities\Many>',
 			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<QueryResult\Entities\Many>',
+			'list<QueryResult\Entities\Many>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<QueryResult\Entities\Many>',
+			'list<QueryResult\Entities\Many>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
@@ -117,19 +116,19 @@ class QueryResultTest
 		');
 
 		assertType(
-			'array<array{intColumn: int, stringNullColumn: string|null}>',
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
 			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<array{intColumn: int, stringNullColumn: string|null}>',
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
 			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<array{intColumn: int, stringNullColumn: string|null}>',
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<array{intColumn: int, stringNullColumn: string|null}>',
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
@@ -317,7 +316,7 @@ class QueryResultTest
 	public function testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(EntityManagerInterface $em, Query $query): void
 	{
 		assertType(
-			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			'list<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
 			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
@@ -325,15 +324,15 @@ class QueryResultTest
 			$query->toIterable([], AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			'list<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
 			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			'list<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'array<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
+			'list<T of array|object (method QueryResult\queryResult\QueryResultTest::testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(), argument)>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(

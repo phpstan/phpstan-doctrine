@@ -4,8 +4,9 @@ namespace Doctrine\ORM;
 
 /**
  * @template TResult The type of results returned by this query in HYDRATE_OBJECT mode
+ * @template TIndex The index type of the results
  *
- * @extends AbstractQuery<TResult>
+ * @extends AbstractQuery<TResult, TIndex>
  */
 final class Query extends AbstractQuery
 {

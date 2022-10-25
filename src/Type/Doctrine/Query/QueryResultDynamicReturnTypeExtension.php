@@ -8,6 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -18,6 +19,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VoidType;
 
 final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -70,12 +72,25 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 		$queryType = $scope->getType($methodCall->var);
 		$queryResultType = $this->getQueryResultType($queryType);
+		$queryIndexType = $this->getQueryIndexType($queryType);
 
 		return $this->getMethodReturnTypeForHydrationMode(
 			$methodReflection,
 			$hydrationMode,
-			$queryResultType
+			$queryResultType,
+			$queryIndexType
 		);
+	}
+
+	private function getQueryIndexType(Type $queryType): Type
+	{
+		if (!$queryType instanceof GenericObjectType) {
+			return new MixedType();
+		}
+
+		$types = $queryType->getTypes();
+
+		return $types[1] ?? new MixedType();
 	}
 
 	private function getQueryResultType(Type $queryType): Type
@@ -92,7 +107,8 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	private function getMethodReturnTypeForHydrationMode(
 		MethodReflection $methodReflection,
 		Type $hydrationMode,
-		Type $queryResultType
+		Type $queryResultType,
+		?Type $queryIndexType
 	): Type
 	{
 		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
@@ -126,10 +142,17 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					$queryResultType
 				);
 			default:
-				return new ArrayType(
-					new MixedType(),
-					$queryResultType
-				);
+				return $queryIndexType instanceof MixedType
+					? AccessoryArrayListType::intersectWith(
+						TypeCombinator::intersect(
+							new ArrayType(new IntegerType(), $queryResultType),
+							...TypeUtils::getAccessoryTypes($queryResultType)
+						)
+					)
+					: new ArrayType(
+						$queryIndexType,
+						$queryResultType
+					);
 		}
 	}
 

@@ -153,7 +153,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	{
 		$em = $this->objectMetadataResolver->getObjectManager();
 		if (!$em instanceof EntityManagerInterface) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null);
 		}
 
 		$typeBuilder = new QueryResultTypeBuilder();
@@ -162,10 +162,10 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
 		} catch (ORMException | DBALException | CommonException $e) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null);
 		}
 
-		return new QueryType($dql, $typeBuilder->getResultType());
+		return new QueryType($dql, $typeBuilder->getResultType(), $typeBuilder->getIndexType());
 	}
 
 }

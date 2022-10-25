@@ -62,6 +62,11 @@ final class QueryResultTypeBuilder
 	 */
 	private $newObjects = [];
 
+	/**
+	 * @var Type|null
+	 */
+	private $indexedBy = null;
+
 	public function setSelectQuery(): void
 	{
 		$this->selectQuery = true;
@@ -228,6 +233,16 @@ final class QueryResultTypeBuilder
 		}
 
 		return new ConstantStringType($alias);
+	}
+
+    public function setIndexedBy(Type $type): void
+    {
+		$this->indexedBy = $type;
+    }
+
+	public function getIndexType(): ?Type
+	{
+		return $this->indexedBy;
 	}
 
 }
