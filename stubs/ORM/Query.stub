@@ -3,10 +3,23 @@
 namespace Doctrine\ORM;
 
 /**
+ * @template TKey as array-key
  * @template TResult The type of results returned by this query in HYDRATE_OBJECT mode
  *
  * @extends AbstractQuery<TResult>
  */
 final class Query extends AbstractQuery
 {
+    /**
+     * @param int|string $hydrationMode
+     *
+     * @phpstan-return (
+     *    $hydrationMode is self::HYDRATE_OBJECT
+     *    ? array<TKey, TValue>
+     *    : mixed
+     * )
+     */
+    public function getResult($hydrationMode = self::HYDRATE_OBJECT)
+    {
+    }
 }
