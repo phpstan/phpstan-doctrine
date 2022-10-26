@@ -15,7 +15,6 @@ use PHPStan\Type\MethodTypeSpecifyingExtension;
 final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
 
-	private const COLLECTION_CLASS = 'Doctrine\Common\Collections\Collection';
 	private const IS_EMPTY_METHOD_NAME = 'isEmpty';
 	private const FIRST_METHOD_NAME = 'first';
 	private const LAST_METHOD_NAME = 'last';
@@ -23,9 +22,20 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 	/** @var TypeSpecifier */
 	private $typeSpecifier;
 
+	/** @var class-string */
+	private $collectionClass;
+
+	/**
+	 * @param class-string $collectionClass
+	 */
+	public function __construct(string $collectionClass)
+	{
+		$this->collectionClass = $collectionClass;
+	}
+
 	public function getClass(): string
 	{
-		return self::COLLECTION_CLASS;
+		return $this->collectionClass;
 	}
 
 	public function isMethodSupported(
@@ -35,8 +45,8 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 	): bool
 	{
 		return (
-			$methodReflection->getDeclaringClass()->getName() === self::COLLECTION_CLASS
-			|| $methodReflection->getDeclaringClass()->isSubclassOf(self::COLLECTION_CLASS)
+			$methodReflection->getDeclaringClass()->getName() === $this->collectionClass
+			|| $methodReflection->getDeclaringClass()->isSubclassOf($this->collectionClass)
 		)
 		&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
 	}

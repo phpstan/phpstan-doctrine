@@ -370,6 +370,15 @@ services:
 	# Doctrine Collection
 	-
 		class: PHPStan\Type\Doctrine\Collection\IsEmptyTypeSpecifyingExtension
+		arguments:
+			collectionClass: Doctrine\Common\Collections\Collection
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
+
+	-
+		class: PHPStan\Type\Doctrine\Collection\IsEmptyTypeSpecifyingExtension
+		arguments:
+			collectionClass: Doctrine\Common\Collections\ReadableCollection
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 

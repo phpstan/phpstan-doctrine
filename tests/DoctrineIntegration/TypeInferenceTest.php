@@ -13,6 +13,7 @@ class TypeInferenceTest extends TypeInferenceTestCase
 	public function dataFileAsserts(): iterable
 	{
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/getRepository.php');
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/isEmpty.php');
 	}
 
 	/**
