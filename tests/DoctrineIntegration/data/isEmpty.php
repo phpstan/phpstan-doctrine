@@ -10,7 +10,7 @@ class Foo
 {
 
 	/** @var Collection<int, Bar> */
-	private Collection $shippingOptions;
+	private $shippingOptions;
 
 	public function __construct()
 	{
