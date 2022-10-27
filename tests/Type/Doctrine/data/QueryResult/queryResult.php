@@ -237,31 +237,31 @@ class QueryResultTest
 	public function testReturnTypeOfQueryMethodsWithReturnTypeIsMixed(EntityManagerInterface $em, Query $query): void
 	{
 		assertType(
-			'mixed',
+			'array<(int|string)>',
 			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'iterable',
+			'iterable<(int|string)>',
 			$query->toIterable([], AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'mixed',
+			'array<(int|string)>',
 			$query->execute(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'mixed',
+			'array<(int|string)>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'mixed',
+			'array<(int|string)>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'mixed',
+			'(int|string)',
 			$query->getSingleResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 		assertType(
-			'mixed',
+			'int|string|null',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 	}

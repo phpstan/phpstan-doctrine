@@ -23,6 +23,6 @@ cs-fix:
 phpstan:
 	php vendor/bin/phpstan analyse -l 8 -c phpstan.neon src tests
 
-.PHONY: phpstan-generate-baseline
+.PHONY: phpstan-generate-baselmake ine
 phpstan-generate-baseline:
 	php vendor/bin/phpstan analyse -l 8 -c phpstan.neon src tests -b phpstan-baseline.neon
