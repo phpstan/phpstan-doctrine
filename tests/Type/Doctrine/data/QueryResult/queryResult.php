@@ -232,7 +232,7 @@ class QueryResultTest
 	 * Test that we return the original return type when ResultType may be
 	 * VoidType
 	 *
-	 * @param Query<mixed> $query
+	 * @param Query<array-key, mixed> $query
 	 */
 	public function testReturnTypeOfQueryMethodsWithReturnTypeIsMixed(EntityManagerInterface $em, Query $query): void
 	{

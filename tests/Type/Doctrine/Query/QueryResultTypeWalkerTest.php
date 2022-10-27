@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
@@ -190,6 +191,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	{
 		$em = self::$em;
 
+		/** @var Query<array-key, mixed> $query */
 		$query = $em->createQuery($dql);
 
 		$typeBuilder = new QueryResultTypeBuilder();

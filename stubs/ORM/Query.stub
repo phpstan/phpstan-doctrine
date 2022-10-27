@@ -10,12 +10,13 @@ namespace Doctrine\ORM;
  */
 final class Query extends AbstractQuery
 {
+    public const HYDRATE_OBJECT = 1;
+
     /**
      * @param int|string $hydrationMode
      *
-     * @phpstan-return (
-     *    $hydrationMode is self::HYDRATE_OBJECT
-     *    ? array<TKey, TValue>
+     * @return ($hydrationMode is self::HYDRATE_OBJECT
+     *    ? array<TKey, TResult>
      *    : mixed
      * )
      */

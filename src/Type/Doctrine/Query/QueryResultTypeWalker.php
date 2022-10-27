@@ -79,7 +79,7 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	private $newObjectCounter = 0;
 
-	/** @var Query<mixed> */
+	/** @var Query<array-key, mixed> */
 	private $query;
 
 	/** @var EntityManagerInterface */
@@ -108,7 +108,7 @@ class QueryResultTypeWalker extends SqlWalker
 	private $hasGroupByClause;
 
 	/**
-	 * @param Query<mixed> $query
+	 * @param Query<array-key, mixed> $query
 	 */
 	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry): void
 	{
@@ -123,7 +123,7 @@ class QueryResultTypeWalker extends SqlWalker
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @param Query<mixed> $query
+	 * @param Query<array-key, mixed> $query
 	 * @param ParserResult $parserResult
 	 * @param array<QueryComponent> $queryComponents
 	 */

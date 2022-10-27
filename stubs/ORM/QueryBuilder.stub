@@ -15,7 +15,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @return Query<mixed>
+	 * @return Query<array-key, mixed>
 	 */
 	public function getQuery()
 	{

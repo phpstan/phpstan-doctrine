@@ -49,7 +49,7 @@ class QueryBuilderGetQuery
 	{
 		$query = $builder->getQuery();
 
-		assertType('Doctrine\ORM\Query<mixed>', $query);
+		assertType('Doctrine\ORM\Query<array-key, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsInvalid(EntityManagerInterface $em): void
@@ -59,7 +59,7 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<mixed>', $query);
+		assertType('Doctrine\ORM\Query<array-key, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsVoidWithDeleteOrUpdate(EntityManagerInterface $em): void

@@ -84,6 +84,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 				$typeBuilder = new QueryResultTypeBuilder();
 
 				try {
+					/** @var Query<array-key, mixed> $query */
 					$query = $em->createQuery($queryString);
 					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
 				} catch (ORMException | DBALException | NewDBALException | CommonException $e) {
