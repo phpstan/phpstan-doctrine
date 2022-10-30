@@ -21,4 +21,11 @@ class CatchWithUnthrownExceptionRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/unthrown-exception.php'], []);
 	}
 
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/../../../extension.neon',
+		];
+	}
+
 }
