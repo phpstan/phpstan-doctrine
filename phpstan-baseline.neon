@@ -26,6 +26,11 @@ parameters:
 			path: src/Rules/Doctrine/ORM/EntityRelationRule.php
 
 		-
+			message: "#^Calling PHPStan\\\\Analyser\\\\MutatingScope\\:\\:enterNamespace\\(\\) is not covered by backward compatibility promise\\. The method might change in a minor PHPStan version\\.$#"
+			count: 1
+			path: src/Type/Doctrine/QueryBuilder/OtherMethodQueryBuilderParser.php
+
+		-
 			message: "#^Call to method getProperty\\(\\) on an unknown class PHPStan\\\\BetterReflection\\\\Reflection\\\\Adapter\\\\ReflectionEnum\\.$#"
 			count: 1
 			path: src/Rules/Gedmo/PropertiesExtension.php

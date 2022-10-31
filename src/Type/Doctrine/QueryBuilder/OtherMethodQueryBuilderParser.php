@@ -103,13 +103,13 @@ class OtherMethodQueryBuilderParser
 		/** @var ScopeFactory $scopeFactory */
 		$scopeFactory = $this->container->getByType(ScopeFactory::class);
 
-		$methodScope = $scopeFactory->create(
-			ScopeContext::create($fileName),
-			$scope->isDeclareStrictTypes(),
-			[],
-			$methodReflection,
-			$scope->getNamespace()
-		)->enterClass($methodReflection->getDeclaringClass())->enterClassMethod($methodNode, TemplateTypeMap::createEmpty(), [], null, null, null, false, false, false);
+		$methodScope = $scopeFactory->create(ScopeContext::create($fileName));
+		if ($scope->getNamespace() !== null) {
+			$methodScope = $methodScope->enterNamespace($scope->getNamespace());
+		}
+
+		$methodScope = $methodScope->enterClass($methodReflection->getDeclaringClass())
+			->enterClassMethod($methodNode, TemplateTypeMap::createEmpty(), [], null, null, null, false, false, false);
 
 		$queryBuilderTypes = [];
 
