@@ -55,6 +55,13 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
 
 		$query = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm', 'm.stringColumn')
+			->getQuery();
+
+		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, string>', $query);
+
+		$query = $em->createQueryBuilder()
 			->select(['m.intColumn', 'm.stringNullColumn'])
 			->from(Many::class, 'm')
 			->indexBy('m', 'm.stringColumn')
@@ -67,7 +74,7 @@ class QueryBuilderGetQuery
 	{
 		$query = $builder->getQuery();
 
-		assertType('Doctrine\ORM\Query<mixed>', $query);
+		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsInvalid(EntityManagerInterface $em): void

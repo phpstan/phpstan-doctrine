@@ -11,6 +11,7 @@ use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Doctrine\Type\ListIndexMarkerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
@@ -142,7 +143,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					$queryResultType
 				);
 			default:
-				return $queryIndexType instanceof MixedType
+				return $queryIndexType instanceof ListIndexMarkerType
 					? AccessoryArrayListType::intersectWith(
 						TypeCombinator::intersect(
 							new ArrayType(new IntegerType(), $queryResultType),
@@ -150,7 +151,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 						)
 					)
 					: new ArrayType(
-						$queryIndexType,
+						new MixedType(),
 						$queryResultType
 					);
 		}

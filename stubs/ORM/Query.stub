@@ -4,7 +4,7 @@ namespace Doctrine\ORM;
 
 /**
  * @template TResult The type of results returned by this query in HYDRATE_OBJECT mode
- * @template TIndex The index type of the results
+ * @template TIndex The type of column used in indexBy, mixed if no indexBy is used
  *
  * @extends AbstractQuery<TResult, TIndex>
  */

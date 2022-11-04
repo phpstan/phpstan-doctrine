@@ -29,7 +29,7 @@ class CreateQuery
 	{
 		$query = $em->createQuery($dql);
 
-		assertType('Doctrine\ORM\Query<mixed>', $query); // TODO fix
+		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsInvalid(EntityManagerInterface $em, string $dql): void

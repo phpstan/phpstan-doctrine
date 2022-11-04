@@ -24,7 +24,7 @@ use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 
 /**
- * Infers TResult in Query<TResult> on EntityManagerInterface::createQuery()
+ * Infers TResult and TIndex in Query<TResult, TIndex> on EntityManagerInterface::createQuery()
  */
 final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -94,7 +94,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 			}
 			return new GenericObjectType(
 				Query::class,
-				[new MixedType()]
+				[new MixedType(), new MixedType()]
 			);
 		});
 	}

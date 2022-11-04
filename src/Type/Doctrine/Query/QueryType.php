@@ -18,7 +18,8 @@ class QueryType extends GenericObjectType
 		string $dql,
 		?Type $resultType,
 		?Type $indexType
-	) {
+	)
+	{
 		parent::__construct('Doctrine\ORM\Query', [
 			$resultType ?? new MixedType(),
 			$indexType ?? new MixedType(),

@@ -5,6 +5,7 @@ namespace PHPStan\Type\Doctrine\Query;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\Doctrine\Type\ListIndexMarkerType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VoidType;
@@ -62,10 +63,13 @@ final class QueryResultTypeBuilder
 	 */
 	private $newObjects = [];
 
-	/**
-	 * @var Type|null
-	 */
-	private $indexedBy = null;
+	/** @var Type */
+	private $indexedBy;
+
+	public function __construct()
+	{
+		$this->indexedBy = new ListIndexMarkerType();
+	}
 
 	public function setSelectQuery(): void
 	{
@@ -235,12 +239,12 @@ final class QueryResultTypeBuilder
 		return new ConstantStringType($alias);
 	}
 
-    public function setIndexedBy(Type $type): void
-    {
+	public function setIndexedBy(Type $type): void
+	{
 		$this->indexedBy = $type;
-    }
+	}
 
-	public function getIndexType(): ?Type
+	public function getIndexType(): Type
 	{
 		return $this->indexedBy;
 	}
