@@ -70,6 +70,34 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, string>', $query);
 	}
 
+	public function testIndexByResultInfering(EntityManagerInterface $em): void
+	{
+		$result = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm', 'm.intColumn')
+			->getQuery()
+			->getResult();
+
+		assertType('array<QueryResult\Entities\Many>', $result);
+
+		$result = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm', 'm.stringColumn')
+			->getQuery()
+			->getResult();
+
+		assertType('array<QueryResult\Entities\Many>', $result);
+
+		$result = $em->createQueryBuilder()
+			->select(['m.intColumn', 'm.stringNullColumn'])
+			->from(Many::class, 'm')
+			->indexBy('m', 'm.stringColumn')
+			->getQuery()
+			->getResult();
+
+		assertType('array<array{intColumn: int, stringNullColumn: string|null}>', $result);
+	}
+
 	public function testQueryResultTypeIsMixedWhenDQLIsNotKnown(QueryBuilder $builder): void
 	{
 		$query = $builder->getQuery();
