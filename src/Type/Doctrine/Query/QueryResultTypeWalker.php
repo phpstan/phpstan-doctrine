@@ -45,7 +45,6 @@ use function intval;
 use function is_numeric;
 use function is_object;
 use function is_string;
-use function is_subclass_of;
 use function serialize;
 use function sprintf;
 use function strtolower;
@@ -1300,7 +1299,7 @@ class QueryResultTypeWalker extends SqlWalker
 		$type = $metadata['type'];
 		$enumType = $metadata['enumType'] ?? null;
 
-		if (!is_string($enumType) || !class_exists($enumType) || !is_subclass_of($enumType, BackedEnum::class)) {
+		if (!is_string($enumType) || !class_exists($enumType)) {
 			$enumType = null;
 		}
 
