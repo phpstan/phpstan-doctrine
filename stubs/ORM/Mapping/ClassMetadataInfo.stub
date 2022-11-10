@@ -18,7 +18,7 @@ use ReflectionClass;
  *      notInsertable?: bool,
  *      notUpdatable?: bool,
  *      generated?: int,
- *      enumType?: class-string<BackedEnum>,
+ *      enumType?: class-string<\BackedEnum>,
  *      columnDefinition?: string,
  *      precision?: int,
  *      scale?: int,
