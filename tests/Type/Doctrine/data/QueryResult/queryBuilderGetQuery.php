@@ -124,7 +124,7 @@ class QueryBuilderGetQuery
 				 ->delete()
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<int, void>', $query);
+		assertType('Doctrine\ORM\Query<void, void>', $query);
 
 		$query = $em->getRepository(Many::class)
 				 ->createQueryBuilder('m')
@@ -134,7 +134,7 @@ class QueryBuilderGetQuery
 				 ->set('m.intColumn', '42')
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<int, void>', $query);
+		assertType('Doctrine\ORM\Query<void, void>', $query);
 
 	}
 

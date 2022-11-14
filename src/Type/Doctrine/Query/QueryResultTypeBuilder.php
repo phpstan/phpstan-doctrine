@@ -246,6 +246,10 @@ final class QueryResultTypeBuilder
 
 	public function getIndexType(): Type
 	{
+		if (!$this->selectQuery) {
+			return new VoidType();
+		}
+
 		return $this->indexedBy;
 	}
 
