@@ -16,14 +16,14 @@ class QueryResultTest
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
+		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many>', $query);
 
 		$query = $em->createQuery('
 			SELECT		m.intColumn, m.stringNullColumn
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, int>', $query);
+		assertType('Doctrine\ORM\Query<int, array{intColumn: int, stringNullColumn: string|null}>', $query);
 	}
 
 	/**
@@ -271,7 +271,7 @@ class QueryResultTest
 	 *
 	 * @template T
 	 *
-	 * @param Query<T, mixed> $query
+	 * @param Query<mixed, T> $query
 	 */
 	public function testReturnTypeOfQueryMethodsWithReturnTypeIsTemplateMixedType(EntityManagerInterface $em, Query $query): void
 	{
@@ -311,7 +311,7 @@ class QueryResultTest
 	 *
 	 * @template T of array|object
 	 *
-	 * @param Query<T, mixed> $query
+	 * @param Query<mixed, T> $query
 	 */
 	public function testReturnTypeOfQueryMethodsWithReturnTypeIsNonVoidTemplate(EntityManagerInterface $em, Query $query): void
 	{

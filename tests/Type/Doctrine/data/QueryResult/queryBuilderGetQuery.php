@@ -35,14 +35,14 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
+		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select(['m.intColumn', 'm.stringNullColumn'])
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, int>', $query);
+		assertType('Doctrine\ORM\Query<int, array{intColumn: int, stringNullColumn: string|null}>', $query);
 	}
 
 	public function testIndexByInfering(EntityManagerInterface $em): void
@@ -52,14 +52,14 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm', 'm.intColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
+		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select('m')
 			->from(Many::class, 'm', 'm.stringColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, string>', $query);
+		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select(['m.intColumn', 'm.stringNullColumn'])
@@ -67,7 +67,7 @@ class QueryBuilderGetQuery
 			->indexBy('m', 'm.stringColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, string>', $query);
+		assertType('Doctrine\ORM\Query<string, array{intColumn: int, stringNullColumn: string|null}>', $query);
 	}
 
 	public function testIndexByResultInfering(EntityManagerInterface $em): void
@@ -124,7 +124,7 @@ class QueryBuilderGetQuery
 				 ->delete()
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<void, int>', $query);
+		assertType('Doctrine\ORM\Query<int, void>', $query);
 
 		$query = $em->getRepository(Many::class)
 				 ->createQueryBuilder('m')
@@ -134,7 +134,7 @@ class QueryBuilderGetQuery
 				 ->set('m.intColumn', '42')
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<void, int>', $query);
+		assertType('Doctrine\ORM\Query<int, void>', $query);
 
 	}
 
@@ -143,7 +143,7 @@ class QueryBuilderGetQuery
 		$query = $this->getQueryBuilder($em)
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
+		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many>', $query);
 	}
 
 	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder

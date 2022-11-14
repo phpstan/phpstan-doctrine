@@ -16,13 +16,13 @@ class QueryType extends GenericObjectType
 
 	public function __construct(
 		string $dql,
-		?Type $resultType,
-		?Type $indexType
+		?Type $indexType,
+		?Type $resultType
 	)
 	{
 		parent::__construct('Doctrine\ORM\Query', [
-			$resultType ?? new MixedType(),
 			$indexType ?? new MixedType(),
+			$resultType ?? new MixedType(),
 		]);
 		$this->dql = $dql;
 	}

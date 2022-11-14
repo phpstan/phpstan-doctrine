@@ -91,7 +91,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 		$types = $queryType->getTypes();
 
-		return $types[1] ?? new MixedType();
+		return $types[0] ?? new MixedType();
 	}
 
 	private function getQueryResultType(Type $queryType): Type
@@ -102,14 +102,14 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 		$types = $queryType->getTypes();
 
-		return $types[0] ?? new MixedType();
+		return $types[1] ?? new MixedType();
 	}
 
 	private function getMethodReturnTypeForHydrationMode(
 		MethodReflection $methodReflection,
 		Type $hydrationMode,
 		Type $queryResultType,
-		?Type $queryIndexType
+		Type $queryIndexType
 	): Type
 	{
 		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
