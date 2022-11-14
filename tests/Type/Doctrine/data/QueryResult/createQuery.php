@@ -15,14 +15,14 @@ class CreateQuery
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, mixed>', $query);
+		assertType('Doctrine\ORM\Query<QueryResult\Entities\Many, int>', $query);
 
 		$query = $em->createQuery('
 			SELECT		m.intColumn, m.stringNullColumn
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, mixed>', $query);
+		assertType('Doctrine\ORM\Query<array{intColumn: int, stringNullColumn: string|null}, int>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsNotKnown(EntityManagerInterface $em, string $dql): void
