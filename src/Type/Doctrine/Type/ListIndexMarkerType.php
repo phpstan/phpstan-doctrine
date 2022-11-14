@@ -2,9 +2,9 @@
 
 namespace PHPStan\Type\Doctrine\Type;
 
-use PHPStan\Type\MixedType;
+use PHPStan\Type\IntegerType;
 
-class ListIndexMarkerType extends MixedType
+class ListIndexMarkerType extends IntegerType
 {
 
 }
