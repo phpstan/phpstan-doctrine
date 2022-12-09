@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -17,7 +18,7 @@ class BigIntType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new StringType();
+		return TypeCombinator::intersect(new StringType(), new AccessoryNumericStringType());
 	}
 
 	public function getWritableToDatabaseType(): Type
