@@ -18,20 +18,4 @@ abstract class AbstractQuery
 	{
 
 	}
-
-	/**
-	 * @return list<mixed>
-	 */
-	public function getArrayResult()
-	{
-
-	}
-
-	/**
-	 * @return list<mixed>
-	 */
-	public function getSingleColumnResult()
-	{
-
-	}
 }
