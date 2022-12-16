@@ -550,6 +550,7 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$nullable = ($joinColumn['nullable'] ?? true)
+					|| $this->isQueryComponentNullable($dqlAlias)
 					|| $this->hasAggregateWithoutGroupBy();
 
 				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);

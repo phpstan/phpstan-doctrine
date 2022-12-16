@@ -1377,6 +1377,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantIntegerType(6), TypeCombinator::addNull($this->numericStringOrInt())],
 				[new ConstantIntegerType(7), TypeCombinator::addNull(new MixedType())],
 				[new ConstantIntegerType(8), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(9), TypeCombinator::addNull($this->numericStringOrInt())],
 			]),
 			'
 				SELECT		IDENTITY(m.oneNull),
@@ -1386,8 +1387,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							IDENTITY(m.compoundPk, \'id\'),
 							IDENTITY(m.compoundPk, \'version\'),
 							IDENTITY(m.compoundPkAssoc),
-							IDENTITY(m.compoundPkAssoc, \'version\')
+							IDENTITY(m.compoundPkAssoc, \'version\'),
+							IDENTITY(o.subOne)
 				FROM		QueryResult\Entities\Many m
+				LEFT JOIN   m.oneNull o
 			',
 		];
 
