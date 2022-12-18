@@ -18,16 +18,28 @@ interface Collection extends Countable, IteratorAggregate, ArrayAccess, Readable
 
     /**
      * @phpstan-impure
+     *
+     * @param T $element
+     *
+     * @return true
      */
     public function add($element) {}
 
     /**
      * @phpstan-impure
+     *
+     * @param TKey $key
+     *
+     * @return T|null
      */
     public function remove($key) {}
 
     /**
      * @phpstan-impure
+     *
+     * @param T $element
+     *
+     * @return bool
      */
     public function removeElement($element) {}
 
