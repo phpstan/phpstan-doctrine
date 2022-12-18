@@ -26,6 +26,13 @@ if ($collection->isEmpty()) {
 
 	$false2 = $collection->last();
 	$false2;
+
+	$collection->add($new);
+	$result1 = $collection->first();
+	$result1;
+
+	$result2 = $collection->last();
+	$result2;
 }
 
 if (!$collection->isEmpty()) {
@@ -34,4 +41,11 @@ if (!$collection->isEmpty()) {
 
 	$entity2 = $collection->last();
 	$entity2;
+
+	$collection->removeElement($new);
+	$result3 = $collection->first();
+	$result3;
+
+	$result4 = $collection->last();
+	$result4;
 }

@@ -16,4 +16,19 @@ use IteratorAggregate;
 interface Collection extends Countable, IteratorAggregate, ArrayAccess, ReadableCollection
 {
 
+    /**
+     * @phpstan-impure
+     */
+    public function add($element) {}
+
+    /**
+     * @phpstan-impure
+     */
+    public function remove($key) {}
+
+    /**
+     * @phpstan-impure
+     */
+    public function removeElement($element) {}
+
 }
