@@ -36,28 +36,28 @@ class IsEmptyTypeSpecifyingExtensionTest extends RuleTestCase
 				28,
 			],
 			[
-				'Variable $result1 is: MyEntity|false',
-				32,
-			],
-			[
-				'Variable $result2 is: MyEntity|false',
-				35,
-			],
-			[
 				'Variable $entity1 is: MyEntity',
-				40,
+				33,
 			],
 			[
 				'Variable $entity2 is: MyEntity',
-				43,
+				36,
+			],
+			[
+				'Variable $result1 is: MyEntity|false',
+				42,
+			],
+			[
+				'Variable $result2 is: MyEntity|false',
+				45,
 			],
 			[
 				'Variable $result3 is: MyEntity|false',
-				47,
+				51,
 			],
 			[
 				'Variable $result4 is: MyEntity|false',
-				50,
+				54,
 			],
 		]);
 	}

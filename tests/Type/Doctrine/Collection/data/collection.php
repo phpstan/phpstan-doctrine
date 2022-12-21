@@ -26,7 +26,17 @@ if ($collection->isEmpty()) {
 
 	$false2 = $collection->last();
 	$false2;
+}
 
+if (!$collection->isEmpty()) {
+	$entity1 = $collection->first();
+	$entity1;
+
+	$entity2 = $collection->last();
+	$entity2;
+}
+
+if ($collection->isEmpty()) {
 	$collection->add($new);
 	$result1 = $collection->first();
 	$result1;
@@ -36,12 +46,6 @@ if ($collection->isEmpty()) {
 }
 
 if (!$collection->isEmpty()) {
-	$entity1 = $collection->first();
-	$entity1;
-
-	$entity2 = $collection->last();
-	$entity2;
-
 	$collection->removeElement($new);
 	$result3 = $collection->first();
 	$result3;
