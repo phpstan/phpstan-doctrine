@@ -2,6 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
+use BackedEnum;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use ReflectionClass;
 
@@ -18,7 +19,7 @@ use ReflectionClass;
  *      notInsertable?: bool,
  *      notUpdatable?: bool,
  *      generated?: int,
- *      enumType?: class-string<\BackedEnum>,
+ *      enumType?: class-string<BackedEnum>,
  *      columnDefinition?: string,
  *      precision?: int,
  *      scale?: int,
@@ -76,6 +77,14 @@ use ReflectionClass;
  *     targetToSourceKeyColumns?: array<string, string>,
  *     type: int,
  *     unique?: bool,
+ * }
+ * @psalm-type DiscriminatorColumnMapping = array{
+ *     name: string,
+ *     fieldName: string,
+ *     type: string,
+ *     length?: int,
+ *     columnDefinition?: string|null,
+ *     enumType?: class-string<BackedEnum>|null,
  * }
  */
 class ClassMetadataInfo implements ClassMetadata
