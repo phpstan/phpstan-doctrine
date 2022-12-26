@@ -6,6 +6,7 @@ use Composer\InstalledVersions;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -48,6 +49,7 @@ use function class_exists;
 use function count;
 use function property_exists;
 use function sprintf;
+use function strpos;
 use function version_compare;
 use const PHP_VERSION_ID;
 
@@ -1310,6 +1312,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		// There is no error after the merge of https://github.com/doctrine/dbal/pull/5755
+		$moduloError = strpos((new SqlitePlatform())->getModExpression('', ''), '%') === false;
 		yield 'mod function error' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), TypeCombinator::addNull($this->uintStringified())],
@@ -1318,7 +1322,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				SELECT		MOD(10, NULLIF(m.intColumn, m.intColumn))
 				FROM		QueryResult\Entities\Many m
 			',
-			PHP_VERSION_ID < 70400 ? 'Modulo by zero' : null,
+			$moduloError ? 'Modulo by zero' : null,
 		];
 
 		yield 'substring function' => [
