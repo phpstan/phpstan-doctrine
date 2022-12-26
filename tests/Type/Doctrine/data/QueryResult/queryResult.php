@@ -143,11 +143,11 @@ class QueryResultTest
 	}
 
 	/**
-	 * Test that we properly infer the return type of Query methods with explicit hydration mode that is not HYDRATE_OBJECT
+	 * Test that we properly infer the return type of Query methods with explicit hydration mode of HYDRATE_ARRAY
 	 *
-	 * We are never able to infer the return type here
+	 * We can infer the return type by changing every object by an array
 	 */
-	public function testReturnTypeOfQueryMethodsWithExplicitNonObjectHydrationMode(EntityManagerInterface $em): void
+	public function testReturnTypeOfQueryMethodsWithExplicitArrayHydrationMode(EntityManagerInterface $em): void
 	{
 		$query = $em->createQuery('
 			SELECT		m
@@ -155,32 +155,378 @@ class QueryResultTest
 		');
 
 		assertType(
-			'mixed',
+			'list<array>',
 			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'iterable',
+			'list<array>',
+			$query->getArrayResult()
+		);
+		assertType(
+			'iterable<int, array>',
 			$query->toIterable([], AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'mixed',
+			'list<array>',
 			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'mixed',
+			'list<array>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'mixed',
+			'list<array>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'mixed',
+			'array',
 			$query->getSingleResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'mixed',
+			'array|null',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn, m.stringNullColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->getArrayResult()
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null}',
+			$query->getSingleResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null}|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+	}
+
+	/**
+	 * Test that we properly infer the return type of Query methods with explicit hydration mode of HYDRATE_SCALAR
+	 */
+	public function testReturnTypeOfQueryMethodsWithExplicitScalarHydrationMode(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array>',
+			$query->getResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->getScalarResult()
+		);
+		assertType(
+			'iterable<int, array>',
+			$query->toIterable([], AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->execute(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'array',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'array|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn, m.stringNullColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->getResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->getScalarResult()
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->execute(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null}>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null}',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null}|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR)
+		);
+	}
+
+	/**
+	 * Test that we properly infer the return type of Query methods with explicit hydration mode of HYDRATE_SCALAR
+	 */
+	public function testReturnTypeOfQueryMethodsWithExplicitSingleScalarHydrationMode(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array>',
+			$query->getResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->getSingleScalarResult()
+		);
+		assertType(
+			'iterable<int, array>',
+			$query->toIterable([], AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->execute(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'array',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'array|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array{intColumn: int}>',
+			$query->getResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int}>',
+			$query->getSingleScalarResult()
+		);
+		assertType(
+			'list<array{intColumn: int}>',
+			$query->execute(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int}>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'list<array{intColumn: int}>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'array{intColumn: int}',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+		assertType(
+			'array{intColumn: int}|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+		);
+	}
+
+	/**
+	 * Test that we properly infer the return type of Query methods with explicit hydration mode of HYDRATE_SIMPLEOBJECT
+	 *
+	 * We are never able to infer the return type here
+	 */
+	public function testReturnTypeOfQueryMethodsWithExplicitSimpleObjectHydrationMode(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<QueryResult\Entities\Many>',
+			$query->getResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'iterable<int, QueryResult\Entities\Many>',
+			$query->toIterable([], AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<QueryResult\Entities\Many>',
+			$query->execute(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<QueryResult\Entities\Many>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<QueryResult\Entities\Many>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'QueryResult\Entities\Many',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'QueryResult\Entities\Many|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn, m.stringNullColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<mixed>',
+			$query->getResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<mixed>',
+			$query->execute(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<mixed>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'list<mixed>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+		assertType(
+			'mixed',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
+		);
+	}
+
+	/**
+	 * Test that we properly infer the return type of Query methods with explicit hydration mode of HYDRATE_SCALAR_COLUMN
+	 *
+	 * We are never able to infer the return type here
+	 */
+	public function testReturnTypeOfQueryMethodsWithExplicitScalarColumnHydrationMode(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<mixed>',
+			$query->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<mixed>',
+			$query->getSingleColumnResult()
+		);
+		assertType(
+			'iterable<int, mixed>',
+			$query->toIterable([], AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<mixed>',
+			$query->execute(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<mixed>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<mixed>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'mixed',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'mixed',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<int>',
+			$query->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<int>',
+			$query->getSingleColumnResult()
+		);
+		assertType(
+			'list<int>',
+			$query->execute(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<int>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'list<int>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'int',
+			$query->getSingleResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
+		);
+		assertType(
+			'int|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 	}
 
