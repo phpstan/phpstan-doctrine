@@ -14,6 +14,10 @@ class ExpressionBuilderGetQuery
 		return $value; // Using the 'string' return type to provide a non `literal-string`, e.g. $_POST['field'];
 	}
 
+	private function nonLiteralInteger(int $value): int {
+		return $value;
+	}
+
 	public function isNullLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->isNull('field');
@@ -64,6 +68,13 @@ class ExpressionBuilderGetQuery
 	{
 		$value = $this->nonLiteralString('A');
 		$result = $em->createQueryBuilder()->expr()->between('field', "'value_1'", "'" . $value . "'");
+		assertType('string', $result);
+	}
+
+	public function betweenNonLiteralString4(EntityManagerInterface $em): void
+	{
+		$value = $this->nonLiteralInteger(2); // Integers are not literal-strings
+		$result = $em->createQueryBuilder()->expr()->between('field', '1', $value);
 		assertType('string', $result);
 	}
 

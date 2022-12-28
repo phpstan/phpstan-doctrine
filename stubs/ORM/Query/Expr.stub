@@ -23,8 +23,8 @@ class Expr
 
 	/**
 	 * @param string $val
-	 * @param string $x
-	 * @param string $y
+	 * @param int|string $x
+	 * @param int|string $y
 	 * @return ($val is literal-string ? ($x is literal-string ? ($y is literal-string ? literal-string&non-empty-string : string) : string) : string)
 	 */
 	public function between($val, $x, $y)

@@ -67,6 +67,12 @@ class ExpressionBuilderGetQueryNoObjectManager
 		assertType('string', $result);
 	}
 
+	public function betweenNonLiteralString4(EntityManagerInterface $em): void
+	{
+		$result = $em->createQueryBuilder()->expr()->between('field', '1', 2); // Integers are not literal-strings
+		assertType('string', $result);
+	}
+
 	public function countDistinctLiteralString(EntityManagerInterface $em): void
 	{
 		$result = $em->createQueryBuilder()->expr()->countDistinct('A', 'B', 'C');
