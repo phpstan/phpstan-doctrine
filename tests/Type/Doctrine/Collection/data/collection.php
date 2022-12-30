@@ -2,6 +2,8 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use function PHPStan\Testing\assertType;
+
 class MyEntity
 {
 
@@ -15,23 +17,41 @@ $new = new MyEntity();
 $collection = new ArrayCollection();
 
 $entityOrFalse1 = $collection->first();
-$entityOrFalse1;
+assertType('MyEntity|false', $entityOrFalse1);
 
 $entityOrFalse2 = $collection->last();
-$entityOrFalse2;
+assertType('MyEntity|false', $entityOrFalse2);
 
 if ($collection->isEmpty()) {
 	$false1 = $collection->first();
-	$false1;
+	assertType('false', $false1);
 
 	$false2 = $collection->last();
-	$false2;
+	assertType('false', $false2);
 }
 
 if (!$collection->isEmpty()) {
 	$entity1 = $collection->first();
-	$entity1;
+	assertType('MyEntity', $entity1);
 
 	$entity2 = $collection->last();
-	$entity2;
+	assertType('MyEntity', $entity2);
+}
+
+if ($collection->isEmpty()) {
+	$collection->add($new);
+	$result1 = $collection->first();
+	assertType('MyEntity|false', $result1);
+
+	$result2 = $collection->last();
+	assertType('MyEntity|false', $result2);
+}
+
+if (!$collection->isEmpty()) {
+	$collection->removeElement($new);
+	$result3 = $collection->first();
+	assertType('MyEntity|false', $result3);
+
+	$result4 = $collection->last();
+	assertType('MyEntity|false', $result4);
 }

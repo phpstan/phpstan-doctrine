@@ -2,48 +2,28 @@
 
 namespace PHPStan\Type\Doctrine\Collection;
 
-use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
+use PHPStan\Testing\TypeInferenceTestCase;
 
-/**
- * @extends RuleTestCase<VariableTypeReportingRule>
- */
-class IsEmptyTypeSpecifyingExtensionTest extends RuleTestCase
+class IsEmptyTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
 
-	protected function getRule(): Rule
+	/** @return iterable<mixed> */
+	public function dataFileAsserts(): iterable
 	{
-		return new VariableTypeReportingRule();
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/collection.php');
 	}
 
-	public function testExtension(): void
+	/**
+	 * @dataProvider dataFileAsserts
+	 * @param mixed ...$args
+	 */
+	public function testFileAsserts(
+		string $assertType,
+		string $file,
+		...$args
+	): void
 	{
-		$this->analyse([__DIR__ . '/data/collection.php'], [
-			[
-				'Variable $entityOrFalse1 is: MyEntity|false',
-				18,
-			],
-			[
-				'Variable $entityOrFalse2 is: MyEntity|false',
-				21,
-			],
-			[
-				'Variable $false1 is: false',
-				25,
-			],
-			[
-				'Variable $false2 is: false',
-				28,
-			],
-			[
-				'Variable $entity1 is: MyEntity',
-				33,
-			],
-			[
-				'Variable $entity2 is: MyEntity',
-				36,
-			],
-		]);
+		$this->assertFileAsserts($assertType, $file, ...$args);
 	}
 
 	public static function getAdditionalConfigFiles(): array
