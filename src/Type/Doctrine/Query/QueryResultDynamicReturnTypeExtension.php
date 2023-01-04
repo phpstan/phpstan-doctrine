@@ -11,13 +11,14 @@ use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\GenericTypeVariableResolver;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VoidType;
 
 final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -80,13 +81,16 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	private function getQueryResultType(Type $queryType): Type
 	{
-		if (!$queryType instanceof GenericObjectType) {
+		if (!$queryType instanceof TypeWithClassName) {
 			return new MixedType();
 		}
 
-		$types = $queryType->getTypes();
+		$resultType = GenericTypeVariableResolver::getType($queryType, AbstractQuery::class, 'TResult');
+		if ($resultType === null) {
+			return new MixedType();
+		}
 
-		return $types[0] ?? new MixedType();
+		return $resultType;
 	}
 
 	private function getMethodReturnTypeForHydrationMode(
