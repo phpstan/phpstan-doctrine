@@ -5,6 +5,7 @@ namespace PHPStan\Type\Doctrine\Query;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VoidType;
@@ -61,6 +62,14 @@ final class QueryResultTypeBuilder
 	 * @var array<array-key,Type>
 	 */
 	private $newObjects = [];
+
+	/** @var Type */
+	private $indexedBy;
+
+	public function __construct()
+	{
+		$this->indexedBy = new NullType();
+	}
 
 	public function setSelectQuery(): void
 	{
@@ -228,6 +237,21 @@ final class QueryResultTypeBuilder
 		}
 
 		return new ConstantStringType($alias);
+	}
+
+
+	public function setIndexedBy(Type $type): void
+	{
+		$this->indexedBy = $type;
+	}
+
+	public function getIndexType(): Type
+	{
+		if (!$this->selectQuery) {
+			return new VoidType();
+		}
+
+		return $this->indexedBy;
 	}
 
 }

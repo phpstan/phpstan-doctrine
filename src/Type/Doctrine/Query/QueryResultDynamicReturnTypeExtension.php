@@ -8,6 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -71,10 +72,12 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 		$queryType = $scope->getType($methodCall->var);
 		$queryResultType = $this->getQueryResultType($queryType);
+		$queryKeyType = $this->getQueryKeyType($queryType);
 
 		return $this->getMethodReturnTypeForHydrationMode(
 			$methodReflection,
 			$hydrationMode,
+			$queryKeyType,
 			$queryResultType
 		);
 	}
@@ -93,9 +96,24 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		return $resultType;
 	}
 
+	private function getQueryKeyType(Type $queryType): Type
+	{
+		if (!$queryType instanceof TypeWithClassName) {
+			return new MixedType();
+		}
+
+		$resultType = GenericTypeVariableResolver::getType($queryType, AbstractQuery::class, 'TKey');
+		if ($resultType === null) {
+			return new MixedType();
+		}
+
+		return $resultType;
+	}
+
 	private function getMethodReturnTypeForHydrationMode(
 		MethodReflection $methodReflection,
 		Type $hydrationMode,
+		Type $queryKeyType,
 		Type $queryResultType
 	): Type
 	{
@@ -126,12 +144,18 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				return TypeCombinator::addNull($queryResultType);
 			case 'toIterable':
 				return new IterableType(
-					new MixedType(),
+					$queryKeyType instanceof NullType ? new IntegerType() : $queryKeyType,
 					$queryResultType
 				);
 			default:
+				if ($queryKeyType instanceof NullType) {
+					return AccessoryArrayListType::intersectWith(new ArrayType(
+						new IntegerType(),
+						$queryResultType
+					));
+				}
 				return new ArrayType(
-					new MixedType(),
+					$queryKeyType,
 					$queryResultType
 				);
 		}

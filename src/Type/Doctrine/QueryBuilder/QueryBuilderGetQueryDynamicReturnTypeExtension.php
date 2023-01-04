@@ -165,7 +165,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 			return new QueryType($dql, null);
 		}
 
-		return new QueryType($dql, $typeBuilder->getResultType());
+		return new QueryType($dql, $typeBuilder->getIndexType(), $typeBuilder->getResultType());
 	}
 
 }

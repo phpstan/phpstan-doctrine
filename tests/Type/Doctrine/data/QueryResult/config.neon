@@ -3,3 +3,5 @@ includes:
 parameters:
 	doctrine:
 		objectManagerLoader: entity-manager.php
+	featureToggles:
+		listType: true

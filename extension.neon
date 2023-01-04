@@ -386,3 +386,8 @@ services:
 		class: PHPStan\Rules\Gedmo\PropertiesExtension
 		tags:
 			- phpstan.properties.readWriteExtension
+
+	-
+		class: PHPStan\PhpDoc\Doctrine\QueryTypeNodeResolverExtension
+		tags:
+			- phpstan.phpDoc.typeNodeResolverExtension

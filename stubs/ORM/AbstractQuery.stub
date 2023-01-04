@@ -5,6 +5,7 @@ namespace Doctrine\ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * @template-covariant TKey The type of column used in indexBy
  * @template-covariant TResult The type of results returned by this query in HYDRATE_OBJECT mode
  */
 abstract class AbstractQuery

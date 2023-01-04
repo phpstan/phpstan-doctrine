@@ -312,6 +312,10 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkIdentificationVariableDeclaration($identificationVariableDecl)
 	{
+		if ($identificationVariableDecl->indexBy !== null) {
+			$identificationVariableDecl->indexBy->dispatch($this);
+		}
+
 		foreach ($identificationVariableDecl->joins as $join) {
 			assert($join instanceof AST\Node);
 
@@ -326,6 +330,8 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkIndexBy($indexBy): void
 	{
+		$type = $this->unmarshalType($indexBy->singleValuedPathExpression->dispatch($this));
+		$this->typeBuilder->setIndexedBy($type);
 	}
 
 	/**
