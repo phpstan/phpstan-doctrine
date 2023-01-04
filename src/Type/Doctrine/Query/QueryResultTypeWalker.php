@@ -1290,7 +1290,10 @@ class QueryResultTypeWalker extends SqlWalker
 		return $this->nullableQueryComponents[$dqlAlias] ?? false;
 	}
 
-	/** @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field */
+	/**
+	 * @param ClassMetadataInfo<object> $class
+	 * @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field
+	 */
 	private function getTypeOfField(ClassMetadataInfo $class, string $fieldName): array
 	{
 		assert(isset($class->fieldMappings[$fieldName]));

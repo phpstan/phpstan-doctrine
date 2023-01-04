@@ -53,8 +53,9 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 	}
 
 	/**
-	 * @param string $className
-	 * @return ClassMetadata
+	 * @template T of object
+	 * @param class-string<T> $className
+	 * @return ClassMetadata<T>
 	 */
 	protected function newClassMetadataInstance($className)
 	{

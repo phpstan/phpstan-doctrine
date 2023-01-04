@@ -83,6 +83,9 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 		return $metadata->isReadOnly && !$declaringClass->hasConstructor();
 	}
 
+	/**
+	 * @param ClassMetadataInfo<object> $metadata
+	 */
 	private function isGeneratedIdentifier(ClassMetadataInfo $metadata, string $propertyName): bool
 	{
 		if ($metadata->isIdentifierNatural()) {

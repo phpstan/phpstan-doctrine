@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\QueryBuilder\\Foo::doFoo() return type with generic class Doctrine\\ORM\\Query does not specify its types: TResult",
+        "line": 22,
+        "ignorable": true
+    },
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\QueryBuilder\\Foo::doBar() return type with generic class Doctrine\\ORM\\Query does not specify its types: TResult",
+        "line": 35,
+        "ignorable": true
+    },
+    {
+        "message": "Method PHPStan\\DoctrineIntegration\\ORM\\QueryBuilder\\Foo::dynamicQueryBuilder() return type with generic class Doctrine\\ORM\\Query does not specify its types: TResult",
+        "line": 50,
+        "ignorable": true
+    }
+]

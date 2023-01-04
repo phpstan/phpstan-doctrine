@@ -24,7 +24,7 @@ final class ObjectMetadataResolver
 	/** @var ObjectManager|false|null */
 	private $objectManager;
 
-	/** @var ClassMetadataFactory<ClassMetadata>|null */
+	/** @var ClassMetadataFactory<ClassMetadata<object>>|null */
 	private $metadataFactory;
 
 	public function __construct(
@@ -89,7 +89,7 @@ final class ObjectMetadataResolver
 	}
 
 	/**
-	 * @return ClassMetadataFactory<ClassMetadata>
+	 * @return ClassMetadataFactory<ClassMetadata<object>>
 	 */
 	private function getMetadataFactory(): ?ClassMetadataFactory
 	{
@@ -101,6 +101,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
+		/** @var ClassMetadataFactory<ClassMetadata<object>> $metadataFactory */
 		$metadataFactory = new \PHPStan\Doctrine\Mapping\ClassMetadataFactory();
 
 		return $this->metadataFactory = $metadataFactory;
