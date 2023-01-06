@@ -11,6 +11,7 @@
          failOnRisky="true"
          failOnWarning="true"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+		 convertDeprecationsToExceptions="true"
 >
 	<php>
 		<ini name="assert.exception" value="0"/>
