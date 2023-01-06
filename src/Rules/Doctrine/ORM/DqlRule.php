@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
 use PhpParser\Node;
@@ -76,6 +77,8 @@ class DqlRule implements Rule
 				$query->getAST();
 			} catch (QueryException $e) {
 				$messages[] = sprintf('DQL: %s', $e->getMessage());
+			} catch (AssertionError $e) {
+				continue;
 			}
 		}
 

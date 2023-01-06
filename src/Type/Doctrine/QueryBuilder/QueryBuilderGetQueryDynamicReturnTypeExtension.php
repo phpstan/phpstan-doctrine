@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use AssertionError;
 use Doctrine\Common\CommonException;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -162,6 +163,8 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
 		} catch (ORMException | DBALException | CommonException $e) {
+			return new QueryType($dql, null);
+		} catch (AssertionError $e) {
 			return new QueryType($dql, null);
 		}
 

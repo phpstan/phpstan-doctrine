@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
 use PhpParser\Node;
@@ -107,6 +108,8 @@ class QueryBuilderDqlRule implements Rule
 				}
 
 				$messages[] = $message;
+			} catch (AssertionError $e) {
+				continue;
 			}
 		}
 
