@@ -12,7 +12,10 @@
          failOnWarning="true"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xml"
 >
-    <coverage>
+	<php>
+		<ini name="assert.exception" value="0"/>
+	</php>
+	<coverage>
         <include>
             <directory suffix=".php">./src</directory>
         </include>
