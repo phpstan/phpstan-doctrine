@@ -10,7 +10,7 @@
          beStrictAboutTodoAnnotatedTests="true"
          failOnRisky="true"
          failOnWarning="true"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xml"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
 >
 	<php>
 		<ini name="assert.exception" value="0"/>
