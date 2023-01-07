@@ -1235,10 +1235,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							SQRT(1)
 				FROM		QueryResult\Entities\Many m
 			',
-			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '<3.4') && PHP_VERSION_ID >= 80100
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '<3') && PHP_VERSION_ID >= 80100
 				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
 				: null,
-			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4') && PHP_VERSION_ID >= 80100
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3') && PHP_VERSION_ID >= 80100
 				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
 				: null,
 		];
