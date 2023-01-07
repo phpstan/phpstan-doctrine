@@ -33,6 +33,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+          ini-file: development
 
       - name: "Validate Composer"
         run: "composer validate"
@@ -61,6 +62,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "8.0"
+          ini-file: development
 
       - name: "Validate Composer"
         run: "composer validate"
@@ -101,6 +103,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+          ini-file: development
 
       - name: "Downgrade PHPUnit"
         if: matrix.php-version == '7.2' || matrix.php-version == '7.3'
@@ -141,6 +144,7 @@ jobs:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
           extensions: mbstring
+          ini-file: development
           tools: composer:v2
 
       - name: "Downgrade PHPUnit"
