@@ -3,10 +3,10 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -49,7 +49,6 @@ use function class_exists;
 use function count;
 use function property_exists;
 use function sprintf;
-use function strpos;
 use function version_compare;
 use const PHP_VERSION_ID;
 
@@ -188,7 +187,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	}
 
 	/** @dataProvider getTestData */
-	public function test(Type $expectedType, string $dql, ?string $expectedExceptionMessage = null): void
+	public function test(Type $expectedType, string $dql, ?string $expectedExceptionMessage = null, ?string $expectedDeprecationMessage = null): void
 	{
 		$em = self::$em;
 
@@ -199,6 +198,9 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		if ($expectedExceptionMessage !== null) {
 			$this->expectException(Throwable::class);
 			$this->expectExceptionMessage($expectedExceptionMessage);
+		} elseif ($expectedDeprecationMessage !== null) {
+			$this->expectDeprecation();
+			$this->expectDeprecationMessage($expectedDeprecationMessage);
 		}
 
 		QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
@@ -1233,6 +1235,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							SQRT(1)
 				FROM		QueryResult\Entities\Many m
 			',
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '<3.4') && PHP_VERSION_ID >= 80100
+				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
+				: null,
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4') && PHP_VERSION_ID >= 80100
+				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
+				: null,
 		];
 
 		yield 'length function' => [
@@ -1280,6 +1288,18 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							LOCATE(\'f\', \'foo\', 0)
 				FROM		QueryResult\Entities\Many m
 			',
+			null,
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
+				? null
+				: (
+				PHP_VERSION_ID >= 80100
+					? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
+					: (
+					PHP_VERSION_ID >= 70300 && PHP_VERSION_ID < 80000
+						? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
+						: null
+				)
+			),
 		];
 
 		yield 'lower function' => [
@@ -1312,8 +1332,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		// There is no error after the merge of https://github.com/doctrine/dbal/pull/5755
-		$moduloError = strpos((new SqlitePlatform())->getModExpression('', ''), '%') === false;
 		yield 'mod function error' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), TypeCombinator::addNull($this->uintStringified())],
@@ -1322,7 +1340,9 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				SELECT		MOD(10, NULLIF(m.intColumn, m.intColumn))
 				FROM		QueryResult\Entities\Many m
 			',
-			$moduloError ? 'Modulo by zero' : null,
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '<3.5')
+				? 'Modulo by zero'
+				: null,
 		];
 
 		yield 'substring function' => [
