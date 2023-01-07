@@ -3,6 +3,7 @@
 namespace PHPStan\Stubs\Doctrine;
 
 use PHPStan\PhpDoc\StubFilesExtension;
+use function class_exists;
 use function dirname;
 
 class StubFilesExtensionLoader implements StubFilesExtension
@@ -20,16 +21,25 @@ class StubFilesExtensionLoader implements StubFilesExtension
 
 	public function getFiles(): array
 	{
-		$path = dirname(dirname(dirname(__DIR__))) . '/stubs';
+		$stubsDir = dirname(dirname(dirname(__DIR__))) . '/stubs';
+		$path = $stubsDir;
 
 		if ($this->bleedingEdge === true) {
 			$path .= '/bleedingEdge';
 		}
 
-		return [
+		$files = [
 			$path . '/ORM/QueryBuilder.stub',
 			$path . '/EntityRepository.stub',
 		];
+
+		if (class_exists('Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository')) {
+			$files[] = $stubsDir . '/LazyServiceEntityRepository.stub';
+		} else {
+			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
+		}
+
+		return $files;
 	}
 
 }
