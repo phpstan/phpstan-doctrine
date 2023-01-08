@@ -5,6 +5,7 @@ namespace PHPStan\Stubs\Doctrine;
 use PHPStan\PhpDoc\StubFilesExtension;
 use function class_exists;
 use function dirname;
+use function trait_exists;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
@@ -33,7 +34,10 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$path . '/EntityRepository.stub',
 		];
 
-		if (class_exists('Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository')) {
+		if (
+			trait_exists('Symfony\Component\VarExporter\LazyGhostTrait')
+			&& class_exists('Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository')
+		) {
 			$files[] = $stubsDir . '/LazyServiceEntityRepository.stub';
 		} else {
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
