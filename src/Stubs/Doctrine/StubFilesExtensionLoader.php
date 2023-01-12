@@ -2,21 +2,26 @@
 
 namespace PHPStan\Stubs\Doctrine;
 
+use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
-use function class_exists;
 use function dirname;
-use function trait_exists;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
+
+	/** @var Reflector */
+	private $reflector;
 
 	/** @var bool */
 	private $bleedingEdge;
 
 	public function __construct(
+		Reflector $reflector,
 		bool $bleedingEdge
 	)
 	{
+		$this->reflector = $reflector;
 		$this->bleedingEdge = $bleedingEdge;
 	}
 
@@ -34,10 +39,20 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$path . '/EntityRepository.stub',
 		];
 
-		if (
-			trait_exists('Symfony\Component\VarExporter\LazyGhostTrait')
-			&& class_exists('Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository')
-		) {
+		$hasLazyServiceEntityRepositoryAsParent = false;
+
+		try {
+			$serviceEntityRepository = $this->reflector->reflectClass('Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository');
+			if ($serviceEntityRepository->getParentClass() !== null) {
+				/** @var class-string $lazyServiceEntityRepositoryName */
+				$lazyServiceEntityRepositoryName = 'Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository';
+				$hasLazyServiceEntityRepositoryAsParent = $serviceEntityRepository->getParentClass()->getName() === $lazyServiceEntityRepositoryName;
+			}
+		} catch (IdentifierNotFound $e) {
+			// pass
+		}
+
+		if ($hasLazyServiceEntityRepositoryAsParent) {
 			$files[] = $stubsDir . '/LazyServiceEntityRepository.stub';
 		} else {
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
