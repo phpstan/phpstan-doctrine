@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$entityName of class Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata constructor expects class\\-string\\<T of object\\>, string given\\.$#"
-			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
-
-		-
 			message: "#^Calling PHPStan\\\\Type\\\\ParserNodeTypeToPHPStanType\\:\\:resolve\\(\\) is not covered by backward compatibility promise\\. The method might change in a minor PHPStan version\\.$#"
 			count: 1
 			path: src/Rules/Doctrine/ORM/EntityColumnRule.php
@@ -26,14 +21,9 @@ parameters:
 			path: src/Rules/Doctrine/ORM/EntityRelationRule.php
 
 		-
-			message: "#^Calling PHPStan\\\\Analyser\\\\MutatingScope\\:\\:enterNamespace\\(\\) is not covered by backward compatibility promise\\. The method might change in a minor PHPStan version\\.$#"
+			message: "#^PHPDoc tag @var with type class\\-string is not subtype of native type 'Doctrine\\\\\\\\Bundle…'\\.$#"
 			count: 1
-			path: src/Type/Doctrine/QueryBuilder/OtherMethodQueryBuilderParser.php
-
-		-
-			message: "#^Call to method getProperty\\(\\) on an unknown class PHPStan\\\\BetterReflection\\\\Reflection\\\\Adapter\\\\ReflectionEnum\\.$#"
-			count: 1
-			path: src/Rules/Gedmo/PropertiesExtension.php
+			path: src/Stubs/Doctrine/StubFilesExtensionLoader.php
 
 		-
 			message: "#^Accessing PHPStan\\\\Rules\\\\DeadCode\\\\UnusedPrivatePropertyRule\\:\\:class is not covered by backward compatibility promise\\. The class might change in a minor PHPStan version\\.$#"

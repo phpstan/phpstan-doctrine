@@ -3,11 +3,10 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
-use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Persistence\ObjectManager;
+use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
 use function class_exists;
@@ -24,7 +23,7 @@ final class ObjectMetadataResolver
 	/** @var ObjectManager|false|null */
 	private $objectManager;
 
-	/** @var ClassMetadataFactory<ClassMetadata<object>>|null */
+	/** @var ClassMetadataFactory|null */
 	private $metadataFactory;
 
 	public function __construct(
@@ -88,9 +87,6 @@ final class ObjectMetadataResolver
 		}
 	}
 
-	/**
-	 * @return ClassMetadataFactory<ClassMetadata<object>>
-	 */
 	private function getMetadataFactory(): ?ClassMetadataFactory
 	{
 		if ($this->metadataFactory !== null) {
@@ -101,10 +97,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		/** @var ClassMetadataFactory<ClassMetadata<object>> $metadataFactory */
-		$metadataFactory = new \PHPStan\Doctrine\Mapping\ClassMetadataFactory();
-
-		return $this->metadataFactory = $metadataFactory;
+		return $this->metadataFactory = new ClassMetadataFactory();
 	}
 
 	/**
