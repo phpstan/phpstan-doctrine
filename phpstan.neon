@@ -31,3 +31,6 @@ parameters:
 		-
 			message: '~^Variable property access on PhpParser\\Node\\Stmt\\Declare_\|PhpParser\\Node\\Stmt\\Namespace_\.$~'
 			path: src/Type/Doctrine/QueryBuilder/OtherMethodQueryBuilderParser.php
+		-
+			message: '#^Call to method getProperty\(\) on an unknown class PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionEnum\.$#'
+			path: src/Rules/Gedmo/PropertiesExtension.php
