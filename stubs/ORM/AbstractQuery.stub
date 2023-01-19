@@ -10,13 +10,4 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class AbstractQuery
 {
-
-	/**
-	 * @param ArrayCollection<array-key, mixed>|array<mixed> $parameters
-	 * @return static
-	 */
-	public function setParameters($parameters)
-	{
-
-	}
 }
