@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
  * @extends RuleTestCase<EntityConstructorNotFinalRule>
@@ -12,9 +13,14 @@ use PHPStan\Testing\RuleTestCase;
 class EntityConstructorNotFinalRuleTest extends RuleTestCase
 {
 
+	/** @var string|null */
+	private $objectManagerLoader;
+
 	protected function getRule(): Rule
 	{
-		return new EntityConstructorNotFinalRule();
+		return new EntityConstructorNotFinalRule(
+			new ObjectMetadataResolver($this->objectManagerLoader)
+		);
 	}
 
 	/**
@@ -23,6 +29,17 @@ class EntityConstructorNotFinalRuleTest extends RuleTestCase
 	 */
 	public function testRule(string $file, array $expectedErrors): void
 	{
+		$this->objectManagerLoader = __DIR__ . '/entity-manager.php';
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	/**
+	 * @dataProvider ruleProvider
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
+	 */
+	public function testRuleWithoutObjectManagerLoader(string $file, array $expectedErrors): void
+	{
+		$this->objectManagerLoader = null;
 		$this->analyse([$file], $expectedErrors);
 	}
 
@@ -48,6 +65,11 @@ class EntityConstructorNotFinalRuleTest extends RuleTestCase
 
 		yield 'correct entity' => [
 			__DIR__ . '/data/MyEntity.php',
+			[],
+		];
+
+		yield 'non-entity final constructor' => [
+			__DIR__ . '/data/NonEntityFinalConstructor.php',
 			[],
 		];
 

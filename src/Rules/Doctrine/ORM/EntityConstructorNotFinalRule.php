@@ -6,7 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function sprintf;
 
 /**
@@ -14,6 +16,14 @@ use function sprintf;
  */
 class EntityConstructorNotFinalRule implements Rule
 {
+
+	/** @var ObjectMetadataResolver */
+	private $objectMetadataResolver;
+
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
+	{
+		$this->objectMetadataResolver = $objectMetadataResolver;
+	}
 
 	public function getNodeType(): string
 	{
@@ -31,15 +41,23 @@ class EntityConstructorNotFinalRule implements Rule
 		}
 
 		$classReflection = $scope->getClassReflection();
-
 		if ($classReflection === null) {
 			throw new ShouldNotHappenException();
 		}
 
-		return [sprintf(
+		if ($this->objectMetadataResolver->isTransient($classReflection->getName())) {
+			return [];
+		}
+
+		$metadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
+		if ($metadata !== null && $metadata->isEmbeddedClass === true) {
+			return [];
+		}
+
+		return [RuleErrorBuilder::message(sprintf(
 			'Constructor of class %s is final which can cause problems with proxies.',
 			$classReflection->getDisplayName()
-		)];
+		))->build()];
 	}
 
 }

@@ -23,9 +23,12 @@ rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
 	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
+	- PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule
 
 conditionalTags:
 	PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
+	PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%
 
 services:
@@ -54,3 +57,5 @@ services:
 			bleedingEdge: %featureToggles.bleedingEdge%
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule
