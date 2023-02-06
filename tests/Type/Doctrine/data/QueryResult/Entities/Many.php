@@ -110,6 +110,14 @@ class Many
 class Bug245Episode
 {
 	/**
+	 * @Column(type="bigint")
+	 * @Id
+	 *
+	 * @var string
+	 */
+	public $id;
+
+	/**
 	 * @var \Doctrine\Common\Collections\Collection<Bug245Segment>
 	 * @ORM\OneToMany(
 	 *      targetEntity="\QueryResult\Entities\Bug245Segment",
@@ -127,6 +135,14 @@ class Bug245Episode
  */
 class Bug245Segment
 {
+	/**
+	 * @Column(type="bigint")
+	 * @Id
+	 *
+	 * @var string
+	 */
+	public $id;
+
 	/**
 	 * @ORM\ManyToOne(
 	 *     targetEntity="\QueryResult\Entities\Bug245Episode",
