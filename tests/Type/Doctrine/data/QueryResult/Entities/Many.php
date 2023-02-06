@@ -112,7 +112,7 @@ class Bug245Episode
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<Bug245Segment>
 	 * @ORM\OneToMany(
-	 *      targetEntity="App\VideoBundle\Entity\Segment",
+	 *      targetEntity="\QueryResult\Entities\Bug245Segment",
 	 *      mappedBy="episode",
 	 *      cascade={"persist", "remove"},
 	 *      orphanRemoval=true
@@ -129,7 +129,7 @@ class Bug245Segment
 {
 	/**
 	 * @ORM\ManyToOne(
-	 *     targetEntity="App\VideoBundle\Entity\Episode",
+	 *     targetEntity="\QueryResult\Entities\Bug245Episode",
 	 *     inversedBy="segments",
 	 *     cascade={"persist"}
 	 * )
