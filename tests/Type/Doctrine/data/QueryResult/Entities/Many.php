@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinColumns;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @Entity
@@ -101,4 +102,39 @@ class Many
 	 * @var CompoundPkAssoc|null
 	 */
 	public $compoundPkAssoc;
+}
+
+/**
+ * @Entity
+ */
+class Bug245Episode
+{
+	/**
+	 * @var \Doctrine\Common\Collections\Collection<Bug245Segment>
+	 * @ORM\OneToMany(
+	 *      targetEntity="App\VideoBundle\Entity\Segment",
+	 *      mappedBy="episode",
+	 *      cascade={"persist", "remove"},
+	 *      orphanRemoval=true
+	 * )
+	 * @ORM\OrderBy({"position" = "ASC"})
+	 */
+	private $segments;
+}
+
+/**
+ * @ORM\Entity
+ */
+class Bug245Segment
+{
+	/**
+	 * @ORM\ManyToOne(
+	 *     targetEntity="App\VideoBundle\Entity\Episode",
+	 *     inversedBy="segments",
+	 *     cascade={"persist"}
+	 * )
+	 * @ORM\JoinColumn(name="episode_id", referencedColumnName="id", nullable=false)
+	 * @var Bug245Episode
+	 */
+	private $episode;
 }
