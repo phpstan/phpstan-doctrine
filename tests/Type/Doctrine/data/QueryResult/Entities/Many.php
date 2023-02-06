@@ -105,7 +105,7 @@ class Many
 }
 
 /**
- * @Entity
+ * @ORM\Entity
  */
 class Bug245Episode
 {
