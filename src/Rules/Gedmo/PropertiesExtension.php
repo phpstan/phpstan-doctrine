@@ -72,10 +72,6 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 	 */
 	private function isGedmoAnnotationOrAttribute(PropertyReflection $property, string $propertyName, array $classList): bool
 	{
-		if ($this->annotationReader === null) {
-			return false;
-		}
-
 		$classReflection = $property->getDeclaringClass();
 		if ($this->objectMetadataResolver->isTransient($classReflection->getName())) {
 			return false;
@@ -83,16 +79,20 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 		$propertyReflection = $classReflection->getNativeReflection()->getProperty($propertyName);
 
-		$annotations = $this->annotationReader->getPropertyAnnotations($propertyReflection);
-		foreach ($annotations as $annotation) {
-			if (in_array(get_class($annotation), $classList, true)) {
+		$attributes = $propertyReflection->getAttributes();
+		foreach ($attributes as $attribute) {
+			if (in_array($attribute->getName(), $classList, true)) {
 				return true;
 			}
 		}
 
-		$attributes = $propertyReflection->getAttributes();
-		foreach ($attributes as $attribute) {
-			if (in_array($attribute->getName(), $classList, true)) {
+		if ($this->annotationReader === null) {
+			return false;
+		}
+
+		$annotations = $this->annotationReader->getPropertyAnnotations($propertyReflection);
+		foreach ($annotations as $annotation) {
+			if (in_array(get_class($annotation), $classList, true)) {
 				return true;
 			}
 		}
