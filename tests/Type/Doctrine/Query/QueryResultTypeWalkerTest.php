@@ -1559,14 +1559,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		);
 	}
 
-	private function floatStringified(): Type
-	{
-		return TypeCombinator::union(
-			new FloatType(),
-			$this->numericString()
-		);
-	}
-
 	private function numericStringified(): Type
 	{
 		return TypeCombinator::union(
