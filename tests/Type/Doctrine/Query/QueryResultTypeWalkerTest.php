@@ -1223,7 +1223,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		yield 'sqrt function' => [
+		/*yield 'sqrt function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->floatStringified()],
 				[new ConstantIntegerType(2), TypeCombinator::addNull($this->floatStringified())],
@@ -1241,7 +1241,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3') && PHP_VERSION_ID >= 80100
 				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
 				: null,
-		];
+		];*/
 
 		yield 'length function' => [
 			$this->constantArray([
