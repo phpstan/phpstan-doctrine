@@ -2,9 +2,11 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -33,14 +35,22 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		$type = ParametersAcceptorSelector::selectSingle($this->reflectionProvider->getClass($this->type)->getNativeMethod('convertToPHPValue')->getVariants())->getReturnType();
+		$method = $this->reflectionProvider->getClass($this->type)->getNativeMethod('convertToPHPValue');
+		$type = ParametersAcceptorSelector::selectFromTypes([
+			new MixedType(),
+			new ObjectType(AbstractPlatform::class),
+		], $method->getVariants(), false)->getReturnType();
 
 		return TypeCombinator::removeNull($type);
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
-		$type = ParametersAcceptorSelector::selectSingle($this->reflectionProvider->getClass($this->type)->getNativeMethod('convertToDatabaseValue')->getVariants())->getParameters()[0]->getType();
+		$method = $this->reflectionProvider->getClass($this->type)->getNativeMethod('convertToDatabaseValue');
+		$type = ParametersAcceptorSelector::selectFromTypes([
+			new MixedType(),
+			new ObjectType(AbstractPlatform::class),
+		], $method->getVariants(), false)->getParameters()[0]->getType();
 
 		return TypeCombinator::removeNull($type);
 	}
