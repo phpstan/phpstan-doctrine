@@ -12,7 +12,6 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use function lcfirst;
 use function str_replace;
 use function strlen;
@@ -54,10 +53,7 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
-			if ($repositoryAncesor === null) {
-				return false;
-			}
+			return false;
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
@@ -66,22 +62,22 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 			return false;
 		}
 
-		if (!$entityClassType instanceof TypeWithClassName) {
-			return false;
-		}
-
-		$classReflection = $entityClassType->getClassReflection();
-		if ($classReflection === null) {
-			return false;
-		}
-
+		$entityClassNames = $entityClassType->getObjectClassNames();
 		$fieldName = $this->classify($methodFieldName);
-		$classMetadata = $this->objectMetadataResolver->getClassMetadata($classReflection->getName());
-		if ($classMetadata === null) {
-			return false;
+
+		/** @var class-string $entityClassName */
+		foreach ($entityClassNames as $entityClassName) {
+			$classMetadata = $this->objectMetadataResolver->getClassMetadata($entityClassName);
+			if ($classMetadata === null) {
+				continue;
+			}
+
+			if ($classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName)) {
+				return true;
+			}
 		}
 
-		return $classMetadata->hasField($fieldName) || $classMetadata->hasAssociation($fieldName);
+		return false;
 	}
 
 	private function classify(string $word): string

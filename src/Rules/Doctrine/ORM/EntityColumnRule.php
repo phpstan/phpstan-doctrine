@@ -160,15 +160,13 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		$transformArrays = static function (Type $type, callable $traverse): Type {
+		$propertyTransformedType = TypeTraverser::map($propertyType, static function (Type $type, callable $traverse): Type {
 			if ($type instanceof ArrayType) {
 				return new ArrayType(new MixedType(), new MixedType());
 			}
 
 			return $traverse($type);
-		};
-
-		$propertyTransformedType = TypeTraverser::map($propertyType, $transformArrays);
+		});
 
 		if (!$propertyTransformedType->isSuperTypeOf($writableToPropertyType)->yes()) {
 			$errors[] = sprintf(

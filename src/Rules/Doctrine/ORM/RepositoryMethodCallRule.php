@@ -6,11 +6,7 @@ use Doctrine\Persistence\ObjectRepository;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use PHPStan\Type\GenericTypeVariableResolver;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 use function count;
 use function in_array;
@@ -41,28 +37,12 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 		$argType = $scope->getType($node->getArgs()[0]->value);
-		if (!$argType instanceof ConstantArrayType) {
-			return [];
-		}
-		if (count($argType->getKeyTypes()) === 0) {
-			return [];
-		}
 		$calledOnType = $scope->getType($node->var);
-		if (!$calledOnType instanceof TypeWithClassName) {
-			return [];
-		}
-		$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
-		if ($entityClassType === null) {
-			$entityClassType = GenericTypeVariableResolver::getType($calledOnType, ObjectRepository::class, 'TEntityClass');
-			if ($entityClassType === null) {
-				return [];
-			}
-		}
-		if (!$entityClassType instanceof TypeWithClassName) {
-			return [];
-		}
-		$entityClassReflection = $entityClassType->getClassReflection();
-		if ($entityClassReflection === null) {
+		$entityClassType = $calledOnType->getTemplateType(ObjectRepository::class, 'TEntityClass');
+
+		/** @var list<class-string> $entityClassNames */
+		$entityClassNames = $entityClassType->getObjectClassNames();
+		if (count($entityClassNames) !== 1) {
 			return [];
 		}
 
@@ -80,32 +60,31 @@ class RepositoryMethodCallRule implements Rule
 			return [];
 		}
 
-		$classMetadata = $this->objectMetadataResolver->getClassMetadata($entityClassReflection->getName());
+		$classMetadata = $this->objectMetadataResolver->getClassMetadata($entityClassNames[0]);
 		if ($classMetadata === null) {
 			return [];
 		}
 
 		$messages = [];
-		foreach ($argType->getKeyTypes() as $keyType) {
-			if (!$keyType instanceof ConstantStringType) {
-				continue;
-			}
+		foreach ($argType->getConstantArrays() as $constantArray) {
+			foreach ($constantArray->getKeyTypes() as $keyType) {
+				foreach ($keyType->getConstantStrings() as $fieldName) {
+					if (
+						$classMetadata->hasField($fieldName->getValue())
+						|| $classMetadata->hasAssociation($fieldName->getValue())
+					) {
+						continue;
+					}
 
-			$fieldName = $keyType->getValue();
-			if (
-				$classMetadata->hasField($fieldName)
-				|| $classMetadata->hasAssociation($fieldName)
-			) {
-				continue;
+					$messages[] = sprintf(
+						'Call to method %s::%s() - entity %s does not have a field named $%s.',
+						$calledOnType->describe(VerbosityLevel::typeOnly()),
+						$methodName,
+						$entityClassNames[0],
+						$fieldName->getValue()
+					);
+				}
 			}
-
-			$messages[] = sprintf(
-				'Call to method %s::%s() - entity %s does not have a field named $%s.',
-				$calledOnType->describe(VerbosityLevel::typeOnly()),
-				$methodName,
-				$entityClassReflection->getDisplayName(),
-				$fieldName
-			);
 		}
 
 		return $messages;

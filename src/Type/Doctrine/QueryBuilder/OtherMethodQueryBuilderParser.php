@@ -19,7 +19,7 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\Parser\Parser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateTypeMap;
-use PHPStan\Type\TypeWithClassName;
+use function count;
 use function is_array;
 
 class OtherMethodQueryBuilderParser
@@ -29,7 +29,7 @@ class OtherMethodQueryBuilderParser
 	private $descendIntoOtherMethods;
 
 	/** @var ReflectionProvider */
-	private $broker;
+	private $reflectionProvider;
 
 	/** @var Parser */
 	private $parser;
@@ -37,10 +37,10 @@ class OtherMethodQueryBuilderParser
 	/** @var Container */
 	private $container;
 
-	public function __construct(bool $descendIntoOtherMethods, ReflectionProvider $broker, Parser $parser, Container $container)
+	public function __construct(bool $descendIntoOtherMethods, ReflectionProvider $reflectionProvider, Parser $parser, Container $container)
 	{
 		$this->descendIntoOtherMethods = $descendIntoOtherMethods;
-		$this->broker = $broker;
+		$this->reflectionProvider = $reflectionProvider;
 		$this->parser = $parser;
 		$this->container = $container;
 	}
@@ -66,15 +66,17 @@ class OtherMethodQueryBuilderParser
 			return [];
 		}
 
-		if (!$methodCalledOnType instanceof TypeWithClassName) {
+		$methodCalledOnTypeClassNames = $methodCalledOnType->getObjectClassNames();
+
+		if (count($methodCalledOnTypeClassNames) !== 1) {
 			return [];
 		}
 
-		if (!$this->broker->hasClass($methodCalledOnType->getClassName())) {
+		if (!$this->reflectionProvider->hasClass($methodCalledOnTypeClassNames[0])) {
 			return [];
 		}
 
-		$classReflection = $this->broker->getClass($methodCalledOnType->getClassName());
+		$classReflection = $this->reflectionProvider->getClass($methodCalledOnTypeClassNames[0]);
 		$methodName = $methodCall->name->toString();
 		if (!$classReflection->hasNativeMethod($methodName)) {
 			return [];

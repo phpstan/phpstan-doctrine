@@ -12,14 +12,11 @@ use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\GenericTypeVariableResolver;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VoidType;
 
 final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -71,43 +68,13 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		}
 
 		$queryType = $scope->getType($methodCall->var);
-		$queryResultType = $this->getQueryResultType($queryType);
-		$queryKeyType = $this->getQueryKeyType($queryType);
 
 		return $this->getMethodReturnTypeForHydrationMode(
 			$methodReflection,
 			$hydrationMode,
-			$queryKeyType,
-			$queryResultType
+			$queryType->getTemplateType(AbstractQuery::class, 'TKey'),
+			$queryType->getTemplateType(AbstractQuery::class, 'TResult')
 		);
-	}
-
-	private function getQueryResultType(Type $queryType): Type
-	{
-		if (!$queryType instanceof TypeWithClassName) {
-			return new MixedType();
-		}
-
-		$resultType = GenericTypeVariableResolver::getType($queryType, AbstractQuery::class, 'TResult');
-		if ($resultType === null) {
-			return new MixedType();
-		}
-
-		return $resultType;
-	}
-
-	private function getQueryKeyType(Type $queryType): Type
-	{
-		if (!$queryType instanceof TypeWithClassName) {
-			return new MixedType();
-		}
-
-		$resultType = GenericTypeVariableResolver::getType($queryType, AbstractQuery::class, 'TKey');
-		if ($resultType === null) {
-			return new MixedType();
-		}
-
-		return $resultType;
 	}
 
 	private function getMethodReturnTypeForHydrationMode(
@@ -144,11 +111,11 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				return TypeCombinator::addNull($queryResultType);
 			case 'toIterable':
 				return new IterableType(
-					$queryKeyType instanceof NullType ? new IntegerType() : $queryKeyType,
+					$queryKeyType->isNull()->yes() ? new IntegerType() : $queryKeyType,
 					$queryResultType
 				);
 			default:
-				if ($queryKeyType instanceof NullType) {
+				if ($queryKeyType->isNull()->yes()) {
 					return AccessoryArrayListType::intersectWith(new ArrayType(
 						new IntegerType(),
 						$queryResultType

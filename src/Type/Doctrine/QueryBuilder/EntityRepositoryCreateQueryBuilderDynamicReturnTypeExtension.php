@@ -10,10 +10,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use function array_unshift;
+use function count;
 
 class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -37,8 +36,8 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		$entityNameExpr = new MethodCall($methodCall->var, new Identifier('getEntityName'));
 
 		$entityNameExprType = $scope->getType($entityNameExpr);
-		if ($entityNameExprType instanceof GenericClassStringType && $entityNameExprType->getGenericType() instanceof TypeWithClassName) {
-			$entityNameExpr = new String_($entityNameExprType->getGenericType()->getClassName());
+		if ($entityNameExprType->isClassStringType()->yes() && count($entityNameExprType->getClassStringObjectType()->getObjectClassNames()) === 1) {
+			$entityNameExpr = new String_($entityNameExprType->getClassStringObjectType()->getObjectClassNames()[0]);
 		}
 
 		if (!isset($methodCall->getArgs()[0])) {

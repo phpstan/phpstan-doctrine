@@ -8,20 +8,19 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\ObjectRepository;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use function count;
 
 class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -91,25 +90,21 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 			);
 		}
 		$argType = $scope->getType($methodCall->getArgs()[0]->value);
-		if ($argType instanceof ConstantStringType) {
-			$objectName = $argType->getValue();
-			$classType = new ObjectType($objectName);
-		} elseif ($argType instanceof GenericClassStringType) {
-			$classType = $argType->getGenericType();
-			if (!$classType instanceof TypeWithClassName) {
-				return new GenericObjectType(
-					$defaultRepositoryClass,
-					[$classType]
-				);
-			}
-
-			$objectName = $classType->getClassName();
-		} else {
+		if (!$argType->isClassStringType()->yes()) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
 
+		$classType = $argType->getClassStringObjectType();
+		$objectNames = $classType->getObjectClassNames();
+		if (count($objectNames) !== 1) {
+			return new GenericObjectType(
+				$defaultRepositoryClass,
+				[$classType]
+			);
+		}
+
 		try {
-			$repositoryClass = $this->getRepositoryClass($objectName, $defaultRepositoryClass);
+			$repositoryClass = $this->getRepositoryClass($objectNames[0], $defaultRepositoryClass);
 		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
@@ -129,10 +124,11 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 			$args,
 			$methodReflection->getVariants()
 		)->getReturnType();
-		if ($defaultType instanceof GenericObjectType && count($defaultType->getTypes()) > 0) {
+		$entity = $defaultType->getTemplateType(ObjectRepository::class, 'TEntityClass');
+		if (!$entity instanceof ErrorType) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,
-				[$defaultType->getTypes()[0]]
+				[$entity]
 			);
 		}
 
