@@ -5,7 +5,6 @@ namespace PHPStan\Type\Doctrine;
 use PhpParser\Node\Arg;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
-use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
 use function count;
 use function strpos;
@@ -39,20 +38,20 @@ class ArgumentsProcessor
 				$array = [];
 				foreach ($value->getConstantArrays()[0]->getKeyTypes() as $i => $keyType) {
 					$valueType = $value->getConstantArrays()[0]->getValueTypes()[$i];
-					if (!$valueType instanceof ConstantScalarType) {
+					if (count($valueType->getConstantScalarValues()) !== 1) {
 						throw new DynamicQueryBuilderArgumentException();
 					}
-					$array[$keyType->getValue()] = $valueType->getValue();
+					$array[$keyType->getValue()] = $valueType->getConstantScalarValues()[0];
 				}
 
 				$args[] = $array;
 				continue;
 			}
-			if (!$value instanceof ConstantScalarType) {
+			if (count($value->getConstantScalarValues()) !== 1) {
 				throw new DynamicQueryBuilderArgumentException();
 			}
 
-			$args[] = $value->getValue();
+			$args[] = $value->getConstantScalarValues()[0];
 		}
 
 		return $args;
