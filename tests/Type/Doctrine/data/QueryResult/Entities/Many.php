@@ -107,7 +107,7 @@ class Many
 /**
  * @ORM\Entity
  */
-class Bug245Episode
+class Bug425Episode
 {
 	/**
 	 * @Column(type="bigint")
@@ -118,9 +118,9 @@ class Bug245Episode
 	public $id;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<Bug245Segment>
+	 * @var \Doctrine\Common\Collections\Collection<Bug425Segment>
 	 * @ORM\OneToMany(
-	 *      targetEntity="\QueryResult\Entities\Bug245Segment",
+	 *      targetEntity="\QueryResult\Entities\Bug425Segment",
 	 *      mappedBy="episode",
 	 *      cascade={"persist", "remove"},
 	 *      orphanRemoval=true
@@ -133,7 +133,7 @@ class Bug245Episode
 /**
  * @ORM\Entity
  */
-class Bug245Segment
+class Bug425Segment
 {
 	/**
 	 * @Column(type="bigint")
@@ -145,12 +145,12 @@ class Bug245Segment
 
 	/**
 	 * @ORM\ManyToOne(
-	 *     targetEntity="\QueryResult\Entities\Bug245Episode",
+	 *     targetEntity="\QueryResult\Entities\Bug425Episode",
 	 *     inversedBy="segments",
 	 *     cascade={"persist"}
 	 * )
 	 * @ORM\JoinColumn(name="episode_id", referencedColumnName="id", nullable=false)
-	 * @var Bug245Episode
+	 * @var Bug425Episode
 	 */
 	private $episode;
 }
