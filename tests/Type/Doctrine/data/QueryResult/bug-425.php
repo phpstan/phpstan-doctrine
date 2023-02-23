@@ -3,8 +3,8 @@
 namespace QueryResult\CreateQuery;
 
 use Doctrine\ORM\EntityManager;
-use QueryResult\Entities\Bug245Episode;
-use QueryResult\Entities\Bug245Segment;
+use QueryResult\Entities\Bug425Episode;
+use QueryResult\Entities\Bug425Segment;
 use function PHPStan\Testing\assertType;
 
 class Foo
@@ -27,9 +27,9 @@ class Foo
 			->andWhere(
 				"0 = (SELECT COUNT(segment.id) FROM " . Bug425Segment::class . " as segment
               WHERE segment.episode = episode.id AND segment.state != 'distributed')"
-			)->getQuery()->getResult();
+			)->getQuery()->getScalarResult();
 
-		assertType('mixed', $result);
+		assertType('array', $result);
 	}
 
 }

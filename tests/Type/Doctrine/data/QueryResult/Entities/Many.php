@@ -4,6 +4,7 @@ namespace QueryResult\Entities;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinColumns;
@@ -110,10 +111,11 @@ class Many
 class Bug425Episode
 {
 	/**
-	 * @Column(type="bigint")
+	 * @Column(name="id", type="integer")
 	 * @Id
+	 * @GeneratedValue(strategy="AUTO")
 	 *
-	 * @var string
+	 * @var int|null
 	 */
 	public $id;
 
@@ -128,6 +130,13 @@ class Bug425Episode
 	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
 	private $segments;
+
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="segmentsComplete", type="boolean")
+	 */
+	private $segmentsComplete = false;
 }
 
 /**
@@ -136,10 +145,11 @@ class Bug425Episode
 class Bug425Segment
 {
 	/**
-	 * @Column(type="bigint")
+	 * @Column(name="id", type="integer")
 	 * @Id
+	 * @GeneratedValue(strategy="AUTO")
 	 *
-	 * @var string
+	 * @var int|null
 	 */
 	public $id;
 
@@ -153,4 +163,18 @@ class Bug425Segment
 	 * @var Bug425Episode
 	 */
 	private $episode;
+
+	/**
+     * @var bool
+     *
+     * @ORM\Column(name="isLastSegment", type="boolean")
+     */
+	 private $isLastSegment = false;
+
+	 /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=255)
+     */
+    protected $state = 'initial';
 }
