@@ -1274,7 +1274,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		if (PHP_VERSION_ID > 70300) {
+		if (PHP_VERSION_ID >= 70400) {
 			yield 'locate function' => [
 				$this->constantArray([
 					[new ConstantIntegerType(1), $this->uintStringified()],
@@ -1296,7 +1296,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				PHP_VERSION_ID >= 80100
 					? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
 					: (
-				PHP_VERSION_ID >= 70300 && PHP_VERSION_ID < 80000
+				PHP_VERSION_ID < 80000
 					? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
 					: null
 					)
