@@ -99,10 +99,7 @@ class OtherMethodQueryBuilderParser
 			return [];
 		}
 
-		/** @var NodeScopeResolver $nodeScopeResolver */
 		$nodeScopeResolver = $this->container->getByType(NodeScopeResolver::class);
-
-		/** @var ScopeFactory $scopeFactory */
 		$scopeFactory = $this->container->getByType(ScopeFactory::class);
 
 		$methodScope = $scopeFactory->create(ScopeContext::create($fileName));
