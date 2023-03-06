@@ -5,9 +5,8 @@ namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
-use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
@@ -16,7 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use function class_exists;
 
-class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension, BrokerAwareExtension
+class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
 
 	/** @var ArgumentsProcessor */
@@ -25,21 +24,18 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 	/** @var string */
 	private $class;
 
-	/** @var Broker */
-	private $broker;
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
 
 	public function __construct(
 		ArgumentsProcessor $argumentsProcessor,
-		string $class
+		string $class,
+		ReflectionProvider $reflectionProvider
 	)
 	{
 		$this->argumentsProcessor = $argumentsProcessor;
 		$this->class = $class;
-	}
-
-	public function setBroker(Broker $broker): void
-	{
-		$this->broker = $broker;
+		$this->reflectionProvider = $reflectionProvider;
 	}
 
 	public function getClass(): string
@@ -59,7 +55,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 		}
 
 		$className = $scope->resolveName($methodCall->class);
-		if (!$this->broker->hasClass($className)) {
+		if (!$this->reflectionProvider->hasClass($className)) {
 			return new ObjectType($className);
 		}
 
@@ -76,7 +72,7 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 				)
 			);
 		} catch (DynamicQueryBuilderArgumentException $e) {
-			return new ObjectType($this->broker->getClassName($className));
+			return new ObjectType($this->reflectionProvider->getClassName($className));
 		}
 
 		return new ExprType($className, $exprObject);
