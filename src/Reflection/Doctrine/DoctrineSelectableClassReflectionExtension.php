@@ -13,7 +13,7 @@ class DoctrineSelectableClassReflectionExtension implements MethodsClassReflecti
 	/** @var ReflectionProvider */
 	private $reflectionProvider;
 
-	public function setBroker(ReflectionProvider $reflectionProvider): void
+	public function __construct(ReflectionProvider $reflectionProvider)
 	{
 		$this->reflectionProvider = $reflectionProvider;
 	}
