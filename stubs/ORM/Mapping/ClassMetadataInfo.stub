@@ -3,6 +3,7 @@
 namespace Doctrine\ORM\Mapping;
 
 use BackedEnum;
+use Doctrine\ORM\Id\AbstractIdGenerator;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use ReflectionClass;
 
@@ -89,6 +90,11 @@ use ReflectionClass;
  */
 class ClassMetadataInfo implements ClassMetadata
 {
+
+	/**
+	 * @var AbstractIdGenerator|null
+	 */
+	public $idGenerator;
 
 	/** @var string|null */
 	public $customRepositoryClassName;
