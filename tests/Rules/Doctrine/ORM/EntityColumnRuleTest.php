@@ -56,7 +56,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		}
 
 		return new EntityColumnRule(
-			new ObjectMetadataResolver($this->objectManagerLoader),
+			new ObjectMetadataResolver($this->createReflectionProvider(), $this->objectManagerLoader, true),
 			new DescriptorRegistry([
 				new ArrayType(),
 				new BigIntType(),

@@ -9,6 +9,8 @@ use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\Persistence\Mapping\ReflectionService;
+use PHPStan\Reflection\ReflectionProvider;
 use ReflectionClass;
 use function class_exists;
 use function count;
@@ -16,6 +18,21 @@ use const PHP_VERSION_ID;
 
 class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 {
+
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
+
+	/** @var bool */
+	private $bleedingEdge;
+
+	/** @var BetterReflectionService|null */
+	private $reflectionService = null;
+
+	public function __construct(ReflectionProvider $reflectionProvider, bool $bleedingEdge)
+	{
+		$this->reflectionProvider = $reflectionProvider;
+		$this->bleedingEdge = $bleedingEdge;
+	}
 
 	protected function initialize(): void
 	{
@@ -50,6 +67,19 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		}
 
 		$targetPlatformProperty->setValue($this, $platform);
+	}
+
+	public function getReflectionService(): ReflectionService
+	{
+		if (!$this->bleedingEdge) {
+			return parent::getReflectionService();
+		}
+
+		if ($this->reflectionService === null) {
+			$this->reflectionService = new BetterReflectionService($this->reflectionProvider);
+		}
+
+		return $this->reflectionService;
 	}
 
 	/**
