@@ -96,7 +96,6 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
-			bleedingEdge: %featureToggles.bleedingEdge%
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetDqlDynamicReturnTypeExtension
 		arguments:

@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
 use function class_exists;
@@ -18,14 +17,8 @@ use function sprintf;
 final class ObjectMetadataResolver
 {
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
-
 	/** @var string|null */
 	private $objectManagerLoader;
-
-	/** @var bool */
-	private $bleedingEdge;
 
 	/** @var ObjectManager|false|null */
 	private $objectManager;
@@ -34,14 +27,10 @@ final class ObjectMetadataResolver
 	private $metadataFactory;
 
 	public function __construct(
-		ReflectionProvider $reflectionProvider,
-		?string $objectManagerLoader,
-		bool $bleedingEdge
+		?string $objectManagerLoader
 	)
 	{
-		$this->reflectionProvider = $reflectionProvider;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->bleedingEdge = $bleedingEdge;
 	}
 
 	public function hasObjectManagerLoader(): bool
@@ -108,7 +97,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		return $this->metadataFactory = new ClassMetadataFactory($this->reflectionProvider, $this->bleedingEdge);
+		return $this->metadataFactory = new ClassMetadataFactory();
 	}
 
 	/**

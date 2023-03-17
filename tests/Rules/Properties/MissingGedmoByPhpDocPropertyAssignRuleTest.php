@@ -23,7 +23,7 @@ class MissingGedmoByPhpDocPropertyAssignRuleTest extends RuleTestCase
 	protected function getReadWritePropertiesExtensions(): array
 	{
 		return [
-			new PropertiesExtension(new ObjectMetadataResolver($this->createReflectionProvider(), __DIR__ . '/entity-manager.php', true)),
+			new PropertiesExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php')),
 		];
 	}
 

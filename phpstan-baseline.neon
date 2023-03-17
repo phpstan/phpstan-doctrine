@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method PHPStan\\\\Doctrine\\\\Mapping\\\\BetterReflectionService\\:\\:getParentClasses\\(\\) should return array\\<class\\-string\\> but returns array\\<string\\>\\.$#"
-			count: 1
-			path: src/Doctrine/Mapping/BetterReflectionService.php
-
-		-
-			message: "#^PHPDoc tag @var with type ReflectionClass\\<T of object\\> is not subtype of type PHPStan\\\\BetterReflection\\\\Reflection\\\\Adapter\\\\ReflectionClass\\|PHPStan\\\\BetterReflection\\\\Reflection\\\\Adapter\\\\ReflectionEnum\\.$#"
-			count: 1
-			path: src/Doctrine/Mapping/BetterReflectionService.php
-
-		-
 			message: "#^Calling PHPStan\\\\Type\\\\ParserNodeTypeToPHPStanType\\:\\:resolve\\(\\) is not covered by backward compatibility promise\\. The method might change in a minor PHPStan version\\.$#"
 			count: 1
 			path: src/Rules/Doctrine/ORM/EntityColumnRule.php
