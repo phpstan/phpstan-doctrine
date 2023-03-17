@@ -154,4 +154,16 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 * @var EmptyObject
 	 */
 	private $incompatibleJsonValueObject;
+
+	/**
+	 * @ORM\Column(type="simple_array")
+	 * @var int[]
+	 */
+	private $invalidSimpleArray;
+
+	/**
+	 * @ORM\Column(type="simple_array")
+	 * @var list<string>
+	 */
+	private $validSimpleArray;
 }

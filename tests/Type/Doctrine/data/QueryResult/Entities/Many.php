@@ -102,6 +102,12 @@ class Many
 	 * @var CompoundPkAssoc|null
 	 */
 	public $compoundPkAssoc;
+
+	/**
+	 * @ORM\Column(type="simple_array")
+	 * @var list<string>
+	 */
+	public $simpleArrayColumn;
 }
 
 /**
