@@ -84,4 +84,18 @@ class MagicRepositoryCalls
 		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
 		$entityRepository->countByTitle('test', ['id' => 'DESC']);
 	}
+
+	/**
+	 * @param class-string<MySecondEntity|MyThirdEntity> $entityClass
+	 */
+	public function doFindByWithRepositoryOfMultiplesClasses(string $entityClass): void
+	{
+		$entityRepository = $this->entityManager->getRepository($entityClass);
+		$entityRepository->findBy(['id' => 1]);
+		$entityRepository->findById(1);
+		$entityRepository->findByTitle('test');
+		$entityRepository->findByTransient('test');
+		$entityRepository->findByNonexistent('test');
+		$entityRepository->findByCustomMethod();
+	}
 }

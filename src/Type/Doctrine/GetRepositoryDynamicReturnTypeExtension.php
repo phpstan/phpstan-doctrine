@@ -21,6 +21,7 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use function count;
 
 class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -96,22 +97,26 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 
 		$classType = $argType->getClassStringObjectType();
 		$objectNames = $classType->getObjectClassNames();
-		if (count($objectNames) !== 1) {
+
+		if (count($objectNames) === 0) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,
 				[$classType]
 			);
 		}
 
-		try {
-			$repositoryClass = $this->getRepositoryClass($objectNames[0], $defaultRepositoryClass);
-		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
-			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
+		$repositoryTypes = [];
+		foreach ($objectNames as $objectName) {
+			try {
+				$repositoryClass = $this->getRepositoryClass($objectName, $defaultRepositoryClass);
+			} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
+				return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
+			}
+
+			$repositoryTypes[] = new GenericObjectType($repositoryClass, [$classType]);
 		}
 
-		return new GenericObjectType($repositoryClass, [
-			$classType,
-		]);
+		return TypeCombinator::union(...$repositoryTypes);
 	}
 
 	/**

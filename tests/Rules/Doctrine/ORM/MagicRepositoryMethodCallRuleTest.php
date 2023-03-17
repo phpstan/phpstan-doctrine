@@ -88,6 +88,14 @@ class MagicRepositoryMethodCallRuleTest extends RuleTestCase
 				'Method Doctrine\Persistence\ObjectRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::countByTitle() invoked with 2 parameters, 1 required.',
 				85,
 			],
+			[
+				'Call to an undefined method PHPStan\Rules\Doctrine\ORM\TestRepository<PHPStan\Rules\Doctrine\ORM\MySecondEntity|PHPStan\Rules\Doctrine\ORM\MyThirdEntity>::findByTransient().',
+				97,
+			],
+			[
+				'Call to an undefined method PHPStan\Rules\Doctrine\ORM\TestRepository<PHPStan\Rules\Doctrine\ORM\MySecondEntity|PHPStan\Rules\Doctrine\ORM\MyThirdEntity>::findByNonexistent().',
+				98,
+			],
 		]);
 	}
 
