@@ -797,7 +797,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			$type = $this->resolveDoctrineType($typeName, $enumType, $nullable);
 
-			$this->typeBuilder->addScalar($resultAlias, $type);
+			$this->addScalar($resultAlias, $type);
 
 			return '';
 		}
@@ -857,7 +857,7 @@ class QueryResultTypeWalker extends SqlWalker
 				});
 			}
 
-			$this->typeBuilder->addScalar($resultAlias, $type);
+			$this->addScalar($resultAlias, $type);
 
 			return '';
 		}
@@ -1296,6 +1296,18 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkResultVariable($resultVariable): string
 	{
 		return $this->marshalType(new MixedType());
+	}
+
+	/**
+	 * @param array-key $alias
+	 */
+	private function addScalar($alias, Type $type): void
+	{
+		if ($type instanceof UnionType) {
+			$type = TypeUtils::toBenevolentUnion($type);
+		}
+
+		$this->typeBuilder->addScalar($alias, $type);
 	}
 
 	private function unmarshalType(string $marshalledType): Type
