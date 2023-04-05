@@ -27,6 +27,8 @@ rules:
 conditionalTags:
 	PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%
+	PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
 
 services:
 	-
@@ -54,3 +56,5 @@ services:
 			bleedingEdge: %featureToggles.bleedingEdge%
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule
