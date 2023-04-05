@@ -159,7 +159,11 @@ class EntityColumnRuleTest extends RuleTestCase
 				156,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array but database expects array<string>.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				162,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
 			],
 		]);
@@ -218,7 +222,11 @@ class EntityColumnRuleTest extends RuleTestCase
 				156,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array but database expects array<string>.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				162,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
 			],
 		]);

@@ -160,13 +160,14 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		$propertyTransformedType = TypeTraverser::map($propertyType, static function (Type $type, callable $traverse): Type {
+		// If the type descriptor does not precise the types inside the array, don't report errors if the field has a more precise type
+		$propertyTransformedType = $writableToPropertyType->equals(new ArrayType(new MixedType(), new MixedType())) ? TypeTraverser::map($propertyType, static function (Type $type, callable $traverse): Type {
 			if ($type instanceof ArrayType) {
 				return new ArrayType(new MixedType(), new MixedType());
 			}
 
 			return $traverse($type);
-		});
+		}) : $propertyType;
 
 		if (!$propertyTransformedType->isSuperTypeOf($writableToPropertyType)->yes()) {
 			$errors[] = sprintf(
@@ -181,16 +182,16 @@ class EntityColumnRule implements Rule
 		if (
 			!$writableToDatabaseType->isSuperTypeOf(
 				$this->allowNullablePropertyForRequiredField || (in_array($propertyName, $identifiers, true) && !$nullable)
-					? TypeCombinator::removeNull($propertyTransformedType)
-					: $propertyTransformedType
+					? TypeCombinator::removeNull($propertyType)
+					: $propertyType
 			)->yes()
 		) {
 			$errors[] = sprintf(
 				'Property %s::$%s type mapping mismatch: property can contain %s but database expects %s.',
 				$className,
 				$propertyName,
-				$propertyTransformedType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyTransformedType)),
-				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyTransformedType))
+				$propertyTransformedType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyType)),
+				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyType))
 			);
 		}
 		return $errors;
