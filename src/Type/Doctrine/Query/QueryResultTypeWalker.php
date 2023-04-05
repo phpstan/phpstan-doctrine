@@ -846,18 +846,27 @@ class QueryResultTypeWalker extends SqlWalker
 				// the driver and PHP version.
 				// Here we assume that the value may or may not be casted to
 				// string by the driver.
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+				$casted = false;
+				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use (&$casted): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
 					}
 					if ($type instanceof IntegerType || $type instanceof FloatType) {
+						$casted = true;
 						return TypeCombinator::union($type->toString(), $type);
 					}
 					if ($type instanceof BooleanType) {
+						$casted = true;
 						return TypeCombinator::union($type->toInteger()->toString(), $type);
 					}
 					return $traverse($type);
 				});
+
+				// Since we made supposition about possibly casted values,
+				// we can only provide a benevolent union.
+				if ($casted && $type instanceof UnionType) {
+					$type = TypeUtils::toBenevolentUnion($type);
+				}
 			}
 
 			$this->addScalar($resultAlias, $type);
