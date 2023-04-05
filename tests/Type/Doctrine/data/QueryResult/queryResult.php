@@ -155,35 +155,35 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<array>',
+			'list<mixed>',
 			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<mixed>',
 			$query->getArrayResult()
 		);
 		assertType(
-			'iterable<int, array>',
+			'iterable<int, mixed>',
 			$query->toIterable([], AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<mixed>',
 			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<mixed>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<mixed>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'array',
+			'mixed',
 			$query->getSingleResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'array|null',
+			'mixed',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 
