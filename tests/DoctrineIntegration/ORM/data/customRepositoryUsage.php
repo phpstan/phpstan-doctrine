@@ -102,3 +102,41 @@ class MyRepository extends EntityRepository
 		return 1;
 	}
 }
+
+/**
+ * @template T of MyEntity
+ * @extends EntityRepository<T>
+ */
+class AbstractRepository extends EntityRepository
+{
+
+}
+
+class UseAbstractRepository
+{
+
+	/** @var AbstractRepository */
+	private $repository;
+
+	/** @var AbstractRepository<MyEntity> */
+	private $genericRepository;
+
+	/**
+	 * @param AbstractRepository<MyEntity> $genericRepository
+	 */
+	public function __construct(
+		AbstractRepository $repository,
+		AbstractRepository $genericRepository
+	)
+	{
+		$this->repository = $repository;
+		$this->genericRepository = $genericRepository;
+	}
+
+	public function find(): void
+	{
+		$entity = $this->repository->findOneById(1);
+		$entity = $this->genericRepository->findOneById(1);
+	}
+
+}
