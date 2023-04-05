@@ -106,6 +106,9 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var bool */
 	private $hasGroupByClause;
 
+	/** @var bool */
+	private $hasCondition;
+
 	/**
 	 * @param Query<mixed> $query
 	 */
@@ -134,6 +137,7 @@ class QueryResultTypeWalker extends SqlWalker
 		$this->nullableQueryComponents = [];
 		$this->hasAggregateFunction = false;
 		$this->hasGroupByClause = false;
+		$this->hasCondition = false;
 
 		// The object is instantiated by Doctrine\ORM\Query\Parser, so receiving
 		// dependencies through the constructor is not an option. Instead, we
@@ -589,6 +593,8 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkHavingClause($havingClause)
 	{
+		$this->hasCondition = true;
+
 		return $this->marshalType(new MixedType());
 	}
 
@@ -993,6 +999,8 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkWhereClause($whereClause)
 	{
+		$this->hasCondition = true;
+
 		return $this->marshalType(new MixedType());
 	}
 
@@ -1280,7 +1288,10 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	private function addScalar($alias, Type $type): void
 	{
-		if ($type instanceof UnionType) {
+		// Since we don't check the condition inside the WHERE or HAVING
+		// conditions, we cannot be sure all the union types are correct.
+		// For exemple, a condition `WHERE foo.bar IS NOT NULL` could be added.
+		if ($this->hasCondition && $type instanceof UnionType) {
 			$type = TypeUtils::toBenevolentUnion($type);
 		}
 
