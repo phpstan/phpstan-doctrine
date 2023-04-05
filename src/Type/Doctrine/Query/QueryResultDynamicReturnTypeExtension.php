@@ -10,7 +10,11 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
+use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
@@ -48,11 +52,16 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
+	/** @var DescriptorRegistry */
+	private $descriptorRegistry;
+
 	public function __construct(
-		ObjectMetadataResolver $objectMetadataResolver
+		ObjectMetadataResolver $objectMetadataResolver,
+		DescriptorRegistry $descriptorRegistry
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->descriptorRegistry = $descriptorRegistry;
 	}
 
 	public function getClass(): string
@@ -183,10 +192,11 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	private function getArrayHydratedReturnType(Type $queryResultType): Type
 	{
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
+		$descriptorRegistry = $this->descriptorRegistry;
 
 		return TypeTraverser::map(
 			$queryResultType,
-			static function (Type $type, callable $traverse) use ($objectManager): Type {
+			static function (Type $type, callable $traverse) use ($objectManager, $descriptorRegistry): Type {
 				$isObject = (new ObjectWithoutClassType())->isSuperTypeOf($type);
 				if ($isObject->no()) {
 					return $traverse($type);
@@ -199,9 +209,33 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					return new MixedType();
 				}
 
-				return $objectManager->getMetadataFactory()->hasMetadataFor($type->getClassName())
-					? new ArrayType(new MixedType(), new MixedType())
-					: $traverse($type);
+				if (!$objectManager->getMetadataFactory()->hasMetadataFor($type->getClassName())) {
+					return $traverse($type);
+				}
+
+				$metadata = $objectManager->getMetadataFactory()->getMetadataFor($type->getClassName());
+
+				$types = [];
+				$keys = [];
+				foreach ($metadata->fieldMappings as $fieldMapping) {
+					try {
+						$type = $descriptorRegistry->get($fieldMapping['type'])->getWritableToPropertyType();
+					} catch (DescriptorNotRegisteredException $exception) {
+						return new ArrayType(new MixedType(), new MixedType());
+					}
+
+					$nullable = isset($fieldMapping['nullable'])
+						? $fieldMapping['nullable'] === true
+						: false;
+					if ($nullable) {
+						$type = TypeCombinator::addNull($type);
+					}
+
+					$types[] = $type;
+					$keys[] = new ConstantStringType($fieldMapping['fieldName']);
+				}
+
+				return new ConstantArrayType($keys, $types);
 			}
 		);
 	}

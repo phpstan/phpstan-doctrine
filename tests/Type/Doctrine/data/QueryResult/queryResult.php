@@ -155,35 +155,35 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<array>',
+			'list<array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->getArrayResult()
 		);
 		assertType(
-			'iterable<int, array>',
+			'iterable<int, array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->toIterable([], AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<array>',
+			'list<array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}>',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'array',
+			'array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}',
 			$query->getSingleResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'array|null',
+			'array{id: numeric-string, intColumn: int, stringColumn: string, stringNullColumn: string|null, datetimeColumn: DateTime, datetimeImmutableColumn: DateTimeImmutable}|null',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 
