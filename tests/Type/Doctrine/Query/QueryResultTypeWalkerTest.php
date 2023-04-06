@@ -13,6 +13,7 @@ use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -28,6 +29,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use QueryResult\Entities\Embedded;
@@ -551,12 +553,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					],
 					[
 						new ConstantIntegerType(2),
-						TypeCombinator::union(
+						TypeUtils::toBenevolentUnion(TypeCombinator::union(
 							new ConstantIntegerType(1),
 							new ConstantIntegerType(2),
 							new ConstantStringType('1'),
 							new ConstantStringType('2')
-						),
+						)),
 					],
 					[
 						new ConstantIntegerType(3),
@@ -603,7 +605,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::addNull($this->intStringified()),
+					$this->intStringified(true),
 				],
 				[
 					new ConstantIntegerType(2),
@@ -617,7 +619,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(4),
-					TypeCombinator::addNull($this->intStringified()),
+					$this->intStringified(true),
 				],
 				[
 					new ConstantIntegerType(5),
@@ -627,7 +629,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(6),
-					TypeCombinator::addNull($this->intStringified()),
+					$this->intStringified(true),
 				],
 				[
 					new ConstantIntegerType(7),
@@ -653,7 +655,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantStringType('max'),
-					TypeCombinator::addNull($this->intStringified()),
+					$this->intStringified(true),
 				],
 				[
 					new ConstantStringType('arithmetic'),
@@ -761,10 +763,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantStringType('1'),
 						new ConstantIntegerType(1)
-					),
+					)),
 				],
 				[new ConstantIntegerType(2), new ConstantStringType('hello')],
 			]),
@@ -778,11 +780,11 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(1),
 						new ConstantStringType('1'),
 						new NullType()
-					),
+					)),
 				],
 			]),
 			'
@@ -795,10 +797,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new StringType(),
 						new IntegerType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(2),
@@ -824,10 +826,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new StringType(),
 						new ConstantIntegerType(0)
-					),
+					)),
 				],
 			]),
 			'
@@ -844,10 +846,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new StringType(),
 						new ConstantIntegerType(0)
-					),
+					)),
 				],
 			]),
 			'
@@ -864,12 +866,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(0),
 						new ConstantIntegerType(1),
 						new ConstantStringType('0'),
 						new ConstantStringType('1')
-					),
+					)),
 				],
 			]),
 			'
@@ -885,12 +887,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(0),
 						new ConstantIntegerType(1),
 						new ConstantStringType('0'),
 						new ConstantStringType('1')
-					),
+					)),
 				],
 			]),
 			'
@@ -906,31 +908,31 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(1),
 						new ConstantStringType('1')
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(2),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(0),
 						new ConstantStringType('0')
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(3),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(1),
 						new ConstantStringType('1')
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(4),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantIntegerType(0),
 						new ConstantStringType('0')
-					),
+					)),
 				],
 			]),
 			'
@@ -1102,10 +1104,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					],
 					[
 						new ConstantIntegerType(2),
-						TypeCombinator::union(
+						TypeUtils::toBenevolentUnion(TypeCombinator::union(
 							new ConstantIntegerType(1),
 							new ConstantStringType('1')
-						),
+						)),
 					],
 					[
 						new ConstantStringType('intColumn'),
@@ -1149,7 +1151,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'new arguments affect scalar counter' => [
 			$this->constantArray([
-				[new ConstantIntegerType(5), TypeCombinator::addNull($this->intStringified())],
+				[new ConstantIntegerType(5), $this->intStringified(true)],
 				[new ConstantIntegerType(0), new ObjectType(ManyId::class)],
 				[new ConstantIntegerType(1), new ObjectType(OneId::class)],
 			]),
@@ -1166,7 +1168,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantStringType('intColumn'), new IntegerType()],
 				[new ConstantIntegerType(1), $this->intStringified()],
 				[new ConstantIntegerType(2), $this->intStringified()],
-				[new ConstantIntegerType(3), TypeCombinator::addNull($this->intStringified())],
+				[new ConstantIntegerType(3), $this->intStringified(true)],
 				[new ConstantIntegerType(4), $this->intStringified()],
 				[new ConstantIntegerType(5), $this->intStringified()],
 				[new ConstantIntegerType(6), $this->numericStringified()],
@@ -1188,9 +1190,9 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'abs function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->unumericStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->unumericStringified())],
+				[new ConstantIntegerType(2), $this->unumericStringified(true)],
 				[new ConstantIntegerType(3), $this->unumericStringified()],
-				[new ConstantIntegerType(4), TypeCombinator::union($this->unumericStringified())],
+				[new ConstantIntegerType(4), $this->unumericStringified()],
 			]),
 			'
 				SELECT		ABS(m.intColumn),
@@ -1204,7 +1206,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'bit_and function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->uintStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintStringified())],
+				[new ConstantIntegerType(2), $this->uintStringified(true)],
 				[new ConstantIntegerType(3), $this->uintStringified()],
 			]),
 			'
@@ -1218,7 +1220,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'bit_or function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->uintStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintStringified())],
+				[new ConstantIntegerType(2), $this->uintStringified(true)],
 				[new ConstantIntegerType(3), $this->uintStringified()],
 			]),
 			'
@@ -1296,8 +1298,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'date_diff function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->numericStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->numericStringified())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull($this->numericStringified())],
+				[new ConstantIntegerType(2), $this->numericStringified(true)],
+				[new ConstantIntegerType(3), $this->numericStringified(true)],
 				[new ConstantIntegerType(4), $this->numericStringified()],
 			]),
 			'
@@ -1339,11 +1341,9 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(2),
-					TypeCombinator::addNull(
-						$this->hasTypedExpressions()
-						? $this->uint()
-						: $this->uintStringified()
-					),
+					$this->hasTypedExpressions()
+					? $this->uint(true)
+					: $this->uintStringified(true)
 				],
 				[
 					new ConstantIntegerType(3),
@@ -1364,8 +1364,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			yield 'locate function' => [
 				$this->constantArray([
 					[new ConstantIntegerType(1), $this->uintStringified()],
-					[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintStringified())],
-					[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintStringified())],
+					[new ConstantIntegerType(2), $this->uintStringified(true)],
+					[new ConstantIntegerType(3), $this->uintStringified(true)],
 					[new ConstantIntegerType(4), $this->uintStringified()],
 				]),
 				'
@@ -1407,8 +1407,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'mod function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->uintStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintStringified())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintStringified())],
+				[new ConstantIntegerType(2), $this->uintStringified(true)],
+				[new ConstantIntegerType(3), $this->uintStringified(true)],
 				[new ConstantIntegerType(4), $this->uintStringified()],
 			]),
 			'
@@ -1422,7 +1422,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'mod function error' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), TypeCombinator::addNull($this->uintStringified())],
+				[new ConstantIntegerType(1), $this->uintStringified(true)],
 			]),
 			'
 				SELECT		MOD(10, NULLIF(m.intColumn, m.intColumn))
@@ -1481,15 +1481,15 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'identity function' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
-				[new ConstantIntegerType(2), $this->numericStringOrInt()],
-				[new ConstantIntegerType(3), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(1), $this->intStringified(true)],
+				[new ConstantIntegerType(2), $this->intStringified()],
+				[new ConstantIntegerType(3), $this->intStringified(true)],
 				[new ConstantIntegerType(4), TypeCombinator::addNull(new StringType())],
 				[new ConstantIntegerType(5), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(6), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(6), $this->intStringified(true)],
 				[new ConstantIntegerType(7), TypeCombinator::addNull(new MixedType())],
-				[new ConstantIntegerType(8), TypeCombinator::addNull($this->numericStringOrInt())],
-				[new ConstantIntegerType(9), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(8), $this->intStringified(true)],
+				[new ConstantIntegerType(9), $this->intStringified(true)],
 			]),
 			'
 				SELECT		IDENTITY(m.oneNull),
@@ -1508,7 +1508,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'select nullable association' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(1), $this->intStringified(true)],
 			]),
 			'
 				SELECT		DISTINCT(m.oneNull)
@@ -1518,7 +1518,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'select non null association' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), $this->numericStringOrInt()],
+				[new ConstantIntegerType(1), $this->intStringified()],
 			]),
 			'
 				SELECT		DISTINCT(m.one)
@@ -1528,7 +1528,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'select default nullability association' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(1), $this->intStringified(true)],
 			]),
 			'
 				SELECT		DISTINCT(m.oneDefaultNullability)
@@ -1538,7 +1538,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'select non null association in aggregated query' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
+				[new ConstantIntegerType(1), $this->intStringified(true)],
 				[
 					new ConstantIntegerType(2),
 					$this->hasTypedExpressions()
@@ -1608,17 +1608,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		return $builder->getArray();
 	}
 
-	private function numericStringOrInt(): Type
-	{
-		return new UnionType([
-			new IntegerType(),
-			new IntersectionType([
-				new StringType(),
-				new AccessoryNumericStringType(),
-			]),
-		]);
-	}
-
 	private function numericString(): Type
 	{
 		return new IntersectionType([
@@ -1627,42 +1616,67 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		]);
 	}
 
-	private function uint(): Type
+	private function uint(bool $nullable = false): Type
 	{
-		return IntegerRangeType::fromInterval(0, null);
+		$type = IntegerRangeType::fromInterval(0, null);
+		if ($nullable) {
+			TypeCombinator::addNull($type);
+		}
+
+		return $type;
 	}
 
-	private function intStringified(): Type
+	private function intStringified(bool $nullable = false): Type
 	{
-		return TypeCombinator::union(
+		$types = [
 			new IntegerType(),
-			$this->numericString()
-		);
+			$this->numericString(),
+		];
+		if ($nullable) {
+			$types[] = new NullType();
+		}
+
+		return TypeUtils::toBenevolentUnion(TypeCombinator::union(...$types));
 	}
-	private function uintStringified(): Type
+	private function uintStringified(bool $nullable = false): Type
 	{
-		return TypeCombinator::union(
+		$types = [
 			$this->uint(),
-			$this->numericString()
-		);
+			$this->numericString(),
+		];
+		if ($nullable) {
+			$types[] = new NullType();
+		}
+
+		return TypeUtils::toBenevolentUnion(TypeCombinator::union(...$types));
 	}
 
-	private function numericStringified(): Type
+	private function numericStringified(bool $nullable = false): Type
 	{
-		return TypeCombinator::union(
+		$types = [
 			new FloatType(),
 			new IntegerType(),
-			$this->numericString()
-		);
+			$this->numericString(),
+		];
+		if ($nullable) {
+			$types[] = new NullType();
+		}
+
+		return TypeUtils::toBenevolentUnion(TypeCombinator::union(...$types));
 	}
 
-	private function unumericStringified(): Type
+	private function unumericStringified(bool $nullable = false): Type
 	{
-		return TypeCombinator::union(
+		$types = [
 			new FloatType(),
 			IntegerRangeType::fromInterval(0, null),
 			$this->numericString()
-		);
+		];
+		if ($nullable) {
+			$types[] = new NullType();
+		}
+
+		return TypeUtils::toBenevolentUnion(TypeCombinator::union(...$types));
 	}
 
 	private function hasTypedExpressions(): bool
