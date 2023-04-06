@@ -797,10 +797,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeUtils::toBenevolentUnion(TypeCombinator::union(
+					TypeCombinator::union(
 						new StringType(),
 						new IntegerType()
-					)),
+					),
 				],
 				[
 					new ConstantIntegerType(2),
@@ -826,10 +826,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeUtils::toBenevolentUnion(TypeCombinator::union(
+					TypeCombinator::union(
 						new StringType(),
 						new ConstantIntegerType(0)
-					)),
+					),
 				],
 			]),
 			'
@@ -846,10 +846,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeUtils::toBenevolentUnion(TypeCombinator::union(
+					TypeCombinator::union(
 						new StringType(),
 						new ConstantIntegerType(0)
-					)),
+					),
 				],
 			]),
 			'
