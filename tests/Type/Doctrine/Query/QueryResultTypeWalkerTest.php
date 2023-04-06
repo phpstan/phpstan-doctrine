@@ -442,6 +442,25 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		yield 'scalar with where condition' => [
+			$this->constantArray([
+				[new ConstantStringType('intColumn'), new IntegerType()],
+				[new ConstantStringType('stringColumn'), new StringType()],
+				[
+					new ConstantStringType('stringNullColumn'),
+					TypeUtils::toBenevolentUnion(TypeCombinator::addNull(new StringType()))
+				],
+				[new ConstantStringType('datetimeColumn'), new ObjectType(DateTime::class)],
+				[new ConstantStringType('datetimeImmutableColumn'), new ObjectType(DateTimeImmutable::class)],
+			]),
+			'
+				SELECT		m.intColumn, m.stringColumn, m.stringNullColumn,
+							m.datetimeColumn, m.datetimeImmutableColumn
+				FROM		QueryResult\Entities\Many m
+				WHERE       m.stringNullColumn IS NOT NULL
+			',
+		];
+
 		yield 'scalar with alias' => [
 			$this->constantArray([
 				[new ConstantStringType('i'), new IntegerType()],
