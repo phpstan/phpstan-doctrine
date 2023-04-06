@@ -13,7 +13,6 @@ use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
-use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -30,7 +29,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeUtils;
-use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use QueryResult\Entities\Embedded;
 use QueryResult\Entities\JoinedChild;
@@ -1257,7 +1255,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(2),
 					$this->hasTypedExpressions()
 					? $this->uint(true)
-					: $this->uintStringified(true)
+					: $this->uintStringified(true),
 				],
 				[
 					new ConstantIntegerType(3),
@@ -1584,7 +1582,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		$types = [
 			new FloatType(),
 			IntegerRangeType::fromInterval(0, null),
-			$this->numericString()
+			$this->numericString(),
 		];
 		if ($nullable) {
 			$types[] = new NullType();
