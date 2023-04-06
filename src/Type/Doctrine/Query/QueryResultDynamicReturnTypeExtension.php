@@ -10,6 +10,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -21,6 +22,7 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VoidType;
 use function count;
@@ -156,7 +158,12 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			case 'getSingleResult':
 				return $queryResultType;
 			case 'getOneOrNullResult':
-				return TypeCombinator::addNull($queryResultType);
+				$nullableQueryResultType = TypeCombinator::addNull($queryResultType);
+				if ($queryResultType instanceof BenevolentUnionType) {
+					$nullableQueryResultType = TypeUtils::toBenevolentUnion($nullableQueryResultType);
+				}
+
+				return $nullableQueryResultType;
 			case 'toIterable':
 				return new IterableType(
 					$queryKeyType->isNull()->yes() ? new IntegerType() : $queryKeyType,

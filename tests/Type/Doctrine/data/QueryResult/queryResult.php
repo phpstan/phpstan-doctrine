@@ -384,31 +384,31 @@ class QueryResultTest
 		');
 
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->getResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->getSingleScalarResult()
 		);
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->execute(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'int<0, max>|numeric-string',
+			'(int<0, max>|numeric-string)',
 			$query->getSingleResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'int<0, max>|numeric-string|null',
+			'(int<0, max>|numeric-string|null)',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 	}
