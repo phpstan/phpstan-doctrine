@@ -447,7 +447,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantStringType('stringColumn'), new StringType()],
 				[
 					new ConstantStringType('stringNullColumn'),
-					TypeUtils::toBenevolentUnion(TypeCombinator::addNull(new StringType()))
+					TypeUtils::toBenevolentUnion(TypeCombinator::addNull(new StringType())),
 				],
 				[new ConstantStringType('datetimeColumn'), new ObjectType(DateTime::class)],
 				[new ConstantStringType('datetimeImmutableColumn'), new ObjectType(DateTimeImmutable::class)],
