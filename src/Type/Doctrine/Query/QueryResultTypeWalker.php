@@ -847,6 +847,8 @@ class QueryResultTypeWalker extends SqlWalker
 				// Here we assume that the value may or may not be casted to
 				// string by the driver.
 				$casted = false;
+				$originalType = $type;
+
 				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use (&$casted): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
@@ -864,7 +866,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				// Since we made supposition about possibly casted values,
 				// we can only provide a benevolent union.
-				if ($casted && $type instanceof UnionType) {
+				if ($casted && $type instanceof UnionType && !$originalType->equals($type)) {
 					$type = TypeUtils::toBenevolentUnion($type);
 				}
 			}
