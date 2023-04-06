@@ -20,6 +20,7 @@ use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\JsonType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
+use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use Ramsey\Uuid\Doctrine\UuidType;
@@ -68,6 +69,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new JsonType(),
 				new IntegerType(),
 				new StringType(),
+				new SimpleArrayType(),
 				new UuidTypeDescriptor(UuidType::class),
 				new ReflectionDescriptor(CarbonImmutableType::class, $this->createBroker()),
 				new ReflectionDescriptor(CarbonType::class, $this->createBroker()),
@@ -156,6 +158,14 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
 				156,
 			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				162,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
+				162,
+			],
 		]);
 	}
 
@@ -210,6 +220,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
 				156,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				162,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
+				162,
 			],
 		]);
 	}

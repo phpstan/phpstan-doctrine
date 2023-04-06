@@ -132,6 +132,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				$many->stringNullColumn = $stringNullColumnMany;
 				$many->datetimeColumn = new DateTime('2001-01-01 00:00:00');
 				$many->datetimeImmutableColumn = new DateTimeImmutable('2001-01-01 00:00:00');
+				$many->simpleArrayColumn = ['foo'];
 				$many->one = $one;
 				$one->manies->add($many);
 				$em->persist($many);
