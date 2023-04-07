@@ -2,16 +2,18 @@
 
 namespace PHPStan\Doctrine\Mapping;
 
+use Composer\InstalledVersions;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use ReflectionClass;
 use function class_exists;
 use function count;
+use function version_compare;
 use const PHP_VERSION_ID;
 
 class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
@@ -43,10 +45,12 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		$targetPlatformProperty = $parentReflection->getProperty('targetPlatform');
 		$targetPlatformProperty->setAccessible(true);
 
-		if (class_exists(MySqlPlatform::class)) {
-			$platform = new MySqlPlatform();
+		$version = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal3 = $version !== null && version_compare($version, '3', '>=');
+		if ($hasDbal3) {
+			$platform = new MySQLPlatform();
 		} else {
-			$platform = new \Doctrine\DBAL\Platforms\MySQLPlatform();
+			$platform = new \Doctrine\DBAL\Platforms\MySqlPlatform();
 		}
 
 		$targetPlatformProperty->setValue($this, $platform);
