@@ -199,14 +199,9 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					return new MixedType();
 				}
 
-				if (!$objectManager->getMetadataFactory()->hasMetadataFor($type->getClassName())) {
-					return $traverse($type);
-				}
-
-				// We could return `new ArrayTyp(new MixedType(), new MixedType())`
-				// but the lack of precision in the array keys/values would give false positive
-				// @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
-				return new MixedType();
+				return $objectManager->getMetadataFactory()->hasMetadataFor($type->getClassName())
+					? new ArrayType(new MixedType(), new MixedType())
+					: $traverse($type);
 			}
 		);
 	}
