@@ -10,6 +10,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -208,22 +209,19 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	private function getScalarHydratedReturnType(Type $queryResultType): Type
 	{
-		if (!$queryResultType->isArray()->yes()) {
+		if (!$queryResultType instanceof ArrayType) {
 			return new ArrayType(new MixedType(), new MixedType());
 		}
 
-		foreach ($queryResultType->getArrays() as $arrayType) {
-			$itemType = $arrayType->getItemType();
+		$itemType = $queryResultType->getItemType();
+		$hasNoObject = (new ObjectWithoutClassType())->isSuperTypeOf($itemType)->no();
+		$hasNoArray = $itemType->isArray()->no();
 
-			if (
-				!(new ObjectWithoutClassType())->isSuperTypeOf($itemType)->no()
-				|| !$itemType->isArray()->no()
-			) {
-				return new ArrayType(new MixedType(), new MixedType());
-			}
+		if ($hasNoArray && $hasNoObject) {
+			return $queryResultType;
 		}
 
-		return $queryResultType;
+		return new ArrayType(new MixedType(), new MixedType());
 	}
 
 	private function getSimpleObjectHydratedReturnType(Type $queryResultType): Type
@@ -238,41 +236,31 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	private function getSingleScalarHydratedReturnType(Type $queryResultType): Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (!$queryResultType->isConstantArray()->yes()) {
+		if (!$queryResultType instanceof ConstantArrayType) {
 			return new MixedType();
 		}
 
-		$types = [];
-		foreach ($queryResultType->getConstantArrays() as $constantArrayType) {
-			$values = $constantArrayType->getValueTypes();
-			if (count($values) !== 1) {
-				return new MixedType();
-			}
-
-			$types[] = $constantArrayType->getFirstIterableValueType();
+		$values = $queryResultType->getValueTypes();
+		if (count($values) !== 1) {
+			return new MixedType();
 		}
 
-		return TypeCombinator::union(...$types);
+		return $queryResultType->getFirstIterableValueType();
 	}
 
 	private function getScalarColumnHydratedReturnType(Type $queryResultType): Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (!$queryResultType->isConstantArray()->yes()) {
+		if (!$queryResultType instanceof ConstantArrayType) {
 			return new MixedType();
 		}
 
-		$types = [];
-		foreach ($queryResultType->getConstantArrays() as $constantArrayType) {
-			$values = $constantArrayType->getValueTypes();
-			if (count($values) !== 1) {
-				return new MixedType();
-			}
-
-			$types[] = $constantArrayType->getFirstIterableValueType();
+		$values = $queryResultType->getValueTypes();
+		if (count($values) !== 1) {
+			return new MixedType();
 		}
 
-		return TypeCombinator::union(...$types);
+		return $queryResultType->getFirstIterableValueType();
 	}
 
 	private function originalReturnType(MethodReflection $methodReflection): Type
