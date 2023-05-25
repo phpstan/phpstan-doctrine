@@ -120,8 +120,10 @@ final class ObjectMetadataResolver
 					return null;
 				}
 
+				/** @throws \Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException */
 				$metadata = $metadataFactory->getMetadataFor($className);
 			} else {
+				/** @throws \Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException */
 				$metadata = $objectManager->getClassMetadata($className);
 			}
 		} catch (\Doctrine\Persistence\Mapping\MappingException | MappingException | AnnotationException $e) {
