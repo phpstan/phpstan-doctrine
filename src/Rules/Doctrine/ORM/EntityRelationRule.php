@@ -135,7 +135,7 @@ class EntityRelationRule implements Rule
 					$propertyName,
 					$columnType->describe(VerbosityLevel::typeOnly()),
 					$propertyType->describe(VerbosityLevel::typeOnly())
-				))->build();
+				))->identifier('doctrine.associationType')->build();
 			}
 			if (
 				!$columnType->isSuperTypeOf(
@@ -150,7 +150,7 @@ class EntityRelationRule implements Rule
 					$propertyName,
 					$propertyType->describe(VerbosityLevel::typeOnly()),
 					$columnType->describe(VerbosityLevel::typeOnly())
-				))->build();
+				))->identifier('doctrine.associationType')->build();
 			}
 		}
 

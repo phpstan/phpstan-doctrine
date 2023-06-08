@@ -60,6 +60,7 @@ class EntityMappingExceptionRule implements Rule
 			return [
 				RuleErrorBuilder::message($e->getMessage())
 					->nonIgnorable()
+					->identifier('doctrine.mapping')
 					->build(),
 			];
 		}

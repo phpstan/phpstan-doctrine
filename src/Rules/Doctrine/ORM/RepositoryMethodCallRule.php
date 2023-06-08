@@ -83,7 +83,7 @@ class RepositoryMethodCallRule implements Rule
 						$methodName,
 						$entityClassNames[0],
 						$fieldName->getValue()
-					))->build();
+					))->identifier(sprintf('doctrine.%sArgument', $methodName))->build();
 				}
 			}
 		}

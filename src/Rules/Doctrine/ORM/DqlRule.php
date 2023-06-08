@@ -78,6 +78,7 @@ class DqlRule implements Rule
 				$query->getAST();
 			} catch (QueryException $e) {
 				$messages[] = RuleErrorBuilder::message(sprintf('DQL: %s', $e->getMessage()))
+					->identifier('doctrine.dql')
 					->build();
 			} catch (AssertionError $e) {
 				continue;

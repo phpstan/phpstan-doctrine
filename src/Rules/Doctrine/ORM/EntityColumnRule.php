@@ -107,7 +107,7 @@ class EntityColumnRule implements Rule
 					$className,
 					$propertyName,
 					$fieldMapping['type']
-				))->build(),
+				))->identifier('doctrine.descriptorNotFound')->build(),
 			] : [];
 		}
 
@@ -128,7 +128,7 @@ class EntityColumnRule implements Rule
 							$backedEnumType->describe(VerbosityLevel::typeOnly()),
 							$enumReflection->getDisplayName(),
 							$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
-						))->build();
+						))->identifier('doctrine.enumType')->build();
 					}
 				}
 			}
@@ -179,7 +179,7 @@ class EntityColumnRule implements Rule
 				$propertyName,
 				$writableToPropertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyTransformedType, $writableToPropertyType)),
 				$propertyType->describe(VerbosityLevel::getRecommendedLevelByType($propertyTransformedType, $writableToPropertyType))
-			))->build();
+			))->identifier('doctrine.columnType')->build();
 		}
 
 		if (
@@ -195,7 +195,7 @@ class EntityColumnRule implements Rule
 				$propertyName,
 				$propertyTransformedType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyType)),
 				$writableToDatabaseType->describe(VerbosityLevel::getRecommendedLevelByType($writableToDatabaseType, $propertyType))
-			))->build();
+			))->identifier('doctrine.columnType')->build();
 		}
 		return $errors;
 	}

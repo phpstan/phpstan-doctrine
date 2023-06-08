@@ -64,6 +64,7 @@ class QueryBuilderDqlRule implements Rule
 			) {
 				return [
 					RuleErrorBuilder::message('Could not analyse QueryBuilder with unknown beginning.')
+						->identifier('doctrine.queryBuilderDynamic')
 						->build(),
 				];
 			}
@@ -76,6 +77,7 @@ class QueryBuilderDqlRule implements Rule
 			return [
 				RuleErrorBuilder::message(sprintf('Internal error: %s', $e->getMessage()))
 					->nonIgnorable()
+					->identifier('doctrine.internalError')
 					->build(),
 			];
 		}
@@ -85,6 +87,7 @@ class QueryBuilderDqlRule implements Rule
 			if ($this->reportDynamicQueryBuilders) {
 				return [
 					RuleErrorBuilder::message('Could not analyse QueryBuilder with dynamic arguments.')
+						->identifier('doctrine.queryBuilderDynamicArgument')
 						->build(),
 				];
 			}
@@ -115,6 +118,7 @@ class QueryBuilderDqlRule implements Rule
 				}
 
 				$messages[] = RuleErrorBuilder::message($message)
+					->identifier('doctrine.dql')
 					->build();
 			} catch (AssertionError $e) {
 				continue;

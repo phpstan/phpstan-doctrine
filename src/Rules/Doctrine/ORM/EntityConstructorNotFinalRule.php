@@ -58,7 +58,7 @@ class EntityConstructorNotFinalRule implements Rule
 			RuleErrorBuilder::message(sprintf(
 				'Constructor of class %s is final which can cause problems with proxies.',
 				$classReflection->getDisplayName()
-			))->build(),
+			))->identifier('doctrine.finalConstructor')->build(),
 		];
 	}
 
