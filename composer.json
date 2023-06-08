@@ -30,8 +30,8 @@
 		"nesbot/carbon": "^2.49",
 		"nikic/php-parser": "^4.13.2",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
-		"phpstan/phpstan-phpunit": "^1.0",
-		"phpstan/phpstan-strict-rules": "^1.0",
+		"phpstan/phpstan-phpunit": "^1.3.13",
+		"phpstan/phpstan-strict-rules": "^1.5.1",
 		"phpunit/phpunit": "^9.5.10",
 		"ramsey/uuid-doctrine": "^1.5.0",
 		"symfony/cache": "^4.4.35"
