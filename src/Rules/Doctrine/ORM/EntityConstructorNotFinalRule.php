@@ -54,10 +54,12 @@ class EntityConstructorNotFinalRule implements Rule
 			return [];
 		}
 
-		return [RuleErrorBuilder::message(sprintf(
-			'Constructor of class %s is final which can cause problems with proxies.',
-			$classReflection->getDisplayName()
-		))->build()];
+		return [
+			RuleErrorBuilder::message(sprintf(
+				'Constructor of class %s is final which can cause problems with proxies.',
+				$classReflection->getDisplayName()
+			))->build(),
+		];
 	}
 
 }

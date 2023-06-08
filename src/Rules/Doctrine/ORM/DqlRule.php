@@ -8,6 +8,7 @@ use Doctrine\ORM\Query\QueryException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
@@ -76,7 +77,8 @@ class DqlRule implements Rule
 			try {
 				$query->getAST();
 			} catch (QueryException $e) {
-				$messages[] = sprintf('DQL: %s', $e->getMessage());
+				$messages[] = RuleErrorBuilder::message(sprintf('DQL: %s', $e->getMessage()))
+					->build();
 			} catch (AssertionError $e) {
 				continue;
 			}

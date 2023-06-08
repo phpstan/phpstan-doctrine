@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
@@ -62,7 +63,8 @@ class QueryBuilderDqlRule implements Rule
 				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes()
 			) {
 				return [
-					'Could not analyse QueryBuilder with unknown beginning.',
+					RuleErrorBuilder::message('Could not analyse QueryBuilder with unknown beginning.')
+						->build(),
 				];
 			}
 			return [];
@@ -71,14 +73,19 @@ class QueryBuilderDqlRule implements Rule
 		try {
 			$dqlType = $scope->getType(new MethodCall($node, new Node\Identifier('getDQL'), []));
 		} catch (Throwable $e) {
-			return [sprintf('Internal error: %s', $e->getMessage())];
+			return [
+				RuleErrorBuilder::message(sprintf('Internal error: %s', $e->getMessage()))
+					->nonIgnorable()
+					->build(),
+			];
 		}
 
 		$dqls = TypeUtils::getConstantStrings($dqlType);
 		if (count($dqls) === 0) {
 			if ($this->reportDynamicQueryBuilders) {
 				return [
-					'Could not analyse QueryBuilder with dynamic arguments.',
+					RuleErrorBuilder::message('Could not analyse QueryBuilder with dynamic arguments.')
+						->build(),
 				];
 			}
 			return [];
@@ -107,7 +114,8 @@ class QueryBuilderDqlRule implements Rule
 					$message .= sprintf("\nDQL: %s", $dql->getValue());
 				}
 
-				$messages[] = $message;
+				$messages[] = RuleErrorBuilder::message($message)
+					->build();
 			} catch (AssertionError $e) {
 				continue;
 			}
