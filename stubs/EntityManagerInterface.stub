@@ -4,6 +4,7 @@ namespace Doctrine\ORM;
 
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 interface EntityManagerInterface extends ObjectManager
@@ -36,6 +37,8 @@ interface EntityManagerInterface extends ObjectManager
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $id
 	 * @phpstan-return T|null
+     *
+     * @throws ORMException
 	 */
 	public function getReference($entityName, $id);
 
