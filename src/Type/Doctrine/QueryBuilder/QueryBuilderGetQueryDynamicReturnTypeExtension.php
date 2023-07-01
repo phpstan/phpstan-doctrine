@@ -23,6 +23,7 @@ use PHPStan\Type\Doctrine\Query\QueryType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use Throwable;
 use function count;
 use function in_array;
 use function method_exists;
@@ -141,7 +142,11 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 					return $defaultReturnType;
 				}
 
-				$queryBuilder->{$methodName}(...$args);
+				try {
+					$queryBuilder->{$methodName}(...$args);
+				} catch (Throwable $e) {
+					return $defaultReturnType;
+				}
 			}
 
 			$resultTypes[] = $this->getQueryType($queryBuilder->getDQL());
