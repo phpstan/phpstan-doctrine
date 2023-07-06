@@ -2,6 +2,8 @@
 
 namespace Doctrine\ORM;
 
+use Doctrine\ORM\Exception\ORMException;
+
 class EntityManager implements EntityManagerInterface
 {
 
@@ -35,6 +37,8 @@ class EntityManager implements EntityManagerInterface
 	 * @phpstan-param class-string<T> $entityName
 	 * @phpstan-param mixed $id
 	 * @phpstan-return T|null
+	 *
+	 * @throws ORMException
 	 */
 	public function getReference($entityName, $id);
 

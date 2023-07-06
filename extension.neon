@@ -36,6 +36,7 @@ parameters:
 		- stubs/Collections/ReadableCollection.stub
 		- stubs/Collections/Selectable.stub
 		- stubs/ORM/AbstractQuery.stub
+		- stubs/ORM/Exception/ORMException.stub
 		- stubs/ORM/Id/AbstractIdGenerator.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
