@@ -73,7 +73,7 @@ class QueryBuilder
 	 * @param literal-string                                     $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
-	 * @param literal-string|Expr\Comparison|Expr\Composite|null $condition
+	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
 	 * @param literal-string|null                                $indexBy
 	 *
 	 * @return $this
@@ -87,7 +87,7 @@ class QueryBuilder
 	 * @param literal-string                                     $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
-	 * @param literal-string|Expr\Comparison|Expr\Composite|null $condition
+	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
 	 * @param literal-string|null                                $indexBy
 	 *
 	 * @return $this
@@ -101,7 +101,7 @@ class QueryBuilder
 	 * @param literal-string                                     $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
-	 * @param literal-string|Expr\Comparison|Expr\Composite|null $condition
+	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
 	 * @param literal-string|null                                $indexBy
 	 *
 	 * @return $this
@@ -143,7 +143,7 @@ class QueryBuilder
 	{
 
 	}
-	
+
 	/**
 	 * @param literal-string|object|array<mixed> $predicates
 	 * @return $this
