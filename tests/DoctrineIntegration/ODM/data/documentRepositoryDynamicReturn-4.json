@@ -1,7 +1,0 @@
-[
-    {
-        "message": "Property PHPStan\\DoctrineIntegration\\ODM\\DocumentRepositoryDynamicReturn\\MyDocument::$id is unused.",
-        "line": 135,
-        "ignorable": true
-    }
-]

@@ -5,6 +5,7 @@ namespace PHPStan\DoctrineIntegration\ODM\DocumentManagerMergeReturn;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -21,6 +22,7 @@ class Example
 	public function merge(): void
 	{
 		$test = $this->documentManager->merge(new MyDocument());
+		assertType(MyDocument::class, $test);
 		$test->doSomething();
 	}
 }
