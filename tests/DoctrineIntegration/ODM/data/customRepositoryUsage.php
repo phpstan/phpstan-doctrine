@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
 use RuntimeException;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -23,12 +24,8 @@ class Example
 	public function get(): void
 	{
 		$test = $this->repository->get('testing');
+		assertType(MyDocument::class, $test);
 		$test->doSomethingElse();
-	}
-
-	public function nonexistant(): void
-	{
-		$this->repository->nonexistant();
 	}
 }
 
@@ -61,6 +58,8 @@ class MyRepository extends DocumentRepository
 		if ($document === null) {
 			throw new RuntimeException('Not found...');
 		}
+
+		assertType(MyDocument::class, $document);
 
 		return $document;
 	}

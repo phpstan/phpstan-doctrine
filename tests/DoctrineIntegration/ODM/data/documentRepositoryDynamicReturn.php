@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
 use RuntimeException;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -28,6 +29,8 @@ class Example
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType('object', $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -40,6 +43,8 @@ class Example
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType('object', $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -47,6 +52,7 @@ class Example
 	public function findAllDynamicType(): void
 	{
 		$items = $this->repository->findAll();
+		assertType('array<int, object>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -57,6 +63,7 @@ class Example
 	public function findByDynamicType(): void
 	{
 		$items = $this->repository->findBy(['blah' => 'testing']);
+		assertType('array<int, object>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -85,6 +92,8 @@ class Example2
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType(MyDocument::class, $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -97,6 +106,8 @@ class Example2
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType(MyDocument::class, $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -104,6 +115,7 @@ class Example2
 	public function findAllDynamicType(): void
 	{
 		$items = $this->repository->findAll();
+		assertType('array<int, ' . MyDocument::class . '>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -114,6 +126,7 @@ class Example2
 	public function findByDynamicType(): void
 	{
 		$items = $this->repository->findBy(['blah' => 'testing']);
+		assertType('array<int, ' . MyDocument::class . '>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();

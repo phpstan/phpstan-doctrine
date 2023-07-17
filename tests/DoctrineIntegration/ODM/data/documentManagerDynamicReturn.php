@@ -6,6 +6,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
 use RuntimeException;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -27,6 +28,8 @@ class Example
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType(MyDocument::class, $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -34,6 +37,7 @@ class Example
 	public function getReferenceDynamicType(): void
 	{
 		$test = $this->documentManager->getReference(MyDocument::class, 'blah-123');
+		assertType(MyDocument::class, $test);
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -41,6 +45,7 @@ class Example
 	public function getPartialReferenceDynamicType(): void
 	{
 		$test = $this->documentManager->getPartialReference(MyDocument::class, 'blah-123');
+		assertType(MyDocument::class, $test);
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
