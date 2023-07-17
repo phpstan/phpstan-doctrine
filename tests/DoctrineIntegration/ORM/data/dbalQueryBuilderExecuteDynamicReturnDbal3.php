@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PHPStan\DoctrineIntegration\ORM\DbalQueryBuilderExecuteDynamicReturn;
+namespace PHPStan\DoctrineIntegration\ORM\DbalQueryBuilderExecuteDynamicReturnDbal3;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Result;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -15,24 +17,18 @@ class Example
 		$this->connection = $connection;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function testCaseOne(int $userId): array
+	public function testCaseOne(int $userId): void
 	{
-		return $this->connection->createQueryBuilder()
+		$test = $this->connection->createQueryBuilder()
 			->select('*')
 			->from('user')
 			->where('user.id = :id')
 			->setParameter('id', $userId)
-			->execute()
-			->fetchAll();
+			->execute();
+		assertType('Doctrine\DBAL\Driver\Result&Doctrine\DBAL\Result', $test);
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function testCaseTwo(int $userId): array
+	public function testCaseTwo(int $userId): void
 	{
 		$qb = $this->connection->createQueryBuilder();
 		$qb->select('*');
@@ -40,13 +36,10 @@ class Example
 		$qb->where('user.id = :id');
 		$qb->setParameter('id', $userId);
 
-		return $qb->execute()->fetchAll();
+		assertType(Result::class . '|int|string', $qb->execute());
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function testCaseThree(?int $userId = null): array
+	public function testCaseThree(?int $userId = null): void
 	{
 		$qb = $this->connection->createQueryBuilder();
 		$qb->select('*');
@@ -57,33 +50,27 @@ class Example
 			$qb->setParameter('id', $userId);
 		}
 
-		return $qb->execute()->fetchAll();
+		assertType(Result::class . '|int|string', $qb->execute());
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function testCaseFourA(?int $userId = null): array
+	public function testCaseFourA(?int $userId = null): void
 	{
 		$qb = $this->connection->createQueryBuilder();
 		$qb->select('*');
 		$qb->from('user');
 
 		if ($userId !== null) {
-			return $this->testCaseFourB($qb, $userId);
+			$this->testCaseFourB($qb, $userId);
 		}
 
-		return $qb->execute()->fetchAll();
+		assertType(Result::class . '|int|string', $qb->execute());
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	private function testCaseFourB(QueryBuilder $qb, int $userId): array
+	private function testCaseFourB(QueryBuilder $qb, int $userId): void
 	{
 		$qb->where('user.id = :id');
 		$qb->setParameter('id', $userId);
 
-		return $qb->execute()->fetchAll();
+		assertType(Result::class . '|int|string', $qb->execute());
 	}
 }

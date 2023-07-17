@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use RuntimeException;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -31,6 +32,7 @@ class Example
 	public function get(): void
 	{
 		$test = $this->repository->get(1);
+		assertType(MyEntity::class, $test);
 		$test->doSomethingElse();
 		$test->nonexistent();
 	}
@@ -43,6 +45,7 @@ class Example
 	public function nonGenericRepository(): void
 	{
 		$entity = $this->repository->find(1);
+		assertType('object|null', $entity);
 		$entity->doSomethingElse();
 		$entity->nonexistent();
 	}
@@ -50,14 +53,15 @@ class Example
 	public function genericRepository(): void
 	{
 		$entity = $this->anotherRepository->find(1);
+		assertType(MyEntity::class . '|null', $entity);
 		$entity->doSomethingElse();
 		$entity->nonexistent();
 	}
 
 	public function callExistingMethodOnRepository(): void
 	{
-		$this->repository->findOneByBlabla()->test();
-		$this->anotherRepository->findOneByBlabla()->test();
+		assertType('int', $this->repository->findOneByBlabla());
+		assertType('int', $this->anotherRepository->findOneByBlabla());
 	}
 }
 
@@ -89,6 +93,7 @@ class MyRepository extends EntityRepository
 	public function get(int $id): MyEntity
 	{
 		$entity = $this->find($id);
+		assertType('T of object (class PHPStan\DoctrineIntegration\ORM\CustomRepositoryUsage\MyRepository, argument)|null', $entity);
 
 		if ($entity === null) {
 			throw new RuntimeException('Not found...');

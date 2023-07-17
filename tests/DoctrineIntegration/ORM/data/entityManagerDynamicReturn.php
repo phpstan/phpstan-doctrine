@@ -5,6 +5,7 @@ namespace PHPStan\DoctrineIntegration\ORM\EntityManagerDynamicReturn;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use RuntimeException;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -38,6 +39,8 @@ class Example
 			throw new RuntimeException('Sorry, but no...');
 		}
 
+		assertType(MyEntity::class, $test);
+
 		$test->doSomething();
 		$test->doSomethingElse();
 	}
@@ -49,6 +52,8 @@ class Example
 		if ($test === null) {
 			throw new RuntimeException('Sorry, but no...');
 		}
+
+		assertType(MyEntity::class, $test);
 
 		$test->doSomething();
 		$test->doSomethingElse();
@@ -62,11 +67,14 @@ class Example
 		$repository = $this->entityManager->getRepository($entityName);
 		$repository->getClassName();
 		$repository->unknownMethod();
+		assertType('Doctrine\ORM\EntityRepository<object>', $repository);
 		$entity = $repository->find(1);
 
 		if ($entity === null) {
 			throw new RuntimeException('Sorry, but no...');
 		}
+
+		assertType('object', $entity);
 
 		$entity->unknownMethod();
 	}

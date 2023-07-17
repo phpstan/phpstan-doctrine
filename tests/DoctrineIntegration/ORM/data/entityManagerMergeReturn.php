@@ -4,6 +4,7 @@ namespace PHPStan\DoctrineIntegration\ORM\EntityManagerMergeReturn;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use function PHPStan\Testing\assertType;
 
 class Example
 {
@@ -20,6 +21,7 @@ class Example
 	public function merge(): void
 	{
 		$test = $this->entityManager->merge(new MyEntity());
+		assertType(MyEntity::class, $test);
 		$test->doSomething();
 		$test->doSomethingElse();
 	}

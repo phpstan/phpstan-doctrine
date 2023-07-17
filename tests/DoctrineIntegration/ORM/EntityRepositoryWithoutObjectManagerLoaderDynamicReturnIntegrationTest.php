@@ -3,8 +3,6 @@
 namespace PHPStan\DoctrineIntegration\ORM;
 
 use PHPStan\Testing\LevelsTestCase;
-use const PHP_MAJOR_VERSION;
-use const PHP_MINOR_VERSION;
 
 final class EntityRepositoryWithoutObjectManagerLoaderDynamicReturnIntegrationTest extends LevelsTestCase
 {
@@ -21,10 +19,6 @@ final class EntityRepositoryWithoutObjectManagerLoaderDynamicReturnIntegrationTe
 
 	public function getDataPath(): string
 	{
-		if (PHP_MAJOR_VERSION === 7 && PHP_MINOR_VERSION === 1) {
-			return __DIR__ . '/data-php-7.1';
-		}
-
 		return __DIR__ . '/data';
 	}
 

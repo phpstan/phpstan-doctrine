@@ -5,6 +5,7 @@ namespace PHPStan\DoctrineIntegration\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use PHPStan\DoctrineIntegration\ORM\CustomRepositoryUsage\MyEntity;
+use function PHPStan\Testing\assertType;
 
 class Foo
 {
@@ -25,9 +26,8 @@ class Foo
 			->select('e')
 			->from(MyEntity::class, 'e');
 		$query = $queryBuilder->getQuery();
-
-		$query->getDQL() === 'aaa';
-		$queryBuilder->getDQL() === 'aaa';
+		assertType('\'SELECT e FROM PHPStan\\\\DoctrineIntegration\\\\ORM\\\\CustomRepositoryUsage\\\\MyEntity e\'', $query->getDQL());
+		assertType('\'SELECT e FROM PHPStan\\\\DoctrineIntegration\\\\ORM\\\\CustomRepositoryUsage\\\\MyEntity e\'', $queryBuilder->getDQL());
 
 		return $query;
 	}
@@ -38,8 +38,8 @@ class Foo
 		$queryBuilder = $entityRepository->createQueryBuilder('e');
 		$query = $queryBuilder->getQuery();
 
-		$query->getDQL() === 'bbb';
-		$queryBuilder->getDQL() === 'bbb';
+		assertType('\'SELECT e FROM PHPStan\\\\DoctrineIntegration\\\\ORM\\\\CustomRepositoryUsage\\\\MyEntity e\'', $query->getDQL());
+		assertType('\'SELECT e FROM PHPStan\\\\DoctrineIntegration\\\\ORM\\\\CustomRepositoryUsage\\\\MyEntity e\'', $queryBuilder->getDQL());
 
 		return $query;
 	}
@@ -66,11 +66,15 @@ class Foo
 				'id' => 123,
 			]);
 
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		$result = $queryBuilder->getQuery()->getOneOrNullResult();
+		assertType('mixed', $result);
+
+		return $result;
 	}
 
 	public function getCustomQueryBuilder(): CustomQueryBuilder
 	{
+		assertType(CustomQueryBuilder::class, $this->entityManager->createQueryBuilder());
 	    return $this->entityManager->createQueryBuilder();
 	}
 }
