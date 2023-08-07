@@ -19,4 +19,10 @@ abstract class AbstractQuery
 	{
 
 	}
+
+	/**
+	* @return bool|float|int|string|null
+	*/
+	public function getSingleScalarResult();
+
 }
