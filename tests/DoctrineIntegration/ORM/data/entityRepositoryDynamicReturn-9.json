@@ -1,7 +1,0 @@
-[
-    {
-        "message": "Cannot cast mixed to int.",
-        "line": 241,
-        "ignorable": true
-    }
-]
