@@ -7,7 +7,7 @@
 	],
 	"require": {
 		"php": "^7.2 || ^8.0",
-		"phpstan/phpstan": "^1.11"
+		"phpstan/phpstan": "^1.10.12"
 	},
 	"conflict": {
 		"doctrine/collections": "<1.0",
