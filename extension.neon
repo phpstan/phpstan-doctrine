@@ -40,7 +40,9 @@ parameters:
 		- stubs/ORM/Id/AbstractIdGenerator.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
+		- stubs/ORM/NonUniqueResultException.stub
 		- stubs/ORM/ORMException.stub
+		- stubs/ORM/UnexpectedResultException.stub
 		- stubs/ORM/Query/Expr.stub
 		- stubs/ORM/Query.stub
 		- stubs/ORM/Query/Expr/Comparison.stub
