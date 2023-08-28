@@ -24,6 +24,7 @@ abstract class AbstractQuery
 	/**
 	* @return bool|float|int|string|null
 	*
+	* @throws NoResultException
 	* @throws NonUniqueResultException
 	*/
 	public function getSingleScalarResult();
