@@ -50,6 +50,7 @@ parameters:
 		- stubs/ORM/Query/Expr/Composite.stub
 		- stubs/ORM/Query/Expr/Func.stub
 		- stubs/ORM/Query/Expr/Join.stub
+		- stubs/ORM/Tools/Pagination/Paginator.stub
 		- stubs/Persistence/Mapping/ClassMetadata.stub
 		- stubs/ServiceDocumentRepository.stub
 
