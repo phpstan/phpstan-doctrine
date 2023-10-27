@@ -93,7 +93,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 		try {
 			$annotations = $this->annotationReader->getPropertyAnnotations($propertyReflection);
-		} catch (AnnotationException) {
+		} catch (AnnotationException $e) {
 			// Suppress the "The annotation X was never imported." exception in case the `objectManagerLoader` is not configured
 			return false;
 		}
