@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\Gedmo;
 
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Gedmo\Mapping\Annotation as Gedmo;
 use PHPStan\Reflection\PropertyReflection;
