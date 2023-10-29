@@ -16,6 +16,7 @@ parameters:
 			- Doctrine\Persistence\Mapping\ClassMetadata
 			- Doctrine\ORM\AbstractQuery
 			- Doctrine\ORM\Query
+			- Doctrine\ORM\Tools\Pagination\Paginator
 	stubFiles:
 		- stubs/Criteria.stub
 		- stubs/DBAL/Exception/UniqueConstraintViolationException.stub
