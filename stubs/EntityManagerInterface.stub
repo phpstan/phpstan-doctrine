@@ -60,11 +60,20 @@ interface EntityManagerInterface extends ObjectManager
 	 */
 	public function copy($entity, $deep = false);
 
-  /**
-   * @template T of object
-   * @phpstan-param class-string<T> $className
-   *
-   * @phpstan-return ClassMetadata<T>
-   */
-  public function getClassMetadata($className);
+	/**
+	 * @return void
+	 *
+	 * @throws ORMException
+	 * @throws \Doctrine\DBAL\Exception\UniqueConstraintViolationException
+	 */
+	public function flush();
+
+	/**
+	 * @template T of object
+	 * @phpstan-param class-string<T> $className
+	 *
+	 * @phpstan-return ClassMetadata<T>
+	 */
+	public function getClassMetadata($className);
+
 }
