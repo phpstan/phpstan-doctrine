@@ -58,9 +58,9 @@ class QueryBuilder
 	}
 
 	/**
-	 * @param literal-string      $from
-	 * @param literal-string      $alias
-	 * @param literal-string|null $indexBy
+	 * @param literal-string|class-string $from
+	 * @param literal-string              $alias
+	 * @param literal-string|null         $indexBy
 	 *
 	 * @return $this
 	 */
@@ -70,7 +70,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @param literal-string                                     $join
+	 * @param literal-string|class-string                        $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
 	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
@@ -84,7 +84,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @param literal-string                                     $join
+	 * @param literal-string|class-string                        $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
 	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
@@ -98,7 +98,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @param literal-string                                     $join
+	 * @param literal-string|class-string                        $join
 	 * @param literal-string                                     $alias
 	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
 	 * @param literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
