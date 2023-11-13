@@ -398,3 +398,8 @@ services:
 		class: PHPStan\PhpDoc\Doctrine\QueryTypeNodeResolverExtension
 		tags:
 			- phpstan.phpDoc.typeNodeResolverExtension
+
+	-
+		class: PHPStan\Type\Doctrine\EntityManagerInterfaceThrowTypeExtension
+		tags:
+			- phpstan.dynamicMethodThrowTypeExtension
