@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace PHPStan\Type\Doctrine;
 
@@ -12,15 +12,16 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodThrowTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VoidType;
 use PHPStan\Type\TypeCombinator;
+use function array_map;
 
 class EntityManagerInterfaceThrowTypeExtension implements DynamicMethodThrowTypeExtension
 {
+
 	public const SUPPORTED_METHOD = [
 		'flush' => [
 			ORMException::class,
-			UniqueConstraintViolationException::class
+			UniqueConstraintViolationException::class,
 		],
 	];
 
@@ -44,4 +45,5 @@ class EntityManagerInterfaceThrowTypeExtension implements DynamicMethodThrowType
 
 		return $methodReflection->getThrowType();
 	}
+
 }
