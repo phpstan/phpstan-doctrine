@@ -12,6 +12,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
 use Throwable;
@@ -31,13 +32,23 @@ class QueryBuilderDqlRule implements Rule
 	/** @var bool */
 	private $reportDynamicQueryBuilders;
 
+	/** @var OtherMethodQueryBuilderParser */
+	private $otherMethodQueryBuilderParser;
+
+	/** @var bool */
+	private $searchOtherMethodsForQueryBuilderBeginning;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
-		bool $reportDynamicQueryBuilders
+		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser,
+		bool $reportDynamicQueryBuilders,
+		bool $searchOtherMethodsForQueryBuilderBeginning
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
+		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
 		$this->reportDynamicQueryBuilders = $reportDynamicQueryBuilders;
+		$this->searchOtherMethodsForQueryBuilderBeginning = $searchOtherMethodsForQueryBuilderBeginning;
 	}
 
 	public function getNodeType(): string
@@ -58,6 +69,14 @@ class QueryBuilderDqlRule implements Rule
 		$calledOnType = $scope->getType($node->var);
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
+
+			if ($this->searchOtherMethodsForQueryBuilderBeginning) {
+				$queryBuilderTypes = $this->otherMethodQueryBuilderParser->getQueryBuilderTypes($scope, $node);
+				if (count($queryBuilderTypes) !== 0) {
+					return [];
+				}
+			}
+
 			if (
 				$this->reportDynamicQueryBuilders
 				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes()
