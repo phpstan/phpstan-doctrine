@@ -19,6 +19,10 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\Parser\Parser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateTypeMap;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use function count;
 use function is_array;
 
@@ -118,11 +122,18 @@ class OtherMethodQueryBuilderParser
 			}
 
 			$exprType = $scope->getType($node->expr);
-			if (!$exprType instanceof QueryBuilderType) {
-				return;
-			}
 
-			$queryBuilderTypes[] = $exprType;
+			TypeTraverser::map($exprType, static function (Type $type, callable $traverse) use (&$queryBuilderTypes): Type {
+				if ($type instanceof UnionType || $type instanceof IntersectionType) {
+					return $traverse($type);
+				}
+
+				if ($type instanceof QueryBuilderType) {
+					$queryBuilderTypes[] = $type;
+				}
+
+				return $type;
+			});
 		});
 
 		return $queryBuilderTypes;
