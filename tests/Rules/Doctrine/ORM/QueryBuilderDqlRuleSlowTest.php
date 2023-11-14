@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -14,7 +15,12 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new QueryBuilderDqlRule(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php'), true);
+		return new QueryBuilderDqlRule(
+			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php'),
+			self::getContainer()->getByType(OtherMethodQueryBuilderParser::class),
+			true,
+			true
+		);
 	}
 
 	public function testRule(): void
@@ -39,10 +45,6 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 14 near \'Foo e\': Error: Class \'Foo\' is not defined.',
 				71,
-			],
-			[
-				'Could not analyse QueryBuilder with unknown beginning.',
-				89,
 			],
 			[
 				'Could not analyse QueryBuilder with dynamic arguments.',
