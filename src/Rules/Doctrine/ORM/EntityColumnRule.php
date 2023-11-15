@@ -94,7 +94,6 @@ class EntityColumnRule implements Rule
 			return [];
 		}
 
-		/** @var array{type: string, fieldName: string, columnName?: string, inherited?: class-string, nullable?: bool, enumType?: ?string} $fieldMapping */
 		$fieldMapping = $metadata->fieldMappings[$propertyName];
 
 		$errors = [];
