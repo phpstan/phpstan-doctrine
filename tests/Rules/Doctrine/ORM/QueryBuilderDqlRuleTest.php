@@ -122,6 +122,11 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], $errors);
 	}
 
+	public function testAndOrVariants(): void
+	{
+		$this->analyse([__DIR__ . '/data/query-builder-dql-and-or-variants.php'], []);
+	}
+
 	public function testBranchingPerformance(): void
 	{
 		$this->analyse([__DIR__ . '/data/query-builder-branches-performance.php'], [
