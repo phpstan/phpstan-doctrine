@@ -36,7 +36,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	 * Those are critical methods where we need to understand arguments passed to them, the rest is allowed to be more dynamic
 	 * - this list reflects what is implemented in QueryResultTypeWalker
 	 */
-	const METHODS_AFFECTING_RESULT_TYPE = [
+	private const METHODS_AFFECTING_RESULT_TYPE = [
 		'add',
 		'select',
 		'addselect',
