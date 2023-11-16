@@ -2,8 +2,11 @@
 
 namespace QueryResult\CreateQuery;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\QueryBuilder;
 use QueryResult\Entities\Many;
 use function PHPStan\Testing\assertType;
@@ -135,7 +138,99 @@ class QueryBuilderGetQuery
 				 ->getQuery();
 
 		assertType('Doctrine\ORM\Query<void, void>', $query);
+	}
 
+
+	public function testDynamicMethodCall(
+		EntityManagerInterface $em,
+		Andx $and,
+		Criteria $criteria,
+		string $string
+	): void
+	{
+		$result = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm')
+			->andWhere($and)
+			->setParameter($string, $string)
+			->setParameters([$string])
+			->orWhere($string)
+			->addOrderBy($string)
+			->addGroupBy($string)
+			->addCriteria($criteria)
+			->getQuery()
+			->getResult();
+
+		assertType('list<QueryResult\Entities\Many>', $result);
+
+		$result = $em->createQueryBuilder()
+			->select(['m.stringNullColumn'])
+			->add('from', new From(Many::class, 'm', null), true)
+			->where($string)
+			->orderBy($string)
+			->groupBy($string)
+			->getQuery()
+			->getResult();
+
+		assertType('list<array{stringNullColumn: string|null}>', $result);
+
+		$result = $em->createQueryBuilder()
+			->select(['m.intColumn', 'm.stringNullColumn'])
+			->from($string, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->select(['m.intColumn', 'm.stringNullColumn'])
+			->from(Many::class, 'm')
+			->indexBy($string, $string)
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm', $string)
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->select([$string, 'm.stringNullColumn'])
+			->from(Many::class, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->select(['m.stringNullColumn'])
+			->from(Many::class, $string)
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->addSelect($string)
+			->from(Many::class, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+
+		$result = $em->createQueryBuilder()
+			->addSelect('m')
+			->from(Many::class, 'm')
+			->join($string, $string)
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
 	}
 
 	public function testQueryTypeIsInferredOnAcrossMethods(EntityManagerInterface $em): void
