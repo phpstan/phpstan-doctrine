@@ -279,6 +279,9 @@ services:
 		class: PHPStan\Type\Doctrine\Descriptors\ArrayType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
+		class: PHPStan\Type\Doctrine\Descriptors\AsciiStringType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
 		class: PHPStan\Type\Doctrine\Descriptors\BigIntType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
