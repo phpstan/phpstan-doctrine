@@ -1,4 +1,4 @@
-<?php /* declare(strict_types = 1);*/ // disabled temporary for BC with Doctrine 2
+<?php /* declare(strict_types = 1);*/ // disabled temporary for compatibility with Doctrine 3
 
 namespace PHPStan\Doctrine\Mapping;
 
@@ -57,7 +57,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 	 * @param class-string<T> $className
 	 * @return ClassMetadata<T>
 	 */
-	protected function newClassMetadataInstance(string $className): ClassMetadata
+	protected function newClassMetadataInstance($className)
 	{
 		return new ClassMetadata($className);
 	}
