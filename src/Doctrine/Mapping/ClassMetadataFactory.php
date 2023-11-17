@@ -1,4 +1,10 @@
-<?php /* declare(strict_types = 1);*/ // disabled temporary for compatibility with Doctrine 3
+<?php/* declare(strict_types=1);*/
+/**
+ * disabled temporary for compatibility with Doctrine 3
+ * 
+ * @phpcs:disable PSR12.Files.FileHeader
+ * @phpcs:disable PSR12.Files.OpenTag
+ */
 
 namespace PHPStan\Doctrine\Mapping;
 
