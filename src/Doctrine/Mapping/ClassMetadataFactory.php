@@ -2,10 +2,8 @@
 /**
  * disabled temporary for compatibility with Doctrine 3
  * 
- * @phpcs:disable PSR12.Files.FileHeader
- * @phpcs:disable PSR12.Files.OpenTag
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
  */
-
 namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
