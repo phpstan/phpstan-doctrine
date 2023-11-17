@@ -19,7 +19,7 @@ class EntityConstructorNotFinalRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new EntityConstructorNotFinalRule(
-			new ObjectMetadataResolver($this->objectManagerLoader)
+			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp')
 		);
 	}
 

@@ -14,7 +14,7 @@ class RepositoryMethodCallRuleWithoutObjectManagerLoaderTest extends RuleTestCas
 
 	protected function getRule(): Rule
 	{
-		return new RepositoryMethodCallRule(new ObjectMetadataResolver(null));
+		return new RepositoryMethodCallRule(new ObjectMetadataResolver(null, __DIR__ . '/../../../../tmp'));
 	}
 
 	/**

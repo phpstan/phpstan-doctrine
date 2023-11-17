@@ -26,11 +26,16 @@ final class ObjectMetadataResolver
 	/** @var ClassMetadataFactory|null */
 	private $metadataFactory;
 
+	/** @var string */
+	private $tmpDir;
+
 	public function __construct(
-		?string $objectManagerLoader
+		?string $objectManagerLoader,
+		string $tmpDir
 	)
 	{
 		$this->objectManagerLoader = $objectManagerLoader;
+		$this->tmpDir = $tmpDir;
 	}
 
 	public function hasObjectManagerLoader(): bool
@@ -97,7 +102,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		return $this->metadataFactory = new ClassMetadataFactory();
+		return $this->metadataFactory = new ClassMetadataFactory($this->tmpDir);
 	}
 
 	/**

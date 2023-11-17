@@ -103,6 +103,7 @@ services:
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%
+			tmpDir: %tmpDir%
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderGetDqlDynamicReturnTypeExtension
 		arguments:
