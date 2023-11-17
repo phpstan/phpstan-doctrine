@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Doctrine\ORM\Proxy\ProxyFactory;
 use function class_exists;
 use function count;
 use const PHP_VERSION_ID;
@@ -40,7 +39,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 
 		$config = new Configuration();
 		$config->setMetadataDriverImpl(count($drivers) === 1 ? $drivers[0] : new MappingDriverChain($drivers));
-		$config->setAutoGenerateProxyClasses(ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED);
+		$config->setAutoGenerateProxyClasses(true);
 		$config->setProxyDir($this->tmpDir);
 		$config->setProxyNamespace('__PHPStanDoctrine__\\Proxy');
 		$connection = DriverManager::getConnection([
