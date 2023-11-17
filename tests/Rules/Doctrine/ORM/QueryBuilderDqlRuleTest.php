@@ -134,6 +134,19 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testDynamicWhere(): void
+	{
+		$this->analyse([__DIR__ . '/data/query-builder-dynamic.php'], [
+			['Could not analyse QueryBuilder with dynamic arguments.', 40],
+			['Could not analyse QueryBuilder with dynamic arguments.', 45],
+			['Could not analyse QueryBuilder with dynamic arguments.', 51],
+			['Could not analyse QueryBuilder with dynamic arguments.', 56],
+			['Could not analyse QueryBuilder with dynamic arguments.', 61],
+			['Could not analyse QueryBuilder with dynamic arguments.', 66],
+			['Could not analyse QueryBuilder with dynamic arguments.', 71],
+		]);
+	}
+
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
