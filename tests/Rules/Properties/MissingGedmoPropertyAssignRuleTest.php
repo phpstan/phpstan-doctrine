@@ -24,7 +24,7 @@ class MissingGedmoPropertyAssignRuleTest extends RuleTestCase
 	protected function getReadWritePropertiesExtensions(): array
 	{
 		return [
-			new PropertiesExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php')),
+			new PropertiesExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp')),
 		];
 	}
 

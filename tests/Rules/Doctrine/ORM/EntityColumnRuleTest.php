@@ -57,7 +57,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		}
 
 		return new EntityColumnRule(
-			new ObjectMetadataResolver($this->objectManagerLoader),
+			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
 			new DescriptorRegistry([
 				new ArrayType(),
 				new BigIntType(),

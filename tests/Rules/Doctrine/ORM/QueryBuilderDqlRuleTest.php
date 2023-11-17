@@ -16,7 +16,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		return new QueryBuilderDqlRule(
-			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php'),
+			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp'),
 			self::getContainer()->getByType(OtherMethodQueryBuilderParser::class),
 			true,
 			true

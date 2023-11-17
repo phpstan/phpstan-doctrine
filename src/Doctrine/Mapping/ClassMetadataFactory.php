@@ -4,12 +4,13 @@ namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\DocParser;
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use ReflectionClass;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use function class_exists;
 use function count;
 use const PHP_VERSION_ID;
@@ -17,12 +18,16 @@ use const PHP_VERSION_ID;
 class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 {
 
+	/** @var string */
+	private $tmpDir;
+
+	public function __construct(string $tmpDir)
+	{
+		$this->tmpDir = $tmpDir;
+	}
+
 	protected function initialize(): void
 	{
-		$parentReflection = new ReflectionClass(parent::class);
-		$driverProperty = $parentReflection->getProperty('driver');
-		$driverProperty->setAccessible(true);
-
 		$drivers = [];
 		if (class_exists(AnnotationReader::class)) {
 			$docParser = new DocParser();
@@ -33,23 +38,21 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 			$drivers[] = new AttributeDriver([]);
 		}
 
-		$driverProperty->setValue($this, count($drivers) === 1 ? $drivers[0] : new MappingDriverChain($drivers));
+		$config = new Configuration();
+		$config->setMetadataDriverImpl(count($drivers) === 1 ? $drivers[0] : new MappingDriverChain($drivers));
+		$config->setAutoGenerateProxyClasses(ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED);
+		$config->setProxyDir($this->tmpDir);
+		$config->setProxyNamespace('__PHPStanDoctrine__\\Proxy');
+		$connection = DriverManager::getConnection([
+			'driver' => 'pdo_sqlite',
+			'memory' => true,
+		], $config);
 
-		$evmProperty = $parentReflection->getProperty('evm');
-		$evmProperty->setAccessible(true);
-		$evmProperty->setValue($this, new EventManager());
+		$em = new EntityManager($connection, $config);
+		$this->setEntityManager($em);
+		parent::initialize();
+
 		$this->initialized = true;
-
-		$targetPlatformProperty = $parentReflection->getProperty('targetPlatform');
-		$targetPlatformProperty->setAccessible(true);
-
-		if (class_exists(MySqlPlatform::class)) {
-			$platform = new MySqlPlatform();
-		} else {
-			$platform = new \Doctrine\DBAL\Platforms\MySQLPlatform();
-		}
-
-		$targetPlatformProperty->setValue($this, $platform);
 	}
 
 	/**
