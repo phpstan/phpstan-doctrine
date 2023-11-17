@@ -2,8 +2,9 @@
 /**
  * disabled temporary for compatibility with Doctrine 3
  * 
- * @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes
  */
+
 namespace PHPStan\Doctrine\Mapping;
 
 use Doctrine\Common\Annotations\AnnotationReader;
