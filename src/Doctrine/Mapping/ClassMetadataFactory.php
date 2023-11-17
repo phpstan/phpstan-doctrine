@@ -47,7 +47,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 			'memory' => true,
 		], $config);
 
-		$em = new EntityManager($connection, $config);
+		$em = EntityManager::create($connection, $config);
 		$this->setEntityManager($em);
 		parent::initialize();
 
