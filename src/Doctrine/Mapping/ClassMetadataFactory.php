@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php /* declare(strict_types = 1);*/ // disabled temporary for BC with Doctrine 2
 
 namespace PHPStan\Doctrine\Mapping;
 
