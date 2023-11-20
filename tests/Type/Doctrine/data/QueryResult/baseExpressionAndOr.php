@@ -11,3 +11,6 @@ assertType("int<0, max>", $count1);
 
 $modifiedAnd = $and->add('a = b');
 assertType("Doctrine\ORM\Query\Expr\Andx", $modifiedAnd);
+
+$string = $and->__toString();
+assertType("string", $string);
