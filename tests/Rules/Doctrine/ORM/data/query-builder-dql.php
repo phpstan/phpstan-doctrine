@@ -281,6 +281,16 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
+	public function qbExprMethod(): void
+	{
+		$expr = (new \Doctrine\ORM\Query\Expr\Andx())->add('1 = 1');
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere($expr);
+		$queryBuilder->getQuery();
+	}
+
 }
 
 class CustomExpr extends \Doctrine\ORM\Query\Expr
