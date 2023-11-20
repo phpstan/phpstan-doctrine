@@ -29,6 +29,9 @@ parameters:
 			message: '~^Variable method call on object\.$~'
 			path: src/Type/Doctrine/QueryBuilder/Expr/ExpressionBuilderDynamicReturnTypeExtension.php
 		-
+			message: '~^Variable method call on object\.$~'
+			path: src/Type/Doctrine/QueryBuilder/Expr/BaseExpressionDynamicReturnTypeExtension.php
+		-
 			message: '~^Variable property access on PhpParser\\Node\\Stmt\\Declare_\|PhpParser\\Node\\Stmt\\Namespace_\.$~'
 			path: src/Type/Doctrine/QueryBuilder/OtherMethodQueryBuilderParser.php
 		-
