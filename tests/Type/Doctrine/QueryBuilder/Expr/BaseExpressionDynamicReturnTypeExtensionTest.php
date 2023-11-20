@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Type\Doctrine\QueryBuilder\Expr;
+namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 
 use PHPStan\Testing\TypeInferenceTestCase;
 
