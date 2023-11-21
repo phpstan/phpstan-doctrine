@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use function get_class;
+use function in_array;
 use function is_object;
 use function method_exists;
 
@@ -34,7 +35,7 @@ class BaseExpressionDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return true;
+		return in_array($methodReflection->getName(), ['add', 'addMultiple'], true);
 	}
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
