@@ -24,6 +24,7 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Throwable;
+use function array_slice;
 use function count;
 use function in_array;
 use function method_exists;
@@ -150,6 +151,18 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				if ($lowerMethodName === 'setmaxresults') {
 					$queryBuilder->setMaxResults(10);
 					continue;
+				}
+
+				if ($lowerMethodName === 'set') {
+					try {
+						$args = $this->argumentsProcessor->processArgs($scope, $methodName, array_slice($calledMethodCall->getArgs(), 0, 1));
+					} catch (DynamicQueryBuilderArgumentException $e) {
+						return $defaultReturnType;
+					}
+					if (count($args) === 1) {
+						$queryBuilder->set($args[0], $args[0]);
+						continue;
+					}
 				}
 
 				if (!method_exists($queryBuilder, $methodName)) {

@@ -129,6 +129,16 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/query-builder-dql-and-or-variants.php'], []);
 	}
 
+	public function testUpdateIssue(): void
+	{
+		$this->analyse([__DIR__ . '/data/query-builder-dql-update.php'], [
+			[
+				'Could not analyse QueryBuilder with dynamic arguments.',
+				31,
+			],
+		]);
+	}
+
 	public function testBranchingPerformance(): void
 	{
 		$this->analyse([__DIR__ . '/data/query-builder-branches-performance.php'], [
