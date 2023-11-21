@@ -242,6 +242,13 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $branchingQuery);
 	}
 
+	public function testQueryTypeIsInferredOnAcrossMethodsEvenWhenVariableAssignmentIsUsed(EntityManagerInterface $em): void
+	{
+		$queryBuilder = $this->getQueryBuilder($em);
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+	}
+
 	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
 	{
 		return $em->createQueryBuilder()

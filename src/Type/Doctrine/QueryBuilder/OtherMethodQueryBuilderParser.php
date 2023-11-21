@@ -54,17 +54,22 @@ class OtherMethodQueryBuilderParser
 	 */
 	public function getQueryBuilderTypes(Scope $scope, MethodCall $methodCall): array
 	{
-		if (!$this->descendIntoOtherMethods || !$methodCall->var instanceof MethodCall) {
+		if (!$methodCall->var instanceof MethodCall) {
 			return [];
 		}
 
 		return $this->findQueryBuilderTypesInCalledMethod($scope, $methodCall->var);
 	}
+
 	/**
 	 * @return QueryBuilderType[]
 	 */
-	private function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodCall $methodCall): array
+	public function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodCall $methodCall): array
 	{
+		if (!$this->descendIntoOtherMethods) {
+			return [];
+		}
+
 		$methodCalledOnType = $scope->getType($methodCall->var);
 		if (!$methodCall->name instanceof Identifier) {
 			return [];
