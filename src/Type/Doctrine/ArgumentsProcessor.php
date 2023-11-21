@@ -15,7 +15,7 @@ class ArgumentsProcessor
 
 	/**
 	 * @param Arg[] $methodCallArgs
-	 * @return mixed[]
+	 * @return list<mixed>
 	 * @throws DynamicQueryBuilderArgumentException
 	 */
 	public function processArgs(
