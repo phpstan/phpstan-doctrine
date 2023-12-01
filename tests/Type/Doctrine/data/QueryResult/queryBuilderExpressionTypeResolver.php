@@ -36,6 +36,16 @@ class QueryBuilderExpressionTypeResolverTest
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
 	}
 
+	public function testQueryBuilderPassedElsewhereNotTracked(EntityManagerInterface $em): void
+	{
+		$queryBuilder = $this->getQueryBuilder($em);
+		$queryBuilder->indexBy('m', 'm.stringColumn');
+
+		$this->adjustQueryBuilderToIndexByInt($queryBuilder);
+
+		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+	}
+
 	public function testDiveIntoCustomEntityRepository(EntityManagerInterface $em): void
 	{
 		$queryBuilder = $this->myRepository->getCustomQueryBuilder($em);
@@ -46,6 +56,11 @@ class QueryBuilderExpressionTypeResolverTest
 	public function testFirstClassCallableDoesNotFail(EntityManagerInterface $em): void
 	{
 		$this->getQueryBuilder(...);
+	}
+
+	private function adjustQueryBuilderToIndexByInt(QueryBuilder $qb): void
+	{
+		$qb->indexBy('m', 'm.intColumn');
 	}
 
 	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
