@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +14,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use function count;
-use function str_starts_with;
 
 class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTypeResolverExtension
 {
@@ -38,12 +38,14 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 			return null;
 		}
 
-		$queryBuilderType = new ObjectType(QueryBuilder::class);
 		$callerType = $scope->getType($expr->var);
 
-		foreach ($callerType->getObjectClassNames() as $callerObjectClassName) {
-			if (str_starts_with($callerObjectClassName, 'Doctrine')) {
-				return null; // do not dive into native Doctrine methods (like EntityRepository->createQueryBuilder)
+		foreach ($callerType->getObjectClassReflections() as $callerClassReflection) {
+			if ($callerClassReflection->is(QueryBuilder::class)) {
+				return null; // covered by QueryBuilderMethodDynamicReturnTypeExtension
+			}
+			if ($callerClassReflection->is(EntityRepository::class)) {
+				return null; // createQueryBuilder covered by EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension
 			}
 		}
 
@@ -55,7 +57,7 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 
 		$returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
-		$returnsQueryBuilder = $queryBuilderType->isSuperTypeOf($returnType)->yes();
+		$returnsQueryBuilder = (new ObjectType(QueryBuilder::class))->isSuperTypeOf($returnType)->yes();
 
 		if (!$returnsQueryBuilder) {
 			return null;
