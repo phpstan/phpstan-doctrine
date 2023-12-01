@@ -34,6 +34,10 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 			return null;
 		}
 
+		if ($expr->isFirstClassCallable()) {
+			return null;
+		}
+
 		if (!$expr->name instanceof Identifier) {
 			return null;
 		}
