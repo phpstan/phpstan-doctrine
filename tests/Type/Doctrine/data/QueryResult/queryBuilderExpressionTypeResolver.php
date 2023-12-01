@@ -53,6 +53,14 @@ class QueryBuilderExpressionTypeResolverTest
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
 	}
 
+
+	public function testStaticCallWorksToo(EntityManagerInterface $em): void
+	{
+		$queryBuilder = self::getStaticQueryBuilder($em);
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+	}
+
 	public function testFirstClassCallableDoesNotFail(EntityManagerInterface $em): void
 	{
 		$this->getQueryBuilder(...);
@@ -64,6 +72,13 @@ class QueryBuilderExpressionTypeResolverTest
 	}
 
 	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+	}
+
+	private static function getStaticQueryBuilder(EntityManagerInterface $em): QueryBuilder
 	{
 		return $em->createQueryBuilder()
 			->select('m')

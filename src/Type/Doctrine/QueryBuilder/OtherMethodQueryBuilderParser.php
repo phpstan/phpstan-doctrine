@@ -3,8 +3,6 @@
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -17,13 +15,12 @@ use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Parser\Parser;
-use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use function count;
 use function is_array;
 
 class OtherMethodQueryBuilderParser
@@ -32,54 +29,28 @@ class OtherMethodQueryBuilderParser
 	/** @var bool */
 	private $descendIntoOtherMethods;
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
-
 	/** @var Parser */
 	private $parser;
 
 	/** @var Container */
 	private $container;
 
-	public function __construct(bool $descendIntoOtherMethods, ReflectionProvider $reflectionProvider, Parser $parser, Container $container)
+	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
 	{
 		$this->descendIntoOtherMethods = $descendIntoOtherMethods;
-		$this->reflectionProvider = $reflectionProvider;
 		$this->parser = $parser;
 		$this->container = $container;
 	}
 
 	/**
-	 * @return QueryBuilderType[]
+	 * @return list<QueryBuilderType>
 	 */
-	public function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodCall $methodCall): array
+	public function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodReflection $methodReflection): array
 	{
 		if (!$this->descendIntoOtherMethods) {
 			return [];
 		}
 
-		$methodCalledOnType = $scope->getType($methodCall->var);
-		if (!$methodCall->name instanceof Identifier) {
-			return [];
-		}
-
-		$methodCalledOnTypeClassNames = $methodCalledOnType->getObjectClassNames();
-
-		if (count($methodCalledOnTypeClassNames) !== 1) {
-			return [];
-		}
-
-		if (!$this->reflectionProvider->hasClass($methodCalledOnTypeClassNames[0])) {
-			return [];
-		}
-
-		$classReflection = $this->reflectionProvider->getClass($methodCalledOnTypeClassNames[0]);
-		$methodName = $methodCall->name->toString();
-		if (!$classReflection->hasNativeMethod($methodName)) {
-			return [];
-		}
-
-		$methodReflection = $classReflection->getNativeMethod($methodName);
 		$fileName = $methodReflection->getDeclaringClass()->getFileName();
 		if ($fileName === null) {
 			return [];
