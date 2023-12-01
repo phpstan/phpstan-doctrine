@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
 use QueryResult\Entities\Many;
 use function PHPStan\Testing\assertType;
 
-class QueryBuilderGetQuery
+class QueryBuilderExpressionTypeResolverTest
 {
 
 	public function testQueryTypeIsInferredOnAcrossMethods(EntityManagerInterface $em): void
