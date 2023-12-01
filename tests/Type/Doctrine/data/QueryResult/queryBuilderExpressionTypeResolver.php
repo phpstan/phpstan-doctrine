@@ -5,6 +5,7 @@ namespace QueryResult\CreateQuery;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\QueryBuilder;
@@ -13,6 +14,11 @@ use function PHPStan\Testing\assertType;
 
 class QueryBuilderExpressionTypeResolverTest
 {
+
+	/**
+	 * @var MyRepository
+	 */
+	private $myRepository;
 
 	public function testQueryTypeIsInferredOnAcrossMethods(EntityManagerInterface $em): void
 	{
@@ -26,6 +32,13 @@ class QueryBuilderExpressionTypeResolverTest
 	public function testQueryTypeIsInferredOnAcrossMethodsEvenWhenVariableAssignmentIsUsed(EntityManagerInterface $em): void
 	{
 		$queryBuilder = $this->getQueryBuilder($em);
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+	}
+
+	public function testDiveIntoCustomEntityRepository(EntityManagerInterface $em): void
+	{
+		$queryBuilder = $this->myRepository->getCustomQueryBuilder($em);
 
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
 	}
@@ -53,5 +66,15 @@ class QueryBuilderExpressionTypeResolverTest
 		}
 
 		return $queryBuilder;
+	}
+}
+
+class MyRepository extends EntityRepository {
+
+	private function getCustomQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
 	}
 }
