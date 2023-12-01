@@ -137,10 +137,6 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderReturnedDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: PHPStan\Type\Doctrine\CreateQueryDynamicReturnTypeExtension
 		arguments:
 			objectMetadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
@@ -172,6 +168,11 @@ services:
 		arguments:
 			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 			parser: @defaultAnalysisParser
+
+	-
+		class: PHPStan\Type\Doctrine\QueryBuilder\ReturnQueryBuilderExpressionTypeResolverExtension
+		tags:
+			- phpstan.broker.expressionTypeResolverExtension
 
 	-
 		class: PHPStan\Stubs\Doctrine\StubFilesExtensionLoader
