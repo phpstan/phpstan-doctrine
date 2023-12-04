@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PhpParser\Node\Expr;
@@ -90,6 +91,9 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 			}
 			if ($callerClassReflection->is(EntityRepository::class) && $methodName === 'createQueryBuilder') {
 				return null; // covered by EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension
+			}
+			if ($callerClassReflection->is(EntityManagerInterface::class) && $methodName === 'createQueryBuilder') {
+				return null; // no need to dive there
 			}
 		}
 
