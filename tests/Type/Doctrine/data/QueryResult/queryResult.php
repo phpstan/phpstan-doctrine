@@ -345,4 +345,17 @@ class QueryResultTest
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 	}
+
+	public function testSetHintDoesNotLooseType(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('
+			SELECT		m
+			FROM		QueryResult\Entities\Many m
+		')->setHint(Query::HINT_REFRESH, true);
+
+		assertType(
+			'list<QueryResult\Entities\Many>',
+			$query->getResult(AbstractQuery::HYDRATE_OBJECT)
+		);
+	}
 }
