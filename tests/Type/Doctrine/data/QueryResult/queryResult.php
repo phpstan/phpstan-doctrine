@@ -351,7 +351,6 @@ class QueryResultTest
 	{
 		$q = 'SELECT m FROM QueryResult\Entities\Many m';
 
-		// works
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setLockMode(LockMode::NONE));
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setParameter(1, 1));
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setMaxResults(10));
@@ -361,8 +360,6 @@ class QueryResultTest
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->enableResultCache(1));
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheLifetime(1));
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheProfile(null));
-
-		// broken
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHint('name', 1));
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHydrationMode(AbstractQuery::HYDRATE_OBJECT));
 	}
