@@ -36,10 +36,14 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry)
+	/** @var bool */
+	private $stringifyExpressions;
+
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry, bool $stringifyExpressions)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
+		$this->stringifyExpressions = $stringifyExpressions;
 	}
 
 	public function getClass(): string
@@ -86,7 +90,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 
 				try {
 					$query = $em->createQuery($queryString);
-					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
+					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->stringifyExpressions);
 				} catch (ORMException | DBALException | NewDBALException | CommonException $e) {
 					return new QueryType($queryString, null, null);
 				} catch (AssertionError $e) {

@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -42,11 +43,13 @@ use function floatval;
 use function get_class;
 use function gettype;
 use function intval;
+use function is_bool;
 use function is_numeric;
 use function is_object;
 use function is_string;
 use function serialize;
 use function sprintf;
+use function strpos;
 use function strtolower;
 use function unserialize;
 
@@ -63,6 +66,8 @@ class QueryResultTypeWalker extends SqlWalker
 	private const HINT_TYPE_MAPPING = self::class . '::HINT_TYPE_MAPPING';
 
 	private const HINT_DESCRIPTOR_REGISTRY = self::class . '::HINT_DESCRIPTOR_REGISTRY';
+
+	private const HINT_STRINGIFY_EXPRESSIONS = self::class . '::HINT_STRINGIFY_EXPRESSIONS';
 
 	/**
 	 * Counter for generating unique scalar result.
@@ -106,14 +111,18 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var bool */
 	private $hasGroupByClause;
 
+	/** @var bool */
+	private $stringifyExpressions;
+
 	/**
 	 * @param Query<mixed> $query
 	 */
-	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry): void
+	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry, bool $stringifyExpressions): void
 	{
 		$query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::class);
 		$query->setHint(self::HINT_TYPE_MAPPING, $typeBuilder);
 		$query->setHint(self::HINT_DESCRIPTOR_REGISTRY, $descriptorRegistry);
+		$query->setHint(self::HINT_STRINGIFY_EXPRESSIONS, $stringifyExpressions);
 
 		$parser = new Parser($query);
 		$parser->parse();
@@ -164,6 +173,19 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		$this->descriptorRegistry = $descriptorRegistry;
+
+		$stringifyExpressions = $this->query->getHint(self::HINT_STRINGIFY_EXPRESSIONS);
+
+		if (!is_bool($stringifyExpressions)) {
+			throw new ShouldNotHappenException(sprintf(
+				'Expected the query hint %s to contain a %s, but got a %s',
+				self::HINT_STRINGIFY_EXPRESSIONS,
+				'boolean',
+				is_object($stringifyExpressions) ? get_class($stringifyExpressions) : gettype($stringifyExpressions)
+			));
+		}
+
+		$this->stringifyExpressions = $stringifyExpressions;
 
 		parent::__construct($query, $parserResult, $queryComponents);
 	}
@@ -834,7 +856,7 @@ class QueryResultTypeWalker extends SqlWalker
 					}
 					return $enforcedType;
 				});
-			} else {
+			} elseif ($this->stringifyExpressions) {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on
 				// the driver and PHP version.
@@ -1108,7 +1130,21 @@ class QueryResultTypeWalker extends SqlWalker
 				if (floatval(intval($value)) === floatval($value)) {
 					$type = new ConstantIntegerType((int) $value);
 				} else {
-					$type = new ConstantFloatType((float) $value);
+
+					if ($this->em->getConnection()->getDatabasePlatform() instanceof AbstractMySQLPlatform) {
+
+						// both PDO_mysql and mysqli hydrates 123.4 literals as string no matter the configuration (e.g. PDO::ATTR_STRINGIFY_FETCHES being false) and PHP version
+						// the only way to force float is to use 123.4e0 scientific notation
+						// https://dev.mysql.com/doc/refman/8.0/en/number-literals.html
+
+						if (strpos((string) $value, 'e') !== false || strpos((string) $value, 'E') !== false) {
+							$type = new ConstantFloatType((float) $value);
+						} else {
+							$type = new ConstantStringType((string) (float) $value);
+						}
+					} else {
+						$type = new ConstantFloatType((float) $value);
+					}
 				}
 
 				break;

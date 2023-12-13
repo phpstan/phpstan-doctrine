@@ -68,12 +68,16 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	/** @var OtherMethodQueryBuilderParser */
 	private $otherMethodQueryBuilderParser;
 
+	/** @var bool */
+	private $stringifyExpressions;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		ArgumentsProcessor $argumentsProcessor,
 		?string $queryBuilderClass,
 		DescriptorRegistry $descriptorRegistry,
-		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
+		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser,
+		bool $stringifyExpressions
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
@@ -81,6 +85,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		$this->queryBuilderClass = $queryBuilderClass;
 		$this->descriptorRegistry = $descriptorRegistry;
 		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
+		$this->stringifyExpressions = $stringifyExpressions;
 	}
 
 	public function getClass(): string
@@ -202,7 +207,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 		try {
 			$query = $em->createQuery($dql);
-			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
+			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->stringifyExpressions);
 		} catch (ORMException | DBALException | CommonException $e) {
 			return new QueryType($dql, null);
 		} catch (AssertionError $e) {

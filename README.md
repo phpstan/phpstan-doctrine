@@ -152,6 +152,19 @@ $query->getOneOrNullResult(Query::HYDRATE_OBJECT); // User
 
 This is due to the design of the `Query` class preventing from determining the hydration mode used by these functions unless it is specified explicitly during the call.
 
+### Numeric types inferring
+
+By default, any expression like `MAX(e.id)` results in `int|numeric-string` as certain drivers & PHP versions do cast the result to string.
+If you are using setup that does not do that, you can disable stringification of such expressions by setting `parameters.doctrine.stringifyExpressions` to `false`.
+
+This should be accurate behaviour for [PHP 8.1.25+ with PDO driver](https://github.com/php/php-src/blob/php-8.1.25/UPGRADING#L122-L139) and disabled `PDO::ATTR_STRINGIFY_FETCHES` (which is default).
+
+```neon
+parameters:
+	doctrine:
+		stringifyExpressions: false
+```
+
 ## Custom types
 
 If your application uses custom Doctrine types, you can write your own type descriptors to analyse them properly.
