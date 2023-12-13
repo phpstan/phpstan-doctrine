@@ -49,7 +49,7 @@ use function is_object;
 use function is_string;
 use function serialize;
 use function sprintf;
-use function strpos;
+use function stripos;
 use function strtolower;
 use function unserialize;
 
@@ -1137,7 +1137,7 @@ class QueryResultTypeWalker extends SqlWalker
 						// the only way to force float is to use 123.4e0 scientific notation
 						// https://dev.mysql.com/doc/refman/8.0/en/number-literals.html
 
-						if (strpos((string) $value, 'e') !== false || strpos((string) $value, 'E') !== false) {
+						if (stripos((string) $value, 'e') !== false) {
 							$type = new ConstantFloatType((float) $value);
 						} else {
 							$type = new ConstantStringType((string) (float) $value);
