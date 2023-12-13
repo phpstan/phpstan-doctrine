@@ -241,8 +241,13 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		$result = $query->getResult();
 		self::assertGreaterThan(0, count($result));
 
+		$expectedTypesForRealResultCheck = [$expectedTypeWithStringify];
+		if (PHP_VERSION_ID >= 80125) { // before this version, you always get stringified results (https://github.com/php/php-src/blob/php-8.1.25/UPGRADING#L122-L139)
+			$expectedTypesForRealResultCheck[] = $expectedTypeWithoutStringify;
+		}
+
 		foreach ($result as $row) {
-			foreach ([$expectedTypeWithStringify, $expectedTypeWithoutStringify] as $type) {
+			foreach ($expectedTypesForRealResultCheck as $type) {
 				$rowType = ConstantTypeHelper::getTypeFromValue($row);
 				self::assertTrue(
 					$type->accepts($rowType, true)->yes(),
