@@ -40,7 +40,13 @@ class FloatType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescri
 
 	public function getDatabaseInternalType(): Type
 	{
-		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new IntegerType());
+		return TypeCombinator::union(
+			new \PHPStan\Type\FloatType(),
+			new IntersectionType([
+				new StringType(),
+				new AccessoryNumericStringType(),
+			])
+		);
 	}
 
 	public function getDatabaseInternalTypeForDriver(Connection $connection): Type

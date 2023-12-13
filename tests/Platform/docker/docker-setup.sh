@@ -1,3 +1,4 @@
+# common setup for PHP 8.0 and PHP 8.1
 set -ex \
   && apt update \
   && apt install -y bash zip libpq-dev libsqlite3-dev \

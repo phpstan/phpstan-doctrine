@@ -7,26 +7,44 @@ services:
         ports:
             - 3306:3306
         environment:
-            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: 'secret'
             MYSQL_DATABASE: foo
+        volumes:
+            -
+                type: tmpfs
+                target: /var/lib/mysql
 
     pgsql:
         image: postgres:13
         ports:
             - 5432:5432
         environment:
-            POSTGRES_PASSWORD: secret
+            POSTGRES_PASSWORD: 'secret'
             POSTGRES_USER: root
             POSTGRES_DB: foo
+        volumes:
+            -
+                type: tmpfs
+                target: /var/lib/postgresql/data
+
+    mssql:
+        image: mcr.microsoft.com/mssql/server:latest
+        environment:
+            ACCEPT_EULA: Y
+            SA_PASSWORD: 'Secret.123'
+            MSSQL_PID: Developer
+        ports:
+            - 1433:1433
 
     php80:
-        depends_on: [mysql, pgsql]
+        depends_on: [mysql, pgsql, mssql]
         build:
             context: .
             dockerfile: ./Dockerfile80
         environment:
             MYSQL_HOST: mysql
             PGSQL_HOST: pgsql
+            MSSQL_HOST: mssql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
@@ -40,6 +58,7 @@ services:
         environment:
             MYSQL_HOST: mysql
             PGSQL_HOST: pgsql
+            MSSQL_HOST: mssql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
