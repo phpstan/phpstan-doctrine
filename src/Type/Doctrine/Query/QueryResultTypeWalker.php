@@ -1133,8 +1133,8 @@ class QueryResultTypeWalker extends SqlWalker
 
 					if ($this->em->getConnection()->getDatabasePlatform() instanceof AbstractMySQLPlatform) {
 
-						// both PDO_mysql and mysqli hydrates 123.4 literals as string no matter the configuration (e.g. PDO::ATTR_STRINGIFY_FETCHES being false) and PHP version
-						// the only way to force float is to use 123.4e0 scientific notation
+						// both pdo_mysql and mysqli hydrates decimal literal (e.g. 123.4) as string no matter the configuration (e.g. PDO::ATTR_STRINGIFY_FETCHES being false) and PHP version
+						// the only way to force float is to use float literal with scientific notation (e.g. 123.4e0)
 						// https://dev.mysql.com/doc/refman/8.0/en/number-literals.html
 
 						if (stripos((string) $value, 'e') !== false) {
