@@ -128,7 +128,7 @@ class QueryBuilderGetQuery
 
 		$query = $em->createQueryBuilder()
 			->select('v')
-			->from($vehicle::class, 'v')
+			->from(get_class($vehicle), 'v')
 			->getQuery();
 
 		assertType('Doctrine\ORM\Query<null, mixed>', $query);
