@@ -11,6 +11,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
@@ -36,14 +37,14 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
-	/** @var bool */
-	private $stringifyExpressions;
+	/** @var PhpVersion */
+	private $phpVersion;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry, bool $stringifyExpressions)
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry, PhpVersion $phpVersion)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
-		$this->stringifyExpressions = $stringifyExpressions;
+		$this->phpVersion = $phpVersion;
 	}
 
 	public function getClass(): string
@@ -90,7 +91,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 
 				try {
 					$query = $em->createQuery($queryString);
-					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->stringifyExpressions);
+					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion);
 				} catch (ORMException | DBALException | NewDBALException | CommonException $e) {
 					return new QueryType($queryString, null, null);
 				} catch (AssertionError $e) {

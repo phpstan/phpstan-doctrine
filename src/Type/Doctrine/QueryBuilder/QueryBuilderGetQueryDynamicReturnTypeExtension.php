@@ -10,6 +10,7 @@ use Doctrine\ORM\ORMException;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
@@ -68,8 +69,8 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	/** @var OtherMethodQueryBuilderParser */
 	private $otherMethodQueryBuilderParser;
 
-	/** @var bool */
-	private $stringifyExpressions;
+	/** @var PhpVersion */
+	private $phpVersion;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
@@ -77,7 +78,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		?string $queryBuilderClass,
 		DescriptorRegistry $descriptorRegistry,
 		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser,
-		bool $stringifyExpressions
+		PhpVersion $phpVersion
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
@@ -85,7 +86,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		$this->queryBuilderClass = $queryBuilderClass;
 		$this->descriptorRegistry = $descriptorRegistry;
 		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
-		$this->stringifyExpressions = $stringifyExpressions;
+		$this->phpVersion = $phpVersion;
 	}
 
 	public function getClass(): string
@@ -207,7 +208,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 		try {
 			$query = $em->createQuery($dql);
-			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->stringifyExpressions);
+			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion);
 		} catch (ORMException | DBALException | CommonException $e) {
 			return new QueryType($dql, null);
 		} catch (AssertionError $e) {

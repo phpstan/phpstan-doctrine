@@ -8,7 +8,6 @@ parameters:
 		objectManagerLoader: null
 		searchOtherMethodsForQueryBuilderBeginning: true
 		queryBuilderFastAlgorithm: false
-		stringifyExpressions: true
 	featureToggles:
 		skipCheckGenericClasses:
 			- Doctrine\ODM\MongoDB\Mapping\ClassMetadata
@@ -66,7 +65,6 @@ parametersSchema:
 		objectManagerLoader: schema(string(), nullable())
 		searchOtherMethodsForQueryBuilderBeginning: bool()
 		queryBuilderFastAlgorithm: bool()
-		stringifyExpressions: bool()
 	])
 
 conditionalTags:
@@ -117,7 +115,6 @@ services:
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
-			stringifyExpressions: %doctrine.stringifyExpressions%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -141,7 +138,6 @@ services:
 		class: PHPStan\Type\Doctrine\CreateQueryDynamicReturnTypeExtension
 		arguments:
 			objectMetadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
-			stringifyExpressions: %doctrine.stringifyExpressions%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
