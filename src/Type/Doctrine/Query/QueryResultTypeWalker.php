@@ -56,6 +56,7 @@ use function intval;
 use function is_numeric;
 use function is_object;
 use function is_string;
+use function method_exists;
 use function serialize;
 use function sprintf;
 use function stripos;
@@ -843,28 +844,8 @@ class QueryResultTypeWalker extends SqlWalker
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $this->scalarResultCounter++;
 			$type = $this->unmarshalType($expr->dispatch($this));
 
-			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType($expr->getReturnType()->getName());
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
-					if ($type instanceof UnionType || $type instanceof IntersectionType) {
-						return $traverse($type);
-					}
-					if ($type instanceof NullType) {
-						return $type;
-					}
-					if ($enforcedType->accepts($type, true)->yes()) {
-						return $type;
-					}
-					if ($enforcedType instanceof StringType) {
-						if ($type instanceof IntegerType || $type instanceof FloatType) {
-							return TypeCombinator::union($type->toString(), $type);
-						}
-						if ($type instanceof BooleanType) {
-							return TypeCombinator::union($type->toInteger()->toString(), $type);
-						}
-					}
-					return $enforcedType;
-				});
+			if ($expr instanceof TypedExpression) {
+				$type = $this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type)); // TODO test nullability
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on
@@ -1501,7 +1482,7 @@ class QueryResultTypeWalker extends SqlWalker
 	private function shouldStringifyExpressions(Type $type): TrinaryLogic
 	{
 		$driver = $this->em->getConnection()->getDriver();
-		$nativeConnection = $this->em->getConnection()->getNativeConnection();
+		$nativeConnection = $this->getNativeConnection();
 
 		if ($nativeConnection instanceof PDO) {
 			$stringifyFetches = $this->isPdoStringifyEnabled($nativeConnection);
@@ -1580,13 +1561,40 @@ class QueryResultTypeWalker extends SqlWalker
 		try {
 			return (bool) $pdo->getAttribute(PDO::ATTR_STRINGIFY_FETCHES);
 		} catch (PDOException $e) {
-			return false; // default
+			$selectOne = $pdo->query('SELECT 1');
+			if ($selectOne === false) {
+				return false; // this should not happen, just return attribute default value
+			}
+			$one = $selectOne->fetchColumn();
+
+			// string can be returned due to old PHP used or because ATTR_STRINGIFY_FETCHES is enabled,
+			// but it should not matter as it behaves the same way
+			// (the attribute is there to maintain BC)
+			return is_string($one);
 		}
 	}
 
 	private function isPdoEmulatePreparesEnabled(PDO $pdo): bool
 	{
 		return (bool) $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+	}
+
+	/**
+	 * @return object|resource|null
+	 */
+	private function getNativeConnection()
+	{
+		$connection = $this->em->getConnection();
+
+		if (method_exists($connection, 'getNativeConnection')) {
+			return $connection->getNativeConnection();
+		}
+
+		if ($connection->getWrappedConnection() instanceof PDO) {
+			return $connection->getWrappedConnection();
+		}
+
+		return null;
 	}
 
 }
