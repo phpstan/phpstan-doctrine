@@ -223,7 +223,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		self::assertSame(
 			$expectedType->describe(VerbosityLevel::precise()),
 			$type->describe(VerbosityLevel::precise()),
-			"Query $dql\n failed expectation\n"
+			sprintf("Query %s\n failed expectation\n", $dql)
 		);
 
 		// Double-check our expectations
