@@ -44,6 +44,7 @@ services:
 			reportUnknownTypes: %doctrine.reportUnknownTypes%
 			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
 			bleedingEdge: %featureToggles.bleedingEdge%
+			descriptorRegistry: @doctrineTypeDescriptorRegistry
 		tags:
 			- phpstan.rules.rule
 	-

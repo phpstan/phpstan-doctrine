@@ -74,7 +74,8 @@ conditionalTags:
 services:
 	-
 		class: PHPStan\Type\Doctrine\DescriptorRegistryFactory
-	-
+
+	doctrineTypeDescriptorRegistry:
 		class: PHPStan\Type\Doctrine\DefaultDescriptorRegistry
 		factory: @PHPStan\Type\Doctrine\DescriptorRegistryFactory::createRegistry
 
@@ -115,6 +116,7 @@ services:
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
 			argumentsProcessor: @doctrineQueryBuilderArgumentsProcessor
+			descriptorRegistry: @doctrineTypeDescriptorRegistry
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -138,6 +140,7 @@ services:
 		class: PHPStan\Type\Doctrine\CreateQueryDynamicReturnTypeExtension
 		arguments:
 			objectMetadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
+			descriptorRegistry: @doctrineTypeDescriptorRegistry
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
