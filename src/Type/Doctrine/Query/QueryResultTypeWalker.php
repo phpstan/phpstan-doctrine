@@ -26,6 +26,7 @@ use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
@@ -1326,6 +1327,9 @@ class QueryResultTypeWalker extends SqlWalker
 				$type = $this->descriptorRegistry
 					->get($typeName)
 					->getWritableToPropertyType();
+				if ($type instanceof NeverType) {
+					$type = new MixedType();
+				}
 			} catch (DescriptorNotRegisteredException $e) {
 				$type = new MixedType();
 			}
