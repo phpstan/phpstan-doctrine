@@ -75,7 +75,7 @@ services:
 	otherMethodAnalysisParser: # identical to defaultAnalysisParser, but uses inner PathRoutingParser without cleaning parser
 		class: PHPStan\Parser\CachedParser
 		arguments:
-			originalParser: @pathRoutingParser
+			originalParser: @pathRoutingOtherMethodAnalysisParser
 			cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
 		autowired: false
 
