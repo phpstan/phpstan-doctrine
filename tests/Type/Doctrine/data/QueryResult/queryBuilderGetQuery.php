@@ -9,6 +9,8 @@ use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\QueryBuilder;
 use QueryResult\Entities\Many;
+use Type\Doctrine\data\QueryResult\Entities\Truck;
+use Type\Doctrine\data\QueryResult\Entities\VehicleInterface;
 use function PHPStan\Testing\assertType;
 
 class QueryBuilderGetQuery
@@ -116,6 +118,20 @@ class QueryBuilderGetQuery
 			->getQuery();
 
 		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
+	}
+
+	public function testQueryResultTypeIsMixedWhenDQLIsUsingAnInterfaceTypeDefinition(EntityManagerInterface $em): void
+	{
+		$vehicle = $this->createVehicule();
+
+		assertType(VehicleInterface::class, $vehicle);
+
+		$query = $em->createQueryBuilder()
+			->select('v')
+			->from(get_class($vehicle), 'v')
+			->getQuery();
+
+		assertType('Doctrine\ORM\Query<null, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsVoidWithDeleteOrUpdate(EntityManagerInterface $em): void
@@ -260,5 +276,10 @@ class QueryBuilderGetQuery
 		}
 
 		return $queryBuilder;
+	}
+
+	private function createVehicule(): VehicleInterface
+	{
+		return new Truck();
 	}
 }
