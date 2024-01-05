@@ -37,3 +37,11 @@ parameters:
 		-
 			message: '#^Call to method getProperty\(\) on an unknown class PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionEnum\.$#'
 			path: src/Rules/Gedmo/PropertiesExtension.php
+		-
+			message: '#^Call to function method_exists\(\) with Doctrine\\DBAL\\Connection and ''getNativeConnection'' will always evaluate to true\.$#' # needed for older DBAL versions
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+		-
+			messages: # needed for older DBAL versions (fails only on PHP 7.3)
+				- '#^Class Doctrine\\DBAL\\Driver\\PgSQL\\Driver not found\.$#'
+				- '#^Class Doctrine\\DBAL\\Driver\\SQLite3\\Driver not found\.$#'
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php

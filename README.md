@@ -152,6 +152,18 @@ $query->getOneOrNullResult(Query::HYDRATE_OBJECT); // User
 
 This is due to the design of the `Query` class preventing from determining the hydration mode used by these functions unless it is specified explicitly during the call.
 
+### Expression types inferring
+
+Whether `MAX(e.id)` is fetched as `string` or `int` highly [depends on drivers, their setup and PHP version](https://github.com/janedbal/php-database-drivers-fetch-test).
+This extension copies the logic from linked analysis, autodetects your setup and provides accurate results for `pdo_mysql`, `mysqli`, `pdo_sqlite`, `sqlite3`, `pdo_pgsql` and `pgsql`.
+Any other driver will result in union with stringified version, e.g. `numeric-string|int`.
+
+```neon
+parameters:
+	doctrine:
+		stringifyExpressions: false
+```
+
 ## Custom types
 
 If your application uses custom Doctrine types, you can write your own type descriptors to analyse them properly.

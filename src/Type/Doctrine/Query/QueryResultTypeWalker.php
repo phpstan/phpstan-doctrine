@@ -3,6 +3,12 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Driver\Mysqli\Driver as MysqliDriver;
+use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PdoMysqlDriver;
+use Doctrine\DBAL\Driver\PDO\PgSQL\Driver as PdoPgSQLDriver;
+use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PdoSQLiteDriver;
+use Doctrine\DBAL\Driver\PgSQL\Driver as PgSQLDriver;
+use Doctrine\DBAL\Driver\SQLite3\Driver as SQLite3Driver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -12,8 +18,13 @@ use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\ParserResult;
 use Doctrine\ORM\Query\SqlWalker;
+use PDO;
+use PDOException;
+use PHPStan\Php\PhpVersion;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\TrinaryLogic;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -45,8 +56,10 @@ use function intval;
 use function is_numeric;
 use function is_object;
 use function is_string;
+use function method_exists;
 use function serialize;
 use function sprintf;
+use function stripos;
 use function strtolower;
 use function unserialize;
 
@@ -63,6 +76,8 @@ class QueryResultTypeWalker extends SqlWalker
 	private const HINT_TYPE_MAPPING = self::class . '::HINT_TYPE_MAPPING';
 
 	private const HINT_DESCRIPTOR_REGISTRY = self::class . '::HINT_DESCRIPTOR_REGISTRY';
+
+	private const HINT_PHP_VERSION = self::class . '::HINT_PHP_VERSION';
 
 	/**
 	 * Counter for generating unique scalar result.
@@ -83,6 +98,9 @@ class QueryResultTypeWalker extends SqlWalker
 
 	/** @var EntityManagerInterface */
 	private $em;
+
+	/** @var PhpVersion */
+	private $phpVersion;
 
 	/**
 	 * Map of all components/classes that appear in the DQL query.
@@ -109,11 +127,12 @@ class QueryResultTypeWalker extends SqlWalker
 	/**
 	 * @param Query<mixed> $query
 	 */
-	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry): void
+	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry, PhpVersion $phpVersion): void
 	{
 		$query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::class);
 		$query->setHint(self::HINT_TYPE_MAPPING, $typeBuilder);
 		$query->setHint(self::HINT_DESCRIPTOR_REGISTRY, $descriptorRegistry);
+		$query->setHint(self::HINT_PHP_VERSION, $phpVersion);
 
 		$parser = new Parser($query);
 		$parser->parse();
@@ -164,6 +183,19 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		$this->descriptorRegistry = $descriptorRegistry;
+
+		$phpVersion = $this->query->getHint(self::HINT_PHP_VERSION);
+
+		if (!$phpVersion instanceof PhpVersion) { // @phpstan-ignore-line ignore bc promise
+			throw new ShouldNotHappenException(sprintf(
+				'Expected the query hint %s to contain a %s, but got a %s',
+				self::HINT_PHP_VERSION,
+				PhpVersion::class,
+				is_object($phpVersion) ? get_class($phpVersion) : gettype($phpVersion)
+			));
+		}
+
+		$this->phpVersion = $phpVersion;
 
 		parent::__construct($query, $parserResult, $queryComponents);
 	}
@@ -812,43 +844,39 @@ class QueryResultTypeWalker extends SqlWalker
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $this->scalarResultCounter++;
 			$type = $this->unmarshalType($expr->dispatch($this));
 
-			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType($expr->getReturnType()->getName());
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
-					if ($type instanceof UnionType || $type instanceof IntersectionType) {
-						return $traverse($type);
-					}
-					if ($type instanceof NullType) {
-						return $type;
-					}
-					if ($enforcedType->accepts($type, true)->yes()) {
-						return $type;
-					}
-					if ($enforcedType instanceof StringType) {
-						if ($type instanceof IntegerType || $type instanceof FloatType) {
-							return TypeCombinator::union($type->toString(), $type);
-						}
-						if ($type instanceof BooleanType) {
-							return TypeCombinator::union($type->toInteger()->toString(), $type);
-						}
-					}
-					return $enforcedType;
-				});
+			if ($expr instanceof TypedExpression) {
+				$type = $this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type)); // TODO test nullability
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on
 				// the driver and PHP version.
-				// Here we assume that the value may or may not be casted to
-				// string by the driver.
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+
+				$type = TypeTraverser::map($type, function (Type $type, callable $traverse): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
 					}
+
 					if ($type instanceof IntegerType || $type instanceof FloatType) {
-						return TypeCombinator::union($type->toString(), $type);
+						$stringify = $this->shouldStringifyExpressions($type);
+
+						if ($stringify->yes()) {
+							return $type->toString();
+						} elseif ($stringify->maybe()) {
+							return TypeCombinator::union($type->toString(), $type);
+						}
+
+						return $type;
 					}
 					if ($type instanceof BooleanType) {
-						return TypeCombinator::union($type->toInteger()->toString(), $type);
+						$stringify = $this->shouldStringifyExpressions($type);
+
+						if ($stringify->yes()) {
+							return $type->toString();
+						} elseif ($stringify->maybe()) {
+							return TypeCombinator::union($type->toInteger()->toString(), $type);
+						}
+
+						return $type;
 					}
 					return $traverse($type);
 				});
@@ -1089,6 +1117,8 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkLiteral($literal)
 	{
+		$driver = $this->em->getConnection()->getDriver();
+
 		switch ($literal->type) {
 			case AST\Literal::STRING:
 				$value = $literal->value;
@@ -1097,8 +1127,12 @@ class QueryResultTypeWalker extends SqlWalker
 				break;
 
 			case AST\Literal::BOOLEAN:
-				$value = strtolower($literal->value) === 'true' ? 1 : 0;
-				$type = new ConstantIntegerType($value);
+				$value = strtolower($literal->value) === 'true';
+				if ($driver instanceof PdoPgSQLDriver || $driver instanceof PgSQLDriver) {
+					$type = new ConstantBooleanType($value);
+				} else {
+					$type = new ConstantIntegerType($value ? 1 : 0);
+				}
 				break;
 
 			case AST\Literal::NUMERIC:
@@ -1108,7 +1142,19 @@ class QueryResultTypeWalker extends SqlWalker
 				if (floatval(intval($value)) === floatval($value)) {
 					$type = new ConstantIntegerType((int) $value);
 				} else {
-					$type = new ConstantFloatType((float) $value);
+					if ($driver instanceof PdoMysqlDriver || $driver instanceof MysqliDriver) {
+						// both pdo_mysql and mysqli hydrates decimal literal (e.g. 123.4) as string no matter the configuration (e.g. PDO::ATTR_STRINGIFY_FETCHES being false) and PHP version
+						// the only way to force float is to use float literal with scientific notation (e.g. 123.4e0)
+						// https://dev.mysql.com/doc/refman/8.0/en/number-literals.html
+
+						if (stripos((string) $value, 'e') !== false) {
+							$type = new ConstantFloatType((float) $value);
+						} else {
+							$type = new ConstantStringType((string) (float) $value);
+						}
+					} else {
+						$type = new ConstantFloatType((float) $value);
+					}
 				}
 
 				break;
@@ -1421,6 +1467,134 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		return false;
+	}
+
+	/**
+	 * See analysis: https://github.com/janedbal/php-database-drivers-fetch-test
+	 *
+	 * Notable 8.1 changes:
+	 * - pdo_mysql: https://github.com/php/php-src/commit/c18b1aea289e8ed6edb3f6e6a135018976a034c6
+	 * - pdo_sqlite: https://github.com/php/php-src/commit/438b025a28cda2935613af412fc13702883dd3a2
+	 * - pdo_pgsql: https://github.com/php/php-src/commit/737195c3ae6ac53b9501cfc39cc80fd462909c82
+	 *
+	 * @param IntegerType|FloatType|BooleanType $type
+	 */
+	private function shouldStringifyExpressions(Type $type): TrinaryLogic
+	{
+		$driver = $this->em->getConnection()->getDriver();
+		$nativeConnection = $this->getNativeConnection();
+
+		if ($nativeConnection instanceof PDO) {
+			$stringifyFetches = $this->isPdoStringifyEnabled($nativeConnection);
+
+			if ($driver instanceof PdoMysqlDriver) {
+				$emulatedPrepares = $this->isPdoEmulatePreparesEnabled($nativeConnection);
+
+				if ($stringifyFetches) {
+					return TrinaryLogic::createYes();
+				}
+
+				if ($this->phpVersion->getVersionId() >= 80100) {
+					return TrinaryLogic::createNo(); // DECIMAL / FLOAT already decided in walkLiteral
+				}
+
+				if ($emulatedPrepares) {
+					return TrinaryLogic::createYes();
+				}
+
+				return TrinaryLogic::createNo();
+			}
+
+			if ($driver instanceof PdoSqliteDriver) {
+				if ($stringifyFetches) {
+					return TrinaryLogic::createYes();
+				}
+
+				if ($this->phpVersion->getVersionId() >= 80100) {
+					return TrinaryLogic::createNo();
+				}
+
+				return TrinaryLogic::createYes();
+			}
+
+			if ($driver instanceof PdoPgSQLDriver) {
+				if ($type->isBoolean()->yes()) {
+					if ($this->phpVersion->getVersionId() >= 80100) {
+						return TrinaryLogic::createFromBoolean($stringifyFetches);
+					}
+
+					return TrinaryLogic::createNo();
+
+				} elseif ($type->isFloat()->yes()) {
+					return TrinaryLogic::createYes();
+
+				} elseif ($type->isInteger()->yes()) {
+					return TrinaryLogic::createFromBoolean($stringifyFetches);
+				}
+			}
+		}
+
+		if ($driver instanceof PgSQLDriver) {
+			if ($type->isBoolean()->yes()) {
+				return TrinaryLogic::createNo();
+			} elseif ($type->isFloat()->yes()) {
+				return TrinaryLogic::createYes();
+			} elseif ($type->isInteger()->yes()) {
+				return TrinaryLogic::createNo();
+			}
+		}
+
+		if ($driver instanceof SQLite3Driver) {
+			return TrinaryLogic::createNo();
+		}
+
+		if ($driver instanceof MysqliDriver) {
+			return TrinaryLogic::createNo(); // DECIMAL / FLOAT already decided in walkLiteral
+		}
+
+		return TrinaryLogic::createMaybe();
+	}
+
+	private function isPdoStringifyEnabled(PDO $pdo): bool
+	{
+		// this fails for most PHP versions, see https://github.com/php/php-src/issues/12969
+		try {
+			return (bool) $pdo->getAttribute(PDO::ATTR_STRINGIFY_FETCHES);
+		} catch (PDOException $e) {
+			$selectOne = $pdo->query('SELECT 1');
+			if ($selectOne === false) {
+				return false; // this should not happen, just return attribute default value
+			}
+			$one = $selectOne->fetchColumn();
+
+			// string can be returned due to old PHP used or because ATTR_STRINGIFY_FETCHES is enabled,
+			// but it should not matter as it behaves the same way
+			// (the attribute is there to maintain BC)
+			return is_string($one);
+		}
+	}
+
+	private function isPdoEmulatePreparesEnabled(PDO $pdo): bool
+	{
+		return (bool) $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+	}
+
+	/**
+	 * @return object|resource|null
+	 */
+	private function getNativeConnection()
+	{
+		$connection = $this->em->getConnection();
+
+		if (method_exists($connection, 'getNativeConnection')) {
+			return $connection->getNativeConnection();
+		}
+
+		if ($connection->getWrappedConnection() instanceof PDO) {
+			return $connection->getWrappedConnection();
+		}
+
+		return null;
 	}
 
 }
