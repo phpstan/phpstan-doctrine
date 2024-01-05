@@ -35,7 +35,6 @@ services:
 		class: PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
 		arguments:
 			reportDynamicQueryBuilders: %doctrine.reportDynamicQueryBuilders%
-			searchOtherMethodsForQueryBuilderBeginning: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 		tags:
 			- phpstan.rules.rule
 	-
@@ -44,6 +43,7 @@ services:
 			reportUnknownTypes: %doctrine.reportUnknownTypes%
 			allowNullablePropertyForRequiredField: %doctrine.allowNullablePropertyForRequiredField%
 			bleedingEdge: %featureToggles.bleedingEdge%
+			descriptorRegistry: @doctrineTypeDescriptorRegistry
 		tags:
 			- phpstan.rules.rule
 	-
