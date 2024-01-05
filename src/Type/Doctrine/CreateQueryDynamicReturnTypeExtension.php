@@ -33,10 +33,10 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	/** @var DefaultDescriptorRegistry */
+	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DefaultDescriptorRegistry $descriptorRegistry)
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;

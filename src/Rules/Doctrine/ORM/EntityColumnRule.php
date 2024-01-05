@@ -10,7 +10,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
-use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
+use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
@@ -36,7 +36,7 @@ class EntityColumnRule implements Rule
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
-	/** @var DefaultDescriptorRegistry */
+	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
 	/** @var ReflectionProvider */
@@ -53,7 +53,7 @@ class EntityColumnRule implements Rule
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
-		DefaultDescriptorRegistry $descriptorRegistry,
+		DescriptorRegistry $descriptorRegistry,
 		ReflectionProvider $reflectionProvider,
 		bool $reportUnknownTypes,
 		bool $allowNullablePropertyForRequiredField,
