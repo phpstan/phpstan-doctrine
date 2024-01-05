@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Type;
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
 use PHPStan\Type\Doctrine\Descriptors\ArrayType;
 use PHPStan\Type\Doctrine\Descriptors\BigIntType;
 use PHPStan\Type\Doctrine\Descriptors\BinaryType;
@@ -58,7 +58,7 @@ class EntityColumnRuleTest extends RuleTestCase
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
-			new DescriptorRegistry([
+			new DefaultDescriptorRegistry([
 				new ArrayType(),
 				new BigIntType(),
 				new BinaryType(),

@@ -17,7 +17,7 @@ use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
-use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
@@ -58,7 +58,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	/** @var EntityManagerInterface */
 	private static $em;
 
-	/** @var DescriptorRegistry */
+	/** @var DefaultDescriptorRegistry */
 	private $descriptorRegistry;
 
 	public static function getAdditionalConfigFiles(): array
@@ -184,7 +184,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 	public function setUp(): void
 	{
-		$this->descriptorRegistry = self::getContainer()->getByType(DescriptorRegistry::class);
+		$this->descriptorRegistry = self::getContainer()->getByType(DefaultDescriptorRegistry::class);
 	}
 
 	/** @dataProvider getTestData */

@@ -75,7 +75,7 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\DescriptorRegistryFactory
 	-
-		class: PHPStan\Type\Doctrine\DescriptorRegistry
+		class: PHPStan\Type\Doctrine\DefaultDescriptorRegistry
 		factory: @PHPStan\Type\Doctrine\DescriptorRegistryFactory::createRegistry
 
 	-

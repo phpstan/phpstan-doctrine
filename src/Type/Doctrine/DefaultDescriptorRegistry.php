@@ -5,7 +5,7 @@ namespace PHPStan\Type\Doctrine;
 use Doctrine\DBAL\Types\Type;
 use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 
-class DescriptorRegistry
+class DefaultDescriptorRegistry
 {
 
 	/** @var array<class-string<Type>, DoctrineTypeDescriptor> */
