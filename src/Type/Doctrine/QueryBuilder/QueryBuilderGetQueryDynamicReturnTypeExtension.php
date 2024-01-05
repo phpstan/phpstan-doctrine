@@ -14,7 +14,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
-use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
@@ -62,7 +62,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	/** @var string|null */
 	private $queryBuilderClass;
 
-	/** @var DescriptorRegistry */
+	/** @var DefaultDescriptorRegistry */
 	private $descriptorRegistry;
 
 	/** @var OtherMethodQueryBuilderParser */
@@ -72,7 +72,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		ObjectMetadataResolver $objectMetadataResolver,
 		ArgumentsProcessor $argumentsProcessor,
 		?string $queryBuilderClass,
-		DescriptorRegistry $descriptorRegistry,
+		DefaultDescriptorRegistry $descriptorRegistry,
 		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
 	{

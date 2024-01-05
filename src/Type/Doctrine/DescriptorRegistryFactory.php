@@ -17,9 +17,9 @@ class DescriptorRegistryFactory
 		$this->container = $container;
 	}
 
-	public function createRegistry(): DescriptorRegistry
+	public function createRegistry(): DefaultDescriptorRegistry
 	{
-		return new DescriptorRegistry($this->container->getServicesByTag(self::TYPE_DESCRIPTOR_TAG));
+		return new DefaultDescriptorRegistry($this->container->getServicesByTag(self::TYPE_DESCRIPTOR_TAG));
 	}
 
 }

@@ -19,7 +19,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
-use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\IntegerRangeType;
@@ -97,7 +97,7 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var QueryResultTypeBuilder */
 	private $typeBuilder;
 
-	/** @var DescriptorRegistry */
+	/** @var DefaultDescriptorRegistry */
 	private $descriptorRegistry;
 
 	/** @var bool */
@@ -109,7 +109,7 @@ class QueryResultTypeWalker extends SqlWalker
 	/**
 	 * @param Query<mixed> $query
 	 */
-	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry): void
+	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DefaultDescriptorRegistry $descriptorRegistry): void
 	{
 		$query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::class);
 		$query->setHint(self::HINT_TYPE_MAPPING, $typeBuilder);
@@ -154,11 +154,11 @@ class QueryResultTypeWalker extends SqlWalker
 
 		$descriptorRegistry = $this->query->getHint(self::HINT_DESCRIPTOR_REGISTRY);
 
-		if (!$descriptorRegistry instanceof DescriptorRegistry) {
+		if (!$descriptorRegistry instanceof DefaultDescriptorRegistry) {
 			throw new ShouldNotHappenException(sprintf(
 				'Expected the query hint %s to contain a %s, but got a %s',
 				self::HINT_DESCRIPTOR_REGISTRY,
-				DescriptorRegistry::class,
+				DefaultDescriptorRegistry::class,
 				is_object($descriptorRegistry) ? get_class($descriptorRegistry) : gettype($descriptorRegistry)
 			));
 		}
