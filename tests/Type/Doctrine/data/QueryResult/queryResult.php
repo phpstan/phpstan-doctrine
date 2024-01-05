@@ -2,6 +2,7 @@
 
 namespace QueryResult\queryResult;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
@@ -345,4 +346,22 @@ class QueryResultTest
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT)
 		);
 	}
+
+	public function testQueryMethods(EntityManagerInterface $em): void
+	{
+		$q = 'SELECT m FROM QueryResult\Entities\Many m';
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setLockMode(LockMode::NONE));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setParameter(1, 1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setMaxResults(10));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setCacheable(true));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setLifetime(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->disableResultCache());
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->enableResultCache(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheLifetime(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheProfile(null));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHint('name', 1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHydrationMode(AbstractQuery::HYDRATE_OBJECT));
+	}
+
 }
