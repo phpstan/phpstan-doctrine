@@ -233,4 +233,33 @@ class QueryBuilderGetQuery
 		assertType('mixed', $result);
 	}
 
+
+	/**
+	 * @param class-string<Many> $many
+	 */
+	public function testRegularClassString(EntityManagerInterface $em, string $many)
+	{
+		$result = $em->createQueryBuilder()
+			->select("m")
+			->from($many, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('list<QueryResult\Entities\Many>', $result);
+	}
+	/**
+	 * @param class-string<T> $many
+	 * @template T of Many
+	 */
+	public function testTemplatedClassString(EntityManagerInterface $em, string $many)
+	{
+		$result = $em->createQueryBuilder()
+			->select("m")
+			->from($many, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('list<QueryResult\Entities\Many>', $result);
+	}
+
 }
