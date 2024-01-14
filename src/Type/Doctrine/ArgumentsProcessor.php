@@ -47,6 +47,12 @@ class ArgumentsProcessor
 				$args[] = $array;
 				continue;
 			}
+
+			if ($value->isClassStringType()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
+				$args[] = $value->getClassStringObjectType()->getObjectClassNames()[0];
+				continue;
+			}
+
 			if (count($value->getConstantScalarValues()) !== 1) {
 				throw new DynamicQueryBuilderArgumentException();
 			}
