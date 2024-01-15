@@ -32,6 +32,13 @@ class CreateQuery
 		assertType('Doctrine\ORM\Query<null, array{simpleArrayColumn: list<string>}>', $query);
 	}
 
+	public function testMappingError(EntityManagerInterface $em): void
+	{
+		$query = $em->createQuery('SELECT u.foo FROM ' . CreateQuery::class . ' u');
+
+		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
+	}
+
 	public function testQueryResultTypeIsMixedWhenDQLIsNotKnown(EntityManagerInterface $em, string $dql): void
 	{
 		$query = $em->createQuery($dql);

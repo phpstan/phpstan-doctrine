@@ -7,6 +7,7 @@ use Doctrine\Common\CommonException;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\Mapping\MappingException;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
@@ -195,7 +196,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		try {
 			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
-		} catch (ORMException | DBALException | CommonException $e) {
+		} catch (ORMException | DBALException | CommonException | MappingException $e) {
 			return new QueryType($dql, null);
 		} catch (AssertionError $e) {
 			return new QueryType($dql, null);
