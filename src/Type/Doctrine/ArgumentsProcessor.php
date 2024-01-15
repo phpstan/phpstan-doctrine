@@ -13,6 +13,14 @@ use function strpos;
 class ArgumentsProcessor
 {
 
+	/** @var ObjectMetadataResolver */
+	private $objectMetadataResolver;
+
+	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
+	{
+		$this->objectMetadataResolver = $objectMetadataResolver;
+	}
+
 	/**
 	 * @param Arg[] $methodCallArgs
 	 * @return list<mixed>
@@ -49,7 +57,13 @@ class ArgumentsProcessor
 			}
 
 			if ($value->isClassStringType()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
-				$args[] = $value->getClassStringObjectType()->getObjectClassNames()[0];
+				/** @var class-string $className */
+				$className = $value->getClassStringObjectType()->getObjectClassNames()[0];
+				if ($this->objectMetadataResolver->isTransient($className)) {
+					throw new DynamicQueryBuilderArgumentException();
+				}
+
+				$args[] = $className;
 				continue;
 			}
 
