@@ -131,7 +131,7 @@ class QueryBuilderGetQuery
 			->from(get_class($vehicle), 'v')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, mixed>', $query);
+		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
 	}
 
 	public function testQueryResultTypeIsVoidWithDeleteOrUpdate(EntityManagerInterface $em): void
