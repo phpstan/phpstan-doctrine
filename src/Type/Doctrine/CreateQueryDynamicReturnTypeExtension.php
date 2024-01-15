@@ -9,6 +9,7 @@ use Doctrine\DBAL\Exception as NewDBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
+use Doctrine\Persistence\Mapping\MappingException;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -87,7 +88,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 				try {
 					$query = $em->createQuery($queryString);
 					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
-				} catch (ORMException | DBALException | NewDBALException | CommonException $e) {
+				} catch (ORMException | DBALException | NewDBALException | CommonException | MappingException $e) {
 					return new QueryType($queryString, null, null);
 				} catch (AssertionError $e) {
 					return new QueryType($queryString, null, null);

@@ -262,4 +262,19 @@ class QueryBuilderGetQuery
 		assertType('list<QueryResult\Entities\Many>', $result);
 	}
 
+
+	/**
+	 * @param class-string<self> $classString
+	 */
+	public function testNonEntityClassString(EntityManagerInterface $em, string $classString)
+	{
+		$result = $em->createQueryBuilder()
+			->select("m")
+			->from($classString, 'm')
+			->getQuery()
+			->getResult();
+
+		assertType('mixed', $result);
+	}
+
 }
