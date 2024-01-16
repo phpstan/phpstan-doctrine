@@ -35,6 +35,9 @@ class OtherMethodQueryBuilderParser
 	/** @var Container */
 	private $container;
 
+	/** @var array<string, array<string, list<QueryBuilderType>>> */
+	private $cache = [];
+
 	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
 	{
 		$this->descendIntoOtherMethods = $descendIntoOtherMethods;
@@ -51,9 +54,14 @@ class OtherMethodQueryBuilderParser
 			return [];
 		}
 
+		$methodName = $methodReflection->getName();
 		$fileName = $methodReflection->getDeclaringClass()->getFileName();
 		if ($fileName === null) {
 			return [];
+		}
+
+		if (isset($this->cache[$fileName][$methodName])) {
+			return $this->cache[$fileName][$methodName];
 		}
 
 		$nodes = $this->parser->parseFile($fileName);
@@ -62,7 +70,7 @@ class OtherMethodQueryBuilderParser
 			return [];
 		}
 
-		$methodNode = $this->findMethodNode($methodReflection->getName(), $classNode->stmts);
+		$methodNode = $this->findMethodNode($methodName, $classNode->stmts);
 		if ($methodNode === null || $methodNode->stmts === null) {
 			return [];
 		}
@@ -99,6 +107,8 @@ class OtherMethodQueryBuilderParser
 				return $type;
 			});
 		});
+
+		$this->cache[$fileName][$methodName] = $queryBuilderTypes;
 
 		return $queryBuilderTypes;
 	}
