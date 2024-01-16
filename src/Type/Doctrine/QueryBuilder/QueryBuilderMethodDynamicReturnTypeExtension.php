@@ -26,11 +26,16 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 	/** @var string|null */
 	private $queryBuilderClass;
 
+	/** @var OtherMethodQueryBuilderParser */
+	private $otherMethodQueryBuilderParser;
+
 	public function __construct(
-		?string $queryBuilderClass
+		?string $queryBuilderClass,
+		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
 	{
 		$this->queryBuilderClass = $queryBuilderClass;
+		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
 	}
 
 	public function getClass(): string
@@ -69,7 +74,10 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
-			return $calledOnType;
+			$queryBuilderTypes = $this->otherMethodQueryBuilderParser->getQueryBuilderTypes($scope, $methodCall);
+			if (count($queryBuilderTypes) === 0) {
+				return $calledOnType;
+			}
 		}
 
 		if (count($queryBuilderTypes) > self::MAX_COMBINATIONS) {

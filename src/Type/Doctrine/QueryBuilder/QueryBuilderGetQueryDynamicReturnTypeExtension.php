@@ -66,17 +66,22 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
+	/** @var OtherMethodQueryBuilderParser */
+	private $otherMethodQueryBuilderParser;
+
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		ArgumentsProcessor $argumentsProcessor,
 		?string $queryBuilderClass,
-		DescriptorRegistry $descriptorRegistry
+		DescriptorRegistry $descriptorRegistry,
+		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->argumentsProcessor = $argumentsProcessor;
 		$this->queryBuilderClass = $queryBuilderClass;
 		$this->descriptorRegistry = $descriptorRegistry;
+		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
 	}
 
 	public function getClass(): string
@@ -103,7 +108,10 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		)->getReturnType();
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
-			return $defaultReturnType;
+			$queryBuilderTypes = $this->otherMethodQueryBuilderParser->getQueryBuilderTypes($scope, $methodCall);
+			if (count($queryBuilderTypes) === 0) {
+				return $defaultReturnType;
+			}
 		}
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();

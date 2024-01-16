@@ -84,14 +84,14 @@ class TestQueryBuilderRepository
 			->getQuery();
 	}
 
-	public function analyseQueryBuilderOtherMethodBeginning(): void
+	public function analyseQueryBuilderUnknownBeginning(): void
 	{
 		$this->createQb()->getQuery();
 	}
 
 	private function createQb(): \Doctrine\ORM\QueryBuilder
 	{
-		return $this->entityManager->createQueryBuilder()->select('e')->from(MyEntity::class, 'e');
+		return $this->entityManager->createQueryBuilder();
 	}
 
 	public function analyseQueryBuilderDynamicArgs(string $entity): void

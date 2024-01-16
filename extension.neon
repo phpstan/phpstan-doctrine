@@ -170,11 +170,6 @@ services:
 			parser: @defaultAnalysisParser
 
 	-
-		class: PHPStan\Type\Doctrine\QueryBuilder\ReturnQueryBuilderExpressionTypeResolverExtension
-		tags:
-			- phpstan.broker.expressionTypeResolverExtension
-
-	-
 		class: PHPStan\Stubs\Doctrine\StubFilesExtensionLoader
 		tags:
 			- phpstan.stubFilesExtension
