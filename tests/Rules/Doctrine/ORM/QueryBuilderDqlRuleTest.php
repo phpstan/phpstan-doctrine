@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -16,6 +17,8 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		return new QueryBuilderDqlRule(
 			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp'),
+			self::getContainer()->getByType(OtherMethodQueryBuilderParser::class),
+			true,
 			true
 		);
 	}

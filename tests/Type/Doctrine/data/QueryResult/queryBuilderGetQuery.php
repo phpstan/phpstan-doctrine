@@ -233,7 +233,6 @@ class QueryBuilderGetQuery
 		assertType('mixed', $result);
 	}
 
-
 	/**
 	 * @param class-string<Many> $many
 	 */
@@ -275,6 +274,35 @@ class QueryBuilderGetQuery
 			->getResult();
 
 		assertType('mixed', $result);
+	}
+
+	public function testQueryTypeIsInferredOnAcrossMethods(EntityManagerInterface $em): void
+	{
+		$query = $this->getQueryBuilder($em)->getQuery();
+		$branchingQuery = $this->getBranchingQueryBuilder($em)->getQuery();
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $branchingQuery);
+	}
+
+	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+	}
+
+	private function getBranchingQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		$queryBuilder = $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+
+		if (random_int(0, 1) === 1) {
+			$queryBuilder->andWhere('m.intColumn = 1');
+		}
+
+		return $queryBuilder;
 	}
 
 }

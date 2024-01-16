@@ -35,6 +35,7 @@ services:
 		class: PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
 		arguments:
 			reportDynamicQueryBuilders: %doctrine.reportDynamicQueryBuilders%
+			searchOtherMethodsForQueryBuilderBeginning: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 		tags:
 			- phpstan.rules.rule
 	-
