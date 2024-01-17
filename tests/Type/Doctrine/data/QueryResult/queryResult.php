@@ -156,27 +156,27 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<mixed>',
+			'array',
 			$query->getArrayResult()
 		);
 		assertType(
-			'iterable<int, mixed>',
+			'iterable',
 			$query->toIterable([], AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
 		);
 		assertType(
@@ -234,35 +234,35 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<array>',
+			'mixed',
 			$query->getResult(AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'list<array>',
+			'array',
 			$query->getScalarResult()
 		);
 		assertType(
-			'iterable<int, array>',
+			'iterable',
 			$query->toIterable([], AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'list<array>',
+			'mixed',
 			$query->execute(null, AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'list<array>',
+			'mixed',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'list<array>',
+			'mixed',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'array',
+			'mixed',
 			$query->getSingleResult(AbstractQuery::HYDRATE_SCALAR)
 		);
 		assertType(
-			'array|null',
+			'mixed',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR)
 		);
 
@@ -316,11 +316,11 @@ class QueryResultTest
 			$query->getResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
-			'mixed',
+			'bool|float|int|string|null',
 			$query->getSingleScalarResult()
 		);
 		assertType(
-			'iterable<int, mixed>',
+			'iterable',
 			$query->toIterable([], AbstractQuery::HYDRATE_SINGLE_SCALAR)
 		);
 		assertType(
@@ -460,19 +460,19 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->getResult(AbstractQuery::HYDRATE_SIMPLEOBJECT)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->execute(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SIMPLEOBJECT)
 		);
 		assertType(
@@ -498,27 +498,27 @@ class QueryResultTest
 		');
 
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->getResult(AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 		assertType(
-			'list<mixed>',
+			'array',
 			$query->getSingleColumnResult()
 		);
 		assertType(
-			'iterable<int, mixed>',
+			'iterable',
 			$query->toIterable([], AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->execute(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 		assertType(
-			'list<mixed>',
+			'mixed',
 			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_SCALAR_COLUMN)
 		);
 		assertType(

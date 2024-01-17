@@ -154,6 +154,10 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				return $this->originalReturnType($methodReflection);
 		}
 
+		if (null === $queryResultType) {
+			return $this->originalReturnType($methodReflection);
+		}
+
 		switch ($methodReflection->getName()) {
 			case 'getSingleResult':
 				return $queryResultType;
@@ -187,13 +191,21 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		}
 	}
 
-	private function getArrayHydratedReturnType(Type $queryResultType): Type
+	/**
+	 * When we're array-hydrating object, we're not sure of the shape of the array.
+	 * We could return `new ArrayTyp(new MixedType(), new MixedType())`
+	 * but the lack of precision in the array keys/values would give false positive.
+	 *
+	 * @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
+	 */
+	private function getArrayHydratedReturnType(Type $queryResultType): ?Type
 	{
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 
-		return TypeTraverser::map(
+		$mixedFound = false;
+		$queryResultType = TypeTraverser::map(
 			$queryResultType,
-			static function (Type $type, callable $traverse) use ($objectManager): Type {
+			static function (Type $type, callable $traverse) use ($objectManager, &$mixedFound): Type {
 				$isObject = (new ObjectWithoutClassType())->isSuperTypeOf($type);
 				if ($isObject->no()) {
 					return $traverse($type);
@@ -203,6 +215,8 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					|| !$type instanceof TypeWithClassName
 					|| $objectManager === null
 				) {
+					$mixedFound = true;
+
 					return new MixedType();
 				}
 
@@ -210,18 +224,26 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					return $traverse($type);
 				}
 
-				// We could return `new ArrayTyp(new MixedType(), new MixedType())`
-				// but the lack of precision in the array keys/values would give false positive
-				// @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
+				$mixedFound = true;
+
 				return new MixedType();
 			}
 		);
+
+		return $mixedFound ? null : $queryResultType;
 	}
 
-	private function getScalarHydratedReturnType(Type $queryResultType): Type
+	/**
+	 * When we're scalar-hydrating object, we're not sure of the shape of the array.
+	 * We could return `new ArrayTyp(new MixedType(), new MixedType())`
+	 * but the lack of precision in the array keys/values would give false positive.
+	 *
+	 * @see https://github.com/phpstan/phpstan-doctrine/pull/453#issuecomment-1895415544
+	 */
+	private function getScalarHydratedReturnType(Type $queryResultType): ?Type
 	{
 		if (!$queryResultType->isArray()->yes()) {
-			return new ArrayType(new MixedType(), new MixedType());
+			return null;
 		}
 
 		foreach ($queryResultType->getArrays() as $arrayType) {
@@ -231,34 +253,37 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				!(new ObjectWithoutClassType())->isSuperTypeOf($itemType)->no()
 				|| !$itemType->isArray()->no()
 			) {
-				return new ArrayType(new MixedType(), new MixedType());
+				// We could return `new ArrayTyp(new MixedType(), new MixedType())`
+				// but the lack of precision in the array keys/values would give false positive
+				// @see https://github.com/phpstan/phpstan-doctrine/pull/453#issuecomment-1895415544
+				return null;
 			}
 		}
 
 		return $queryResultType;
 	}
 
-	private function getSimpleObjectHydratedReturnType(Type $queryResultType): Type
+	private function getSimpleObjectHydratedReturnType(Type $queryResultType): ?Type
 	{
 		if ((new ObjectWithoutClassType())->isSuperTypeOf($queryResultType)->yes()) {
 			return $queryResultType;
 		}
 
-		return new MixedType();
+		return null;
 	}
 
-	private function getSingleScalarHydratedReturnType(Type $queryResultType): Type
+	private function getSingleScalarHydratedReturnType(Type $queryResultType): ?Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (!$queryResultType->isConstantArray()->yes()) {
-			return new MixedType();
+		if (null === $queryResultType || !$queryResultType->isConstantArray()->yes()) {
+			return null;
 		}
 
 		$types = [];
 		foreach ($queryResultType->getConstantArrays() as $constantArrayType) {
 			$values = $constantArrayType->getValueTypes();
 			if (count($values) !== 1) {
-				return new MixedType();
+				return null;
 			}
 
 			$types[] = $constantArrayType->getFirstIterableValueType();
@@ -267,18 +292,18 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		return TypeCombinator::union(...$types);
 	}
 
-	private function getScalarColumnHydratedReturnType(Type $queryResultType): Type
+	private function getScalarColumnHydratedReturnType(Type $queryResultType): ?Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (!$queryResultType->isConstantArray()->yes()) {
-			return new MixedType();
+		if (null === $queryResultType || !$queryResultType->isConstantArray()->yes()) {
+			return null;
 		}
 
 		$types = [];
 		foreach ($queryResultType->getConstantArrays() as $constantArrayType) {
 			$values = $constantArrayType->getValueTypes();
 			if (count($values) !== 1) {
-				return new MixedType();
+				return null;
 			}
 
 			$types[] = $constantArrayType->getFirstIterableValueType();
