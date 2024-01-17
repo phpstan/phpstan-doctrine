@@ -154,7 +154,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 				return $this->originalReturnType($methodReflection);
 		}
 
-		if (null === $queryResultType) {
+		if ($queryResultType === null) {
 			return $this->originalReturnType($methodReflection);
 		}
 
@@ -275,7 +275,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	private function getSingleScalarHydratedReturnType(Type $queryResultType): ?Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (null === $queryResultType || !$queryResultType->isConstantArray()->yes()) {
+		if ($queryResultType === null || !$queryResultType->isConstantArray()->yes()) {
 			return null;
 		}
 
@@ -295,7 +295,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	private function getScalarColumnHydratedReturnType(Type $queryResultType): ?Type
 	{
 		$queryResultType = $this->getScalarHydratedReturnType($queryResultType);
-		if (null === $queryResultType || !$queryResultType->isConstantArray()->yes()) {
+		if ($queryResultType === null || !$queryResultType->isConstantArray()->yes()) {
 			return null;
 		}
 
