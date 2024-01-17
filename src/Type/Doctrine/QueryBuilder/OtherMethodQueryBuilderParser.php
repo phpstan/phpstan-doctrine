@@ -22,6 +22,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use function is_array;
+use function sprintf;
 
 class OtherMethodQueryBuilderParser
 {
@@ -35,7 +36,7 @@ class OtherMethodQueryBuilderParser
 	/** @var Container */
 	private $container;
 
-	/** @var array<string, array<string, list<QueryBuilderType>>> */
+	/** @var array<string, list<QueryBuilderType>> */
 	private $cache = [];
 
 	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
@@ -55,17 +56,20 @@ class OtherMethodQueryBuilderParser
 		}
 
 		$methodName = $methodReflection->getName();
+		$className = $methodReflection->getDeclaringClass()->getName();
 		$fileName = $methodReflection->getDeclaringClass()->getFileName();
 		if ($fileName === null) {
 			return [];
 		}
 
-		if (isset($this->cache[$fileName][$methodName])) {
-			return $this->cache[$fileName][$methodName];
+		$cacheKey = $this->buildCacheKey($fileName, $className, $methodName);
+
+		if (isset($this->cache[$cacheKey])) {
+			return $this->cache[$cacheKey];
 		}
 
 		$nodes = $this->parser->parseFile($fileName);
-		$classNode = $this->findClassNode($methodReflection->getDeclaringClass()->getName(), $nodes);
+		$classNode = $this->findClassNode($className, $nodes);
 		if ($classNode === null) {
 			return [];
 		}
@@ -108,7 +112,7 @@ class OtherMethodQueryBuilderParser
 			});
 		});
 
-		$this->cache[$fileName][$methodName] = $queryBuilderTypes;
+		$this->cache[$cacheKey] = $queryBuilderTypes;
 
 		return $queryBuilderTypes;
 	}
@@ -167,6 +171,11 @@ class OtherMethodQueryBuilderParser
 		}
 
 		return null;
+	}
+
+	private function buildCacheKey(string $fileName, string $declaringClassName, string $methodName): string
+	{
+		return sprintf('%s-%s-%s', $fileName, $declaringClassName, $methodName);
 	}
 
 }
