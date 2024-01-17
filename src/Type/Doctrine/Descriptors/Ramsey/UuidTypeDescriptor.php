@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors\Ramsey;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 use PHPStan\Type\ObjectType;
@@ -62,7 +63,7 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 		);
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

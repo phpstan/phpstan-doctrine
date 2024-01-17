@@ -2,9 +2,13 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PdoSqliteDriver;
+use Doctrine\DBAL\Driver\SQLite3\Driver as Sqlite3Driver;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -27,9 +31,17 @@ class DecimalType implements DoctrineTypeDescriptor
 		return TypeCombinator::union(new StringType(), new FloatType(), new IntegerType());
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
-		return TypeCombinator::union(new FloatType(), new IntegerType());
+		if ($driver instanceof Sqlite3Driver || $driver instanceof PdoSqliteDriver) {
+			return new FloatType();
+		}
+
+		// TODO use mixed as fallback for any untested driver or some guess?
+		return new IntersectionType([
+			new StringType(),
+			new AccessoryNumericStringType(),
+		]);
 	}
 
 }

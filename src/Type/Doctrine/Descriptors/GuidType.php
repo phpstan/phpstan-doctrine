@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
@@ -23,7 +24,7 @@ class GuidType implements DoctrineTypeDescriptor
 		return new StringType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

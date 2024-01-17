@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\StringType;
@@ -25,7 +26,7 @@ class BinaryType implements DoctrineTypeDescriptor
 		return new MixedType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

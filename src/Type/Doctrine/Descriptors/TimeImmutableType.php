@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -25,7 +26,7 @@ class TimeImmutableType implements DoctrineTypeDescriptor
 		return new ObjectType(DateTimeImmutable::class);
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

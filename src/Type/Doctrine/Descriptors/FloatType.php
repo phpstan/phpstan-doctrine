@@ -2,7 +2,12 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Driver\PDO\PgSQL\Driver as PdoPgSQLDriver;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
@@ -24,9 +29,15 @@ class FloatType implements DoctrineTypeDescriptor
 		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new IntegerType());
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
-		return TypeCombinator::union(new \PHPStan\Type\FloatType(), new IntegerType());
+		if ($driver instanceof PdoPgSQLDriver) {
+			return new IntersectionType([
+				new StringType(),
+				new AccessoryNumericStringType(),
+			]);
+		}
+		return new \PHPStan\Type\FloatType();
 	}
 
 }

@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\Type;
 
 class StringType implements DoctrineTypeDescriptor
@@ -22,7 +23,7 @@ class StringType implements DoctrineTypeDescriptor
 		return new \PHPStan\Type\StringType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new \PHPStan\Type\StringType();
 	}

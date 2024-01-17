@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
@@ -23,10 +24,10 @@ class BigIntType implements DoctrineTypeDescriptor
 
 	public function getWritableToDatabaseType(): Type
 	{
-		return TypeCombinator::union(new StringType(), new IntegerType());
+		return TypeCombinator::union(new StringType());
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new IntegerType();
 	}

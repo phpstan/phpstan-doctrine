@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
@@ -27,7 +28,7 @@ class SimpleArrayType implements DoctrineTypeDescriptor
 		return new ArrayType(new MixedType(), new StringType());
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

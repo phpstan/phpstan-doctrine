@@ -4,6 +4,7 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -26,7 +27,7 @@ class DateTimeType implements DoctrineTypeDescriptor
 		return new ObjectType(DateTimeInterface::class);
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

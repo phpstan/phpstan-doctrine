@@ -21,6 +21,9 @@ class DescriptorRegistry
 		}
 	}
 
+	/**
+	 * @throws DescriptorNotRegisteredException
+	 */
 	public function get(string $type): DoctrineTypeDescriptor
 	{
 		$typesMap = Type::getTypesMap();
@@ -34,6 +37,14 @@ class DescriptorRegistry
 			throw new DescriptorNotRegisteredException();
 		}
 		return $this->descriptors[$typeClass];
+	}
+
+	public function getByClassName(string $className): DoctrineTypeDescriptor
+	{
+		if (!isset($this->descriptors[$className])) {
+			throw new DescriptorNotRegisteredException();
+		}
+		return $this->descriptors[$className];
 	}
 
 }

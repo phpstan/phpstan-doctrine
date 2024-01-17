@@ -24,6 +24,13 @@ class Many
 	public $id;
 
 	/**
+	 * @Column(type="boolean")
+	 *
+	 * @var bool
+	 */
+	public $boolColumn;
+
+	/**
 	 * @Column(type="integer")
 	 *
 	 * @var int

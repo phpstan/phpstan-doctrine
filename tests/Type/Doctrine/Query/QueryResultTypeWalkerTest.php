@@ -84,6 +84,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		];
 
 		$dataMany = [
+			'boolColumn' => [true, false],
 			'intColumn' => [1, 2],
 			'stringColumn' => ['A', 'B'],
 			'stringNullColumn' => ['A', null],
@@ -124,9 +125,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$one->manies = new ArrayCollection();
 
 			foreach (self::combinations($dataMany) as $combinationMany) {
-				[$intColumnMany, $stringColumnMany, $stringNullColumnMany] = $combinationMany;
+				[$boolColumnMany, $intColumnMany, $stringColumnMany, $stringNullColumnMany] = $combinationMany;
 				$many = new Many();
 				$many->id = (string) $id++;
+				$many->boolColumn = $boolColumnMany;
 				$many->intColumn = $intColumnMany;
 				$many->stringColumn = $stringColumnMany;
 				$many->stringNullColumn = $stringNullColumnMany;
@@ -189,7 +191,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 	/**
 	 * @param Type|null $expectedTypePhpGte81 If null, it is expected to be the same as $expectedTypePhpGte81
-	 * @dataProvider getTestData
+	 * @dataProvider getDebugData
 	 */
 	public function test(
 		Type $expectedTypePhpLte80,
@@ -216,14 +218,15 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, self::getContainer()->getByType(PhpVersion::class));
 
 		$type = $typeBuilder->getResultType();
-		$expectedType = self::getContainer()->getByType(PhpVersion::class)->getVersionId() >= 80100 && $expectedTypePhpGte81 !== null
+		$phpVersion = self::getContainer()->getByType(PhpVersion::class);
+		$expectedType = $phpVersion->getVersionId() >= 80100 && $expectedTypePhpGte81 !== null
 			? $expectedTypePhpGte81
 			: $expectedTypePhpLte80;
 
 		self::assertSame(
 			$expectedType->describe(VerbosityLevel::precise()),
 			$type->describe(VerbosityLevel::precise()),
-			sprintf("Query %s\n failed expectation\n", $dql)
+			sprintf("Query %s\n failed expectation for PHP {$phpVersion->getVersionString()}\n", $dql)
 		);
 
 		// Double-check our expectations
@@ -244,6 +247,125 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				)
 			);
 		}
+	}
+
+	/**
+	 * @return iterable<string,array{Type,?Type,string,2?:string|null}>
+	 */
+	public function getDebugData(): iterable
+	{
+		yield 'abs function' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), new IntegerType()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull(new IntegerType())],
+				[new ConstantIntegerType(3), new IntegerType()],
+				[new ConstantIntegerType(4), new MixedType()],
+			]),
+			$this->constantArray([
+				[new ConstantIntegerType(1), $this->unumeric()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull($this->unumeric())],
+				[new ConstantIntegerType(3), $this->unumeric()],
+				[new ConstantIntegerType(4), new MixedType()],
+			]),
+			'
+				SELECT		ABS(m.intColumn),
+							ABS(NULLIF(m.intColumn, 1)),
+							ABS(-1),
+							ABS(\'foo\')
+				FROM		QueryResult\Entities\Many m
+			',
+		];
+		//      yield 'enum in expression' => [
+		//          $this->constantArray([
+		//              [
+		//                  new ConstantIntegerType(1),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('a'),
+		//                      new ConstantStringType('b')
+		//                  ),
+		//              ],
+		//              [
+		//                  new ConstantIntegerType(2),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('1'),
+		//                      new ConstantStringType('2')
+		//                  ),
+		//              ],
+		//              [
+		//                  new ConstantIntegerType(3),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('1'),
+		//                      new ConstantStringType('2')
+		//                  ),
+		//              ],
+		//          ]),
+		//          $this->constantArray([
+		//              [
+		//                  new ConstantIntegerType(1),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('a'),
+		//                      new ConstantStringType('b')
+		//                  ),
+		//              ],
+		//              [
+		//                  new ConstantIntegerType(2),
+		//                  TypeCombinator::union(
+		//                      new ConstantIntegerType(1),
+		//                      new ConstantIntegerType(2)
+		//                  ),
+		//              ],
+		//              [
+		//                  new ConstantIntegerType(3),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('1'),
+		//                      new ConstantStringType('2')
+		//                  ),
+		//              ],
+		//          ]),
+		//          '
+		//                  SELECT      COALESCE(e.stringEnumColumn, e.stringEnumColumn),
+		//                              COALESCE(e.intEnumColumn, e.intEnumColumn),
+		//                              COALESCE(e.intEnumOnStringColumn, e.intEnumOnStringColumn)
+		//                  FROM        QueryResult\EntitiesEnum\EntityWithEnum e
+		//              ',
+		//      ];
+		//      yield 'debug' => [
+		//          $this->constantArray([
+		//              [
+		//                  new ConstantStringType('boolColumn'),
+		//                  new BooleanType()
+		//              ],
+		//          ]),
+		//          null,
+		//          '
+		//              SELECT      m.boolColumn
+		//              FROM        QueryResult\Entities\Many m
+		//          ',
+		//      ];
+		//      yield 'debug' => [
+		//          $this->constantArray([
+		//              [
+		//                  new ConstantStringType('foo'),
+		//                  TypeCombinator::union(
+		//                      new ConstantStringType('0'),
+		//                      new ConstantStringType('1')
+		//                  ),
+		//              ],
+		//          ]),
+		//          $this->constantArray([
+		//              [
+		//                  new ConstantStringType('foo'),
+		//                  TypeCombinator::union(
+		//                      new ConstantIntegerType(0),
+		//                      new ConstantIntegerType(1)
+		//                  ),
+		//              ],
+		//          ]),
+		//          '
+		//              SELECT      COALESCE(m.boolColumn, m.boolColumn) AS foo
+		//              FROM        QueryResult\Entities\Many m
+		//          ',
+		//      ];
 	}
 
 	/**
@@ -1346,21 +1468,21 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'abs function' => [
 			$this->constantArray([
-				[new ConstantIntegerType(1), $this->numericString()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->numericString())],
-				[new ConstantIntegerType(3), $this->numericString()],
-				[new ConstantIntegerType(4), TypeCombinator::union($this->numericString())],
+				[new ConstantIntegerType(1), new IntegerType()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull(new IntegerType())],
+				[new ConstantIntegerType(3), new IntegerType()],
+				[new ConstantIntegerType(4), new MixedType()],
 			]),
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->unumeric()],
 				[new ConstantIntegerType(2), TypeCombinator::addNull($this->unumeric())],
 				[new ConstantIntegerType(3), $this->unumeric()],
-				[new ConstantIntegerType(4), TypeCombinator::union($this->unumeric())],
+				[new ConstantIntegerType(4), new MixedType()],
 			]),
 			'
 				SELECT		ABS(m.intColumn),
 							ABS(NULLIF(m.intColumn, 1)),
-							ABS(1),
+							ABS(-1),
 							ABS(\'foo\')
 				FROM		QueryResult\Entities\Many m
 			',

@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\Type;
@@ -24,7 +25,7 @@ class BlobType implements DoctrineTypeDescriptor
 		return new MixedType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new MixedType();
 	}

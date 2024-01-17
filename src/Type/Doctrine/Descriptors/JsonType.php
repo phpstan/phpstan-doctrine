@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use JsonSerializable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -50,7 +51,7 @@ class JsonType implements DoctrineTypeDescriptor
 		return self::getJsonType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new StringType();
 	}

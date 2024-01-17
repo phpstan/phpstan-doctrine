@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Driver;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 
@@ -23,7 +24,7 @@ class SmallIntType implements DoctrineTypeDescriptor
 		return new IntegerType();
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(Driver $driver): Type
 	{
 		return new IntegerType();
 	}
