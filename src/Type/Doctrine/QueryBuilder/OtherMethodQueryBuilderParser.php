@@ -21,6 +21,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use function array_key_exists;
 use function is_array;
 use function sprintf;
 
@@ -36,7 +37,11 @@ class OtherMethodQueryBuilderParser
 	/** @var Container */
 	private $container;
 
-	/** @var array<string, list<QueryBuilderType>> */
+	/**
+	 * Null if the method is currently being processed
+	 *
+	 * @var array<string, list<QueryBuilderType>|null>
+	 */
 	private $cache = [];
 
 	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
@@ -64,9 +69,15 @@ class OtherMethodQueryBuilderParser
 
 		$cacheKey = $this->buildCacheKey($fileName, $className, $methodName);
 
-		if (isset($this->cache[$cacheKey])) {
+		if (array_key_exists($cacheKey, $this->cache)) {
+			if ($this->cache[$cacheKey] === null) {
+				return []; // recursion
+			}
+
 			return $this->cache[$cacheKey];
 		}
+
+		$this->cache[$cacheKey] = null;
 
 		$nodes = $this->parser->parseFile($fileName);
 		$classNode = $this->findClassNode($className, $nodes);

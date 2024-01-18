@@ -71,6 +71,21 @@ class QueryBuilderExpressionTypeResolverTest
 		$qb->indexBy('m', 'm.intColumn');
 	}
 
+	private function getQueryBuilderRecursively(EntityManagerInterface $em): QueryBuilder
+	{
+		return $this->getQueryBuilderRecursively($em);
+	}
+
+	private function getQueryBuilderRecursivelyInLoop(EntityManagerInterface $em): QueryBuilder
+	{
+		return $this->getQueryBuilderRecursivelyInLoop2($em);
+	}
+
+	private function getQueryBuilderRecursivelyInLoop2(EntityManagerInterface $em): QueryBuilder
+	{
+		return $this->getQueryBuilderRecursivelyInLoop($em);
+	}
+
 	private function getQueryBuilder(EntityManagerInterface $em): QueryBuilder
 	{
 		return $em->createQueryBuilder()
