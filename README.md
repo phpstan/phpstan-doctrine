@@ -152,6 +152,20 @@ $query->getOneOrNullResult(Query::HYDRATE_OBJECT); // User
 
 This is due to the design of the `Query` class preventing from determining the hydration mode used by these functions unless it is specified explicitly during the call.
 
+### Problematic approaches
+
+Not every QueryBuilder can be statically analysed, here are few advices to maximize type inferring:
+- Do not pass QueryBuilder to methods
+- Do not use dynamic expressions in QueryBuilder methods (mainly in `select`/`join`/`from`/`set`)
+
+You can enable reporting of places where inferring is unavailable by:
+
+```neon
+parameters:
+	doctrine:
+		reportDynamicQueryBuilders: true
+```
+
 ## Custom types
 
 If your application uses custom Doctrine types, you can write your own type descriptors to analyse them properly.
