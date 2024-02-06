@@ -28,7 +28,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 	protected function initialize(): void
 	{
 		$drivers = [];
-		if (class_exists(AnnotationReader::class)) {
+		if (class_exists(AnnotationDriver::class) && class_exists(AnnotationReader::class)) {
 			$docParser = new DocParser();
 			$docParser->setIgnoreNotImportedAnnotations(true);
 			$drivers[] = new AnnotationDriver(new AnnotationReader($docParser));
@@ -47,7 +47,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 			'memory' => true,
 		], $config);
 
-		$em = EntityManager::create($connection, $config);
+		$em = new EntityManager($connection, $config);
 		$this->setEntityManager($em);
 		parent::initialize();
 
@@ -59,7 +59,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 	 * @param class-string<T> $className
 	 * @return ClassMetadata<T>
 	 */
-	protected function newClassMetadataInstance($className)
+	protected function newClassMetadataInstance($className): ClassMetadata
 	{
 		return new ClassMetadata($className);
 	}

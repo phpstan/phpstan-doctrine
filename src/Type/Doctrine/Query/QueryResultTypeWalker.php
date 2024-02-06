@@ -5,7 +5,6 @@ namespace PHPStan\Type\Doctrine\Query;
 use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -169,10 +168,7 @@ class QueryResultTypeWalker extends SqlWalker
 		parent::__construct($query, $parserResult, $queryComponents);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkSelectStatement(AST\SelectStatement $AST)
+	public function walkSelectStatement(AST\SelectStatement $AST): string
 	{
 		$this->typeBuilder->setSelectQuery();
 		$this->hasAggregateFunction = $this->hasAggregateFunction($AST);
@@ -189,42 +185,37 @@ class QueryResultTypeWalker extends SqlWalker
 		return '';
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkUpdateStatement(AST\UpdateStatement $AST)
+	public function walkUpdateStatement(AST\UpdateStatement $AST): string
+	{
+		return $this->marshalType(new MixedType());
+	}
+
+	public function walkDeleteStatement(AST\DeleteStatement $AST): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $identVariable
 	 */
-	public function walkDeleteStatement(AST\DeleteStatement $AST)
+	public function walkEntityIdentificationVariable($identVariable): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string      $identificationVariable
+	 * @param string|null $fieldName
 	 */
-	public function walkEntityIdentificationVariable($identVariable)
+	public function walkIdentificationVariable($identificationVariable, $fieldName = null): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression $pathExpr
 	 */
-	public function walkIdentificationVariable($identificationVariable, $fieldName = null)
-	{
-		return $this->marshalType(new MixedType());
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkPathExpression($pathExpr)
+	public function walkPathExpression($pathExpr): string
 	{
 		$fieldName = $pathExpr->field;
 		$dqlAlias = $pathExpr->identificationVariable;
@@ -287,17 +278,17 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SelectClause $selectClause
 	 */
-	public function walkSelectClause($selectClause)
+	public function walkSelectClause($selectClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\FromClause $fromClause
 	 */
-	public function walkFromClause($fromClause)
+	public function walkFromClause($fromClause): string
 	{
 		foreach ($fromClause->identificationVariableDeclarations as $identificationVariableDecl) {
 			assert($identificationVariableDecl instanceof AST\Node);
@@ -309,9 +300,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\IdentificationVariableDeclaration $identificationVariableDecl
 	 */
-	public function walkIdentificationVariableDeclaration($identificationVariableDecl)
+	public function walkIdentificationVariableDeclaration($identificationVariableDecl): string
 	{
 		if ($identificationVariableDecl->indexBy !== null) {
 			$identificationVariableDecl->indexBy->dispatch($this);
@@ -327,7 +318,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\IndexBy $indexBy
 	 */
 	public function walkIndexBy($indexBy): void
 	{
@@ -336,25 +327,27 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\RangeVariableDeclaration $rangeVariableDeclaration
 	 */
-	public function walkRangeVariableDeclaration($rangeVariableDeclaration)
+	public function walkRangeVariableDeclaration($rangeVariableDeclaration): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\JoinAssociationDeclaration 								  $joinAssociationDeclaration
+	 * @param int                            								  $joinType
+	 * @param AST\ConditionalExpression|AST\Phase2OptimizableConditional|null $condExpr
 	 */
-	public function walkJoinAssociationDeclaration($joinAssociationDeclaration, $joinType = AST\Join::JOIN_TYPE_INNER, $condExpr = null)
+	public function walkJoinAssociationDeclaration($joinAssociationDeclaration, $joinType = AST\Join::JOIN_TYPE_INNER, $condExpr = null): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Functions\FunctionNode $function
 	 */
-	public function walkFunction($function)
+	public function walkFunction($function): string
 	{
 		switch (true) {
 			case $function instanceof AST\Functions\AvgFunction:
@@ -570,33 +563,33 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\OrderByClause $orderByClause
 	 */
-	public function walkOrderByClause($orderByClause)
+	public function walkOrderByClause($orderByClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\OrderByItem $orderByItem
 	 */
-	public function walkOrderByItem($orderByItem)
+	public function walkOrderByItem($orderByItem): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\HavingClause $havingClause
 	 */
-	public function walkHavingClause($havingClause)
+	public function walkHavingClause($havingClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Join $join
 	 */
-	public function walkJoin($join)
+	public function walkJoin($join): string
 	{
 		$joinType = $join->joinType;
 		$joinDeclaration = $join->joinAssociationDeclaration;
@@ -620,9 +613,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\CoalesceExpression $coalesceExpression
 	 */
-	public function walkCoalesceExpression($coalesceExpression)
+	public function walkCoalesceExpression($coalesceExpression): string
 	{
 		$expressionTypes = [];
 		$allTypesContainNull = true;
@@ -649,9 +642,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NullIfExpression $nullIfExpression
 	 */
-	public function walkNullIfExpression($nullIfExpression)
+	public function walkNullIfExpression($nullIfExpression): string
 	{
 		$firstExpression = $nullIfExpression->firstExpression;
 
@@ -667,10 +660,7 @@ class QueryResultTypeWalker extends SqlWalker
 		return $this->marshalType($type);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkGeneralCaseExpression(AST\GeneralCaseExpression $generalCaseExpression)
+	public function walkGeneralCaseExpression(AST\GeneralCaseExpression $generalCaseExpression): string
 	{
 		$whenClauses = $generalCaseExpression->whenClauses;
 		$elseScalarExpression = $generalCaseExpression->elseScalarExpression;
@@ -705,9 +695,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleCaseExpression $simpleCaseExpression
 	 */
-	public function walkSimpleCaseExpression($simpleCaseExpression)
+	public function walkSimpleCaseExpression($simpleCaseExpression): string
 	{
 		$whenClauses = $simpleCaseExpression->simpleWhenClauses;
 		$elseScalarExpression = $simpleCaseExpression->elseScalarExpression;
@@ -742,9 +732,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SelectExpression $selectExpression
 	 */
-	public function walkSelectExpression($selectExpression)
+	public function walkSelectExpression($selectExpression): string
 	{
 		$expr = $selectExpression->expression;
 		$hidden = $selectExpression->hiddenAliasResultVariable;
@@ -864,49 +854,47 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\QuantifiedExpression $qExpr
 	 */
-	public function walkQuantifiedExpression($qExpr)
+	public function walkQuantifiedExpression($qExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Subselect $subselect
 	 */
-	public function walkSubselect($subselect)
+	public function walkSubselect($subselect): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SubselectFromClause $subselectFromClause
 	 */
-	public function walkSubselectFromClause($subselectFromClause)
+	public function walkSubselectFromClause($subselectFromClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleSelectClause $simpleSelectClause
 	 */
-	public function walkSimpleSelectClause($simpleSelectClause)
+	public function walkSimpleSelectClause($simpleSelectClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkParenthesisExpression(AST\ParenthesisExpression $parenthesisExpression)
+	public function walkParenthesisExpression(AST\ParenthesisExpression $parenthesisExpression): string
 	{
 		return $parenthesisExpression->expression->dispatch($this);
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NewObjectExpression $newObjectExpression
+	 * @param string|null             $newObjectResultAlias
 	 */
-	public function walkNewObject($newObjectExpression, $newObjectResultAlias = null)
+	public function walkNewObject($newObjectExpression, $newObjectResultAlias = null): string
 	{
 		for ($i = 0; $i < count($newObjectExpression->args); $i++) {
 			$this->scalarResultCounter++;
@@ -918,17 +906,17 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleSelectExpression $simpleSelectExpression
 	 */
-	public function walkSimpleSelectExpression($simpleSelectExpression)
+	public function walkSimpleSelectExpression($simpleSelectExpression): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\AggregateExpression $aggExpression
 	 */
-	public function walkAggregateExpression($aggExpression)
+	public function walkAggregateExpression($aggExpression): string
 	{
 		switch ($aggExpression->functionName) {
 			case 'MAX':
@@ -950,145 +938,142 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\GroupByClause $groupByClause
 	 */
-	public function walkGroupByClause($groupByClause)
+	public function walkGroupByClause($groupByClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression|string $groupByItem
 	 */
-	public function walkGroupByItem($groupByItem)
+	public function walkGroupByItem($groupByItem): string
+	{
+		return $this->marshalType(new MixedType());
+	}
+
+	public function walkDeleteClause(AST\DeleteClause $deleteClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\UpdateClause $updateClause
 	 */
-	public function walkDeleteClause(AST\DeleteClause $deleteClause)
+	public function walkUpdateClause($updateClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\UpdateItem $updateItem
 	 */
-	public function walkUpdateClause($updateClause)
+	public function walkUpdateItem($updateItem): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\WhereClause|null $whereClause
 	 */
-	public function walkUpdateItem($updateItem)
+	public function walkWhereClause($whereClause): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalExpression|AST\Phase2OptimizableConditional $condExpr
 	 */
-	public function walkWhereClause($whereClause)
+	public function walkConditionalExpression($condExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalTerm|AST\ConditionalPrimary|AST\ConditionalFactor $condTerm
 	 */
-	public function walkConditionalExpression($condExpr)
+	public function walkConditionalTerm($condTerm): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalFactor|AST\ConditionalPrimary $factor
 	 */
-	public function walkConditionalTerm($condTerm)
+	public function walkConditionalFactor($factor): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalPrimary $primary
 	 */
-	public function walkConditionalFactor($factor)
+	public function walkConditionalPrimary($primary): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ExistsExpression $existsExpr
 	 */
-	public function walkConditionalPrimary($primary)
+	public function walkExistsExpression($existsExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\CollectionMemberExpression $collMemberExpr
 	 */
-	public function walkExistsExpression($existsExpr)
+	public function walkCollectionMemberExpression($collMemberExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\EmptyCollectionComparisonExpression $emptyCollCompExpr
 	 */
-	public function walkCollectionMemberExpression($collMemberExpr)
+	public function walkEmptyCollectionComparisonExpression($emptyCollCompExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NullComparisonExpression $nullCompExpr
 	 */
-	public function walkEmptyCollectionComparisonExpression($emptyCollCompExpr)
+	public function walkNullComparisonExpression($nullCompExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $inExpr
 	 */
-	public function walkNullComparisonExpression($nullCompExpr)
+	public function walkInExpression($inExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\InstanceOfExpression $instanceOfExpr
 	 */
-	public function walkInExpression($inExpr)
+	public function walkInstanceOfExpression($instanceOfExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $inParam
 	 */
-	public function walkInstanceOfExpression($instanceOfExpr)
+	public function walkInParameter($inParam): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Literal $literal
 	 */
-	public function walkInParameter($inParam)
-	{
-		return $this->marshalType(new MixedType());
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function walkLiteral($literal)
+	public function walkLiteral($literal): string
 	{
 		switch ($literal->type) {
 			case AST\Literal::STRING:
@@ -1123,49 +1108,49 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\BetweenExpression $betweenExpr
 	 */
-	public function walkBetweenExpression($betweenExpr)
+	public function walkBetweenExpression($betweenExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\LikeExpression $likeExpr
 	 */
-	public function walkLikeExpression($likeExpr)
+	public function walkLikeExpression($likeExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression $stateFieldPathExpression
 	 */
-	public function walkStateFieldPathExpression($stateFieldPathExpression)
+	public function walkStateFieldPathExpression($stateFieldPathExpression): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ComparisonExpression $compExpr
 	 */
-	public function walkComparisonExpression($compExpr)
+	public function walkComparisonExpression($compExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\InputParameter $inputParam
 	 */
-	public function walkInputParameter($inputParam)
+	public function walkInputParameter($inputParam): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ArithmeticExpression $arithmeticExpr
 	 */
-	public function walkArithmeticExpression($arithmeticExpr)
+	public function walkArithmeticExpression($arithmeticExpr): string
 	{
 		if ($arithmeticExpr->simpleArithmeticExpression !== null) {
 			return $arithmeticExpr->simpleArithmeticExpression->dispatch($this);
@@ -1179,9 +1164,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $simpleArithmeticExpr
 	 */
-	public function walkSimpleArithmeticExpression($simpleArithmeticExpr)
+	public function walkSimpleArithmeticExpression($simpleArithmeticExpr): string
 	{
 		$types = [];
 
@@ -1201,9 +1186,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $term
 	 */
-	public function walkArithmeticTerm($term)
+	public function walkArithmeticTerm($term): string
 	{
 		if (!$term instanceof AST\ArithmeticTerm) {
 			return $this->marshalType(new MixedType());
@@ -1227,9 +1212,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $factor
 	 */
-	public function walkArithmeticFactor($factor)
+	public function walkArithmeticFactor($factor): string
 	{
 		if (!$factor instanceof AST\ArithmeticFactor) {
 			return $this->marshalType(new MixedType());
@@ -1244,9 +1229,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $primary
 	 */
-	public function walkArithmeticPrimary($primary)
+	public function walkArithmeticPrimary($primary): string
 	{
 		// ResultVariable (TODO)
 		if (is_string($primary)) {
@@ -1261,17 +1246,17 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $stringPrimary
 	 */
-	public function walkStringPrimary($stringPrimary)
+	public function walkStringPrimary($stringPrimary): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $resultVariable
 	 */
-	public function walkResultVariable($resultVariable)
+	public function walkResultVariable($resultVariable): string
 	{
 		return $this->marshalType(new MixedType());
 	}
@@ -1298,10 +1283,10 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * @param ClassMetadataInfo<object> $class
+	 * @param ClassMetadata<object> $class
 	 * @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field
 	 */
-	private function getTypeOfField(ClassMetadataInfo $class, string $fieldName): array
+	private function getTypeOfField(ClassMetadata $class, string $fieldName): array
 	{
 		assert(isset($class->fieldMappings[$fieldName]));
 
