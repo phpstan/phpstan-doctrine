@@ -1,6 +1,6 @@
 <?php // lint >= 8.1
 
-namespace PHPStan\Rules\Doctrine\ORMAttributes;
+namespace PHPStan\Rules\Doctrine\ORMEnum;
 
 use Doctrine\ORM\Mapping as ORM;
 

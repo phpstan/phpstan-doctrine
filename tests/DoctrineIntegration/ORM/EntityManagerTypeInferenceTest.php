@@ -20,7 +20,7 @@ class EntityManagerTypeInferenceTest extends TypeInferenceTestCase
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/queryBuilder.php');
 
 		$version = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal3 = $version !== null && strpos($version, '3.') === 0;
+		$hasDbal3 = $version !== null && (strpos($version, '3.') === 0 || strpos($version, '4.'));
 
 		if ($hasDbal3) {
 			yield from $this->gatherAssertTypes(__DIR__ . '/data/dbalQueryBuilderExecuteDynamicReturnDbal3.php');

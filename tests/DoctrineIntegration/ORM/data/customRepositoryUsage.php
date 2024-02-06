@@ -68,6 +68,7 @@ class Example
 /**
  * @ORM\Entity(repositoryClass=MyRepository::class)
  */
+#[ORM\Entity(repositoryClass: MyRepository::class)]
 class MyEntity
 {
 	/**
@@ -77,6 +78,9 @@ class MyEntity
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 	public function doSomethingElse(): void

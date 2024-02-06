@@ -30,6 +30,7 @@ class Example
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class MyEntity
 {
 	/**
@@ -39,6 +40,9 @@ class MyEntity
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 	public function doSomething(): void

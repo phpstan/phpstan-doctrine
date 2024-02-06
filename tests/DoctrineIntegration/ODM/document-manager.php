@@ -10,7 +10,11 @@ use Symfony\Component\Cache\DoctrineProvider;
 $config = new Configuration();
 $config->setProxyDir(__DIR__);
 $config->setProxyNamespace('PHPstan\Doctrine\OdmProxies');
-$config->setMetadataCacheImpl(new DoctrineProvider(new ArrayAdapter()));
+
+if (class_exists(DoctrineProvider::class)) {
+	$config->setMetadataCacheImpl(new DoctrineProvider(new ArrayAdapter()));
+}
+
 $config->setHydratorDir(__DIR__);
 $config->setHydratorNamespace('PHPstan\Doctrine\OdmHydrators');
 
