@@ -2,18 +2,18 @@
 
 namespace PHPStan\DoctrineIntegration\ORM\EntityManagerMergeReturn;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use function PHPStan\Testing\assertType;
 
 class Example
 {
 	/**
-	 * @var EntityManagerInterface
+	 * @var EntityManager
 	 */
 	private $entityManager;
 
-	public function __construct(EntityManagerInterface $entityManager)
+	public function __construct(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
