@@ -2,6 +2,7 @@
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
@@ -35,10 +36,10 @@ Type::overrideType(
 	DateTimeImmutableType::class
 );
 
-return EntityManager::create(
-	[
+return new EntityManager(
+	DriverManager::getConnection([
 		'driver' => 'pdo_sqlite',
 		'memory' => true,
-	],
+	]),
 	$config
 );
