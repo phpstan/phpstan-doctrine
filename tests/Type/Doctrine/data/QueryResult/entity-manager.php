@@ -2,6 +2,7 @@
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Column;
@@ -30,10 +31,10 @@ if (property_exists(Column::class, 'enumType') && PHP_VERSION_ID >= 80100) {
 
 $config->setMetadataDriverImpl($metadataDriver);
 
-return EntityManager::create(
-	[
+return new EntityManager(
+	DriverManager::getConnection([
 		'driver' => 'pdo_sqlite',
 		'memory' => true,
-	],
+	]),
 	$config
 );

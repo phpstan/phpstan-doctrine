@@ -2,6 +2,7 @@
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -18,10 +19,10 @@ $config->setMetadataDriverImpl(
 	)
 );
 
-return EntityManager::create(
-	[
+return new EntityManager(
+	DriverManager::getConnection([
 		'driver' => 'pdo_sqlite',
 		'memory' => true,
-	],
+	]),
 	$config
 );
