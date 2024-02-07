@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
+#[ORM\Entity]
 class EntityWithAGeneratedId
 {
 
@@ -16,18 +17,23 @@ class EntityWithAGeneratedId
 	 * @ORM\Column
 	 * @readonly
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column]
 	private int $id; // ok, ID is generated
 
 	/**
 	 * @ORM\Column
 	 * @readonly
 	 */
+	#[ORM\Column]
 	private int $unassigned;
 
 	/**
 	 * @ORM\Column
 	 * @readonly
 	 */
+	#[ORM\Column]
 	private int $doubleAssigned;
 
 	public function __construct(int $doubleAssigned)
@@ -41,6 +47,7 @@ class EntityWithAGeneratedId
 /**
  * @ORM\Entity(readOnly=true)
  */
+#[ORM\Entity(readOnly: true)]
 class ReadOnlyEntity
 {
 
@@ -49,6 +56,8 @@ class ReadOnlyEntity
 	 * @ORM\Column
 	 * @readonly
 	 */
+	#[ORM\Id]
+	#[ORM\Column]
 	private int $id; // ok, entity is read only
 
 }
@@ -56,6 +65,7 @@ class ReadOnlyEntity
 /**
  * @ORM\Entity(readOnly=true)
  */
+#[ORM\Entity(readOnly: true)]
 class ReadOnlyEntityWithConstructor
 {
 
@@ -64,6 +74,8 @@ class ReadOnlyEntityWithConstructor
 	 * @ORM\Column
 	 * @readonly
 	 */
+	#[ORM\Id]
+	#[ORM\Column]
 	private int $id;
 
 	public function __construct()

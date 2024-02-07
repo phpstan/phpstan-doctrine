@@ -21,6 +21,10 @@ use Doctrine\ORM\Mapping\OneToMany;
  *  "child"="QueryResult\Entities\JoinedChild"
  * })
  */
+#[Entity]
+#[InheritanceType('JOINED')]
+#[DiscriminatorColumn(name: 'discr', type: 'string')]
+#[DiscriminatorMap(['child' => JoinedChild::class])]
 abstract class JoinedParent
 {
 	/**
@@ -29,6 +33,7 @@ abstract class JoinedParent
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
 	public $id;
 
 	/**
@@ -36,6 +41,7 @@ abstract class JoinedParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $parentColumn;
 
 	/**
@@ -43,5 +49,6 @@ abstract class JoinedParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer', nullable: true)]
 	public $parentNullColumn;
 }

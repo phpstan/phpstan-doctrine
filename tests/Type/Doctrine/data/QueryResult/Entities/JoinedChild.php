@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @Entity
  */
+#[Entity]
 class JoinedChild extends JoinedParent
 {
 	/**
@@ -20,6 +21,7 @@ class JoinedChild extends JoinedParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $childColumn;
 
 	/**
@@ -27,5 +29,6 @@ class JoinedChild extends JoinedParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer', nullable: true)]
 	public $childNullColumn;
 }

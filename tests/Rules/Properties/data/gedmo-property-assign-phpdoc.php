@@ -8,10 +8,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity
  */
+#[ORM\Entity]
 class EntityWithAPhpDocGemdoLocaleField
 {
     /**
      * @Gedmo\Locale
      */
+	#[Gedmo\Locale]
     private string $locale; // ok, locale is written and read by gedmo listeners
 }

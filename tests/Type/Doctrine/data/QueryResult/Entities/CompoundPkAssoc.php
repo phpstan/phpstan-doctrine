@@ -15,6 +15,7 @@ use QueryResult\Entities\One;
 /**
  * @Entity
  */
+#[Entity]
 class CompoundPkAssoc
 {
 	/**
@@ -24,6 +25,9 @@ class CompoundPkAssoc
 	 *
 	 * @var One
 	 */
+	#[ManyToOne(targetEntity: One::class)]
+	#[JoinColumn(nullable: false)]
+	#[Id]
 	public $one;
 
 	/**
@@ -32,5 +36,7 @@ class CompoundPkAssoc
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
+	#[Id]
 	public $version;
 }

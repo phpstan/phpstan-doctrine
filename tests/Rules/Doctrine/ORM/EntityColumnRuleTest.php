@@ -368,15 +368,15 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data-enum/enum-type.php'], [
 			[
-				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORMAttributes\FooEnum but property expects PHPStan\Rules\Doctrine\ORMAttributes\BarEnum.',
+				'Property PHPStan\Rules\Doctrine\ORMEnum\Foo::$type2 type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORMEnum\FooEnum but property expects PHPStan\Rules\Doctrine\ORMEnum\BarEnum.',
 				35,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORMAttributes\BarEnum but database expects PHPStan\Rules\Doctrine\ORMAttributes\FooEnum.',
+				'Property PHPStan\Rules\Doctrine\ORMEnum\Foo::$type2 type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORMEnum\BarEnum but database expects PHPStan\Rules\Doctrine\ORMEnum\FooEnum.',
 				35,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type3 type mapping mismatch: backing type string of enum PHPStan\Rules\Doctrine\ORMAttributes\FooEnum does not match database type int.',
+				'Property PHPStan\Rules\Doctrine\ORMEnum\Foo::$type3 type mapping mismatch: backing type string of enum PHPStan\Rules\Doctrine\ORMEnum\FooEnum does not match database type int.',
 				38,
 			],
 		]);

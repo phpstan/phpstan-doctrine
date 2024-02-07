@@ -21,6 +21,10 @@ use Doctrine\ORM\Mapping\OneToMany;
  *  "child"="QueryResult\Entities\SingleTableChild"
  * })
  */
+#[Entity]
+#[InheritanceType('SINGLE_TABLE')]
+#[DiscriminatorColumn(name: 'discr', type: 'string')]
+#[DiscriminatorMap(['child' => SingleTableChild::class])]
 abstract class SingleTableParent
 {
 	/**
@@ -29,6 +33,8 @@ abstract class SingleTableParent
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
+	#[Id]
 	public $id;
 
 	/**
@@ -36,6 +42,7 @@ abstract class SingleTableParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $parentColumn;
 
 	/**
@@ -43,5 +50,6 @@ abstract class SingleTableParent
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer', nullable: true)]
 	public $parentNullColumn;
 }

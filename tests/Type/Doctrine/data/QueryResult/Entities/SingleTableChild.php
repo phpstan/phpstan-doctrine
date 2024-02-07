@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @Entity
  */
+#[Entity]
 class SingleTableChild extends SingleTableParent
 {
 	/**
@@ -20,5 +21,6 @@ class SingleTableChild extends SingleTableParent
 	 *
 	 * @var int|null
 	 */
+	#[Column(type: 'integer', nullable: true)]
 	public $childNullColumn;
 }

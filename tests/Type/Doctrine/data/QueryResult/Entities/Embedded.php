@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @Embeddable
  */
+#[Embeddable]
 class Embedded
 {
 	/**
@@ -22,6 +23,7 @@ class Embedded
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $intColumn;
 
 	/**
@@ -29,6 +31,7 @@ class Embedded
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'string')]
 	public $stringColumn;
 
 	/**
@@ -36,6 +39,7 @@ class Embedded
 	 *
 	 * @var string|null
 	 */
+	#[Column(type: 'string', nullable: true)]
 	public $stringNullColumn;
 
 	/**
@@ -43,5 +47,6 @@ class Embedded
 	 *
 	 * @var NestedEmbedded
 	 */
+	#[ORMEmbedded(class: NestedEmbedded::class)]
 	public $nestedEmbedded;
 }

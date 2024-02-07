@@ -33,9 +33,9 @@ class EntityMappingExceptionRuleTest extends RuleTestCase
 		if (PHP_VERSION_ID < 80100) {
 			self::markTestSkipped('Test requires PHP 8.1.');
 		}
-		$this->analyse([__DIR__ . '/data-attributes/enum-type-without-pk.php'], [
+		$this->analyse([__DIR__ . '/data-enum/enum-type-without-pk.php'], [
 			[
-				'No identifier/primary key specified for Entity "PHPStan\Rules\Doctrine\ORMAttributes\FooWithoutPK". Every Entity must have an identifier/primary key.',
+				'No identifier/primary key specified for Entity "PHPStan\Rules\Doctrine\ORMEnum\FooWithoutPK". Every Entity must have an identifier/primary key.',
 				7,
 			],
 		]);

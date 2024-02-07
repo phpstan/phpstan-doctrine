@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 /**
  * @Entity
  */
+#[Entity]
 class One
 {
 	/**
@@ -22,6 +23,8 @@ class One
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
+	#[Id]
 	public $id;
 
 	/**
@@ -29,6 +32,7 @@ class One
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $intColumn;
 
 	/**
@@ -36,6 +40,7 @@ class One
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'string')]
 	public $stringColumn;
 
 	/**
@@ -43,6 +48,7 @@ class One
 	 *
 	 * @var string|null
 	 */
+	#[Column(type: 'string', nullable: true)]
 	public $stringNullColumn;
 
 	/**
@@ -51,6 +57,8 @@ class One
 	 *
 	 * @var SubOne
 	 */
+	#[OneToOne(targetEntity: SubOne::class, cascade: ['persist'])]
+	#[JoinColumn(nullable: false)]
 	public $subOne;
 
 	/**
@@ -58,6 +66,7 @@ class One
 	 *
 	 * @var Collection<int,Many>
 	 */
+	#[OneToMany(targetEntity: Many::class, mappedBy: 'one')]
 	public $manies;
 
 	/**
@@ -65,6 +74,7 @@ class One
 	 *
 	 * @var Embedded
 	 */
+	#[ORMEmbedded(class: Embedded::class)]
 	public $embedded;
 
 	public function __construct()

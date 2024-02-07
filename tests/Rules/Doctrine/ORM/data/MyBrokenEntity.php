@@ -47,7 +47,7 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 * @ORM\Column(type="datetime_immutable")
 	 * @var \DateTime
 	 */
-	#[ORM\Column(type: 'date_immutable')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	private $four;
 
 	/**

@@ -33,6 +33,7 @@ class EntityWithBrokenOneToOneRelations
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity|null
 	 */
 	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
+	#[ORM\JoinColumn(nullable: false)]
 	private $oneToOneNullableProperty;
 
 	/**
@@ -48,6 +49,7 @@ class EntityWithBrokenOneToOneRelations
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity
 	 */
 	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
+	#[ORM\JoinColumn(nullable: false)]
 	private $oneToOneNonNullable;
 
 	/**

@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 /**
  * @Entity
  */
+#[Entity]
 class EntityWithEnum
 {
 	/**
@@ -22,20 +23,25 @@ class EntityWithEnum
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
+	#[Id]
 	public $id;
 
 	/**
 	 * @Column(type="string", enumType="QueryResult\EntitiesEnum\StringEnum")
 	 */
+	#[Column(type: 'string', enumType: StringEnum::class)]
 	public $stringEnumColumn;
 
 	/**
 	 * @Column(type="integer", enumType="QueryResult\EntitiesEnum\IntEnum")
 	 */
+	#[Column(type: 'integer', enumType: IntEnum::class)]
 	public $intEnumColumn;
 
 	/**
 	 * @Column(type="string", enumType="QueryResult\EntitiesEnum\IntEnum")
 	 */
+	#[Column(type: 'string', enumType: IntEnum::class)]
 	public $intEnumOnStringColumn;
 }

@@ -15,6 +15,7 @@ use QueryResult\Entities\One;
 /**
  * @Entity
  */
+#[Entity]
 class CompoundPk
 {
 	/**
@@ -23,6 +24,8 @@ class CompoundPk
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'string')]
+	#[Id]
 	public $id;
 
 	/**
@@ -31,5 +34,7 @@ class CompoundPk
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
+	#[Id]
 	public $version;
 }

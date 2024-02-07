@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @Entity
  */
+#[Entity]
 class Many
 {
 	/**
@@ -21,6 +22,8 @@ class Many
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
+	#[Id]
 	public $id;
 
 	/**
@@ -28,6 +31,7 @@ class Many
 	 *
 	 * @var int
 	 */
+	#[Column(type: 'integer')]
 	public $intColumn;
 
 	/**
@@ -35,6 +39,7 @@ class Many
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'string')]
 	public $stringColumn;
 
 	/**
@@ -42,6 +47,7 @@ class Many
 	 *
 	 * @var string|null
 	 */
+	#[Column(type: 'string', nullable: true)]
 	public $stringNullColumn;
 
 	/**
@@ -49,6 +55,7 @@ class Many
 	 *
 	 * @var \DateTime
 	 */
+	#[Column(type: 'datetime')]
 	public $datetimeColumn;
 
 	/**
@@ -56,6 +63,7 @@ class Many
 	 *
 	 * @var \DateTimeImmutable
 	 */
+	#[Column(type: 'datetime_immutable')]
 	public $datetimeImmutableColumn;
 
 	/**
@@ -64,6 +72,7 @@ class Many
 	 *
 	 * @var One
 	 */
+	#[ManyToOne(targetEntity: One::class, inversedBy: 'manies')]
 	public $one;
 
 	/**
@@ -72,6 +81,7 @@ class Many
 	 *
 	 * @var One|null
 	 */
+	#[ManyToOne(targetEntity: One::class)]
 	public $oneNull;
 
 	/**
@@ -79,6 +89,7 @@ class Many
 	 *
 	 * @var One|null
 	 */
+	#[ManyToOne(targetEntity: One::class)]
 	public $oneDefaultNullability;
 
 	/**
@@ -90,6 +101,11 @@ class Many
 	 *
 	 * @var CompoundPk|null
 	 */
+	#[ManyToOne(targetEntity: CompoundPk::class)]
+	#[JoinColumns([
+		new JoinColumn(name: 'compoundPk_id', referencedColumnName: 'id'),
+		new JoinColumn(name: 'compoundPk_version', referencedColumnName: 'version'),
+	])]
 	public $compoundPk;
 
 	/**
@@ -101,18 +117,25 @@ class Many
 	 *
 	 * @var CompoundPkAssoc|null
 	 */
+	#[ManyToOne(targetEntity: CompoundPkAssoc::class)]
+	#[JoinColumns([
+		new JoinColumn(name: 'compoundPk_one', referencedColumnName: 'one_id'),
+		new JoinColumn(name: 'compoundPk_version', referencedColumnName: 'version'),
+	])]
 	public $compoundPkAssoc;
 
 	/**
 	 * @ORM\Column(type="simple_array")
 	 * @var list<string>
 	 */
+	#[Column(type: 'simple_array')]
 	public $simpleArrayColumn;
 }
 
 /**
  * @ORM\Entity
  */
+#[Entity]
 class Bug245Episode
 {
 	/**
@@ -121,6 +144,7 @@ class Bug245Episode
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
 	public $id;
 
 	/**
@@ -133,12 +157,15 @@ class Bug245Episode
 	 * )
 	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
+	#[ORM\OneToMany(targetEntity: Bug245Segment::class, mappedBy: 'episode', cascade: ['persist', 'remove'], orphanRemoval: true)]
+	#[ORM\OrderBy(['position' => 'ASC'])]
 	private $segments;
 }
 
 /**
  * @ORM\Entity
  */
+#[Entity]
 class Bug245Segment
 {
 	/**
@@ -147,6 +174,7 @@ class Bug245Segment
 	 *
 	 * @var string
 	 */
+	#[Column(type: 'bigint')]
 	public $id;
 
 	/**
@@ -158,5 +186,7 @@ class Bug245Segment
 	 * @ORM\JoinColumn(name="episode_id", referencedColumnName="id", nullable=false)
 	 * @var Bug245Episode
 	 */
+	#[ManyToOne(targetEntity: Bug245Episode::class, inversedBy: 'segments', cascase: ['persist'])]
+	#[JoinColumn(name: 'episode_id', referencedColumnName: 'id', nullable: false)]
 	private $episode;
 }

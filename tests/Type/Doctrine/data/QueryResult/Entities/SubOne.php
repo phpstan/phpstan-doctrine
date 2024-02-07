@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 /**
  * @Entity
  */
+#[Entity]
 class SubOne
 {
 	/**
@@ -19,5 +20,8 @@ class SubOne
 	 *
 	 * @var string
 	 */
+	#[GeneratedValue]
+	#[Column(type: 'integer')]
+	#[Id]
 	public $id;
 }
