@@ -7,3 +7,6 @@ parameters:
 		objectManagerLoader: entity-manager.php
 		reportDynamicQueryBuilders: true
 		queryBuilderClass: PHPStan\DoctrineIntegration\ORM\QueryBuilder\CustomQueryBuilder
+
+	bootstrapFiles:
+		- ../../../tests/orm-3-bootstrap.php
