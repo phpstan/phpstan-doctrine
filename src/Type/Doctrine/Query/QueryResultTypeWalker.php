@@ -4,7 +4,6 @@ namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
@@ -35,6 +34,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
+use function array_key_exists;
 use function array_map;
 use function assert;
 use function class_exists;
@@ -56,7 +56,7 @@ use function unserialize;
  *
  * It extends SqlkWalker because AST\Node::dispatch() accepts SqlWalker only
  *
- * @phpstan-type QueryComponent array{metadata: ClassMetadata<object>, parent: mixed, relation: ?array{orderBy: array<array-key, string>, indexBy: ?string, fieldName: string, targetEntity: string, sourceEntity: string, isOwningSide: bool, mappedBy: string, type: int}, map: mixed, nestingLevel: int, token: mixed}
+ * @phpstan-import-type QueryComponent from Parser
  */
 class QueryResultTypeWalker extends SqlWalker
 {
@@ -229,6 +229,7 @@ class QueryResultTypeWalker extends SqlWalker
 		$fieldName = $pathExpr->field;
 		$dqlAlias = $pathExpr->identificationVariable;
 		$qComp = $this->queryComponents[$dqlAlias];
+		assert(array_key_exists('metadata', $qComp));
 		$class = $qComp['metadata'];
 
 		assert($fieldName !== null);
@@ -516,6 +517,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$dqlAlias = $function->pathExpression->identificationVariable;
 				$assocField = $function->pathExpression->field;
 				$queryComp = $this->queryComponents[$dqlAlias];
+				assert(array_key_exists('metadata', $queryComp));
 				$class = $queryComp['metadata'];
 				$assoc = $class->associationMappings[$assocField];
 				$assocClassName = $assoc['targetEntity'];
@@ -756,9 +758,11 @@ class QueryResultTypeWalker extends SqlWalker
 		if (is_string($expr)) {
 			$dqlAlias = $expr;
 			$queryComp = $this->queryComponents[$dqlAlias];
+			assert(array_key_exists('metadata', $queryComp));
 			$class = $queryComp['metadata'];
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $dqlAlias;
 
+			assert(array_key_exists('parent', $queryComp));
 			if ($queryComp['parent'] !== null) {
 				return '';
 			}
@@ -785,6 +789,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			$dqlAlias = $expr->identificationVariable;
 			$qComp = $this->queryComponents[$dqlAlias];
+			assert(array_key_exists('metadata', $qComp));
 			$class = $qComp['metadata'];
 
 			[$typeName, $enumType] = $this->getTypeOfField($class, $fieldName);

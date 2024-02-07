@@ -23,7 +23,6 @@ use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use Ramsey\Uuid\Doctrine\UuidType;
 use const PHP_VERSION_ID;
 
 /**
@@ -46,8 +45,8 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType(CustomNumericType::NAME)) {
 			Type::addType(CustomNumericType::NAME, CustomNumericType::class);
 		}
-		if (!Type::hasType(UuidType::NAME)) {
-			Type::addType(UuidType::NAME, UuidType::class);
+		if (!Type::hasType(FakeTestingUuidType::NAME)) {
+			Type::addType(FakeTestingUuidType::NAME, FakeTestingUuidType::class);
 		}
 		if (!Type::hasType('carbon')) {
 			Type::addType('carbon', CarbonType::class);
@@ -70,7 +69,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new IntegerType(),
 				new StringType(),
 				new SimpleArrayType(),
-				new UuidTypeDescriptor(UuidType::class),
+				new UuidTypeDescriptor(FakeTestingUuidType::class),
 				new ReflectionDescriptor(CarbonImmutableType::class, $this->createBroker()),
 				new ReflectionDescriptor(CarbonType::class, $this->createBroker()),
 				new ReflectionDescriptor(CustomType::class, $this->createBroker()),
