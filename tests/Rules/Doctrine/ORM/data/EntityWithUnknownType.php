@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class EntityWithUnknownType
 {
 
@@ -15,11 +16,14 @@ class EntityWithUnknownType
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 	/**
 	 * @ORM\Column(type="unknown")
 	 * @var int
 	 */
+	#[ORM\Column(type: 'unknown')]
 	private $foo;
 }

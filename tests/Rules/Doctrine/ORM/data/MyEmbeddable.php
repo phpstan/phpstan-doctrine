@@ -7,11 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Embeddable()
  */
+#[ORM\Embeddable]
 class MyEmbeddable
 {
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	private $title;
 }

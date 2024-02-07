@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class GeneratedIdEntity5
 {
 
@@ -15,6 +16,8 @@ class GeneratedIdEntity5
 	 * @ORM\Column(type="integer", nullable=false)
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\Column(type: 'integer', nullable: false)]
 	private $id;
 
 }

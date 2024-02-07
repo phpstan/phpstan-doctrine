@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 final class FinalEntity
 {
 	/**
@@ -16,6 +17,9 @@ final class FinalEntity
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Embeddable()
  */
+#[ORM\Embeddable]
 final class FinalEmbeddable
 {
 	/**
@@ -16,6 +17,9 @@ final class FinalEmbeddable
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 }

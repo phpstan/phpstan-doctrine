@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\MappedSuperclass()
  */
+#[ORM\MappedSuperclass]
 abstract class MyBrokenSuperclass
 {
 
@@ -14,6 +15,7 @@ abstract class MyBrokenSuperclass
 	 * @ORM\Column(type="binary")
 	 * @var int
 	 */
+	#[ORM\Column(type: 'binary')]
 	private $five;
 
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="PHPStan\Rules\Doctrine\ORM\TestRepository")
  */
+#[ORM\Entity()]
 class MySecondEntity
 {
 	/**
@@ -16,12 +17,16 @@ class MySecondEntity
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	private $title;
 
 	/**

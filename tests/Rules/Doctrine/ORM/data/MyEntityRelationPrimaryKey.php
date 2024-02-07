@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class MyEntityRelationPrimaryKey
 {
 	/**
@@ -15,6 +16,8 @@ class MyEntityRelationPrimaryKey
 	 *
 	 * @var MyEntity
 	 */
+	#[ORM\Id]
+	#[ORM\ManyToOne(targetEntity: MyEntity::class)]
 	private $id;
 
 }

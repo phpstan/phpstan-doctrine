@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class GeneratedIdEntity1
 {
 
@@ -16,6 +17,9 @@ class GeneratedIdEntity1
 	 * @ORM\Column(type="bigint")
 	 * @var string
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'bigint')]
 	private $id;
 
 }

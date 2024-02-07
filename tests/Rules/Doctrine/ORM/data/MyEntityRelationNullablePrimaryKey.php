@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class MyEntityRelationNullablePrimaryKey
 {
 	/**
@@ -15,6 +16,8 @@ class MyEntityRelationNullablePrimaryKey
 	 *
 	 * @var MyEntity|null
 	 */
+	#[ORM\Id]
+	#[ORM\ManyToOne(targetEntity: MyEntity::class)]
 	private $id;
 
 }

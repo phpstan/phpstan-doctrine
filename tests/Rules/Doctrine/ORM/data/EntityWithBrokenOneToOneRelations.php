@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class EntityWithBrokenOneToOneRelations
 {
 
@@ -15,12 +16,15 @@ class EntityWithBrokenOneToOneRelations
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORm\Column(type: 'integer')]
 	private $id;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity|null
 	 */
+	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
 	private $oneToOneNullableBoth;
 
 	/**
@@ -28,12 +32,14 @@ class EntityWithBrokenOneToOneRelations
 	 * @ORM\JoinColumn(nullable=false)
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity|null
 	 */
+	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
 	private $oneToOneNullableProperty;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity
 	 */
+	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
 	private $oneToOneNullableColumn;
 
 	/**
@@ -41,12 +47,14 @@ class EntityWithBrokenOneToOneRelations
 	 * @ORM\JoinColumn(nullable=false)
 	 * @var \PHPStan\Rules\Doctrine\ORM\AnotherEntity
 	 */
+	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
 	private $oneToOneNonNullable;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="PHPStan\Rules\Doctrine\ORM\AnotherEntity")
 	 * @var \PHPStan\Rules\Doctrine\ORM\MyEntity|null
 	 */
+	#[ORM\OneToOne(targetEntity: AnotherEntity::class)]
 	private $oneToOneWrongClass;
 
 }

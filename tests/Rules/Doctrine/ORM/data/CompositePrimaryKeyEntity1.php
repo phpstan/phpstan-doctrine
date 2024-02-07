@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class CompositePrimaryKeyEntity1
 {
 
@@ -16,6 +17,9 @@ class CompositePrimaryKeyEntity1
 	 * @ORM\Column(type="bigint", nullable=true)
 	 * @var string
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'bigint', nullable: true)]
 	private $id;
 
 	/**
@@ -23,6 +27,8 @@ class CompositePrimaryKeyEntity1
 	 * @ORM\Column(type="string")
 	 * @var string|null
 	 */
+	#[ORM\Id]
+	#[ORM\Column(type: 'string')]
 	private $country;
 
 }

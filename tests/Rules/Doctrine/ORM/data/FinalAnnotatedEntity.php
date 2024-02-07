@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @final
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class FinalAnnotatedEntity
 {
 	/**
@@ -17,6 +18,9 @@ class FinalAnnotatedEntity
 	 *
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 }
