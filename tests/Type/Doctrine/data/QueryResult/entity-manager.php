@@ -7,6 +7,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\DoctrineProvider;
@@ -35,6 +36,15 @@ if (class_exists(AnnotationDriver::class) && class_exists(AnnotationReader::clas
 			[__DIR__ . '/EntitiesEnum']
 		), 'QueryResult\EntitiesEnum\\');
 	}
+} else {
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/Entities']),
+		'QueryResult\Entities\\'
+	);
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/EntitiesEnum']),
+		'QueryResult\EntitiesEnum\\'
+	);
 }
 
 $config->setMetadataDriverImpl($metadataDriver);

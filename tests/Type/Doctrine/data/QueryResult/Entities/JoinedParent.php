@@ -34,6 +34,7 @@ abstract class JoinedParent
 	 * @var string
 	 */
 	#[Column(type: 'bigint')]
+	#[Id]
 	public $id;
 
 	/**
