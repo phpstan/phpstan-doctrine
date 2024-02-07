@@ -11,12 +11,12 @@
     },
     {
         "message": "Method Doctrine\\ORM\\EntityRepository<object>::createQueryBuilder() invoked with 0 parameters, 1-2 required.",
-        "line": 239,
+        "line": 243,
         "ignorable": true
     },
     {
         "message": "Could not analyse QueryBuilder with unknown beginning.",
-        "line": 241,
+        "line": 245,
         "ignorable": true
     }
 ]

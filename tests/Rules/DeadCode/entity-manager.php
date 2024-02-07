@@ -29,6 +29,11 @@ if (class_exists(AnnotationDriver::class) && class_exists(AnnotationReader::clas
 		),
 		'PHPStan\\Rules\\DeadCode\\ORM\\'
 	);
+} else {
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/data']),
+		'PHPStan\\Rules\\DeadCode\\ORM\\'
+	);
 }
 
 if (PHP_VERSION_ID >= 80100) {

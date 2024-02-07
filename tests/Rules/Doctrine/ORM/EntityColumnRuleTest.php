@@ -104,67 +104,67 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
-				19,
+				23,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
-				25,
+				30,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$two type mapping mismatch: property can contain string|null but database expects string.',
-				31,
-			],
-			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$three type mapping mismatch: database can contain DateTime but property expects DateTimeImmutable.',
 				37,
 			],
 			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$three type mapping mismatch: database can contain DateTime but property expects DateTimeImmutable.',
+				44,
+			],
+			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: database can contain DateTimeImmutable but property expects DateTime.',
-				43,
+				51,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: property can contain DateTime but database expects DateTimeImmutable.',
-				43,
+				51,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: database can contain Ramsey\Uuid\UuidInterface but property expects int.',
-				72,
+				85,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: property can contain int but database expects Ramsey\Uuid\UuidInterface|string.',
-				72,
+				85,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$arrayOrNull type mapping mismatch: property can contain array|null but database expects array.',
-				96,
+				113,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$arrayOfIntegersOrNull type mapping mismatch: property can contain array|null but database expects array.',
-				102,
+				120,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects numeric-string.',
-				126,
+				148,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbon type mapping mismatch: database can contain Carbon\Carbon but property expects Carbon\CarbonImmutable.',
-				132,
+				155,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
-				138,
+				162,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
-				156,
+				183,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
-				162,
+				190,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
-				162,
+				190,
 			],
 		]);
 	}
@@ -179,55 +179,55 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
-				19,
+				23,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
-				25,
+				30,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$three type mapping mismatch: database can contain DateTime but property expects DateTimeImmutable.',
-				37,
+				44,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: database can contain DateTimeImmutable but property expects DateTime.',
-				43,
+				51,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$four type mapping mismatch: property can contain DateTime but database expects DateTimeImmutable.',
-				43,
+				51,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: database can contain Ramsey\Uuid\UuidInterface but property expects int.',
-				72,
+				85,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$uuidInvalidType type mapping mismatch: property can contain int but database expects Ramsey\Uuid\UuidInterface|string.',
-				72,
+				85,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$numericString type mapping mismatch: database can contain string but property expects numeric-string.',
-				126,
+				148,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbon type mapping mismatch: database can contain Carbon\Carbon but property expects Carbon\CarbonImmutable.',
-				132,
+				155,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidCarbonImmutable type mapping mismatch: database can contain Carbon\CarbonImmutable but property expects Carbon\Carbon.',
-				138,
+				162,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$incompatibleJsonValueObject type mapping mismatch: property can contain PHPStan\Rules\Doctrine\ORM\EmptyObject but database expects array|bool|float|int|JsonSerializable|stdClass|string|null.',
-				156,
+				183,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
-				162,
+				190,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
-				162,
+				190,
 			],
 		]);
 	}
@@ -252,7 +252,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
-				17,
+				19,
 			],
 		]);
 	}
@@ -280,7 +280,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				[
 					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
-					19,
+					23,
 				],
 			],
 			__DIR__ . '/entity-manager.php',
@@ -290,7 +290,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				[
 					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
-					19,
+					23,
 				],
 			],
 			null,
@@ -306,13 +306,13 @@ class EntityColumnRuleTest extends RuleTestCase
 		yield 'no generated value 2' => [__DIR__ . '/data/GeneratedIdEntity6.php', [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity6::$id type mapping mismatch: property can contain int|null but database expects int.',
-				18,
+				21,
 			],
 		], __DIR__ . '/entity-manager.php'];
 		yield 'no generated value 2 2' => [__DIR__ . '/data/GeneratedIdEntity6.php', [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity6::$id type mapping mismatch: property can contain int|null but database expects int.',
-				18,
+				21,
 			],
 		], null];
 	}
@@ -327,15 +327,15 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/EntityWithCustomType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: database can contain DateTimeInterface but property expects int.',
-				24,
+				28,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$foo type mapping mismatch: property can contain int but database expects array.',
-				24,
+				28,
 			],
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithCustomType::$numeric type mapping mismatch: property can contain string but database expects numeric-string.',
-				30,
+				35,
 			],
 		]);
 	}
@@ -350,7 +350,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/EntityWithUnknownType.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\EntityWithUnknownType::$foo: Doctrine type "unknown" does not have any registered descriptor.',
-				24,
+				28,
 			],
 		]);
 	}
@@ -366,7 +366,7 @@ class EntityColumnRuleTest extends RuleTestCase
 
 		$this->allowNullablePropertyForRequiredField = false;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->analyse([__DIR__ . '/data-attributes/enum-type.php'], [
+		$this->analyse([__DIR__ . '/data-enum/enum-type.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type2 type mapping mismatch: database can contain PHPStan\Rules\Doctrine\ORMAttributes\FooEnum but property expects PHPStan\Rules\Doctrine\ORMAttributes\BarEnum.',
 				35,
@@ -405,7 +405,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/bug-306.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\Bug306\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
-				25,
+				29,
 			],
 		]);
 	}
