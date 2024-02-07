@@ -53,7 +53,7 @@ class EntityConstructorNotFinalRuleTest extends RuleTestCase
 			[
 				[
 					'Constructor of class PHPStan\Rules\Doctrine\ORM\EntityFinalConstructor is final which can cause problems with proxies.',
-					12,
+					13,
 				],
 			],
 		];
