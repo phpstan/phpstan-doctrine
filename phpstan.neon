@@ -20,6 +20,7 @@ parameters:
 	bootstrapFiles:
 		- stubs/runtime/Enum/UnitEnum.php
 		- stubs/runtime/Enum/BackedEnum.php
+		- tests/orm-3-bootstrap.php
 
 	ignoreErrors:
 		-

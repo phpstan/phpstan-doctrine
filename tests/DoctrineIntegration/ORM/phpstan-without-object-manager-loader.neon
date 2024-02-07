@@ -6,3 +6,6 @@ parameters:
 	doctrine:
 		reportDynamicQueryBuilders: true
 		queryBuilderClass: PHPStan\DoctrineIntegration\ORM\QueryBuilder\CustomQueryBuilder
+
+	bootstrapFiles:
+		- ../../../tests/orm-3-bootstrap.php
