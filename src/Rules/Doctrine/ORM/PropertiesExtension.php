@@ -56,7 +56,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 				$generated = $mapping['generated'] ?? null;
 			}
 
-			if ($generated !== ClassMetadata::GENERATED_NEVER) {
+			if ($generated !== null && $generated !== ClassMetadata::GENERATED_NEVER) {
 				return true;
 			}
 		}
