@@ -88,7 +88,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 				try {
 					$query = $em->createQuery($queryString);
 					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
-				} catch (ORMException | DBALException | NewDBALException | CommonException | MappingException $e) {
+				} catch (ORMException | DBALException | NewDBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
 					return new QueryType($queryString, null, null);
 				} catch (AssertionError $e) {
 					return new QueryType($queryString, null, null);
