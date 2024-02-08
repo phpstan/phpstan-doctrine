@@ -1180,7 +1180,7 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkSimpleArithmeticExpression($simpleArithmeticExpr): string
 	{
 		if (!$simpleArithmeticExpr instanceof AST\SimpleArithmeticExpression) {
-			return $this->marshalType(new MixedType());
+			return $this->walkArithmeticTerm($simpleArithmeticExpr);
 		}
 
 		$types = [];
@@ -1206,7 +1206,7 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkArithmeticTerm($term): string
 	{
 		if (!$term instanceof AST\ArithmeticTerm) {
-			return $this->marshalType(new MixedType());
+			return $this->walkArithmeticFactor($term);
 		}
 
 		$types = [];
@@ -1232,7 +1232,7 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkArithmeticFactor($factor): string
 	{
 		if (!$factor instanceof AST\ArithmeticFactor) {
-			return $this->marshalType(new MixedType());
+			return $this->walkArithmeticPrimary($factor);
 		}
 
 		$primary = $factor->arithmeticPrimary;
@@ -1265,6 +1265,10 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkStringPrimary($stringPrimary): string
 	{
+		if ($stringPrimary instanceof AST\Node) {
+			return $stringPrimary->dispatch($this);
+		}
+
 		return $this->marshalType(new MixedType());
 	}
 
