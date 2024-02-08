@@ -21,6 +21,16 @@ parameters:
 			path: src/Rules/Doctrine/ORM/EntityRelationRule.php
 
 		-
+			message: "#^Class Doctrine\\\\ORM\\\\Mapping\\\\FieldMapping not found\\.$#"
+			count: 1
+			path: src/Rules/Doctrine/ORM/PropertiesExtension.php
+
+		-
+			message: "#^Instanceof between array\\<string, array\\<string, mixed\\>\\|bool\\|int\\|string\\> and Doctrine\\\\ORM\\\\Mapping\\\\FieldMapping will always evaluate to false\\.$#"
+			count: 1
+			path: src/Rules/Doctrine/ORM/PropertiesExtension.php
+
+		-
 			message: "#^PHPDoc tag @var with type class\\-string is not subtype of native type 'Doctrine\\\\\\\\Bundle…'\\.$#"
 			count: 1
 			path: src/Stubs/Doctrine/StubFilesExtensionLoader.php
