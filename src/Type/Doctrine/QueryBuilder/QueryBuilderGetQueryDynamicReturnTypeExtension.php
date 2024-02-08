@@ -196,7 +196,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		try {
 			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
-		} catch (ORMException | DBALException | CommonException | MappingException $e) {
+		} catch (ORMException | DBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
 			return new QueryType($dql, null);
 		} catch (AssertionError $e) {
 			return new QueryType($dql, null);
