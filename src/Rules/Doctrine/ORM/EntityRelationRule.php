@@ -87,7 +87,7 @@ class EntityRelationRule implements Rule
 
 		$columnType = null;
 		$toMany = false;
-		if ((bool) ($associationMapping['type'] & 3)) { // ClassMetadataInfo::TO_ONE
+		if ((bool) ($associationMapping['type'] & 3)) { // ClassMetadata::TO_ONE
 			$columnType = new ObjectType($associationMapping['targetEntity']);
 			if (in_array($propertyName, $identifiers, true)) {
 				$nullable = false;
@@ -98,7 +98,7 @@ class EntityRelationRule implements Rule
 			if ($nullable) {
 				$columnType = TypeCombinator::addNull($columnType);
 			}
-		} elseif ((bool) ($associationMapping['type'] & 12)) { // ClassMetadataInfo::TO_MANY
+		} elseif ((bool) ($associationMapping['type'] & 12)) { // ClassMetadata::TO_MANY
 			$toMany = true;
 			$columnType = TypeCombinator::intersect(
 				new ObjectType('Doctrine\Common\Collections\Collection'),

@@ -4,7 +4,7 @@ namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
 use Doctrine\ORM\Query\AST\TypedExpression;
@@ -1285,10 +1285,10 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * @param ClassMetadataInfo<object> $class
+	 * @param ClassMetadata<object> $class
 	 * @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field
 	 */
-	private function getTypeOfField(ClassMetadataInfo $class, string $fieldName): array
+	private function getTypeOfField(ClassMetadata $class, string $fieldName): array
 	{
 		assert(isset($class->fieldMappings[$fieldName]));
 
