@@ -19,6 +19,7 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\Descriptors\OptionRelatedDoctrineTypeDescriptor;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\IntegerRangeType;
@@ -227,13 +228,13 @@ class QueryResultTypeWalker extends SqlWalker
 
 		switch ($pathExpr->type) {
 			case AST\PathExpression::TYPE_STATE_FIELD:
-				[$typeName, $enumType] = $this->getTypeOfField($class, $fieldName);
+				[$typeName, $options, $enumType] = $this->getTypeOfField($class, $fieldName);
 
 				$nullable = $this->isQueryComponentNullable($dqlAlias)
 					|| $class->isNullable($fieldName)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $options, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -264,12 +265,12 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$targetFieldName = $identifierFieldNames[0];
-				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
+				[$typeName, $options, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
 				$nullable = ($joinColumn['nullable'] ?? true)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $options, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -530,7 +531,7 @@ class QueryResultTypeWalker extends SqlWalker
 					return $this->marshalType(new MixedType());
 				}
 
-				[$typeName, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
+				[$typeName, $options, $enumType] = $this->getTypeOfField($targetClass, $targetFieldName);
 
 				if (!isset($assoc['joinColumns'])) {
 					return $this->marshalType(new MixedType());
@@ -553,7 +554,7 @@ class QueryResultTypeWalker extends SqlWalker
 					|| $this->isQueryComponentNullable($dqlAlias)
 					|| $this->hasAggregateWithoutGroupBy();
 
-				$fieldType = $this->resolveDatabaseInternalType($typeName, $enumType, $nullable);
+				$fieldType = $this->resolveDatabaseInternalType($typeName, $options, $enumType, $nullable);
 
 				return $this->marshalType($fieldType);
 
@@ -780,13 +781,13 @@ class QueryResultTypeWalker extends SqlWalker
 			assert(array_key_exists('metadata', $qComp));
 			$class = $qComp['metadata'];
 
-			[$typeName, $enumType] = $this->getTypeOfField($class, $fieldName);
+			[$typeName, $options, $enumType] = $this->getTypeOfField($class, $fieldName);
 
 			$nullable = $this->isQueryComponentNullable($dqlAlias)
 				|| $class->isNullable($fieldName)
 				|| $this->hasAggregateWithoutGroupBy();
 
-			$type = $this->resolveDoctrineType($typeName, $enumType, $nullable);
+			$type = $this->resolveDoctrineType($typeName, $options, $enumType, $nullable);
 
 			$this->typeBuilder->addScalar($resultAlias, $type);
 
@@ -1286,7 +1287,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 	/**
 	 * @param ClassMetadata<object> $class
-	 * @return array{string, ?class-string<BackedEnum>} Doctrine type name and enum type of field
+	 * @return array{string, array<string, mixed>, ?class-string<BackedEnum>} Doctrine type name and enum type of field
 	 */
 	private function getTypeOfField(ClassMetadata $class, string $fieldName): array
 	{
@@ -1301,19 +1302,24 @@ class QueryResultTypeWalker extends SqlWalker
 			$enumType = null;
 		}
 
-		return [$type, $enumType];
+		return [$type, $metadata['options'] ?? [], $enumType];
 	}
 
 	/** @param ?class-string<BackedEnum> $enumType */
-	private function resolveDoctrineType(string $typeName, ?string $enumType = null, bool $nullable = false): Type
-	{
+	private function resolveDoctrineType(
+		string $typeName,
+		array $options,
+		?string $enumType = null,
+		bool $nullable = false
+	): Type {
 		if ($enumType !== null) {
 			$type = new ObjectType($enumType);
 		} else {
 			try {
-				$type = $this->descriptorRegistry
-					->get($typeName)
-					->getWritableToPropertyType();
+				$descriptor = $this->descriptorRegistry->get($typeName);
+				$type = $descriptor instanceof OptionRelatedDoctrineTypeDescriptor
+					? $descriptor->getWritableToPropertyType($options)
+					: $descriptor->getWritableToPropertyType();
 				if ($type instanceof NeverType) {
 					$type = new MixedType();
 				}
@@ -1330,12 +1336,13 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/** @param ?class-string<BackedEnum> $enumType */
-	private function resolveDatabaseInternalType(string $typeName, ?string $enumType = null, bool $nullable = false): Type
+	private function resolveDatabaseInternalType(string $typeName, array $options = [], ?string $enumType = null, bool $nullable = false): Type
 	{
 		try {
-			$type = $this->descriptorRegistry
-				->get($typeName)
-				->getDatabaseInternalType();
+			$descriptor = $this->descriptorRegistry->get($typeName);
+			$type = $descriptor instanceof OptionRelatedDoctrineTypeDescriptor::class
+				? $descriptor->getDatabaseInternalType($options)
+				: $descriptor->getDatabaseInternalType();
 		} catch (DescriptorNotRegisteredException $e) {
 			$type = new MixedType();
 		}

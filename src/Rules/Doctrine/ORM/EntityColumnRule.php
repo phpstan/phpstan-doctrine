@@ -11,6 +11,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\Descriptors\OptionRelatedDoctrineTypeDescriptor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
@@ -110,7 +111,9 @@ class EntityColumnRule implements Rule
 			] : [];
 		}
 
-		$writableToPropertyType = $descriptor->getWritableToPropertyType();
+		$writableToPropertyType = $descriptor instanceof OptionRelatedDoctrineTypeDescriptor
+			? $descriptor->getWritableToPropertyType($fieldMapping['options'] ?? [])
+			: $descriptor->getWritableToPropertyType();
 		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
 
 		$enumTypeString = $fieldMapping['enumType'] ?? null;

@@ -10,7 +10,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
-class BigIntType implements DoctrineTypeDescriptor
+class BigIntType implements OptionRelatedDoctrineTypeDescriptor
 {
 
 	public function getType(): string
@@ -18,13 +18,13 @@ class BigIntType implements DoctrineTypeDescriptor
 		return \Doctrine\DBAL\Types\BigIntType::class;
 	}
 
-	public function getWritableToPropertyType(): Type
+	public function getWritableToPropertyType(array $options = []): Type
 	{
 		if (!$this->hasDoctrineDbal4()) {
 			return TypeCombinator::intersect(new StringType(), new AccessoryNumericStringType());
 		}
 
-		if ($this->usePHP64Bit()) { // TODO: Add `|| Bigint is not unsigned`
+		if ($this->usePHP64Bit() || !($options['unsigned'] ?? false)) {
 			return new IntegerType();
 		}
 
@@ -34,20 +34,20 @@ class BigIntType implements DoctrineTypeDescriptor
 		);
 	}
 
-	public function getWritableToDatabaseType(): Type
+	public function getWritableToDatabaseType(array $options = []): Type
 	{
 		if (!$this->hasDoctrineDbal4()) {
 			return TypeCombinator::union(new StringType(), new IntegerType());
 		}
 
-		if ($this->usePHP64Bit()) { // TODO: Add `|| Bigint is not unsigned`
+		if ($this->usePHP64Bit() || !($options['unsigned'] ?? false)) { // TODO: Add `|| Bigint is not unsigned`
 			return new IntegerType();
 		}
 
 		return TypeCombinator::union(new StringType(), new IntegerType());
 	}
 
-	public function getDatabaseInternalType(): Type
+	public function getDatabaseInternalType(array $options = []): Type
 	{
 		return new IntegerType();
 	}
