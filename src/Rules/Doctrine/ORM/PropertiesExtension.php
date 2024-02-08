@@ -3,11 +3,11 @@
 namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\FieldMapping;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use Throwable;
-use function array_key_exists;
 use function in_array;
 
 class PropertiesExtension implements ReadWritePropertiesExtension
@@ -47,7 +47,16 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 		if (isset($metadata->fieldMappings[$propertyName])) {
 			$mapping = $metadata->fieldMappings[$propertyName];
-			if (array_key_exists('generated', $mapping) && $mapping['generated'] !== ClassMetadata::GENERATED_NEVER) {
+
+			if ($mapping instanceof FieldMapping) {
+				// ORM 3
+				$generated = $mapping->generated;
+			} else {
+				// ORM 2
+				$generated = $mapping['generated'] ?? null;
+			}
+
+			if ($generated !== ClassMetadata::GENERATED_NEVER) {
 				return true;
 			}
 		}
