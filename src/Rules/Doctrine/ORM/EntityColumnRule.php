@@ -137,7 +137,7 @@ class EntityColumnRule implements Rule
 		}
 
 		$identifiers = [];
-		if ($metadata->generatorType !== 5) { // ClassMetadataInfo::GENERATOR_TYPE_NONE
+		if ($metadata->generatorType !== 5) { // ClassMetadata::GENERATOR_TYPE_NONE
 			try {
 				$identifiers = $metadata->getIdentifierFieldNames();
 			} catch (Throwable $e) {

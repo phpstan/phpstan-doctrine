@@ -41,6 +41,12 @@ parameters:
 		- stubs/ORM/Id/AbstractIdGenerator.stub
 		- stubs/ORM/Mapping/ClassMetadata.stub
 		- stubs/ORM/Mapping/ClassMetadataInfo.stub
+		- stubs/ORM/Mapping/ManyToManyInverseSideMapping.stub
+		- stubs/ORM/Mapping/ManyToManyOwningSideMapping.stub
+		- stubs/ORM/Mapping/ManyToOneAssociationMapping.stub
+		- stubs/ORM/Mapping/OneToManyAssociationMapping.stub
+		- stubs/ORM/Mapping/OneToOneInverseSideMapping.stub
+		- stubs/ORM/Mapping/OneToOneOwningSideMapping.stub
 		- stubs/ORM/NonUniqueResultException.stub
 		- stubs/ORM/NoResultException.stub
 		- stubs/ORM/ORMException.stub

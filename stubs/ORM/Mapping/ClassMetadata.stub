@@ -93,6 +93,7 @@ namespace Doctrine\ORM\Mapping;
  *    inherited?: class-string,
  *    declared?: class-string,
  * }
+ * @phpstan-type ConcreteAssociationMapping = OneToOneOwningSideMapping|OneToOneInverseSideMapping|ManyToOneAssociationMapping|OneToManyAssociationMapping|ManyToManyOwningSideMapping|ManyToManyInverseSideMapping
  */
 class ClassMetadata extends ClassMetadataInfo
 {
