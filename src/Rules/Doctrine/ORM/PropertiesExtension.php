@@ -7,7 +7,6 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use Throwable;
-use function array_key_exists;
 use function in_array;
 
 class PropertiesExtension implements ReadWritePropertiesExtension
@@ -47,7 +46,7 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 
 		if (isset($metadata->fieldMappings[$propertyName])) {
 			$mapping = $metadata->fieldMappings[$propertyName];
-			if (array_key_exists('generated', $mapping) && $mapping['generated'] !== ClassMetadata::GENERATED_NEVER) {
+			if (isset($mapping['generated']) && $mapping['generated'] !== ClassMetadata::GENERATED_NEVER) {
 				return true;
 			}
 		}
