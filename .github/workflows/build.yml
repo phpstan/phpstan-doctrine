@@ -111,7 +111,9 @@ jobs:
         include:
           - php-version: "8.3"
             dependencies: "highest"
-            update-packages: "composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 -W"
+            update-packages: |
+              composer config extra.patches.doctrine/orm --json --merge '["compatibility/patches/Column.patch", "compatibility/patches/DiscriminatorColumn.patch", "compatibility/patches/DiscriminatorMap.patch", "compatibility/patches/Embeddable.patch", "compatibility/patches/Embedded.patch", "compatibility/patches/Entity.patch", "compatibility/patches/GeneratedValue.patch", "compatibility/patches/Id.patch", "compatibility/patches/InheritanceType.patch", "compatibility/patches/JoinColumn.patch", "compatibility/patches/JoinColumns.patch", "compatibility/patches/ManyToMany.patch", "compatibility/patches/ManyToOne.patch", "compatibility/patches/MappedSuperclass.patch", "compatibility/patches/OneToMany.patch", "compatibility/patches/OneToOne.patch", "compatibility/patches/UniqueConstraint.patch", "compatibility/patches/Version.patch"]'
+              composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 -W
 
     steps:
       - name: "Checkout"

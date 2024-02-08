@@ -1,0 +1,13 @@
+--- src/Mapping/Version.php	2024-02-03 17:50:09
++++ src/Mapping/Version.php	2024-02-08 14:24:16
+@@ -6,6 +6,10 @@
+
+ use Attribute;
+
++/**
++ * @Annotation
++ * @Target("PROPERTY")
++ */
+ #[Attribute(Attribute::TARGET_PROPERTY)]
+ final class Version implements MappingAttribute
+ {

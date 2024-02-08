@@ -1,0 +1,13 @@
+--- src/Mapping/Id.php	2024-02-08 14:18:20
++++ src/Mapping/Id.php	2024-02-08 14:18:23
+@@ -6,6 +6,10 @@
+
+ use Attribute;
+
++/**
++ * @Annotation
++ * @Target("PROPERTY")
++ */
+ #[Attribute(Attribute::TARGET_PROPERTY)]
+ final class Id implements MappingAttribute
+ {
