@@ -127,6 +127,10 @@ jobs:
         if: ${{ matrix.dependencies == 'lowest' }}
         run: "composer update --prefer-lowest --no-interaction --no-progress"
 
+      - name: "Update Doctrine DBAl to ^3"
+        if: matrix.php-version != '7.2' && matrix.dependencies == 'lowest'
+        run: "composer require --dev doctrine/dbal:^3.3.8 --no-interaction --no-progress"
+
       - name: "Install highest dependencies"
         if: ${{ matrix.dependencies == 'highest' }}
         run: "composer update --no-interaction --no-progress"
