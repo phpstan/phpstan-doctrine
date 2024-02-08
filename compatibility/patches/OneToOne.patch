@@ -1,0 +1,16 @@
+--- src/Mapping/OneToOne.php	2024-02-03 17:50:09
++++ src/Mapping/OneToOne.php	2024-02-08 14:23:03
+@@ -5,7 +5,13 @@
+ namespace Doctrine\ORM\Mapping;
+
+ use Attribute;
++use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
+
++/**
++ * @Annotation
++ * @NamedArgumentConstructor()
++ * @Target("PROPERTY")
++ */
+ #[Attribute(Attribute::TARGET_PROPERTY)]
+ final class OneToOne implements MappingAttribute
+ {
