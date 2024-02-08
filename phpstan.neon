@@ -37,3 +37,7 @@ parameters:
 		-
 			message: '#^Call to method getProperty\(\) on an unknown class PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionEnum\.$#'
 			path: src/Rules/Gedmo/PropertiesExtension.php
+		-
+			message: '#^Call to function method_exists\(\) with ''Doctrine\\\\ORM\\\\EntityManager'' and ''create'' will always evaluate to true\.$#'
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+			reportUnmatched: false
