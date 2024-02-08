@@ -240,6 +240,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			case AST\PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION:
 				if (isset($class->associationMappings[$fieldName]['inherited'])) {
+					/** @var class-string $newClassName */
 					$newClassName = $class->associationMappings[$fieldName]['inherited'];
 					$class = $this->em->getClassMetadata($newClassName);
 				}
@@ -255,6 +256,8 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$joinColumn = $assoc['joinColumns'][0];
+
+				/** @var class-string $assocClassName */
 				$assocClassName = $assoc['targetEntity'];
 
 				$targetClass = $this->em->getClassMetadata($assocClassName);
@@ -360,7 +363,7 @@ class QueryResultTypeWalker extends SqlWalker
 				return $function->getSql($this);
 
 			case $function instanceof AST\Functions\AbsFunction:
-				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
+				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
 
 				$type = TypeCombinator::union(
 					IntegerRangeType::fromInterval(0, null),
@@ -442,8 +445,8 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\LocateFunction:
-				$firstExprType = $this->unmarshalType($function->firstStringPrimary->dispatch($this));
-				$secondExprType = $this->unmarshalType($function->secondStringPrimary->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkStringPrimary($function->firstStringPrimary));
+				$secondExprType = $this->unmarshalType($this->walkStringPrimary($function->secondStringPrimary));
 
 				$type = IntegerRangeType::fromInterval(0, null);
 				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
@@ -465,8 +468,8 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\ModFunction:
-				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
-				$secondExprType = $this->unmarshalType($function->secondSimpleArithmeticExpression->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->firstSimpleArithmeticExpression));
+				$secondExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->secondSimpleArithmeticExpression));
 
 				$type = IntegerRangeType::fromInterval(0, null);
 				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
@@ -481,7 +484,7 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\SqrtFunction:
-				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
+				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
 
 				$type = new FloatType();
 				if (TypeCombinator::containsNull($exprType)) {
@@ -492,10 +495,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 			case $function instanceof AST\Functions\SubstringFunction:
 				$stringType = $this->unmarshalType($function->stringPrimary->dispatch($this));
-				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->firstSimpleArithmeticExpression));
 
 				if ($function->secondSimpleArithmeticExpression !== null) {
-					$secondExprType = $this->unmarshalType($function->secondSimpleArithmeticExpression->dispatch($this));
+					$secondExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->secondSimpleArithmeticExpression));
 				} else {
 					$secondExprType = new IntegerType();
 				}
@@ -514,6 +517,8 @@ class QueryResultTypeWalker extends SqlWalker
 				assert(array_key_exists('metadata', $queryComp));
 				$class = $queryComp['metadata'];
 				$assoc = $class->associationMappings[$assocField];
+
+				/** @var class-string $assocClassName */
 				$assocClassName = $assoc['targetEntity'];
 				$targetClass = $this->em->getClassMetadata($assocClassName);
 
@@ -930,7 +935,7 @@ class QueryResultTypeWalker extends SqlWalker
 			case 'AVG':
 			case 'SUM':
 				$type = $this->unmarshalType(
-					$aggExpression->pathExpression->dispatch($this)
+					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
 				);
 
 				return $this->marshalType(TypeCombinator::addNull($type));
@@ -1159,7 +1164,7 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkArithmeticExpression($arithmeticExpr): string
 	{
 		if ($arithmeticExpr->simpleArithmeticExpression !== null) {
-			return $arithmeticExpr->simpleArithmeticExpression->dispatch($this);
+			return $this->walkSimpleArithmeticExpression($arithmeticExpr->simpleArithmeticExpression);
 		}
 
 		if ($arithmeticExpr->subselect !== null) {
@@ -1302,7 +1307,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 		$metadata = $class->fieldMappings[$fieldName];
 
+		/** @var string $type */
 		$type = $metadata['type'];
+
+		/** @var class-string<BackedEnum>|null $enumType */
 		$enumType = $metadata['enumType'] ?? null;
 
 		if (!is_string($enumType) || !class_exists($enumType)) {
