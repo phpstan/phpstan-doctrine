@@ -1,0 +1,14 @@
+--- src/Mapping/Column.php	2024-02-03 17:50:09
++++ src/Mapping/Column.php	2024-02-08 14:19:31
+@@ -7,6 +7,11 @@
+ use Attribute;
+ use BackedEnum;
+
++/**
++ * @Annotation
++ * @NamedArgumentConstructor
++ * @Target({"PROPERTY","ANNOTATION"})
++ */
+ #[Attribute(Attribute::TARGET_PROPERTY)]
+ final class Column implements MappingAttribute
+ {

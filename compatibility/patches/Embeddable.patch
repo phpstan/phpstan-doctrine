@@ -1,0 +1,13 @@
+--- src/Mapping/Embeddable.php	2024-02-03 17:50:09
++++ src/Mapping/Embeddable.php	2024-02-08 14:23:25
+@@ -6,6 +6,10 @@
+
+ use Attribute;
+
++/**
++ * @Annotation
++ * @Target("CLASS")
++ */
+ #[Attribute(Attribute::TARGET_CLASS)]
+ final class Embeddable implements MappingAttribute
+ {
