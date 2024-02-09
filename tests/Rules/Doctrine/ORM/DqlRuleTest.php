@@ -23,7 +23,7 @@ class DqlRuleTest extends RuleTestCase
 	public function testRule(): void
 	{
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
-		if (strpos($ormVersion, '3.') === 0) {
+		if ($ormVersion !== null && strpos($ormVersion, '3.') === 0) {
 			$lexer = 'TokenType';
 		} else {
 			$lexer = 'Lexer';

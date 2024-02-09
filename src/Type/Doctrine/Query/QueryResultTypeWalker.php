@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -815,7 +816,7 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = $this->unmarshalType($expr->dispatch($this));
 
 			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType($expr->getReturnType()->getName());
+				$enforcedType = $this->resolveDoctrineType(Types::INTEGER);
 				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);

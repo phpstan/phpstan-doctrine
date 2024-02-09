@@ -171,7 +171,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		];
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
 		if (!$hasDbal4) {
 			array_unshift($errors, [
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
@@ -242,7 +242,7 @@ class EntityColumnRuleTest extends RuleTestCase
 		];
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
 		if (!$hasDbal4) {
 			array_unshift($errors, [
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
