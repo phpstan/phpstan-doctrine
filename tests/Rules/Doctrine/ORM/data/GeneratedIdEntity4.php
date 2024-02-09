@@ -13,8 +13,8 @@ class GeneratedIdEntity4
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="bigint", nullable=true)
-	 * @var string|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @var int|null
 	 */
 	private $id;
 

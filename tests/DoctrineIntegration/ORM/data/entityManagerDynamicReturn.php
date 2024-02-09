@@ -45,20 +45,6 @@ class Example
 		$test->doSomethingElse();
 	}
 
-	public function getPartialReferenceDynamicType(): void
-	{
-		$test = $this->entityManager->getPartialReference(MyEntity::class, 1);
-
-		if ($test === null) {
-			throw new RuntimeException('Sorry, but no...');
-		}
-
-		assertType(MyEntity::class, $test);
-
-		$test->doSomething();
-		$test->doSomethingElse();
-	}
-
 	/**
 	 * @param class-string $entityName
 	 */

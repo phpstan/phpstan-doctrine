@@ -1,0 +1,11 @@
+--- src/Carbon/Doctrine/DateTimeType.php	2023-12-10 16:33:53
++++ src/Carbon/Doctrine/DateTimeType.php	2024-02-09 11:36:58
+@@ -17,7 +17,7 @@
+     /**
+      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+      */
+-    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DateTime
++    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Carbon
+     {
+         return $this->doConvertToPHPValue($value);
+     }

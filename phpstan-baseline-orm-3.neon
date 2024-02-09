@@ -1,0 +1,56 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to function method_exists\\(\\) with 'Doctrine\\\\\\\\ORM\\\\\\\\EntityManager' and 'create' will always evaluate to false\\.$#"
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: "#^Caught class Doctrine\\\\ORM\\\\ORMException not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/CreateQueryDynamicReturnTypeExtension.php
+
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Types\\\\ArrayType not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ArrayType.php
+
+		-
+			message: "#^Method PHPStan\\\\Type\\\\Doctrine\\\\Descriptors\\\\ArrayType\\:\\:getType\\(\\) should return class\\-string\\<Doctrine\\\\DBAL\\\\Types\\\\Type\\> but returns string\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ArrayType.php
+
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Types\\\\ObjectType not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ObjectType.php
+
+		-
+			message: "#^Method PHPStan\\\\Type\\\\Doctrine\\\\Descriptors\\\\ObjectType\\:\\:getType\\(\\) should return class\\-string\\<Doctrine\\\\DBAL\\\\Types\\\\Type\\> but returns string\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ObjectType.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, mixed given\\.$#"
+			count: 1
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: "#^Only booleans are allowed in \\|\\|, mixed given on the left side\\.$#"
+			count: 2
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: "#^Caught class Doctrine\\\\ORM\\\\ORMException not found\\.$#"
+			count: 1
+			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
+
+		-
+			message: "#^Class Doctrine\\\\DBAL\\\\Types\\\\ArrayType not found\\.$#"
+			count: 1
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$className of static method Doctrine\\\\DBAL\\\\Types\\\\Type\\:\\:addType\\(\\) expects class\\-string\\<Doctrine\\\\DBAL\\\\Types\\\\Type\\>, string given\\.$#"
+			count: 1
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php

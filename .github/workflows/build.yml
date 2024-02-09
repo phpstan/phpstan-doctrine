@@ -106,6 +106,15 @@ jobs:
         dependencies:
           - "lowest"
           - "highest"
+        update-packages:
+          - ""
+        include:
+          - php-version: "8.3"
+            dependencies: "highest"
+            update-packages: |
+              composer config extra.patches.doctrine/orm --json --merge '["compatibility/patches/Base.patch", "compatibility/patches/Column.patch", "compatibility/patches/DateAddFunction.patch", "compatibility/patches/DateSubFunction.patch", "compatibility/patches/DiscriminatorColumn.patch", "compatibility/patches/DiscriminatorMap.patch", "compatibility/patches/Embeddable.patch", "compatibility/patches/Embedded.patch", "compatibility/patches/Entity.patch", "compatibility/patches/GeneratedValue.patch", "compatibility/patches/Id.patch", "compatibility/patches/InheritanceType.patch", "compatibility/patches/JoinColumn.patch", "compatibility/patches/JoinColumns.patch", "compatibility/patches/ManyToMany.patch", "compatibility/patches/ManyToOne.patch", "compatibility/patches/MappedSuperclass.patch", "compatibility/patches/OneToMany.patch", "compatibility/patches/OneToOne.patch", "compatibility/patches/OrderBy.patch", "compatibility/patches/UniqueConstraint.patch", "compatibility/patches/Version.patch"]'
+              composer config extra.patches.carbonphp/carbon-doctrine-types --json --merge '["compatibility/patches/DateTimeImmutableType.patch", "compatibility/patches/DateTimeType.patch"]'
+              composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 -W
 
     steps:
       - name: "Checkout"
@@ -135,6 +144,9 @@ jobs:
         if: ${{ matrix.dependencies == 'highest' }}
         run: "composer update --no-interaction --no-progress"
 
+      - name: "Update packages"
+        run: ${{ matrix.update-packages }}
+
       - name: "Tests"
         run: "make tests"
 
@@ -152,6 +164,11 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+        update-packages:
+          - ""
+        include:
+          - php-version: "8.3"
+            update-packages: "composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 -W"
 
     steps:
       - name: "Checkout"
@@ -171,6 +188,9 @@ jobs:
 
       - name: "Install dependencies"
         run: "composer update --no-interaction --no-progress"
+
+      - name: "Update packages"
+        run: ${{ matrix.update-packages }}
 
       - name: "PHPStan"
         run: "make phpstan"

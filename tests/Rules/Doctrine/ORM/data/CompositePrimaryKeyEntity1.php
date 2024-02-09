@@ -13,8 +13,8 @@ class CompositePrimaryKeyEntity1
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="bigint", nullable=true)
-	 * @var string
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @var int
 	 */
 	private $id;
 

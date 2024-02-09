@@ -1,0 +1,16 @@
+--- src/Mapping/DiscriminatorColumn.php	2024-02-03 17:50:09
++++ src/Mapping/DiscriminatorColumn.php	2024-02-08 14:25:37
+@@ -6,7 +6,13 @@
+
+ use Attribute;
+ use BackedEnum;
++use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
+
++/**
++ * @Annotation
++ * @NamedArgumentConstructor()
++ * @Target("CLASS")
++ */
+ #[Attribute(Attribute::TARGET_CLASS)]
+ final class DiscriminatorColumn implements MappingAttribute
+ {

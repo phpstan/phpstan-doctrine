@@ -2,9 +2,12 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Composer\InstalledVersions;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use function sprintf;
+use function strpos;
 
 /**
  * @extends RuleTestCase<DqlRule>
@@ -19,9 +22,15 @@ class DqlRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		if ($ormVersion !== null && strpos($ormVersion, '3.') === 0) {
+			$lexer = 'TokenType';
+		} else {
+			$lexer = 'Lexer';
+		}
 		$this->analyse([__DIR__ . '/data/dql.php'], [
 			[
-				'DQL: [Syntax Error] line 0, col -1: Error: Expected Doctrine\ORM\Query\Lexer::T_IDENTIFIER, got end of string.',
+				sprintf('DQL: [Syntax Error] line 0, col -1: Error: Expected Doctrine\ORM\Query\%s::T_IDENTIFIER, got end of string.', $lexer),
 				35,
 			],
 			[

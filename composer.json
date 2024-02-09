@@ -19,6 +19,7 @@
 	"require-dev": {
 		"cache/array-adapter": "^1.1",
 		"composer/semver": "^3.3.2",
+		"cweagans/composer-patches": "^1.7.3",
 		"doctrine/annotations": "^1.11 || ^2.0",
 		"doctrine/collections": "^1.6 || ^2.1",
 		"doctrine/common": "^2.7 || ^3.0",
@@ -38,7 +39,10 @@
 		"symfony/cache": "^5.4"
 	},
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"cweagans/composer-patches": true
+		}
 	},
 	"extra": {
 		"phpstan": {

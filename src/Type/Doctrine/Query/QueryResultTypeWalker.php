@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -197,7 +198,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $identVariable
 	 */
 	public function walkEntityIdentificationVariable($identVariable): string
 	{
@@ -205,7 +206,8 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string      $identificationVariable
+	 * @param string|null $fieldName
 	 */
 	public function walkIdentificationVariable($identificationVariable, $fieldName = null): string
 	{
@@ -213,7 +215,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression $pathExpr
 	 */
 	public function walkPathExpression($pathExpr): string
 	{
@@ -239,6 +241,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			case AST\PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION:
 				if (isset($class->associationMappings[$fieldName]['inherited'])) {
+					/** @var class-string $newClassName */
 					$newClassName = $class->associationMappings[$fieldName]['inherited'];
 					$class = $this->em->getClassMetadata($newClassName);
 				}
@@ -254,6 +257,8 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$joinColumn = $assoc['joinColumns'][0];
+
+				/** @var class-string $assocClassName */
 				$assocClassName = $assoc['targetEntity'];
 
 				$targetClass = $this->em->getClassMetadata($assocClassName);
@@ -279,7 +284,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SelectClause $selectClause
 	 */
 	public function walkSelectClause($selectClause): string
 	{
@@ -287,7 +292,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\FromClause $fromClause
 	 */
 	public function walkFromClause($fromClause): string
 	{
@@ -301,7 +306,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\IdentificationVariableDeclaration $identificationVariableDecl
 	 */
 	public function walkIdentificationVariableDeclaration($identificationVariableDecl): string
 	{
@@ -319,7 +324,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\IndexBy $indexBy
 	 */
 	public function walkIndexBy($indexBy): void
 	{
@@ -328,7 +333,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\RangeVariableDeclaration $rangeVariableDeclaration
 	 */
 	public function walkRangeVariableDeclaration($rangeVariableDeclaration): string
 	{
@@ -336,7 +341,9 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\JoinAssociationDeclaration 								  $joinAssociationDeclaration
+	 * @param int                            								  $joinType
+	 * @param AST\ConditionalExpression|AST\Phase2OptimizableConditional|null $condExpr
 	 */
 	public function walkJoinAssociationDeclaration($joinAssociationDeclaration, $joinType = AST\Join::JOIN_TYPE_INNER, $condExpr = null): string
 	{
@@ -344,7 +351,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Functions\FunctionNode $function
 	 */
 	public function walkFunction($function): string
 	{
@@ -357,7 +364,7 @@ class QueryResultTypeWalker extends SqlWalker
 				return $function->getSql($this);
 
 			case $function instanceof AST\Functions\AbsFunction:
-				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
+				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
 
 				$type = TypeCombinator::union(
 					IntegerRangeType::fromInterval(0, null),
@@ -439,8 +446,8 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\LocateFunction:
-				$firstExprType = $this->unmarshalType($function->firstStringPrimary->dispatch($this));
-				$secondExprType = $this->unmarshalType($function->secondStringPrimary->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkStringPrimary($function->firstStringPrimary));
+				$secondExprType = $this->unmarshalType($this->walkStringPrimary($function->secondStringPrimary));
 
 				$type = IntegerRangeType::fromInterval(0, null);
 				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
@@ -462,8 +469,8 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\ModFunction:
-				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
-				$secondExprType = $this->unmarshalType($function->secondSimpleArithmeticExpression->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->firstSimpleArithmeticExpression));
+				$secondExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->secondSimpleArithmeticExpression));
 
 				$type = IntegerRangeType::fromInterval(0, null);
 				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
@@ -478,7 +485,7 @@ class QueryResultTypeWalker extends SqlWalker
 				return $this->marshalType($type);
 
 			case $function instanceof AST\Functions\SqrtFunction:
-				$exprType = $this->unmarshalType($function->simpleArithmeticExpression->dispatch($this));
+				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
 
 				$type = new FloatType();
 				if (TypeCombinator::containsNull($exprType)) {
@@ -489,10 +496,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 			case $function instanceof AST\Functions\SubstringFunction:
 				$stringType = $this->unmarshalType($function->stringPrimary->dispatch($this));
-				$firstExprType = $this->unmarshalType($function->firstSimpleArithmeticExpression->dispatch($this));
+				$firstExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->firstSimpleArithmeticExpression));
 
 				if ($function->secondSimpleArithmeticExpression !== null) {
-					$secondExprType = $this->unmarshalType($function->secondSimpleArithmeticExpression->dispatch($this));
+					$secondExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->secondSimpleArithmeticExpression));
 				} else {
 					$secondExprType = new IntegerType();
 				}
@@ -511,6 +518,8 @@ class QueryResultTypeWalker extends SqlWalker
 				assert(array_key_exists('metadata', $queryComp));
 				$class = $queryComp['metadata'];
 				$assoc = $class->associationMappings[$assocField];
+
+				/** @var class-string $assocClassName */
 				$assocClassName = $assoc['targetEntity'];
 				$targetClass = $this->em->getClassMetadata($assocClassName);
 
@@ -563,7 +572,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\OrderByClause $orderByClause
 	 */
 	public function walkOrderByClause($orderByClause): string
 	{
@@ -571,7 +580,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\OrderByItem $orderByItem
 	 */
 	public function walkOrderByItem($orderByItem): string
 	{
@@ -579,7 +588,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\HavingClause $havingClause
 	 */
 	public function walkHavingClause($havingClause): string
 	{
@@ -587,7 +596,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Join $join
 	 */
 	public function walkJoin($join): string
 	{
@@ -613,7 +622,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\CoalesceExpression $coalesceExpression
 	 */
 	public function walkCoalesceExpression($coalesceExpression): string
 	{
@@ -642,7 +651,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NullIfExpression $nullIfExpression
 	 */
 	public function walkNullIfExpression($nullIfExpression): string
 	{
@@ -695,7 +704,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleCaseExpression $simpleCaseExpression
 	 */
 	public function walkSimpleCaseExpression($simpleCaseExpression): string
 	{
@@ -732,7 +741,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SelectExpression $selectExpression
 	 */
 	public function walkSelectExpression($selectExpression): string
 	{
@@ -807,7 +816,7 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = $this->unmarshalType($expr->dispatch($this));
 
 			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType($expr->getReturnType()->getName());
+				$enforcedType = $this->resolveDoctrineType(Types::INTEGER);
 				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
@@ -857,7 +866,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\QuantifiedExpression $qExpr
 	 */
 	public function walkQuantifiedExpression($qExpr): string
 	{
@@ -865,7 +874,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Subselect $subselect
 	 */
 	public function walkSubselect($subselect): string
 	{
@@ -873,7 +882,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SubselectFromClause $subselectFromClause
 	 */
 	public function walkSubselectFromClause($subselectFromClause): string
 	{
@@ -881,7 +890,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleSelectClause $simpleSelectClause
 	 */
 	public function walkSimpleSelectClause($simpleSelectClause): string
 	{
@@ -894,7 +903,8 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NewObjectExpression $newObjectExpression
+	 * @param string|null             $newObjectResultAlias
 	 */
 	public function walkNewObject($newObjectExpression, $newObjectResultAlias = null): string
 	{
@@ -908,7 +918,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\SimpleSelectExpression $simpleSelectExpression
 	 */
 	public function walkSimpleSelectExpression($simpleSelectExpression): string
 	{
@@ -916,7 +926,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\AggregateExpression $aggExpression
 	 */
 	public function walkAggregateExpression($aggExpression): string
 	{
@@ -926,7 +936,7 @@ class QueryResultTypeWalker extends SqlWalker
 			case 'AVG':
 			case 'SUM':
 				$type = $this->unmarshalType(
-					$aggExpression->pathExpression->dispatch($this)
+					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
 				);
 
 				return $this->marshalType(TypeCombinator::addNull($type));
@@ -940,7 +950,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\GroupByClause $groupByClause
 	 */
 	public function walkGroupByClause($groupByClause): string
 	{
@@ -948,7 +958,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression|string $groupByItem
 	 */
 	public function walkGroupByItem($groupByItem): string
 	{
@@ -961,7 +971,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\UpdateClause $updateClause
 	 */
 	public function walkUpdateClause($updateClause): string
 	{
@@ -969,7 +979,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\UpdateItem $updateItem
 	 */
 	public function walkUpdateItem($updateItem): string
 	{
@@ -977,7 +987,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\WhereClause|null $whereClause
 	 */
 	public function walkWhereClause($whereClause): string
 	{
@@ -985,7 +995,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalExpression|AST\Phase2OptimizableConditional $condExpr
 	 */
 	public function walkConditionalExpression($condExpr): string
 	{
@@ -993,7 +1003,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalTerm|AST\ConditionalPrimary|AST\ConditionalFactor $condTerm
 	 */
 	public function walkConditionalTerm($condTerm): string
 	{
@@ -1001,7 +1011,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalFactor|AST\ConditionalPrimary $factor
 	 */
 	public function walkConditionalFactor($factor): string
 	{
@@ -1009,7 +1019,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ConditionalPrimary $primary
 	 */
 	public function walkConditionalPrimary($primary): string
 	{
@@ -1017,7 +1027,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ExistsExpression $existsExpr
 	 */
 	public function walkExistsExpression($existsExpr): string
 	{
@@ -1025,7 +1035,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\CollectionMemberExpression $collMemberExpr
 	 */
 	public function walkCollectionMemberExpression($collMemberExpr): string
 	{
@@ -1033,7 +1043,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\EmptyCollectionComparisonExpression $emptyCollCompExpr
 	 */
 	public function walkEmptyCollectionComparisonExpression($emptyCollCompExpr): string
 	{
@@ -1041,7 +1051,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\NullComparisonExpression $nullCompExpr
 	 */
 	public function walkNullComparisonExpression($nullCompExpr): string
 	{
@@ -1049,15 +1059,15 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $inExpr
 	 */
-	public function walkInExpression($inExpr)
+	public function walkInExpression($inExpr): string
 	{
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\InstanceOfExpression $instanceOfExpr
 	 */
 	public function walkInstanceOfExpression($instanceOfExpr): string
 	{
@@ -1065,7 +1075,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $inParam
 	 */
 	public function walkInParameter($inParam): string
 	{
@@ -1073,7 +1083,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Literal $literal
 	 */
 	public function walkLiteral($literal): string
 	{
@@ -1110,7 +1120,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\BetweenExpression $betweenExpr
 	 */
 	public function walkBetweenExpression($betweenExpr): string
 	{
@@ -1118,7 +1128,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\LikeExpression $likeExpr
 	 */
 	public function walkLikeExpression($likeExpr): string
 	{
@@ -1126,7 +1136,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\PathExpression $stateFieldPathExpression
 	 */
 	public function walkStateFieldPathExpression($stateFieldPathExpression): string
 	{
@@ -1134,7 +1144,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ComparisonExpression $compExpr
 	 */
 	public function walkComparisonExpression($compExpr): string
 	{
@@ -1142,7 +1152,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\InputParameter $inputParam
 	 */
 	public function walkInputParameter($inputParam): string
 	{
@@ -1150,12 +1160,12 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\ArithmeticExpression $arithmeticExpr
 	 */
 	public function walkArithmeticExpression($arithmeticExpr): string
 	{
 		if ($arithmeticExpr->simpleArithmeticExpression !== null) {
-			return $arithmeticExpr->simpleArithmeticExpression->dispatch($this);
+			return $this->walkSimpleArithmeticExpression($arithmeticExpr->simpleArithmeticExpression);
 		}
 
 		if ($arithmeticExpr->subselect !== null) {
@@ -1166,10 +1176,14 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param AST\Node|string $simpleArithmeticExpr
 	 */
 	public function walkSimpleArithmeticExpression($simpleArithmeticExpr): string
 	{
+		if (!$simpleArithmeticExpr instanceof AST\SimpleArithmeticExpression) {
+			return $this->walkArithmeticTerm($simpleArithmeticExpr);
+		}
+
 		$types = [];
 
 		foreach ($simpleArithmeticExpr->arithmeticTerms as $term) {
@@ -1188,12 +1202,12 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $term
 	 */
 	public function walkArithmeticTerm($term): string
 	{
 		if (!$term instanceof AST\ArithmeticTerm) {
-			return $this->marshalType(new MixedType());
+			return $this->walkArithmeticFactor($term);
 		}
 
 		$types = [];
@@ -1214,12 +1228,12 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $factor
 	 */
 	public function walkArithmeticFactor($factor): string
 	{
 		if (!$factor instanceof AST\ArithmeticFactor) {
-			return $this->marshalType(new MixedType());
+			return $this->walkArithmeticPrimary($factor);
 		}
 
 		$primary = $factor->arithmeticPrimary;
@@ -1231,7 +1245,7 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $primary
 	 */
 	public function walkArithmeticPrimary($primary): string
 	{
@@ -1248,15 +1262,19 @@ class QueryResultTypeWalker extends SqlWalker
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $stringPrimary
 	 */
 	public function walkStringPrimary($stringPrimary): string
 	{
+		if ($stringPrimary instanceof AST\Node) {
+			return $stringPrimary->dispatch($this);
+		}
+
 		return $this->marshalType(new MixedType());
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $resultVariable
 	 */
 	public function walkResultVariable($resultVariable): string
 	{
@@ -1294,7 +1312,10 @@ class QueryResultTypeWalker extends SqlWalker
 
 		$metadata = $class->fieldMappings[$fieldName];
 
+		/** @var string $type */
 		$type = $metadata['type'];
+
+		/** @var class-string<BackedEnum>|null $enumType */
 		$enumType = $metadata['enumType'] ?? null;
 
 		if (!is_string($enumType) || !class_exists($enumType)) {

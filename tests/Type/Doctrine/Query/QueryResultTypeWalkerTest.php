@@ -49,6 +49,7 @@ use function class_exists;
 use function count;
 use function property_exists;
 use function sprintf;
+use function strpos;
 use function version_compare;
 use const PHP_VERSION_ID;
 
@@ -238,6 +239,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	 */
 	public function getTestData(): iterable
 	{
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
+
 		yield 'just root entity' => [
 			new ObjectType(One::class),
 			'
@@ -354,7 +361,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -376,7 +383,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(Many::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -397,7 +404,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantStringType('one'), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -507,7 +514,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'just root entity and scalars' => [
 			$this->constantArray([
 				[new ConstantIntegerType(0), new ObjectType(One::class)],
-				[new ConstantStringType('id'), $this->numericString()],
+				[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 			]),
 			'
 				SELECT		o, o.id
@@ -1176,37 +1183,39 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		yield 'date_add function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), new StringType()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(4), new StringType()],
-			]),
-			'
+		if (!$hasOrm3) {
+			yield 'date_add function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), new StringType()],
+					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(4), new StringType()],
+				]),
+				'
 				SELECT		DATE_ADD(m.datetimeColumn, m.intColumn, \'day\'),
 							DATE_ADD(m.stringNullColumn, m.intColumn, \'day\'),
 							DATE_ADD(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
 							DATE_ADD(\'2020-01-01\', 7, \'day\')
 				FROM		QueryResult\Entities\Many m
 			',
-		];
+			];
 
-		yield 'date_sub function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), new StringType()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(4), new StringType()],
-			]),
-			'
+			yield 'date_sub function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), new StringType()],
+					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(4), new StringType()],
+				]),
+				'
 				SELECT		DATE_SUB(m.datetimeColumn, m.intColumn, \'day\'),
 							DATE_SUB(m.stringNullColumn, m.intColumn, \'day\'),
 							DATE_SUB(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
 							DATE_SUB(\'2020-01-01\', 7, \'day\')
 				FROM		QueryResult\Entities\Many m
 			',
-		];
+			];
+		}
 
 		yield 'date_diff function' => [
 			$this->constantArray([

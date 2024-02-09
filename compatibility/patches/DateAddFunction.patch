@@ -1,0 +1,10 @@
+--- src/Query/AST/Functions/DateAddFunction.php	2024-02-09 14:22:59
++++ src/Query/AST/Functions/DateAddFunction.php	2024-02-09 14:23:02
+@@ -71,7 +71,6 @@
+     private function dispatchIntervalExpression(SqlWalker $sqlWalker): string
+     {
+         $sql = $this->intervalExpression->dispatch($sqlWalker);
+-        assert(is_numeric($sql));
+
+         return $sql;
+     }
