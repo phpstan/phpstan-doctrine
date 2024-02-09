@@ -4,6 +4,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 
 use Carbon\Doctrine\CarbonImmutableType;
 use Carbon\Doctrine\CarbonType;
+use Composer\InstalledVersions;
 use Doctrine\DBAL\Types\Type;
 use Iterator;
 use PHPStan\Rules\Rule;
@@ -23,6 +24,8 @@ use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use function array_unshift;
+use function strpos;
 use const PHP_VERSION_ID;
 
 /**
@@ -103,11 +106,8 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		$this->allowNullablePropertyForRequiredField = false;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
-			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
-				19,
-			],
+
+		$errors = [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
 				25,
@@ -168,7 +168,18 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
 			],
-		]);
+		];
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+		if (!$hasDbal4) {
+			array_unshift($errors, [
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
+				19,
+			]);
+		}
+
+		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], $errors);
 	}
 
 	/**
@@ -178,11 +189,8 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		$this->allowNullablePropertyForRequiredField = true;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], [
-			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
-				19,
-			],
+
+		$errors = [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
 				25,
@@ -231,7 +239,18 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
 			],
-		]);
+		];
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+		if (!$hasDbal4) {
+			array_unshift($errors, [
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$id type mapping mismatch: database can contain string but property expects int|null.',
+				19,
+			]);
+		}
+
+		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], $errors);
 	}
 
 	/**
