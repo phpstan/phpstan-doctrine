@@ -49,6 +49,7 @@ use function class_exists;
 use function count;
 use function property_exists;
 use function sprintf;
+use function strpos;
 use function version_compare;
 use const PHP_VERSION_ID;
 
@@ -1176,37 +1177,41 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		yield 'date_add function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), new StringType()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(4), new StringType()],
-			]),
-			'
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm3 = strpos($ormVersion, '3.0') === 0;
+		if (!$hasOrm3) {
+			yield 'date_add function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), new StringType()],
+					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(4), new StringType()],
+				]),
+				'
 				SELECT		DATE_ADD(m.datetimeColumn, m.intColumn, \'day\'),
 							DATE_ADD(m.stringNullColumn, m.intColumn, \'day\'),
 							DATE_ADD(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
 							DATE_ADD(\'2020-01-01\', 7, \'day\')
 				FROM		QueryResult\Entities\Many m
 			',
-		];
+			];
 
-		yield 'date_sub function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), new StringType()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-				[new ConstantIntegerType(4), new StringType()],
-			]),
-			'
+			yield 'date_sub function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), new StringType()],
+					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+					[new ConstantIntegerType(4), new StringType()],
+				]),
+				'
 				SELECT		DATE_SUB(m.datetimeColumn, m.intColumn, \'day\'),
 							DATE_SUB(m.stringNullColumn, m.intColumn, \'day\'),
 							DATE_SUB(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
 							DATE_SUB(\'2020-01-01\', 7, \'day\')
 				FROM		QueryResult\Entities\Many m
 			',
-		];
+			];
+		}
 
 		yield 'date_diff function' => [
 			$this->constantArray([
