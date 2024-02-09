@@ -300,7 +300,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			__DIR__ . '/data/GeneratedIdEntity2.php',
 			[
 				[
-					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
+					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain int|null but property expects int.',
 					19,
 				],
 			],
@@ -310,7 +310,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			__DIR__ . '/data/GeneratedIdEntity2.php',
 			[
 				[
-					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain string|null but property expects string.',
+					'Property PHPStan\Rules\Doctrine\ORM\GeneratedIdEntity2::$id type mapping mismatch: database can contain int|null but property expects int.',
 					19,
 				],
 			],

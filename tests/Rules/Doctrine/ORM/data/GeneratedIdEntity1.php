@@ -13,8 +13,8 @@ class GeneratedIdEntity1
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="bigint")
-	 * @var string
+	 * @ORM\Column(type="integer")
+	 * @var int
 	 */
 	private $id;
 
