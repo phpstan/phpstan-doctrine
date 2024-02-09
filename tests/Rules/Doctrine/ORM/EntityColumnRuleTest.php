@@ -54,6 +54,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType('carbon_immutable')) {
 			Type::addType('carbon_immutable', CarbonImmutableType::class);
 		}
+		if (!Type::hasType('array')) {
+			Type::addType('array', \Doctrine\DBAL\Types\ArrayType::class);
+		}
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
