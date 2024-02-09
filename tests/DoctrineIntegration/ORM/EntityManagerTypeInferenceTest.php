@@ -14,14 +14,20 @@ class EntityManagerTypeInferenceTest extends TypeInferenceTestCase
 	 */
 	public function dataFileAsserts(): iterable
 	{
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm2 = $ormVersion !== null && strpos($ormVersion, '2.') === 0;
+		if ($hasOrm2) {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManager-orm2.php');
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerMergeReturn.php');
+		}
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerDynamicReturn.php');
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerMergeReturn.php');
+
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/customRepositoryUsage.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/queryBuilder.php');
 
-		$version = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal3 = $version !== null && strpos($version, '3.') === 0;
-		$hasDbal4 = $version !== null && strpos($version, '4.') === 0;
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal3 = $dbalVersion !== null && strpos($dbalVersion, '3.') === 0;
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
 
 		if ($hasDbal4) {
 			// nothing to test
