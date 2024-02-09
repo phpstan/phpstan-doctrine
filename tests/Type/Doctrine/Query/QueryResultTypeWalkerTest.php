@@ -240,10 +240,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	public function getTestData(): iterable
 	{
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
-		$hasOrm3 = strpos($ormVersion, '3.') === 0;
+		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
-		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
 
 		yield 'just root entity' => [
 			new ObjectType(One::class),

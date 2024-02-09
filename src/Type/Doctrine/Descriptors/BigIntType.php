@@ -45,6 +45,9 @@ class BigIntType implements DoctrineTypeDescriptor
 		}
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		if ($dbalVersion === null) {
+			return false;
+		}
 
 		return strpos($dbalVersion, '4.') === 0;
 	}
