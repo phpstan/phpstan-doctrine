@@ -14,8 +14,14 @@ class EntityManagerWithoutObjectManagerLoaderTypeInferenceTest extends TypeInfer
 	 */
 	public function dataFileAsserts(): iterable
 	{
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm2 = $ormVersion !== null && strpos($ormVersion, '2.') === 0;
+		if ($hasOrm2) {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManager-orm2.php');
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerMergeReturn.php');
+		}
+
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerDynamicReturn.php');
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/entityManagerMergeReturn.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/customRepositoryUsage.php');
 
 		$version = InstalledVersions::getVersion('doctrine/dbal');
