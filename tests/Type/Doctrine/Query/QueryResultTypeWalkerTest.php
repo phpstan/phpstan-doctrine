@@ -239,6 +239,12 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	 */
 	public function getTestData(): iterable
 	{
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm3 = strpos($ormVersion, '3.') === 0;
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = strpos($dbalVersion, '4.') === 0;
+
 		yield 'just root entity' => [
 			new ObjectType(One::class),
 			'
@@ -355,7 +361,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -377,7 +383,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(Many::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -398,7 +404,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantStringType('one'), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $this->numericString()],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				])
 			),
@@ -508,7 +514,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'just root entity and scalars' => [
 			$this->constantArray([
 				[new ConstantIntegerType(0), new ObjectType(One::class)],
-				[new ConstantStringType('id'), $this->numericString()],
+				[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 			]),
 			'
 				SELECT		o, o.id
@@ -1177,8 +1183,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
-		$hasOrm3 = strpos($ormVersion, '3.0') === 0;
 		if (!$hasOrm3) {
 			yield 'date_add function' => [
 				$this->constantArray([
