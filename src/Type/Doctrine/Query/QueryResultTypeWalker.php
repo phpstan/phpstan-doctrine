@@ -933,11 +933,28 @@ class QueryResultTypeWalker extends SqlWalker
 		switch ($aggExpression->functionName) {
 			case 'MAX':
 			case 'MIN':
+				$type = $this->unmarshalType(
+					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
+				);
+
+				return $this->marshalType(TypeCombinator::addNull($type));
+
 			case 'AVG':
+				$type = $this->unmarshalType(
+					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
+				);
+
+				$type = TypeCombinator::union($type, $type->toFloat());
+				$type = TypeUtils::generalizeType($type, GeneralizePrecision::lessSpecific());
+
+				return $this->marshalType(TypeCombinator::addNull($type));
+
 			case 'SUM':
 				$type = $this->unmarshalType(
 					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
 				);
+
+				$type = TypeUtils::generalizeType($type, GeneralizePrecision::lessSpecific());
 
 				return $this->marshalType(TypeCombinator::addNull($type));
 

@@ -29,7 +29,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 	protected function initialize(): void
 	{
 		$drivers = [];
-		if (class_exists(AnnotationReader::class)) {
+		if (class_exists(AnnotationDriver::class) && class_exists(AnnotationReader::class)) {
 			$docParser = new DocParser();
 			$docParser->setIgnoreNotImportedAnnotations(true);
 			$drivers[] = new AnnotationDriver(new AnnotationReader($docParser));
