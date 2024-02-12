@@ -14,7 +14,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
-use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
@@ -723,10 +722,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[
 					new ConstantIntegerType(5),
 					TypeCombinator::union(
-						new ConstantStringType('1'),
-						new ConstantIntegerType(1),
-						new ConstantStringType('1.0'),
-						new ConstantFloatType(1.0),
+						$this->intStringified(),
+						new FloatType(),
 						new NullType()
 					),
 				],

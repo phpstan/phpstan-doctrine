@@ -944,11 +944,8 @@ class QueryResultTypeWalker extends SqlWalker
 					$this->walkSimpleArithmeticExpression($aggExpression->pathExpression)
 				);
 
-				if (count($type->getConstantScalarValues()) !== 1) {
-					$type = TypeUtils::generalizeType($type, GeneralizePrecision::lessSpecific());
-				}
-
-				$type = TypeCombinator::union($type, $type->toFloat(), $type->toFloat()->toString());
+				$type = TypeCombinator::union($type, $type->toFloat());
+				$type = TypeUtils::generalizeType($type, GeneralizePrecision::lessSpecific());
 
 				return $this->marshalType(TypeCombinator::addNull($type));
 
