@@ -681,6 +681,82 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		yield 'aggregate on literal' => [
+			$this->constantArray([
+				[
+					new ConstantIntegerType(1),
+					TypeCombinator::union(
+						new ConstantStringType('1'),
+						new ConstantIntegerType(1),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(2),
+					TypeCombinator::union(
+						new ConstantStringType('0'),
+						new ConstantIntegerType(0),
+						new ConstantStringType('1'),
+						new ConstantIntegerType(1),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(3),
+					TypeCombinator::union(
+						new ConstantStringType('1'),
+						new ConstantIntegerType(1),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(4),
+					TypeCombinator::union(
+						new ConstantStringType('0'),
+						new ConstantIntegerType(0),
+						new ConstantStringType('1'),
+						new ConstantIntegerType(1),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(5),
+					TypeCombinator::union(
+						$this->intStringified(),
+						new FloatType(),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(6),
+					TypeCombinator::union(
+						$this->intStringified(),
+						new FloatType(),
+						new NullType()
+					),
+				],
+				[
+					new ConstantIntegerType(7),
+					TypeCombinator::addNull($this->intStringified()),
+				],
+				[
+					new ConstantIntegerType(8),
+					TypeCombinator::addNull($this->intStringified()),
+				],
+			]),
+			'
+				SELECT		MAX(1),
+							MAX(CASE WHEN m.intColumn = 0 THEN 1 ELSE 0 END),
+							MIN(1),
+							MIN(CASE WHEN m.intColumn = 0 THEN 1 ELSE 0 END),
+							AVG(1),
+							AVG(CASE WHEN m.intColumn = 0 THEN 1 ELSE 0 END),
+							SUM(1),
+							SUM(CASE WHEN m.intColumn = 0 THEN 1 ELSE 0 END)
+				FROM		QueryResult\Entities\Many m
+			',
+		];
+
 		yield 'literal' => [
 			$this->constantArray([
 				[
