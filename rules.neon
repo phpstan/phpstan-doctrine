@@ -63,3 +63,5 @@ services:
 		class: PHPStan\Classes\DoctrineProxyForbiddenClassNamesExtension
 		tags:
 			- phpstan.forbiddenClassNamesExtension
+	-
+		class: PHPStan\Rules\Doctrine\ORM\ExecuteQueryRule
