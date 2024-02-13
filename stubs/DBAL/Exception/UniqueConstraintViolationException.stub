@@ -2,7 +2,9 @@
 
 namespace Doctrine\DBAL\Exception;
 
-class UniqueConstraintViolationException extends \Exception
+use Doctrine\DBAL\Exception;
+
+class UniqueConstraintViolationException extends Exception
 {
 
 }
