@@ -32,6 +32,7 @@
 
     <testsuites>
         <testsuite name="PHPStan for Doctrine">
+            <directory suffix="TestCase.php">tests</directory>
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
