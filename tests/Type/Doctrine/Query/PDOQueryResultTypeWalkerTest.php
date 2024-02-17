@@ -389,7 +389,7 @@ class PDOQueryResultTypeWalkerTest extends QueryResultTypeWalkerTestCase
 				[new ConstantIntegerType(1), new MixedType()],
 			]),
 			'
-				SELECT		(SELECT	m.intColumn FROM QueryResult\Entities\Many m)
+				SELECT		(SELECT	COUNT(m.intColumn) FROM QueryResult\Entities\Many m)
 				FROM		QueryResult\Entities\Many m2
 			',
 		];
