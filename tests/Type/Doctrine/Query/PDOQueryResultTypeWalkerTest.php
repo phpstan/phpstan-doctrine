@@ -15,7 +15,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use QueryResult\Entities\Many;
 use QueryResult\Entities\ManyId;
@@ -29,7 +28,7 @@ use function property_exists;
 use function strpos;
 use const PHP_VERSION_ID;
 
-final class PDOQueryResultTypeWalkerTest extends QueryResultTypeWalkerTestCase
+class PDOQueryResultTypeWalkerTest extends QueryResultTypeWalkerTestCase
 {
 
 	protected static function getEntityManagerPath(): string
@@ -37,9 +36,6 @@ final class PDOQueryResultTypeWalkerTest extends QueryResultTypeWalkerTestCase
 		return __DIR__ . '/../data/QueryResult/entity-manager.php';
 	}
 
-	/**
-	 * @return iterable<string,array{Type,string,2?:string|null}>
-	 */
 	public function getTestData(): iterable
 	{
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');

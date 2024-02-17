@@ -48,8 +48,9 @@ use const PHP_VERSION_ID;
 
 abstract class QueryResultTypeWalkerTestCase extends PHPStanTestCase
 {
+
 	/** @var EntityManagerInterface */
-	private static $em;
+	protected static $em;
 
 	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
@@ -182,7 +183,9 @@ abstract class QueryResultTypeWalkerTestCase extends PHPStanTestCase
 		$this->descriptorRegistry = self::getContainer()->getByType(DescriptorRegistry::class);
 	}
 
-	/** @dataProvider getTestData */
+	/**
+	 * @dataProvider getTestData
+	 */
 	public function test(Type $expectedType, string $dql, ?string $expectedExceptionMessage = null, ?string $expectedDeprecationMessage = null): void
 	{
 		$em = self::$em;
