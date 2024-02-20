@@ -8,6 +8,12 @@ namespace PHPStan\Type\Doctrine\Query;
  */
 class MysqlQueryResultTypeWalkerTest extends PDOQueryResultTypeWalkerTest
 {
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/../data/QueryResult/config-mysql.neon',
+		];
+	}
 
 	protected static function getEntityManagerPath(): string
 	{
