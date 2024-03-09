@@ -3,8 +3,8 @@
 namespace Doctrine\ORM;
 
 /**
- * @template-covariant TKey The type of column used in indexBy
- * @template-covariant TResult The type of results returned by this query in HYDRATE_OBJECT mode
+ * @template TKey The type of column used in indexBy
+ * @template TResult The type of results returned by this query in HYDRATE_OBJECT mode
  *
  * @extends AbstractQuery<TKey, TResult>
  */
