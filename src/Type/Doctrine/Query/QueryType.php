@@ -32,6 +32,11 @@ class QueryType extends GenericObjectType
 		return parent::equals($type);
 	}
 
+	public function getTypeWithoutSubtractedType(): Type
+	{
+		return $this;
+	}
+
 	public function isSuperTypeOf(Type $type): TrinaryLogic
 	{
 		if ($type instanceof self) {
