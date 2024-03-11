@@ -11,15 +11,25 @@ use PHPStan\Type\Type;
 class QueryType extends GenericObjectType
 {
 
+	/** @var Type */
+	private $indexType;
+
+	/** @var Type */
+	private $resultType;
+
 	/** @var string */
 	private $dql;
 
-	public function __construct(string $dql, ?Type $indexType = null, ?Type $resultType = null)
+	public function __construct(string $dql, ?Type $indexType = null, ?Type $resultType = null, ?Type $subtractedType = null)
 	{
+		$this->indexType = $indexType ?? new MixedType();
+		$this->resultType = $resultType ?? new MixedType();
+
 		parent::__construct('Doctrine\ORM\Query', [
-			$indexType ?? new MixedType(),
-			$resultType ?? new MixedType(),
-		]);
+			$this->indexType,
+			$this->resultType,
+		], $subtractedType);
+
 		$this->dql = $dql;
 	}
 
@@ -32,9 +42,9 @@ class QueryType extends GenericObjectType
 		return parent::equals($type);
 	}
 
-	public function getTypeWithoutSubtractedType(): Type
+	public function changeSubtractedType(?Type $subtractedType): Type
 	{
-		return $this;
+		return new self('Doctrine\ORM\Query', $this->indexType, $this->resultType, $subtractedType);
 	}
 
 	public function isSuperTypeOf(Type $type): TrinaryLogic
