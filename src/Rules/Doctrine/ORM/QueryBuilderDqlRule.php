@@ -15,6 +15,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeUtils;
 use Throwable;
+use function array_values;
 use function count;
 use function sprintf;
 use function strpos;
@@ -117,7 +118,8 @@ class QueryBuilderDqlRule implements Rule
 					$message .= sprintf("\nDQL: %s", $dql->getValue());
 				}
 
-				$messages[] = RuleErrorBuilder::message($message)
+				// Use message as index to prevent duplicate
+				$messages[$message] = RuleErrorBuilder::message($message)
 					->identifier('doctrine.dql')
 					->build();
 			} catch (AssertionError $e) {
@@ -125,7 +127,7 @@ class QueryBuilderDqlRule implements Rule
 			}
 		}
 
-		return $messages;
+		return array_values($messages);
 	}
 
 }
