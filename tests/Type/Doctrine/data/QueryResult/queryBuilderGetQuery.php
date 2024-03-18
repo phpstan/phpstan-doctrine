@@ -103,6 +103,19 @@ class QueryBuilderGetQuery
 		assertType('array<string, array{intColumn: int, stringNullColumn: string|null}>', $result);
 	}
 
+	public function testConditionalAddSelect(EntityManagerInterface $em, bool $bool): void
+	{
+		$qb = $em->createQueryBuilder();
+		if ($bool) {
+			$qb->select('m.intColumn');
+		} else {
+			$qb->select('m.intColumn', 'm.stringNullColumn');
+		}
+		$query = $qb->from(Many::class, 'm')->getQuery();
+
+		assertType('Doctrine\ORM\Query<null, array{intColumn: int}>|Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}>', $query);
+	}
+
 	public function testQueryResultTypeIsMixedWhenDQLIsNotKnown(QueryBuilder $builder): void
 	{
 		$query = $builder->getQuery();

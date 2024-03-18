@@ -26,7 +26,7 @@ class QueryBuilderExpressionTypeResolverTest
 		$branchingQuery = $this->getBranchingQueryBuilder($em)->getQuery();
 
 		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $branchingQuery);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>#1|Doctrine\ORM\Query<null, QueryResult\Entities\Many>#2', $branchingQuery);
 	}
 
 	public function testQueryTypeIsInferredOnAcrossMethodsEvenWhenVariableAssignmentIsUsed(EntityManagerInterface $em): void
