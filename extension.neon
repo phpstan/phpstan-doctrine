@@ -426,3 +426,9 @@ services:
 		class: PHPStan\Type\Doctrine\EntityManagerInterfaceThrowTypeExtension
 		tags:
 			- phpstan.dynamicMethodThrowTypeExtension
+
+	# Forbidden class names extension
+	-
+		class: PHPStan\Classes\DoctrineProxyForbiddenClassNamesExtension
+		tags:
+			- phpstan.forbiddenClassNamesExtension
