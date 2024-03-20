@@ -59,3 +59,7 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule
+	-
+		class: PHPStan\Classes\DoctrineProxyForbiddenClassNamesExtension
+		tags:
+			- phpstan.forbiddenClassNamesExtension
