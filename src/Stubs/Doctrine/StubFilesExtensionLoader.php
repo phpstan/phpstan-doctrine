@@ -35,6 +35,7 @@ class StubFilesExtensionLoader implements StubFilesExtension
 		}
 
 		$files = [
+			$path . '/DBAL/Connection.stub',
 			$path . '/ORM/QueryBuilder.stub',
 			$path . '/EntityRepository.stub',
 		];
