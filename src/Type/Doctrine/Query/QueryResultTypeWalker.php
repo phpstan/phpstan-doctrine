@@ -108,6 +108,9 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var bool */
 	private $hasGroupByClause;
 
+	/** @var bool */
+	private $hasWhereClause;
+
 	/**
 	 * @param Query<mixed> $query
 	 */
@@ -136,6 +139,7 @@ class QueryResultTypeWalker extends SqlWalker
 		$this->nullableQueryComponents = [];
 		$this->hasAggregateFunction = false;
 		$this->hasGroupByClause = false;
+		$this->hasWhereClause = false;
 
 		// The object is instantiated by Doctrine\ORM\Query\Parser, so receiving
 		// dependencies through the constructor is not an option. Instead, we
@@ -175,6 +179,7 @@ class QueryResultTypeWalker extends SqlWalker
 		$this->typeBuilder->setSelectQuery();
 		$this->hasAggregateFunction = $this->hasAggregateFunction($AST);
 		$this->hasGroupByClause = $AST->groupByClause !== null;
+		$this->hasWhereClause = $AST->whereClause !== null;
 
 		$this->walkFromClause($AST->fromClause);
 
@@ -797,7 +802,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 			$type = $this->resolveDoctrineType($typeName, $enumType, $nullable);
 
-			$this->typeBuilder->addScalar($resultAlias, $type);
+			$this->addScalar($resultAlias, $type);
 
 			return '';
 		}
@@ -843,21 +848,32 @@ class QueryResultTypeWalker extends SqlWalker
 				// the driver and PHP version.
 				// Here we assume that the value may or may not be casted to
 				// string by the driver.
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+				$casted = false;
+				$originalType = $type;
+
+				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use (&$casted): Type {
 					if ($type instanceof UnionType || $type instanceof IntersectionType) {
 						return $traverse($type);
 					}
 					if ($type instanceof IntegerType || $type instanceof FloatType) {
+						$casted = true;
 						return TypeCombinator::union($type->toString(), $type);
 					}
 					if ($type instanceof BooleanType) {
+						$casted = true;
 						return TypeCombinator::union($type->toInteger()->toString(), $type);
 					}
 					return $traverse($type);
 				});
+
+				// Since we made supposition about possibly casted values,
+				// we can only provide a benevolent union.
+				if ($casted && $type instanceof UnionType && !$originalType->equals($type)) {
+					$type = TypeUtils::toBenevolentUnion($type);
+				}
 			}
 
-			$this->typeBuilder->addScalar($resultAlias, $type);
+			$this->addScalar($resultAlias, $type);
 
 			return '';
 		}
@@ -1296,6 +1312,21 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkResultVariable($resultVariable): string
 	{
 		return $this->marshalType(new MixedType());
+	}
+
+	/**
+	 * @param array-key $alias
+	 */
+	private function addScalar($alias, Type $type): void
+	{
+		// Since we don't check the condition inside the WHERE
+		// conditions, we cannot be sure all the union types are correct.
+		// For exemple, a condition `WHERE foo.bar IS NOT NULL` could be added.
+		if ($this->hasWhereClause && $type instanceof UnionType) {
+			$type = TypeUtils::toBenevolentUnion($type);
+		}
+
+		$this->typeBuilder->addScalar($alias, $type);
 	}
 
 	private function unmarshalType(string $marshalledType): Type
