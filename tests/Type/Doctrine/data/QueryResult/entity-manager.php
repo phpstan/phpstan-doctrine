@@ -22,11 +22,22 @@ $metadataDriver->addDriver(new AnnotationDriver(
 	[__DIR__ . '/Entities']
 ), 'QueryResult\Entities\\');
 
+if (PHP_VERSION_ID >= 80100) {
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/Entities']),
+		'QueryResult\Entities\\'
+	);
+}
+
 if (property_exists(Column::class, 'enumType') && PHP_VERSION_ID >= 80100) {
 	$metadataDriver->addDriver(new AnnotationDriver(
 		new AnnotationReader(),
 		[__DIR__ . '/EntitiesEnum']
 	), 'QueryResult\EntitiesEnum\\');
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/EntitiesEnum']),
+		'QueryResult\EntitiesEnum\\'
+	);
 }
 
 $config->setMetadataDriverImpl($metadataDriver);
