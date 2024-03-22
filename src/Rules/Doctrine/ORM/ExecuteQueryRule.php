@@ -9,6 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use function count;
 use function sprintf;
+use function str_contains;
 use function str_starts_with;
 use function strtolower;
 use function trim;
@@ -69,7 +70,16 @@ class ExecuteQueryRule implements Rule
 
 	private function isSelectQuery(string $sql): bool
 	{
-		return str_starts_with(strtolower(trim($sql)), 'select');
+		$sql = strtolower(trim($sql));
+
+		// `executeQuery` can be used for returning statements like
+		// `UPDATE ... RETURNING`, so we ignore such case to avoid false positive.
+		// @see https://github.com/phpstan/phpstan-doctrine/issues/545#issuecomment-2015059629
+		if (str_contains($sql, 'returning')) {
+			return true;
+		}
+
+		return str_starts_with($sql, 'select');
 	}
 
 }

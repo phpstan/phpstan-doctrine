@@ -19,6 +19,9 @@ class TestExecuteQuery
 		$connection->executeCacheQuery(' SELECT foo from bar WHERE id = 1; ', [], [], $cacheProfile);
 		$connection->executeCacheQuery('UPDATE bar SET foo = NULL WHERE id = 1;', [], [], $cacheProfile);
 		$connection->executeCacheQuery(' UPDATE bar SET foo = NULL WHERE id = 1; ', [], [], $cacheProfile);
+
+		$connection->executeQuery('UPDATE bar SET foo = NULL WHERE id = 1 RETURNING *;');
+		$connection->executeCacheQuery('UPDATE bar SET foo = NULL WHERE id = 1 RETURNING *;', [], [], $cacheProfile);
 	}
 
 }
