@@ -1,0 +1,7 @@
+includes:
+	- ../../../../../extension.neon
+parameters:
+	doctrine:
+		objectManagerLoader: entity-manager-mysql.php
+	featureToggles:
+		listType: true
