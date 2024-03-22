@@ -48,7 +48,8 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodRetur
 		}
 
 		return new $class(
-			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder'
+			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder',
+			$scope
 		);
 	}
 
