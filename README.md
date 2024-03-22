@@ -210,3 +210,13 @@ services:
 		factory: PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor('MyApp\MyCustomTypeName')
 		tags: [phpstan.doctrine.typeDescriptor]
 ```
+
+### Ensure types have descriptor
+
+If you want to be sure you never forget descriptor for some custom type, you can enable:
+
+```neon
+parameters:
+	doctrine:
+		reportUnknownTypes: true
+```
