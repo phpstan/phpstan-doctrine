@@ -10,7 +10,7 @@ use IteratorAggregate;
  * @template TKey of array-key
  * @template T
  * @extends IteratorAggregate<TKey, T>
- * @extends ArrayAccess<TKey|null, T>
+ * @extends ArrayAccess<TKey, T>
  * @extends ReadableCollection<TKey, T>
  */
 interface Collection extends Countable, IteratorAggregate, ArrayAccess, ReadableCollection
