@@ -2,10 +2,12 @@
 
 namespace PHPStan\Stubs\Doctrine;
 
+use Composer\InstalledVersions;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
 use function dirname;
+use function strpos;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
@@ -57,6 +59,13 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$files[] = $stubsDir . '/LazyServiceEntityRepository.stub';
 		} else {
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
+		}
+
+		$collectionVersion = InstalledVersions::getVersion('doctrine/dbal');
+		if ($collectionVersion !== null && strpos($collectionVersion, '1.') === 0) {
+			$files[] = $stubsDir . '/Collections/Collection1.stub';
+		} else {
+			$files[] = $stubsDir . '/Collections/Collection.stub';
 		}
 
 		return $files;
