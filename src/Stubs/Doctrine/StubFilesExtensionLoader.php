@@ -38,21 +38,16 @@ class StubFilesExtensionLoader implements StubFilesExtension
 
 		$files = [];
 
-		if (file_exists($path . '/DBAL/Connection3.stub') && $this->isInstalledVersion('doctrine/dbal', 3)) {
-			$files[] = $path . '/DBAL/Connection3.stub';
+		if (file_exists($path . '/DBAL/Connection4.stub') && $this->isInstalledVersion('doctrine/dbal', 4)) {
+			$files[] = $path . '/DBAL/Connection4.stub';
+			$files[] = $path . '/DBAL/ArrayParameterType.stub';
+			$files[] = $path . '/DBAL/ParameterType.stub';
 		} else {
 			$files[] = $path . '/DBAL/Connection.stub';
-
-			if (file_exists($path . '/DBAL/ArrayParameterType.stub')) {
-				$files[] = $path . '/DBAL/ArrayParameterType.stub';
-			}
-			if (file_exists($path . '/DBAL/ParameterType.stub')) {
-				$files[] = $path . '/DBAL/ParameterType.stub';
-			}
 		}
 
 		$files[] = $path . '/ORM/QueryBuilder.stub';
-		$files[] =$path . '/EntityRepository.stub';
+		$files[] = $path . '/EntityRepository.stub';
 
 		$hasLazyServiceEntityRepositoryAsParent = false;
 

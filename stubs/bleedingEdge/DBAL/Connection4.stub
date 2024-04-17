@@ -6,6 +6,10 @@ use Doctrine\DBAL\Cache\CacheException;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Types\Type;
 
+/**
+ * @phpstan-type WrapperParameterType = string|Type|ParameterType|ArrayParameterType
+ * @phpstan-type WrapperParameterTypeArray = array<int<0, max>, WrapperParameterType>|array<string, WrapperParameterType>
+ */
 class Connection
 {
     /**
@@ -20,9 +24,9 @@ class Connection
      *
      * This method supports PDO binding types as well as DBAL mapping types.
      *
-     * @param literal-string                                                       $sql    SQL statement
-     * @param list<mixed>|array<string, mixed>                                     $params Statement parameters
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types  Parameter types
+     * @param literal-string                   $sql    SQL statement
+     * @param list<mixed>|array<string, mixed> $params Statement parameters
+     * @param WrapperParameterTypeArray        $types  Parameter types
      *
      * @return int|string The number of affected rows.
      *
@@ -36,9 +40,9 @@ class Connection
      * If the query is parametrized, a prepared statement is used.
      * If an SQLLogger is configured, the execution is logged.
      *
-     * @param literal-string                                                       $sql    SQL query
-     * @param list<mixed>|array<string, mixed>                                     $params Query parameters
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types  Parameter types
+     * @param literal-string                   $sql    SQL query
+     * @param list<mixed>|array<string, mixed> $params Query parameters
+     * @param WrapperParameterTypeArray        $types  Parameter types
      *
      * @throws Exception
      */
@@ -52,9 +56,9 @@ class Connection
     /**
      * Executes a caching query.
      *
-     * @param literal-string                                                       $sql    SQL query
-     * @param list<mixed>|array<string, mixed>                                     $params Query parameters
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types  Parameter types
+     * @param literal-string                   $sql    SQL query
+     * @param list<mixed>|array<string, mixed> $params Query parameters
+     * @param WrapperParameterTypeArray        $types  Parameter types
      *
      * @throws CacheException
      * @throws Exception
