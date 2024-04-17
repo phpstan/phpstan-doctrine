@@ -21,7 +21,7 @@ interface Collection extends Countable, IteratorAggregate, ArrayAccess, Readable
      *
      * @param T $element
      *
-     * @return void
+     * @return true
      */
     public function add($element) {}
 
