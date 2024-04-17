@@ -7,7 +7,10 @@ use OutOfBoundsException;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
+use function class_exists;
 use function dirname;
+use function file_exists;
+use function strpos;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {

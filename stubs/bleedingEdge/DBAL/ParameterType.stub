@@ -1,5 +1,7 @@
 <?php
 
+namespace Doctrine\DBAL;
+
 enum ParameterType
 {
 
