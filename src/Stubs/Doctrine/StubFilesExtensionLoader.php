@@ -3,9 +3,11 @@
 namespace PHPStan\Stubs\Doctrine;
 
 use Composer\InstalledVersions;
+use OutOfBoundsException;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
+use function class_exists;
 use function dirname;
 use function strpos;
 
@@ -61,9 +63,13 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
 		}
 
-		$collectionVersion = class_exists(InstalledVersions::class)
-			? InstalledVersions::getVersion('doctrine/collections')
-			: null;
+		try {
+			$collectionVersion = class_exists(InstalledVersions::class)
+				? InstalledVersions::getVersion('doctrine/collections')
+				: null;
+		} catch (OutOfBoundsException $e) {
+			$collectionVersion = null;
+		}
 		if ($collectionVersion !== null && strpos($collectionVersion, '1.') === 0) {
 			$files[] = $stubsDir . '/Collections/Collection1.stub';
 		} else {
