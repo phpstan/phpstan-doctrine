@@ -61,7 +61,9 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
 		}
 
-		$collectionVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$collectionVersion = class_exists(InstalledVersions::class)
+			? InstalledVersions::getVersion('doctrine/collections')
+			: null;
 		if ($collectionVersion !== null && strpos($collectionVersion, '1.') === 0) {
 			$files[] = $stubsDir . '/Collections/Collection1.stub';
 		} else {
