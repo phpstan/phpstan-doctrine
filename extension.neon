@@ -24,7 +24,6 @@ parameters:
 		- stubs/DBAL/Exception/UniqueConstraintViolationException.stub
 		- stubs/DBAL/Types/Type.stub
 		- stubs/DBAL/Exception.stub
-		- stubs/DBAL/FetchMode.stub
 		- stubs/DBAL/Result.stub
 		- stubs/DocumentManager.stub
 		- stubs/DocumentRepository.stub
