@@ -2,10 +2,15 @@
 
 namespace PHPStan\Stubs\Doctrine;
 
+use Composer\InstalledVersions;
+use OutOfBoundsException;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
+use function class_exists;
 use function dirname;
+use function file_exists;
+use function strpos;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
@@ -34,11 +39,18 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$path .= '/bleedingEdge';
 		}
 
-		$files = [
-			$path . '/DBAL/Connection.stub',
-			$path . '/ORM/QueryBuilder.stub',
-			$path . '/EntityRepository.stub',
-		];
+		$files = [];
+
+		if (file_exists($path . '/DBAL/Connection4.stub') && $this->isInstalledVersion('doctrine/dbal', 4)) {
+			$files[] = $path . '/DBAL/Connection4.stub';
+			$files[] = $path . '/DBAL/ArrayParameterType.stub';
+			$files[] = $path . '/DBAL/ParameterType.stub';
+		} else {
+			$files[] = $path . '/DBAL/Connection.stub';
+		}
+
+		$files[] = $path . '/ORM/QueryBuilder.stub';
+		$files[] = $path . '/EntityRepository.stub';
 
 		$hasLazyServiceEntityRepositoryAsParent = false;
 
@@ -60,6 +72,21 @@ class StubFilesExtensionLoader implements StubFilesExtension
 		}
 
 		return $files;
+	}
+
+	private function isInstalledVersion(string $package, int $majorVersion): bool
+	{
+		if (!class_exists(InstalledVersions::class)) {
+			return false;
+		}
+
+		try {
+			$installedVersion = InstalledVersions::getVersion($package);
+		} catch (OutOfBoundsException $e) {
+			return false;
+		}
+
+		return $installedVersion !== null && strpos($installedVersion, $majorVersion . '.') === 0;
 	}
 
 }
