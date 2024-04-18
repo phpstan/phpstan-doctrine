@@ -1,0 +1,16 @@
+<?php
+
+namespace Doctrine\DBAL;
+
+enum ParameterType
+{
+
+    case NULL;
+    case INTEGER;
+    case STRING;
+    case LARGE_OBJECT;
+    case BOOLEAN;
+    case BINARY;
+    case ASCII;
+
+}

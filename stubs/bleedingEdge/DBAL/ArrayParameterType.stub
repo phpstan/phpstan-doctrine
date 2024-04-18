@@ -1,0 +1,13 @@
+<?php
+
+namespace Doctrine\DBAL;
+
+enum ArrayParameterType
+{
+
+    case INTEGER;
+    case STRING;
+    case ASCII;
+    case BINARY;
+
+}
