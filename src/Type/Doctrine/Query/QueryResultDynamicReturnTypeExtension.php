@@ -220,7 +220,9 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 					return new MixedType();
 				}
 
-				if (!$objectManager->getMetadataFactory()->hasMetadataFor($type->getClassName())) {
+				/** @var class-string $className */
+				$className = $type->getClassName();
+				if (!$objectManager->getMetadataFactory()->hasMetadataFor($className)) {
 					return $traverse($type);
 				}
 
