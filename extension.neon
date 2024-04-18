@@ -22,6 +22,7 @@ parameters:
 		- stubs/DBAL/Cache/CacheException.stub
 		- stubs/DBAL/Cache/QueryCacheProfile.stub
 		- stubs/DBAL/Exception/UniqueConstraintViolationException.stub
+		- stubs/DBAL/Query/QueryBuilder.stub
 		- stubs/DBAL/Types/Type.stub
 		- stubs/DBAL/Exception.stub
 		- stubs/DBAL/FetchMode.stub

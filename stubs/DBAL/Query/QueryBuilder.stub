@@ -1,0 +1,47 @@
+<?php
+
+namespace Doctrine\DBAL\Query;
+
+class QueryBuilder {
+
+	/**
+	 * @return array<string, __benevolent<float|int|string|null>>|false
+	 */
+	public function fetchAssociative();
+
+	/**
+	 * @return list<__benevolent<float|int|string|null>>|false
+	 */
+	public function fetchNumeric();
+
+	/**
+	 * @return __benevolent<float|int|string|false|null>
+	 */
+	public function fetchOne();
+
+	/**
+	 * @return list<list<__benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllNumeric(): array;
+
+	/**
+	 * @return list<array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllAssociative(): array;
+
+	/**
+	 * @return array<mixed, __benevolent<float|int|string|null>>
+	 */
+	public function fetchAllKeyValue(): array;
+
+	/**
+	 * @return array<mixed,array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllAssociativeIndexed(): array;
+
+	/**
+	 * @return list<__benevolent<float|int|string|null>>
+	 */
+	public function fetchFirstColumn(): array;
+
+}
