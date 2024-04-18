@@ -83,6 +83,21 @@ conditionalTags:
 		phpstan.broker.methodsClassReflectionExtension: %doctrine.allCollectionsSelectable%
 
 services:
+	otherMethodAnalysisParser: # identical to defaultAnalysisParser, but uses inner PathRoutingParser without cleaning parser
+		class: PHPStan\Parser\CachedParser
+		arguments:
+			originalParser: @pathRoutingOtherMethodAnalysisParser
+			cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
+		autowired: false
+
+	pathRoutingOtherMethodAnalysisParser: # identical to pathRoutingParser, but no cleaning parser is used
+		class: PHPStan\Parser\PathRoutingParser
+		arguments:
+			currentPhpVersionRichParser: @currentPhpVersionRichParser
+			currentPhpVersionSimpleParser: @currentPhpVersionRichParser
+			php8Parser: @php8Parser
+		autowired: false
+
 	-
 		class: PHPStan\Type\Doctrine\DescriptorRegistryFactory
 
@@ -178,7 +193,7 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser
 		arguments:
 			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
-			parser: @defaultAnalysisParser
+			parser: @otherMethodAnalysisParser
 
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\ReturnQueryBuilderExpressionTypeResolverExtension
