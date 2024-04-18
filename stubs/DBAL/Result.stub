@@ -2,7 +2,95 @@
 
 namespace Doctrine\DBAL;
 
+use Traversable;
+
 class Result
 {
 
+	/**
+	 * @return list<__benevolent<float|int|string|null>>|false
+	 */
+	public function fetchNumeric();
+
+	/**
+	 * @return array<string, __benevolent<float|int|string|null>>|false
+	 */
+	public function fetchAssociative();
+
+	/**
+	 * @return __benevolent<float|int|string|false|null>
+	 */
+	public function fetchOne();
+
+	/**
+	 * @return list<list<__benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllNumeric(): array;
+
+	/**
+	 * @return list<array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllAssociative(): array;
+
+	/**
+	 * @return array<mixed, __benevolent<float|int|string|null>>
+	 */
+	public function fetchAllKeyValue(): array;
+
+	/**
+	 * @return array<mixed,array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function fetchAllAssociativeIndexed(): array;
+
+	/**
+	 * @return list<__benevolent<float|int|string|null>>
+	 */
+	public function fetchFirstColumn(): array;
+
+	/**
+	 * @return Traversable<int, list<__benevolent<float|int|string|null>>>
+	 */
+	public function iterateNumeric(): Traversable;
+
+	/**
+	 * @return Traversable<int, array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function iterateAssociative(): Traversable;
+
+	/**
+	 * @return Traversable<__benevolent<float|int|string|null>, __benevolent<float|int|string|null>>
+	 */
+	public function iterateKeyValue(): Traversable;
+
+	/**
+	 * @return Traversable<__benevolent<float|int|string|null>, array<string, __benevolent<float|int|string|null>>>
+	 */
+	public function iterateAssociativeIndexed(): Traversable;
+
+	/**
+	 * @return Traversable<int, __benevolent<float|int|string|null>>
+	 */
+	public function iterateColumn(): Traversable;
+
+	public function rowCount(): int;
+
+	public function columnCount(): int;
+
+	public function free(): void;
+
+	/**
+	 * @deprecated Use {@see fetchNumeric()}, {@see fetchAssociative()} or {@see fetchOne()} instead.
+	 *
+	 * @phpstan-param FetchMode::* $mode
+	 * @return ($mode is 2 ? array<string, __benevolent<float|int|string|null>>|false : ($mode is 3 ? list<__benevolent<float|int|string|null>>|false : __benevolent<float|int|string|false|null>))
+	 */
+	public function fetch(int $mode = FetchMode::ASSOCIATIVE);
+
+	/**
+	 * @deprecated Use {@see fetchAllNumeric()}, {@see fetchAllAssociative()} or {@see fetchOne()} instead.
+	 *
+	 * @phpstan-param FetchMode::* $mode
+	 * @return ($mode is 2 ? list<array<string, __benevolent<float|int|string|null>>> : ($mode is 3 ? list<list<__benevolent<float|int|string|null>>> : list<__benevolent<float|int|string|null>>))
+	 */
+	public function fetchAll(int $mode = FetchMode::ASSOCIATIVE): array;
 }
