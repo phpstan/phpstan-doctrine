@@ -704,63 +704,63 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantStringType('1'),
 						new ConstantIntegerType(1),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(2),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantStringType('0'),
 						new ConstantIntegerType(0),
 						new ConstantStringType('1'),
 						new ConstantIntegerType(1),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(3),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantStringType('1'),
 						new ConstantIntegerType(1),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(4),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						new ConstantStringType('0'),
 						new ConstantIntegerType(0),
 						new ConstantStringType('1'),
 						new ConstantIntegerType(1),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(5),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						$this->intStringified(),
 						new FloatType(),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(6),
-					TypeCombinator::union(
+					TypeUtils::toBenevolentUnion(TypeCombinator::union(
 						$this->intStringified(),
 						new FloatType(),
 						new NullType()
-					),
+					)),
 				],
 				[
 					new ConstantIntegerType(7),
-					TypeCombinator::addNull($this->intStringified()),
+					TypeUtils::toBenevolentUnion(TypeCombinator::addNull($this->intStringified())),
 				],
 				[
 					new ConstantIntegerType(8),
-					TypeCombinator::addNull($this->intStringified()),
+					TypeUtils::toBenevolentUnion(TypeCombinator::addNull($this->intStringified())),
 				],
 			]),
 			'
