@@ -52,4 +52,10 @@ class DqlRuleTest extends RuleTestCase
 		]);
 	}
 
+	protected function shouldFailOnPhpErrors(): bool
+	{
+		// doctrine/orm/src/Query/Parser.php throws assert($this->lexer->lookahead !== null)
+		return false;
+	}
+
 }

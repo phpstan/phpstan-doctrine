@@ -171,4 +171,10 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		];
 	}
 
+	protected function shouldFailOnPhpErrors(): bool
+	{
+		// doctrine/orm/src/Query/Parser.php throws assert(): assert($peek !== null) error
+		return false;
+	}
+
 }
