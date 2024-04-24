@@ -134,4 +134,10 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 		];
 	}
 
+	protected function shouldFailOnPhpErrors(): bool
+	{
+		// doctrine/orm/src/Query/Parser.php throws assert($peek !== null) failed
+		return false;
+	}
+
 }
