@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
@@ -93,26 +92,22 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		MethodReflection $methodReflection,
 		MethodCall $methodCall,
 		Scope $scope
-	): Type
+	): ?Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
-		$defaultReturnType = ParametersAcceptorSelector::selectFromArgs(
-			$scope,
-			$methodCall->getArgs(),
-			$methodReflection->getVariants()
-		)->getReturnType();
+
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
-			return $defaultReturnType;
+			return null;
 		}
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
 		if ($objectManager === null) {
-			return $defaultReturnType;
+			return null;
 		}
 		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
 		if (!$objectManager instanceof $entityManagerInterface) {
-			return $defaultReturnType;
+			return null;
 		}
 
 		/** @var EntityManagerInterface $objectManager */
@@ -150,7 +145,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 					try {
 						$args = $this->argumentsProcessor->processArgs($scope, $methodName, array_slice($calledMethodCall->getArgs(), 0, 1));
 					} catch (DynamicQueryBuilderArgumentException $e) {
-						return $defaultReturnType;
+						return null;
 					}
 					if (count($args) === 1) {
 						$queryBuilder->set($args[0], $args[0]);
@@ -168,13 +163,13 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 					if (in_array($lowerMethodName, self::METHODS_NOT_AFFECTING_RESULT_TYPE, true)) {
 						continue;
 					}
-					return $defaultReturnType;
+					return null;
 				}
 
 				try {
 					$queryBuilder->{$methodName}(...$args);
 				} catch (Throwable $e) {
-					return $defaultReturnType;
+					return null;
 				}
 			}
 

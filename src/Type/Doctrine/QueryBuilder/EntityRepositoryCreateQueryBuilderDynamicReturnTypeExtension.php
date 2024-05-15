@@ -8,7 +8,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use function array_unshift;
@@ -31,7 +30,7 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		MethodReflection $methodReflection,
 		MethodCall $methodCall,
 		Scope $scope
-	): Type
+	): ?Type
 	{
 		$entityNameExpr = new MethodCall($methodCall->var, new Identifier('getEntityName'));
 
@@ -41,7 +40,7 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		}
 
 		if (!isset($methodCall->getArgs()[0])) {
-			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+			return null;
 		}
 
 		$fromArgs = $methodCall->getArgs();
