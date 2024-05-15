@@ -5,7 +5,6 @@ namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -38,25 +37,23 @@ class BaseExpressionDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 		return in_array($methodReflection->getName(), ['add', 'addMultiple'], true);
 	}
 
-	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
+	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
 	{
-		$defaultReturnType = ParametersAcceptorSelector::selectFromArgs($scope, $methodCall->getArgs(), $methodReflection->getVariants())->getReturnType();
-
 		try {
 			$args = $this->argumentsProcessor->processArgs($scope, $methodReflection->getName(), $methodCall->getArgs());
 		} catch (DynamicQueryBuilderArgumentException $e) {
-			return $defaultReturnType;
+			return null;
 		}
 
 		$calledOnType = $scope->getType($methodCall->var);
 		if (!$calledOnType instanceof ExprType) {
-			return $defaultReturnType;
+			return null;
 		}
 
 		$expr = $calledOnType->getExprObject();
 
 		if (!method_exists($expr, $methodReflection->getName())) {
-			return $defaultReturnType;
+			return null;
 		}
 
 		$exprValue = $expr->{$methodReflection->getName()}(...$args);

@@ -46,7 +46,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		MethodReflection $methodReflection,
 		MethodCall $methodCall,
 		Scope $scope
-	): Type
+	): ?Type
 	{
 		$methodName = $methodReflection->getName();
 
@@ -82,7 +82,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		Type $hydrationMode,
 		Type $queryKeyType,
 		Type $queryResultType
-	): Type
+	): ?Type
 	{
 		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
 
@@ -95,13 +95,13 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		if ($isVoidType->maybe()) {
 			// We can't be sure what the query type is, so we return the
 			// declared return type of the method.
-			return $this->originalReturnType($methodReflection);
+			return null;
 		}
 
 		if (!$this->isObjectHydrationMode($hydrationMode)) {
 			// We support only HYDRATE_OBJECT. For other hydration modes, we
 			// return the declared return type of the method.
-			return $this->originalReturnType($methodReflection);
+			return null;
 		}
 
 		switch ($methodReflection->getName()) {
@@ -135,15 +135,6 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		}
 
 		return $type->getValue() === AbstractQuery::HYDRATE_OBJECT;
-	}
-
-	private function originalReturnType(MethodReflection $methodReflection): Type
-	{
-		$parametersAcceptor = ParametersAcceptorSelector::selectSingle(
-			$methodReflection->getVariants()
-		);
-
-		return $parametersAcceptor->getReturnType();
 	}
 
 }

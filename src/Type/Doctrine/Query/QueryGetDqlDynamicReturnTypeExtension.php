@@ -5,7 +5,6 @@ namespace PHPStan\Type\Doctrine\Query;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -30,16 +29,12 @@ class QueryGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeEx
 		MethodReflection $methodReflection,
 		MethodCall $methodCall,
 		Scope $scope
-	): Type
+	): ?Type
 	{
 		$calledOnType = $scope->getType($methodCall->var);
 		$queryTypes = DoctrineTypeUtils::getQueryTypes($calledOnType);
 		if (count($queryTypes) === 0) {
-			return ParametersAcceptorSelector::selectFromArgs(
-				$scope,
-				$methodCall->getArgs(),
-				$methodReflection->getVariants()
-			)->getReturnType();
+			return null;
 		}
 
 		$dqls = [];
