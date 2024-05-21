@@ -77,9 +77,14 @@ class DqlRule implements Rule
 			try {
 				$query->getAST();
 			} catch (QueryException $e) {
-				$messages[] = RuleErrorBuilder::message(sprintf('DQL: %s', $e->getMessage()))
-					->identifier('doctrine.dql')
-					->build();
+				$builder = RuleErrorBuilder::message(sprintf('DQL: %s', $e->getMessage()))
+					->identifier('doctrine.dql');
+
+				if (count($dqls) > 1) {
+					$builder->addTip('Detected from DQL branch: ' . $dql->getValue());
+				}
+
+				$messages[] = $builder->build();
 			} catch (AssertionError $e) {
 				continue;
 			}
