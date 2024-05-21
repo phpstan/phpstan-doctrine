@@ -118,10 +118,15 @@ class QueryBuilderDqlRule implements Rule
 					$message .= sprintf("\nDQL: %s", $dql->getValue());
 				}
 
+				$builder = RuleErrorBuilder::message($message)
+					->identifier('doctrine.dql');
+
+				if (count($dqls) > 1) {
+					$builder->addTip('Detected from DQL branch: ' . $dql->getValue());
+				}
+
 				// Use message as index to prevent duplicate
-				$messages[$message] = RuleErrorBuilder::message($message)
-					->identifier('doctrine.dql')
-					->build();
+				$messages[$message] = $builder->build();
 			} catch (AssertionError $e) {
 				continue;
 			}
