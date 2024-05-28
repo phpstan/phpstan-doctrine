@@ -220,3 +220,16 @@ parameters:
 	doctrine:
 		reportUnknownTypes: true
 ```
+
+This causes failures when your entity uses custom type without descriptor:
+
+```php
+#[Entity]
+abstract class Uuid7Entity
+{
+
+    #[Id]
+    #[Column(type: Uuid7Type::NAME)] // reported when descriptor for such type is missing
+    private Uuid7 $hsCode;
+
+```
