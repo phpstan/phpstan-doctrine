@@ -50,6 +50,7 @@ use function is_string;
 use function serialize;
 use function sprintf;
 use function strtolower;
+use function strtoupper;
 use function unserialize;
 
 /**
@@ -930,7 +931,7 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkAggregateExpression($aggExpression): string
 	{
-		switch ($aggExpression->functionName) {
+		switch (strtoupper($aggExpression->functionName)) {
 			case 'MAX':
 			case 'MIN':
 				$type = $this->unmarshalType(
