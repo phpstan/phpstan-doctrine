@@ -645,6 +645,19 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		yield 'aggregate lowercase' => [
+			$this->constantArray([
+				[
+					new ConstantStringType('foo'),
+					TypeCombinator::addNull($this->numericStringified()),
+				],
+			]),
+			'
+				SELECT		avg(m.intColumn) as foo
+				FROM		QueryResult\Entities\Many m
+			',
+		];
+
 		yield 'aggregate with group by' => [
 			$this->constantArray([
 				[
