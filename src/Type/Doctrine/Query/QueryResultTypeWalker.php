@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -820,7 +821,7 @@ class QueryResultTypeWalker extends SqlWalker
 			if ($expr instanceof TypedExpression) {
 				$type = TypeCombinator::intersect(
 					$type,
-					$this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type))
+					$this->resolveDoctrineType(DbalType::lookupName($expr->getReturnType()), null, TypeCombinator::containsNull($type))
 				);
 			} else {
 				// Expressions default to Doctrine's StringType, whose
