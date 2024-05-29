@@ -9,7 +9,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
@@ -611,9 +610,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(3),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 				[
 					new ConstantIntegerType(4),
@@ -621,9 +618,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(5),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 				[
 					new ConstantIntegerType(6),
@@ -642,6 +637,29 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							COALESCE(MAX(m.intColumn), 0)
 				FROM		QueryResult\Entities\Many m
 				LEFT JOIN	m.one o
+			',
+		];
+
+		yield 'count' => [
+			$this->constantArray([
+				[
+					new ConstantIntegerType(1),
+					new IntegerType(),
+				],
+				[
+					new ConstantIntegerType(2),
+					new IntegerType(),
+				],
+				[
+					new ConstantIntegerType(3),
+					new IntegerType(),
+				],
+			]),
+			'
+				SELECT		COUNT(m.stringNullColumn),
+							COUNT(m.stringColumn),
+					 		COUNT(m)
+				FROM		QueryResult\Entities\Many m
 			',
 		];
 
@@ -678,9 +696,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantStringType('count'),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 			]),
 			'
@@ -1346,23 +1362,17 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::addNull(
-						$this->hasTypedExpressions()
-						? $this->uint()
-						: $this->uintStringified()
+						new IntegerType()
 					),
 				],
 				[
 					new ConstantIntegerType(3),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 			]),
 			'
@@ -1554,9 +1564,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
 				[
 					new ConstantIntegerType(2),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					new IntegerType(),
 				],
 			]),
 			'
@@ -1676,11 +1684,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			IntegerRangeType::fromInterval(0, null),
 			$this->numericString()
 		);
-	}
-
-	private function hasTypedExpressions(): bool
-	{
-		return class_exists(TypedExpression::class);
 	}
 
 	/**

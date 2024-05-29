@@ -3,7 +3,6 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -816,28 +815,8 @@ class QueryResultTypeWalker extends SqlWalker
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $this->scalarResultCounter++;
 			$type = $this->unmarshalType($expr->dispatch($this));
 
-			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType(Types::INTEGER);
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
-					if ($type instanceof UnionType || $type instanceof IntersectionType) {
-						return $traverse($type);
-					}
-					if ($type instanceof NullType) {
-						return $type;
-					}
-					if ($enforcedType->accepts($type, true)->yes()) {
-						return $type;
-					}
-					if ($enforcedType instanceof StringType) {
-						if ($type instanceof IntegerType || $type instanceof FloatType) {
-							return TypeCombinator::union($type->toString(), $type);
-						}
-						if ($type instanceof BooleanType) {
-							return TypeCombinator::union($type->toInteger()->toString(), $type);
-						}
-					}
-					return $enforcedType;
-				});
+			if ($expr instanceof TypedExpression) {
+				$type = $this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type));
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on
