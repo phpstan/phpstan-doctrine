@@ -360,8 +360,10 @@ class QueryResultTypeWalker extends SqlWalker
 			case $function instanceof AST\Functions\MaxFunction:
 			case $function instanceof AST\Functions\MinFunction:
 			case $function instanceof AST\Functions\SumFunction:
-			case $function instanceof AST\Functions\CountFunction:
 				return $function->getSql($this);
+
+			case $function instanceof AST\Functions\CountFunction:
+				return $this->marshalType(IntegerRangeType::fromInterval(0, null));
 
 			case $function instanceof AST\Functions\AbsFunction:
 				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
@@ -816,7 +818,10 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = $this->unmarshalType($expr->dispatch($this));
 
 			if ($expr instanceof TypedExpression) {
-				$type = $this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type));
+				$type = TypeCombinator::intersect(
+					$type,
+					$this->resolveDoctrineType($expr->getReturnType()->getName(), null, TypeCombinator::containsNull($type))
+				);
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on

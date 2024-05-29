@@ -610,7 +610,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(3),
-					new IntegerType(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(4),
@@ -618,7 +618,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(5),
-					new IntegerType(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(6),
@@ -644,15 +644,15 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					new IntegerType(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(2),
-					new IntegerType(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(3),
-					new IntegerType(),
+					$this->uint(),
 				],
 			]),
 			'
@@ -696,7 +696,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantStringType('count'),
-					new IntegerType(),
+					$this->uint(),
 				],
 			]),
 			'
@@ -1362,23 +1362,28 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					new IntegerType(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::addNull(
-						new IntegerType()
+						$this->uint()
 					),
 				],
 				[
 					new ConstantIntegerType(3),
-					new IntegerType(),
+					$this->uint(),
+				],
+				[
+					new ConstantIntegerType(4),
+					$this->uint(),
 				],
 			]),
 			'
 				SELECT		LENGTH(m.stringColumn),
 							LENGTH(m.stringNullColumn),
-							LENGTH(\'foo\')
+							LENGTH(\'foo\'),
+							LENGTH(COALESCE(m.stringNullColumn, \'\'))
 				FROM		QueryResult\Entities\Many m
 			',
 		];
@@ -1564,7 +1569,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
 				[
 					new ConstantIntegerType(2),
-					new IntegerType(),
+					$this->uint(),
 				],
 			]),
 			'
