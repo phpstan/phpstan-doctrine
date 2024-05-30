@@ -13,8 +13,8 @@ jobs:
     name: "Platform matrix test"
     runs-on: "ubuntu-latest"
     env:
-      MYSQL_HOST: localhost
-      PGSQL_HOST: localhost
+      MYSQL_HOST: '127.0.0.1'
+      PGSQL_HOST: '127.0.0.1'
 
     strategy:
       fail-fast: false
