@@ -112,18 +112,22 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 58 near \'p.id = 1\': Error: \'p\' is not defined.',
 				59,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE p.id = 1',
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
 				90,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e INNER JOIN e.parent p WHERE p.id = 1 AND t.id = 1',
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 95 near \'foo = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named foo',
 				107,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e INNER JOIN e.parent p WHERE p.id = 1 AND e.foo = 1',
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 93 near \'t.id = 1\': Error: \'t\' is not defined.',
 				107,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e INNER JOIN e.parent p WHERE p.id = 1 AND t.id = 1',
 			],
 		];
 		$this->analyse([__DIR__ . '/data/query-builder-branches-dql.php'], $errors);
