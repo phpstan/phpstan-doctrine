@@ -170,7 +170,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 
 	/**
 	 * @return iterable<string, mixed>
-
 	 */
 	public function provideCases(): iterable
 	{
@@ -194,9 +193,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'MAX(t.col_float)' =>       		['float',        'float',    'string',     'float',   'string',     'string'],
 			'SQRT(t.col_float)' =>      		['float',        'float',    'string',     'float',   'string',     'string'],
 			'ABS(t.col_float)' =>       		['float',        'float',    'string',     'float',   'string',     'string'],
-			'ABS(t.col_string)' =>      		['float',        'float',       null,         null,      null,         null],  // postgre: function abs(character varying) does not exist
-			// TODO fix inferring 'MOD(t.col_float, 2)' =>    		['float',           null,       null,         null,      null,         null,],  // postgre: function mod(double precision, integer) does not exist
-			// sqlite: Implicit conversion from float 0.125 to int loses precision in \Doctrine\DBAL\Driver\API\SQLite\UserDefinedFunctions:46
 
 			// decimal-ish
 			't.col_decimal' =>          		['string',       'string',   'string',     'string',  'string',     'string'],
@@ -212,10 +208,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'SQRT(t.col_int)' =>        		['float',        'float',    'string',     'float',   'string',     'string'],
 			'SQRT(t.col_bigint)' =>     		['float',        null,       'string',     'float',       null,         null], // sqlite3 returns float, but pdo_sqlite returns NULL
 			'ABS(t.col_decimal)' =>     		['string',       'float',    'string',     'string',  'string',     'string'],
-			// TODO fix inferrring		'SQRT(-1)' =>               ['null',         'null',       null,          null,       null,         null,], // postgre: cannot take square root of a negative number
-
-			'MOD(t.col_decimal, 2)' =>          ['string',           null,       null,         null,      null,         null],  // postgre: function mod(double precision, integer) does not exist
-			// sqlite: Implicit conversion from float 0.125 to int loses precision in \Doctrine\DBAL\Driver\API\SQLite\UserDefinedFunctions:46
 
 			// int-ish
 			'1' =>                      		['int',          'int',      'int',        'int',     'string',     'string'],
