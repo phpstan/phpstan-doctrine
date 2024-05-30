@@ -12,6 +12,9 @@ jobs:
   tests:
     name: "Platform matrix test"
     runs-on: "ubuntu-latest"
+    env:
+      MYSQL_HOST: localhost
+      PGSQL_HOST: localhost
 
     strategy:
       fail-fast: false
@@ -41,7 +44,6 @@ jobs:
     services:
       postgres:
         image: "postgres:latest"
-        options: --hostname pgsql
         env:
           POSTGRES_PASSWORD: "secret"
           POSTGRES_USER: root
@@ -51,7 +53,6 @@ jobs:
 
       mysql:
         image: "mysql:latest"
-        options: --hostname mysql
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: secret

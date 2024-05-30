@@ -30,6 +30,7 @@ use function array_keys;
 use function function_exists;
 use function get_class;
 use function get_debug_type;
+use function getenv;
 use function gettype;
 use function is_resource;
 use function method_exists;
@@ -276,7 +277,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		];
 
 		yield 'mysqli, no native numbers' => [
-			'connection' => ['driver' => 'mysqli', 'host' => 'mysql'],
+			'connection' => ['driver' => 'mysqli', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $nativeMysql,
 			'php81+'     => $nativeMysql,
 			'setup'      => [
@@ -289,14 +290,14 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		];
 
 		yield 'mysqli, native numbers' => [
-			'connection' => ['driver' => 'mysqli', 'host' => 'mysql'],
+			'connection' => ['driver' => 'mysqli', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $nativeMysql,
 			'php81+'     => $nativeMysql,
 			'setup'      => [MYSQLI_OPT_INT_AND_FLOAT_NATIVE => true],
 		];
 
 		yield 'pdo_mysql, stringify, no emulate' => [
-			'connection' => ['driver' => 'pdo_mysql', 'host' => 'mysql'],
+			'connection' => ['driver' => 'pdo_mysql', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $stringified,
 			'php81+'     => $stringified,
 			'setup'      => [
@@ -306,21 +307,21 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		];
 
 		yield 'pdo_mysql, no stringify, no emulate' => [
-			'connection' => ['driver' => 'pdo_mysql', 'host' => 'mysql'],
+			'connection' => ['driver' => 'pdo_mysql', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $nativeMysql,
 			'php81+'     => $nativeMysql,
 			'setup'      => [PDO::ATTR_EMULATE_PREPARES => false],
 		];
 
 		yield 'pdo_mysql, no stringify, emulate' => [
-			'connection' => ['driver' => 'pdo_mysql', 'host' => 'mysql'],
+			'connection' => ['driver' => 'pdo_mysql', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $stringified,
 			'php81+'     => $nativeMysql,
 			'setup'      => [], // defaults
 		];
 
 		yield 'pdo_mysql, stringify, emulate' => [
-			'connection' => ['driver' => 'pdo_mysql', 'host' => 'mysql'],
+			'connection' => ['driver' => 'pdo_mysql', 'host' => getenv('MYSQL_HOST')],
 			'php80-'     => $stringified,
 			'php81+'     => $stringified,
 			'setup'      => [
@@ -329,7 +330,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		];
 
 		yield 'pdo_pgsql, stringify' => [
-			'connection' => ['driver' => 'pdo_pgsql', 'host' => 'pgsql'],
+			'connection' => ['driver' => 'pdo_pgsql', 'host' => getenv('PGSQL_HOST')],
 
 			'php80-'     => $stringifiedOldPostgre,
 			'php81+'     => $stringified,
@@ -337,14 +338,14 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		];
 
 		yield 'pdo_pgsql, no stringify' => [
-			'connection' => ['driver' => 'pdo_pgsql', 'host' => 'pgsql'],
+			'connection' => ['driver' => 'pdo_pgsql', 'host' => getenv('PGSQL_HOST')],
 			'php80-'     => $nativePdoPg,
 			'php81+'     => $nativePdoPg,
 			'setup'      => [],
 		];
 
 		yield 'pgsql' => [
-			'connection' => ['driver' => 'pgsql', 'host' => 'pgsql'],
+			'connection' => ['driver' => 'pgsql', 'host' => getenv('PGSQL_HOST')],
 			'php80-'     => $nativePg,
 			'php81+'     => $nativePg,
 			'setup'      => [],

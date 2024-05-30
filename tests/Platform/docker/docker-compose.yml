@@ -24,6 +24,9 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile80
+        environment:
+            MYSQL_HOST: mysql
+            PGSQL_HOST: pgsql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
@@ -34,6 +37,9 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile81
+        environment:
+            MYSQL_HOST: mysql
+            PGSQL_HOST: pgsql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
