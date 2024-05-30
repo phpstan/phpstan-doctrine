@@ -109,13 +109,13 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$entity->col_float = 0.125;
 		$entity->col_decimal = '0.1';
 		$entity->col_int = 9;
-		$entity->col_bigint = 2147483648;
+		$entity->col_bigint = '2147483648';
 		$entity->col_string = 'foobar';
 
 		$entityManager->persist($entity);
 		$entityManager->flush();
 
-		$columnsQueryTemplate = 'SELECT %s FROM MatrixEntity\TestEntity t GROUP BY t.col_int, t.col_float, t.col_decimal, t.col_bigint, t.col_bool, t.col_string';
+		$columnsQueryTemplate = 'SELECT %s FROM %s t GROUP BY t.col_int, t.col_float, t.col_decimal, t.col_bigint, t.col_bool, t.col_string';
 
 		$expected = $phpVersion >= 81
 			? $expectedOnPhp81AndAbove
@@ -125,7 +125,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			if ($expectedType === null) {
 				continue; // e.g. no such function
 			}
-			$dql = sprintf($columnsQueryTemplate, $select);
+			$dql = sprintf($columnsQueryTemplate, $select, TestEntity::class);
 
 			$query = $entityManager->createQuery($dql);
 			$result = $query->getSingleResult();

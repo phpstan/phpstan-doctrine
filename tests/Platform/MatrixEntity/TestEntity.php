@@ -49,7 +49,7 @@ class TestEntity
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="bigint", name="col_bigint", nullable=false)
-	 * @var int
+	 * @var string
 	 */
 	public $col_bigint;
 

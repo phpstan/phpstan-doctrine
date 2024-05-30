@@ -41,6 +41,7 @@ jobs:
     services:
       postgres:
         image: "postgres:latest"
+        options: --hostname pgsql
         env:
           POSTGRES_PASSWORD: "secret"
           POSTGRES_USER: root
@@ -50,6 +51,7 @@ jobs:
 
       mysql:
         image: "mysql:latest"
+        options: --hostname mysql
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: secret
