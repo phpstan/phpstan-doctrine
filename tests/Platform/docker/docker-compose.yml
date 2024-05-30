@@ -1,0 +1,40 @@
+# the setup here should be in sync with GitHub CI services, see platform-matrix-test.yml
+
+services:
+    mysql:
+        image: mysql:8.0
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: foo
+
+    pgsql:
+        image: postgres:13
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: secret
+            POSTGRES_USER: root
+            POSTGRES_DB: foo
+
+    php80:
+        depends_on: [mysql, pgsql]
+        build:
+            context: .
+            dockerfile: ./Dockerfile80
+        working_dir: /app
+        user: ${UID:-1000}:${GID:-1000}
+        volumes:
+            - ../../../:/app
+
+    php81:
+        depends_on: [mysql, pgsql]
+        build:
+            context: .
+            dockerfile: ./Dockerfile81
+        working_dir: /app
+        user: ${UID:-1000}:${GID:-1000}
+        volumes:
+          - ../../../:/app

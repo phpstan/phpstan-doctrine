@@ -1,0 +1,7 @@
+FROM php:8.0-cli
+
+COPY ./docker-setup.sh /opt/src/scripts/setup.sh
+RUN /opt/src/scripts/setup.sh
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
