@@ -14,7 +14,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use LogicException;
 use mysqli;
 use PDO;
-use PgSql\Connection as NativePgsqlConnection;
 use PHPStan\Platform\MatrixEntity\TestEntity;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\ConstantTypeHelper;
@@ -28,10 +27,10 @@ use function array_column;
 use function array_combine;
 use function array_keys;
 use function function_exists;
-use function get_class;
 use function get_debug_type;
 use function getenv;
 use function gettype;
+use function is_a;
 use function is_resource;
 use function method_exists;
 use function reset;
@@ -374,14 +373,14 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				}
 			}
 
-		} elseif ($nativeConnection instanceof NativePgsqlConnection) {
+		} elseif (is_a($nativeConnection, 'PgSql\Connection', true)) {
 			if ($attributes !== []) {
-				throw new LogicException('Cannot set attributes for ' . NativePgsqlConnection::class . ' driver');
+				throw new LogicException('Cannot set attributes for PgSql\Connection driver');
 			}
 
 		} elseif ($nativeConnection instanceof SQLite3) {
 			if ($attributes !== []) {
-				throw new LogicException('Cannot set attributes for ' . NativePgsqlConnection::class . ' driver');
+				throw new LogicException('Cannot set attributes for ' . SQLite3::class . ' driver');
 			}
 
 		} elseif (is_resource($nativeConnection)) { // e.g. `resource (pgsql link)` on PHP < 8.1 with pgsql driver
@@ -403,12 +402,14 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			return $connection->getNativeConnection();
 		}
 
-		if ($connection->getWrappedConnection() instanceof PDO) {
-			return $connection->getWrappedConnection();
-		}
+		if (method_exists($connection, 'getWrappedConnection')) {
+			if ($connection->getWrappedConnection() instanceof PDO) {
+				return $connection->getWrappedConnection();
+			}
 
-		if (get_class($connection->getWrappedConnection()) === 'Doctrine\DBAL\Driver\Mysqli\MysqliConnection' && method_exists($connection->getWrappedConnection(), 'getWrappedResourceHandle')) {
-			return $connection->getWrappedConnection()->getWrappedResourceHandle();
+			if (method_exists($connection->getWrappedConnection(), 'getWrappedResourceHandle')) {
+				return $connection->getWrappedConnection()->getWrappedResourceHandle();
+			}
 		}
 
 		throw new LogicException('Unable to get native connection');
