@@ -3,7 +3,7 @@ check: lint cs tests phpstan
 
 .PHONY: tests
 tests:
-	php vendor/bin/phpunit --exclude-group=platform
+	php vendor/bin/phpunit
 
 .PHONY: lint
 lint:
