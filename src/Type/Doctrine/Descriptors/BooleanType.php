@@ -28,7 +28,8 @@ class BooleanType implements DoctrineTypeDescriptor
 	{
 		return TypeCombinator::union(
 			new ConstantIntegerType(0),
-			new ConstantIntegerType(1)
+			new ConstantIntegerType(1),
+			new \PHPStan\Type\BooleanType()
 		);
 	}
 

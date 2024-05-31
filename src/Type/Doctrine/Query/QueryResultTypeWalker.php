@@ -14,6 +14,7 @@ use Doctrine\ORM\Query\ParserResult;
 use Doctrine\ORM\Query\SqlWalker;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -1113,8 +1114,11 @@ class QueryResultTypeWalker extends SqlWalker
 				break;
 
 			case AST\Literal::BOOLEAN:
-				$value = strtolower($literal->value) === 'true' ? 1 : 0;
-				$type = new ConstantIntegerType($value);
+				$value = strtolower($literal->value) === 'true';
+				$type = TypeCombinator::union(
+					new ConstantIntegerType($value ? 1 : 0),
+					new ConstantBooleanType($value)
+				);
 				break;
 
 			case AST\Literal::NUMERIC:

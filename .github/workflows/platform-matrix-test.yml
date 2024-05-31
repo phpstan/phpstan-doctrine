@@ -1,0 +1,61 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+name: "Platform matrix test"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "1.4.x"
+
+jobs:
+  tests:
+    name: "Platform matrix test"
+    runs-on: "ubuntu-latest"
+    env:
+      MYSQL_HOST: '127.0.0.1'
+      PGSQL_HOST: '127.0.0.1'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.0"
+          - "8.1"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          ini-file: development
+          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
+
+      - name: "Install dependencies"
+        run: "composer install --no-interaction --no-progress"
+
+      - name: "Run platform matrix test"
+        run: vendor/bin/phpunit --group=platform
+
+    services:
+      postgres:
+        image: "postgres:latest"
+        env:
+          POSTGRES_PASSWORD: "secret"
+          POSTGRES_USER: root
+          POSTGRES_DB: foo
+        ports:
+          - "5432:5432"
+
+      mysql:
+        image: "mysql:latest"
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: foo
+        ports:
+          - "3306:3306"

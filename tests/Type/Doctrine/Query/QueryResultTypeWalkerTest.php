@@ -13,7 +13,9 @@ use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
@@ -794,7 +796,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					TypeCombinator::union(
 						new ConstantIntegerType(1),
 						new ConstantStringType('1'),
-						new NullType()
+						new NullType(),
+						new ConstantBooleanType(true)
 					),
 				],
 			]),
@@ -810,7 +813,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
-						new IntegerType()
+						new IntegerType(),
+						new ConstantBooleanType(false)
 					),
 				],
 				[
@@ -839,6 +843,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
+						new ConstantBooleanType(false),
 						new ConstantIntegerType(0)
 					),
 				],
@@ -859,6 +864,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
+						new ConstantBooleanType(false),
 						new ConstantIntegerType(0)
 					),
 				],
@@ -881,7 +887,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 						new ConstantIntegerType(0),
 						new ConstantIntegerType(1),
 						new ConstantStringType('0'),
-						new ConstantStringType('1')
+						new ConstantStringType('1'),
+						new BooleanType()
 					),
 				],
 			]),
@@ -902,7 +909,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 						new ConstantIntegerType(0),
 						new ConstantIntegerType(1),
 						new ConstantStringType('0'),
-						new ConstantStringType('1')
+						new ConstantStringType('1'),
+						new BooleanType()
 					),
 				],
 			]),
@@ -921,28 +929,32 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new ConstantIntegerType(1),
-						new ConstantStringType('1')
+						new ConstantStringType('1'),
+						new ConstantBooleanType(true)
 					),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::union(
 						new ConstantIntegerType(0),
-						new ConstantStringType('0')
+						new ConstantStringType('0'),
+						new ConstantBooleanType(false)
 					),
 				],
 				[
 					new ConstantIntegerType(3),
 					TypeCombinator::union(
 						new ConstantIntegerType(1),
-						new ConstantStringType('1')
+						new ConstantStringType('1'),
+						new ConstantBooleanType(true)
 					),
 				],
 				[
 					new ConstantIntegerType(4),
 					TypeCombinator::union(
 						new ConstantIntegerType(0),
-						new ConstantStringType('0')
+						new ConstantStringType('0'),
+						new ConstantBooleanType(false)
 					),
 				],
 			]),

@@ -43,3 +43,9 @@ parameters:
 			message: '#^Call to function method_exists\(\) with ''Doctrine\\\\ORM\\\\EntityManager'' and ''create'' will always evaluate to true\.$#'
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 			reportUnmatched: false
+		-
+			messages:
+				- '#^Call to function method_exists\(\) with Doctrine\\DBAL\\Connection and ''getNativeConnection'' will always evaluate to true\.$#'
+				- '#^Cannot call method getWrappedResourceHandle\(\) on class\-string\|object\.$#'
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+			reportUnmatched: false

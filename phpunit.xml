@@ -36,5 +36,11 @@
         </testsuite>
     </testsuites>
 
+	<groups>
+		<exclude>
+			<group>platform</group>
+		</exclude>
+	</groups>
+
     <logging/>
 </phpunit>
