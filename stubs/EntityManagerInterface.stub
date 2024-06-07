@@ -68,4 +68,13 @@ interface EntityManagerInterface extends ObjectManager
 	 */
 	public function getClassMetadata($className);
 
+	/**
+	 * @param-immediately-invoked-callable $func
+	 * @param Closure(): T $func
+	 * @return T
+	 *
+	 * @template T
+	 */
+	public function wrapInTransaction(callable $func);
+
 }
