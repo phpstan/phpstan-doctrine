@@ -70,7 +70,7 @@ interface EntityManagerInterface extends ObjectManager
 
 	/**
 	 * @param-immediately-invoked-callable $func
-	 * @param callable(): T $func
+	 * @param callable(self): T $func
 	 * @return T
 	 *
 	 * @template T
