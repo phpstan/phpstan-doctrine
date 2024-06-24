@@ -3,6 +3,8 @@
 namespace PHPStan\Platform;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -10,11 +12,12 @@ use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use LogicException;
 use mysqli;
 use PDO;
-use PHPStan\Platform\MatrixEntity\TestEntity;
+use PHPStan\Platform\Entity\PlatformEntity;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
@@ -25,7 +28,9 @@ use PHPUnit\Framework\Constraint\IsType;
 use SQLite3;
 use function array_column;
 use function array_combine;
+use function array_fill;
 use function array_keys;
+use function class_exists;
 use function function_exists;
 use function get_debug_type;
 use function getenv;
@@ -89,7 +94,13 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$config->setAutoGenerateProxyClasses(false);
 			$config->setSecondLevelCacheEnabled(false);
 			$config->setMetadataCache(new ArrayCachePool());
-			$config->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), [__DIR__ . '/MatrixEntity']));
+
+			if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '3.*')) {
+				$config->setMetadataDriverImpl(new AttributeDriver([__DIR__ . '/Entity']));
+			} else {
+				$config->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), [__DIR__ . '/Entity']));
+			}
+
 			$entityManager = new EntityManager($connection, $config);
 
 		} catch (DbalException $e) {
@@ -104,7 +115,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$schemaTool->dropSchema($classes);
 		$schemaTool->createSchema($classes);
 
-		$entity = new TestEntity();
+		$entity = new PlatformEntity();
+		$entity->id = '1';
 		$entity->col_bool = true;
 		$entity->col_float = 0.125;
 		$entity->col_decimal = '0.1';
@@ -125,7 +137,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			if ($expectedType === null) {
 				continue; // e.g. no such function
 			}
-			$dql = sprintf($columnsQueryTemplate, $select, TestEntity::class);
+			$dql = sprintf($columnsQueryTemplate, $select, PlatformEntity::class);
 
 			$query = $entityManager->createQuery($dql);
 			$result = $query->getSingleResult();
@@ -214,7 +226,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'1' =>                              ['int',          'int',      'int',        'int',     'string',     'string'],
 			'2147483648' =>                     ['int',          'int',      'int',        'int',     'string',     'string'],
 			't.col_int' =>                      ['int',          'int',      'int',        'int',     'int',        'int'],
-			't.col_bigint' =>                   ['string',       'string',   'string',     'string',  'string',     'string'],
+			't.col_bigint' =>  self::hasDbal4() ? array_fill(0, 6, 'int') : array_fill(0, 6, 'string'),
 			'SUM(t.col_int)' =>                 ['string',       'int',      'int',        'int',     'string',     'string'],
 			'SUM(t.col_bigint)' =>              ['string',       'int',      'string',     'string',  'string',     'string'],
 			"LENGTH('')" =>                     ['int',          'int',      'int',        'int',     'int',        'int'],
@@ -406,6 +418,15 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		}
 
 		throw new LogicException('Unable to get native connection');
+	}
+
+	private static function hasDbal4(): bool
+	{
+		if (!class_exists(InstalledVersions::class)) {
+			return false;
+		}
+
+		return InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '4.*');
 	}
 
 }
