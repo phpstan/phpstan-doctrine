@@ -1,6 +1,6 @@
 # https://help.github.com/en/categories/automating-your-workflow-with-github-actions
 
-name: "Platform matrix test"
+name: "Platform test"
 
 on:
   pull_request:
@@ -10,18 +10,31 @@ on:
 
 jobs:
   tests:
-    name: "Platform matrix test"
+    name: "Platform test"
     runs-on: "ubuntu-latest"
     env:
       MYSQL_HOST: '127.0.0.1'
       PGSQL_HOST: '127.0.0.1'
+      MSSQL_HOST: '127.0.0.1'
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
+          - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
+          - "8.3"
+        update-packages:
+          - ""
+        include:
+          - php-version: "8.1"
+            update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
+          - php-version: "8.2"
+            update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
+          - php-version: "8.3"
+            update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
 
     steps:
       - name: "Checkout"
@@ -37,6 +50,10 @@ jobs:
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
+
+      - name: "Update packages"
+        if: ${{ matrix.update-packages != '' }}
+        run: composer require --dev ${{ matrix.update-packages }} -W
 
       - name: "Run platform matrix test"
         run: vendor/bin/phpunit --group=platform
@@ -59,3 +76,12 @@ jobs:
           MYSQL_DATABASE: foo
         ports:
           - "3306:3306"
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:latest
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: 'Secret.123'
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
