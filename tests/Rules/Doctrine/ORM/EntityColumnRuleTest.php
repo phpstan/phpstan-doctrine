@@ -70,7 +70,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeImmutableType(),
 				new DateTimeType(),
 				new DateType(),
-				new DecimalType(),
+				new DecimalType(true),
 				new JsonType(),
 				new IntegerType(),
 				new StringType(),
