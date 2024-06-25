@@ -74,6 +74,13 @@ class One
 	 */
 	public $embedded;
 
+	/**
+	 * @Column(type="custom_int", nullable=true)
+	 *
+	 * @var mixed
+	 */
+	public $mixedColumn;
+
 	public function __construct()
 	{
 		$this->subOne = new SubOne();

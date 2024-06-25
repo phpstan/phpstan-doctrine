@@ -7,6 +7,7 @@ use Composer\Semver\VersionParser;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -44,6 +45,7 @@ use QueryResult\EntitiesEnum\EntityWithEnum;
 use QueryResult\EntitiesEnum\IntEnum;
 use QueryResult\EntitiesEnum\StringEnum;
 use Throwable;
+use Type\Doctrine\data\QueryResult\CustomIntType;
 use function array_merge;
 use function array_shift;
 use function assert;
@@ -75,6 +77,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	{
 		$em = require __DIR__ . '/../data/QueryResult/entity-manager.php';
 		self::$em = $em;
+
+		if (!DbalType::hasType(CustomIntType::NAME)) {
+			DbalType::addType(CustomIntType::NAME, CustomIntType::class);
+		}
 
 		$schemaTool = new SchemaTool($em);
 		$classes = $em->getMetadataFactory()->getAllMetadata();
@@ -1238,6 +1244,16 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							ABS(1),
 							ABS(\'foo\')
 				FROM		QueryResult\Entities\Many m
+			',
+		];
+
+		yield 'abs function with mixed' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), TypeCombinator::addNull($this->unumericStringified())],
+			]),
+			'
+				SELECT		ABS(o.mixedColumn)
+				FROM		QueryResult\Entities\One o
 			',
 		];
 

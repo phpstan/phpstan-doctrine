@@ -376,7 +376,7 @@ class QueryResultTypeWalker extends SqlWalker
 					new FloatType()
 				);
 
-				if (TypeCombinator::containsNull($exprType)) {
+				if ($this->canBeNull($exprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -388,7 +388,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$secondExprType = $this->unmarshalType($function->secondArithmetic->dispatch($this));
 
 				$type = IntegerRangeType::fromInterval(0, null);
-				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
+				if ($this->canBeNull($firstExprType) || $this->canBeNull($secondExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -399,7 +399,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 				foreach ($function->concatExpressions as $expr) {
 					$type = $this->unmarshalType($expr->dispatch($this));
-					$hasNull = $hasNull || TypeCombinator::containsNull($type);
+					$hasNull = $hasNull || $this->canBeNull($type);
 				}
 
 				$type = new StringType();
@@ -420,7 +420,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$intervalExprType = $this->unmarshalType($function->intervalExpression->dispatch($this));
 
 				$type = new StringType();
-				if (TypeCombinator::containsNull($dateExprType) || TypeCombinator::containsNull($intervalExprType)) {
+				if ($this->canBeNull($dateExprType) || $this->canBeNull($intervalExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -434,7 +434,7 @@ class QueryResultTypeWalker extends SqlWalker
 					new IntegerType(),
 					new FloatType()
 				);
-				if (TypeCombinator::containsNull($date1ExprType) || TypeCombinator::containsNull($date2ExprType)) {
+				if ($this->canBeNull($date1ExprType) || $this->canBeNull($date2ExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -444,7 +444,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$stringPrimaryType = $this->unmarshalType($function->stringPrimary->dispatch($this));
 
 				$type = IntegerRangeType::fromInterval(0, null);
-				if (TypeCombinator::containsNull($stringPrimaryType)) {
+				if ($this->canBeNull($stringPrimaryType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -455,7 +455,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$secondExprType = $this->unmarshalType($this->walkStringPrimary($function->secondStringPrimary));
 
 				$type = IntegerRangeType::fromInterval(0, null);
-				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
+				if ($this->canBeNull($firstExprType) || $this->canBeNull($secondExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -467,7 +467,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$stringPrimaryType = $this->unmarshalType($function->stringPrimary->dispatch($this));
 
 				$type = new StringType();
-				if (TypeCombinator::containsNull($stringPrimaryType)) {
+				if ($this->canBeNull($stringPrimaryType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -478,7 +478,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$secondExprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->secondSimpleArithmeticExpression));
 
 				$type = IntegerRangeType::fromInterval(0, null);
-				if (TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
+				if ($this->canBeNull($firstExprType) || $this->canBeNull($secondExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -493,7 +493,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$exprType = $this->unmarshalType($this->walkSimpleArithmeticExpression($function->simpleArithmeticExpression));
 
 				$type = new FloatType();
-				if (TypeCombinator::containsNull($exprType)) {
+				if ($this->canBeNull($exprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -510,7 +510,7 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				$type = new StringType();
-				if (TypeCombinator::containsNull($stringType) || TypeCombinator::containsNull($firstExprType) || TypeCombinator::containsNull($secondExprType)) {
+				if ($this->canBeNull($stringType) || $this->canBeNull($firstExprType) || $this->canBeNull($secondExprType)) {
 					$type = TypeCombinator::addNull($type);
 				}
 
@@ -714,7 +714,7 @@ class QueryResultTypeWalker extends SqlWalker
 			}
 
 			$type = $this->unmarshalType($expression->dispatch($this));
-			$allTypesContainNull = $allTypesContainNull && TypeCombinator::containsNull($type);
+			$allTypesContainNull = $allTypesContainNull && $this->canBeNull($type);
 
 			// Some drivers manipulate the types, lets avoid false positives by generalizing constant types
 			// e.g. sqlsrv: "COALESCE returns the data type of value with the highest precedence"
