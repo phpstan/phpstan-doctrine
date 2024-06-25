@@ -1189,7 +1189,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'arithmetic' => [
 			$this->constantArray([
 				[new ConstantStringType('intColumn'), new IntegerType()],
-				[new ConstantIntegerType(1), $this->intStringified()],
+				[new ConstantIntegerType(1), TypeCombinator::union(new ConstantIntegerType(1), new ConstantStringType('1'))],
 				[new ConstantIntegerType(2), $this->intStringified()],
 				[new ConstantIntegerType(3), TypeCombinator::addNull($this->intStringified())],
 				[new ConstantIntegerType(4), $this->intStringified()],
