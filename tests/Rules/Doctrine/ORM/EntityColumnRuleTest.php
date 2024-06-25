@@ -7,6 +7,7 @@ use Carbon\Doctrine\CarbonType;
 use Composer\InstalledVersions;
 use Doctrine\DBAL\Types\Type;
 use Iterator;
+use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
@@ -70,7 +71,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DateTimeImmutableType(),
 				new DateTimeType(),
 				new DateType(),
-				new DecimalType(),
+				new DecimalType(new DriverDetector(true)),
 				new JsonType(),
 				new IntegerType(),
 				new StringType(),

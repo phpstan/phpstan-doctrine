@@ -90,6 +90,10 @@ services:
 		factory: @PHPStan\Type\Doctrine\DescriptorRegistryFactory::createRegistry
 
 	-
+		class: PHPStan\Doctrine\Driver\DriverDetector
+		arguments:
+			failOnInvalidConnection: %featureToggles.bleedingEdge%
+	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
 	-
 		class: PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension
