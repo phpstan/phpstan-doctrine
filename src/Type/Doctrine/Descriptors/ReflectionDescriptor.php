@@ -69,6 +69,10 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
+		if (!$this->reflectionProvider->hasClass($this->type)) {
+			return new MixedType();
+		}
+
 		$registry = $this->container->getByType(DefaultDescriptorRegistry::class);
 		$parents = $this->reflectionProvider->getClass($this->type)->getParentClassesNames();
 
