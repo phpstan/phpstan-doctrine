@@ -15,6 +15,7 @@ use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
@@ -1604,13 +1605,13 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		yield 'unary minus' => [
 			$this->constantArray([
-				[new ConstantStringType('minusInt'), $this->numericStringOrInt()], // should be nullable
-				[new ConstantStringType('minusFloat'), TypeCombinator::union(new FloatType(), $this->numericStringOrInt())], // should be nullable && should not include int
+				[new ConstantStringType('minusInt'), TypeCombinator::union(new ConstantIntegerType(-1), new ConstantStringType('-1'))], // should be nullable
+				[new ConstantStringType('minusFloat'), TypeCombinator::union(new ConstantFloatType(-0.1), new ConstantStringType('-0.1'))], // should be nullable
 				[new ConstantStringType('minusIntRange'), TypeCombinator::union(IntegerRangeType::fromInterval(null, 0), $this->numericString())],
 			]),
 			'
-				SELECT		-o.intColumn as minusInt,
-							-o.floatColumn as minusFloat,
+				SELECT		-1 as minusInt,
+							-0.1 as minusFloat,
 							-COUNT(o.intColumn) as minusIntRange
 				FROM		QueryResult\Entities\One o
 			',
