@@ -1261,7 +1261,19 @@ class QueryResultTypeWalker extends SqlWalker
 		$primary = $factor->arithmeticPrimary;
 
 		$type = $this->unmarshalType($this->walkArithmeticPrimary($primary));
-		$type = TypeUtils::generalizeType($type, GeneralizePrecision::lessSpecific());
+
+		if ($type instanceof ConstantIntegerType && $factor->sign === false) {
+			$type = new ConstantIntegerType($type->getValue() * -1);
+
+		} elseif ($type instanceof IntegerRangeType && $factor->sign === false) {
+			$type = IntegerRangeType::fromInterval(
+				$type->getMax() === null ? null : $type->getMax() * -1,
+				$type->getMin() === null ? null : $type->getMin() * -1
+			);
+
+		} elseif ($type instanceof ConstantFloatType && $factor->sign === false) {
+			$type = new ConstantFloatType($type->getValue() * -1);
+		}
 
 		return $this->marshalType($type);
 	}
