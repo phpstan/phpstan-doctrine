@@ -117,6 +117,7 @@ class QueryResultTypeWalker extends SqlWalker
 	public static function walk(Query $query, QueryResultTypeBuilder $typeBuilder, DescriptorRegistry $descriptorRegistry): void
 	{
 		$query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::class);
+		$query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [QueryAggregateFunctionDetectorTreeWalker::class]);
 		$query->setHint(self::HINT_TYPE_MAPPING, $typeBuilder);
 		$query->setHint(self::HINT_DESCRIPTOR_REGISTRY, $descriptorRegistry);
 
@@ -137,7 +138,8 @@ class QueryResultTypeWalker extends SqlWalker
 		$this->em = $query->getEntityManager();
 		$this->queryComponents = $queryComponents;
 		$this->nullableQueryComponents = [];
-		$this->hasAggregateFunction = false;
+		$this->hasAggregateFunction = $query->hasHint(QueryAggregateFunctionDetectorTreeWalker::HINT_HAS_AGGREGATE_FUNCTION);
+
 		$this->hasGroupByClause = false;
 
 		// The object is instantiated by Doctrine\ORM\Query\Parser, so receiving
@@ -176,7 +178,6 @@ class QueryResultTypeWalker extends SqlWalker
 	public function walkSelectStatement(AST\SelectStatement $AST): string
 	{
 		$this->typeBuilder->setSelectQuery();
-		$this->hasAggregateFunction = $this->hasAggregateFunction($AST);
 		$this->hasGroupByClause = $AST->groupByClause !== null;
 
 		$this->walkFromClause($AST->fromClause);
@@ -1430,31 +1431,6 @@ class QueryResultTypeWalker extends SqlWalker
 	private function hasAggregateWithoutGroupBy(): bool
 	{
 		return $this->hasAggregateFunction && !$this->hasGroupByClause;
-	}
-
-	private function hasAggregateFunction(AST\SelectStatement $AST): bool
-	{
-		foreach ($AST->selectClause->selectExpressions as $selectExpression) {
-			if (!$selectExpression instanceof AST\SelectExpression) {
-				continue;
-			}
-
-			$expression = $selectExpression->expression;
-
-			switch (true) {
-				case $expression instanceof AST\Functions\AvgFunction:
-				case $expression instanceof AST\Functions\CountFunction:
-				case $expression instanceof AST\Functions\MaxFunction:
-				case $expression instanceof AST\Functions\MinFunction:
-				case $expression instanceof AST\Functions\SumFunction:
-				case $expression instanceof AST\AggregateExpression:
-					return true;
-				default:
-					break;
-			}
-		}
-
-		return false;
 	}
 
 }
