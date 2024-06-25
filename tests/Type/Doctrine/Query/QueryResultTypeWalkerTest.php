@@ -548,26 +548,18 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				$this->constantArray([
 					[
 						new ConstantIntegerType(1),
-						TypeCombinator::union(
-							new ConstantStringType('a'),
-							new ConstantStringType('b')
-						),
+						new StringType(),
 					],
 					[
 						new ConstantIntegerType(2),
 						TypeCombinator::union(
-							new ConstantIntegerType(1),
-							new ConstantIntegerType(2),
-							new ConstantStringType('1'),
-							new ConstantStringType('2')
+							$this->numericString(),
+							new IntegerType()
 						),
 					],
 					[
 						new ConstantIntegerType(3),
-						TypeCombinator::union(
-							new ConstantStringType('1'),
-							new ConstantStringType('2')
-						),
+						$this->numericString(),
 					],
 				]),
 				'
@@ -842,11 +834,20 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(3),
 					$this->intStringified(),
 				],
+				[
+					new ConstantIntegerType(4),
+					TypeCombinator::union(
+						new IntegerType(),
+						new FloatType(),
+						$this->numericString()
+					),
+				],
 			]),
 			'
 				SELECT		COALESCE(m.stringNullColumn, m.intColumn, false),
 							COALESCE(m.stringNullColumn, m.stringNullColumn),
-							COALESCE(NULLIF(m.intColumn, 1), 0)
+							COALESCE(NULLIF(m.intColumn, 1), 0),
+							COALESCE(1, 1.1)
 				FROM		QueryResult\Entities\Many m
 			',
 		];
@@ -1142,8 +1143,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					[
 						new ConstantIntegerType(2),
 						TypeCombinator::union(
-							new ConstantIntegerType(1),
-							new ConstantStringType('1')
+							new IntegerType(),
+							$this->numericString()
 						),
 					],
 					[
