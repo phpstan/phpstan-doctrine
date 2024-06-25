@@ -82,6 +82,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 
 		$dataOne = [
 			'intColumn' => [1, 2],
+			'floatColumn' => [0.1, 2.0],
 			'stringColumn' => ['A', 'B'],
 			'stringNullColumn' => ['A', null],
 		];
@@ -108,10 +109,11 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		$id = 1;
 
 		foreach (self::combinations($dataOne) as $combination) {
-			[$intColumn, $stringColumn, $stringNullColumn] = $combination;
+			[$intColumn, $floatColumn, $stringColumn, $stringNullColumn] = $combination;
 			$one = new One();
 			$one->id = (string) $id++;
 			$one->intColumn = $intColumn;
+			$one->floatColumn = $floatColumn;
 			$one->stringColumn = $stringColumn;
 			$one->stringNullColumn = $stringNullColumn;
 			$embedded = new Embedded();
@@ -1611,6 +1613,20 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							o.embedded.stringNullColumn,
 							o.embedded.nestedEmbedded.intColumn,
 							o.embedded.nestedEmbedded.stringNullColumn
+				FROM		QueryResult\Entities\One o
+			',
+		];
+
+		yield 'unary minus' => [
+			$this->constantArray([
+				[new ConstantStringType('minusInt'), $this->numericStringOrInt()], // should be nullable
+				[new ConstantStringType('minusFloat'), TypeCombinator::union(new FloatType(), $this->numericStringOrInt())], // should be nullable && should not include int
+				[new ConstantStringType('minusIntRange'), TypeCombinator::union(IntegerRangeType::fromInterval(null, 0), $this->numericString())],
+			]),
+			'
+				SELECT		-o.intColumn as minusInt,
+							-o.floatColumn as minusFloat,
+							-COUNT(o.intColumn) as minusIntRange
 				FROM		QueryResult\Entities\One o
 			',
 		];

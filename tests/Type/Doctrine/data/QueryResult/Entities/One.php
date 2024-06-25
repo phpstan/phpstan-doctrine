@@ -32,6 +32,13 @@ class One
 	public $intColumn;
 
 	/**
+	 * @Column(type="float")
+	 *
+	 * @var float
+	 */
+	public $floatColumn;
+
+	/**
 	 * @Column(type="string")
 	 *
 	 * @var string
