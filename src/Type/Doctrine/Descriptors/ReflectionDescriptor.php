@@ -70,6 +70,16 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor, DoctrineTypeDriver
 
 	public function getDatabaseInternalType(): Type
 	{
+		return $this->doGetDatabaseInternalType(null);
+	}
+
+	public function getDatabaseInternalTypeForDriver(Connection $connection): Type
+	{
+		return $this->doGetDatabaseInternalType($connection);
+	}
+
+	private function doGetDatabaseInternalType(?Connection $connection): Type
+	{
 		if (!$this->reflectionProvider->hasClass($this->type)) {
 			return new MixedType();
 		}
@@ -81,28 +91,9 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor, DoctrineTypeDriver
 			try {
 				// this assumes that if somebody inherits from DecimalType,
 				// the real database type remains decimal and we can reuse its descriptor
-				return $registry->getByClassName($dbalTypeParentClass)->getDatabaseInternalType();
-
-			} catch (DescriptorNotRegisteredException $e) {
-				continue;
-			}
-		}
-
-		return new MixedType();
-	}
-
-	public function getDatabaseInternalTypeForDriver(Connection $connection): Type
-	{
-		$registry = $this->container->getByType(DefaultDescriptorRegistry::class);
-		$parents = $this->reflectionProvider->getClass($this->type)->getParentClassesNames();
-
-		foreach ($parents as $dbalTypeParentClass) {
-			try {
-				// this assumes that if somebody inherits from DecimalType,
-				// the real database type remains decimal and we can reuse its descriptor
 				$descriptor = $registry->getByClassName($dbalTypeParentClass);
 
-				return $descriptor instanceof DoctrineTypeDriverAwareDescriptor
+				return $descriptor instanceof DoctrineTypeDriverAwareDescriptor && $connection !== null
 					? $descriptor->getDatabaseInternalTypeForDriver($connection)
 					: $descriptor->getDatabaseInternalType();
 
