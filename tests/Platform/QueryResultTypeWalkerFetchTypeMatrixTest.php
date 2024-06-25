@@ -112,7 +112,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	 *
 	 * @dataProvider provideCases
 	 */
-	public function testFetchedTypes(
+	public function testPdoMysqlDefault(
 		array $data,
 		string $dqlTemplate,
 		Type $mysqlExpectedType,
@@ -128,33 +128,629 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		string $stringify
 	): void
 	{
-		$dataset = (string) $this->dataName();
-		$phpVersion = PHP_VERSION_ID;
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mysqlExpectedType,
+			$mysqlExpectedResult,
+			$stringify
+		);
+	}
 
-		$this->performDriverTest('pdo_mysql', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $mysqlExpectedType, $mysqlExpectedResult, $stringify);
-		$this->performDriverTest('pdo_mysql', self::CONFIG_STRINGIFY, $data, $dqlTemplate, $dataset, $phpVersion, $mysqlExpectedType, $mysqlExpectedResult, $stringify);
-		$this->performDriverTest('pdo_mysql', self::CONFIG_NO_EMULATE, $data, $dqlTemplate, $dataset, $phpVersion, $mysqlExpectedType, $mysqlExpectedResult, $stringify);
-		$this->performDriverTest('pdo_mysql', self::CONFIG_STRINGIFY_NO_EMULATE, $data, $dqlTemplate, $dataset, $phpVersion, $mysqlExpectedType, $mysqlExpectedResult, $stringify);
-		$this->performDriverTest('mysqli', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $mysqlExpectedType, $mysqlExpectedResult, $stringify);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoMysqlStringify(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_STRINGIFY,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mysqlExpectedType,
+			$mysqlExpectedResult,
+			$stringify
+		);
+	}
 
-		$this->performDriverTest('pdo_sqlite', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $sqliteExpectedType, $sqliteExpectedResult, $stringify);
-		$this->performDriverTest('pdo_sqlite', self::CONFIG_STRINGIFY, $data, $dqlTemplate, $dataset, $phpVersion, $sqliteExpectedType, $sqliteExpectedResult, $stringify);
-		$this->performDriverTest('sqlite3', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $sqliteExpectedType, $sqliteExpectedResult, $stringify);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoMysqlNoEmulate(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_NO_EMULATE,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mysqlExpectedType,
+			$mysqlExpectedResult,
+			$stringify
+		);
+	}
 
-		$this->performDriverTest('pdo_pgsql', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $pdoPgsqlExpectedType, $pdoPgsqlExpectedResult, $stringify);
-		$this->performDriverTest('pdo_pgsql', self::CONFIG_STRINGIFY, $data, $dqlTemplate, $dataset, $phpVersion, $pdoPgsqlExpectedType, $pdoPgsqlExpectedResult, $stringify);
-		$this->performDriverTest('pgsql', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $pgsqlExpectedType, $pgsqlExpectedResult, $stringify);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoMysqlStringifyNoEmulate(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_STRINGIFY_NO_EMULATE,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mysqlExpectedType,
+			$mysqlExpectedResult,
+			$stringify
+		);
+	}
 
-		// unsupported driver:
-		$this->performDriverTest('sqlsrv', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $mssqlExpectedType, $mssqlExpectedResult, $stringify);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoMysqliDefault(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'mysqli',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mysqlExpectedType,
+			$mysqlExpectedResult,
+			$stringify
+		);
+	}
 
-		// known driver, but unknown stringification setup (connection failure)
-		$this->performDriverTest('pdo_mysql', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify), $mysqlExpectedResult, $stringify, self::INVALID_CONNECTION);
-		$this->performDriverTest('pdo_mysql', self::CONFIG_STRINGIFY, $data, $dqlTemplate, $dataset, $phpVersion, $this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify), $mysqlExpectedResult, $stringify, self::INVALID_CONNECTION);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoSqliteDefault(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_sqlite',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$sqliteExpectedType,
+			$sqliteExpectedResult,
+			$stringify
+		);
+	}
 
-		// unknown driver, unknown setup (connection failure)
-		$this->performDriverTest('pdo_mysql', self::CONFIG_DEFAULT, $data, $dqlTemplate, $dataset, $phpVersion, $this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify), $mysqlExpectedResult, $stringify, self::INVALID_CONNECTION_UNKNOWN_DRIVER);
-		$this->performDriverTest('pdo_mysql', self::CONFIG_STRINGIFY, $data, $dqlTemplate, $dataset, $phpVersion, $this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify), $mysqlExpectedResult, $stringify, self::INVALID_CONNECTION_UNKNOWN_DRIVER);
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoSqliteStringify(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_sqlite',
+			self::CONFIG_STRINGIFY,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$sqliteExpectedType,
+			$sqliteExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoSqlite3(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'sqlite3',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$sqliteExpectedType,
+			$sqliteExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoPgsqlDefault(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_pgsql',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$pdoPgsqlExpectedType,
+			$pdoPgsqlExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPdoPgsqlStringify(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_pgsql',
+			self::CONFIG_STRINGIFY,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$pdoPgsqlExpectedType,
+			$pdoPgsqlExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testPgsql(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pgsql',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$pgsqlExpectedType,
+			$pgsqlExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testUnsupportedDriver(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'sqlsrv',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$mssqlExpectedType,
+			$mssqlExpectedResult,
+			$stringify
+		);
+	}
+
+	/**
+	 * Connection failure test
+	 *
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testKnownDriverUnknownSetupDefault(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify),
+			$mysqlExpectedResult,
+			$stringify,
+			self::INVALID_CONNECTION
+		);
+	}
+
+	/**
+	 * Connection failure test
+	 *
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testKnownDriverUnknownSetupStringify(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_STRINGIFY,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify),
+			$mysqlExpectedResult,
+			$stringify,
+			self::INVALID_CONNECTION
+		);
+	}
+
+	/**
+	 * Connection failure test
+	 *
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testUnknownDriverUnknownSetupDefault(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_DEFAULT,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
+			$mysqlExpectedResult,
+			$stringify,
+			self::INVALID_CONNECTION_UNKNOWN_DRIVER
+		);
+	}
+
+	/**
+	 * Connection failure test
+	 *
+	 * @param array<string, mixed> $data
+	 * @param mixed $mysqlExpectedResult
+	 * @param mixed $sqliteExpectedResult
+	 * @param mixed $pdoPgsqlExpectedResult
+	 * @param mixed $pgsqlExpectedResult
+	 * @param mixed $mssqlExpectedResult
+	 * @param self::STRINGIFY_* $stringify
+	 *
+	 * @dataProvider provideCases
+	 */
+	public function testUnknownDriverUnknownSetupStringify(
+		array $data,
+		string $dqlTemplate,
+		Type $mysqlExpectedType,
+		?Type $sqliteExpectedType,
+		?Type $pdoPgsqlExpectedType,
+		?Type $pgsqlExpectedType,
+		?Type $mssqlExpectedType,
+		$mysqlExpectedResult,
+		$sqliteExpectedResult,
+		$pdoPgsqlExpectedResult,
+		$pgsqlExpectedResult,
+		$mssqlExpectedResult,
+		string $stringify
+	): void
+	{
+		$this->performDriverTest(
+			'pdo_mysql',
+			self::CONFIG_STRINGIFY,
+			$data,
+			$dqlTemplate,
+			(string) $this->dataName(),
+			PHP_VERSION_ID,
+			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
+			$mysqlExpectedResult,
+			$stringify,
+			self::INVALID_CONNECTION_UNKNOWN_DRIVER
+		);
 	}
 
 	/**
