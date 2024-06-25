@@ -36,4 +36,15 @@ class DefaultDescriptorRegistry implements DescriptorRegistry
 		return $this->descriptors[$typeClass];
 	}
 
+	/**
+	 * @throws DescriptorNotRegisteredException
+	 */
+	public function getByClassName(string $className): DoctrineTypeDescriptor
+	{
+		if (!isset($this->descriptors[$className])) {
+			throw new DescriptorNotRegisteredException();
+		}
+		return $this->descriptors[$className];
+	}
+
 }

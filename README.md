@@ -195,6 +195,10 @@ Type descriptors don't have to deal with nullable types, as these are transparen
 
 If your custom type's `convertToPHPValue()` and `convertToDatabaseValue()` methods have proper typehints, you don't have to write your own descriptor for it. The `PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor` can analyse the typehints and do the rest for you.
 
+If parent of your type is one of the Doctrine's non-abstract ones, `ReflectionDescriptor` will reuse its descriptor even for expression resolution (e.g. `AVG(t.cost)`).
+For example, if you extend `Doctrine\DBAL\Types\DecimalType`, it will know that sqlite fetches that as `float|int` and other drivers as `numeric-string`.
+If you extend only `Doctrine\DBAL\Types\Type`, you should use custom descriptor and optionally implement even `DoctrineTypeDriverAwareDescriptor` to provide driver-specific resolution.
+
 ### Registering type descriptors
 
 When you write a custom type descriptor, you have to let PHPStan know about it. Add something like this into your `phpstan.neon`:
