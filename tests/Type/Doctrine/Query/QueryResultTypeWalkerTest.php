@@ -647,6 +647,24 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		yield 'aggregate deeper in AST' => [
+			$this->constantArray([
+				[
+					new ConstantStringType('many'),
+					TypeCombinator::addNull(new ObjectType(Many::class)),
+				],
+				[
+					new ConstantStringType('max'),
+					$this->intStringified(),
+				],
+			]),
+			'
+				SELECT		m AS many,
+							COALESCE(MAX(m.intColumn), 0) as max
+				FROM		QueryResult\Entities\Many m
+			',
+		];
+
 		yield 'aggregate lowercase' => [
 			$this->constantArray([
 				[
