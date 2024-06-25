@@ -3,20 +3,21 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use Doctrine\DBAL\Connection;
-use PHPStan\Doctrine\Driver\DriverType;
+use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use function in_array;
 
 class BooleanType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
-	/** @var bool */
-	private $bleedingEdge;
+	/** @var DriverDetector */
+	private $driverDetector;
 
-	public function __construct(bool $bleedingEdge)
+	public function __construct(DriverDetector $driverDetector)
 	{
-		$this->bleedingEdge = $bleedingEdge;
+		$this->driverDetector = $driverDetector;
 	}
 
 	public function getType(): string
@@ -45,18 +46,18 @@ class BooleanType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 
 	public function getDatabaseInternalTypeForDriver(Connection $connection): Type
 	{
-		$driverType = DriverType::detect($connection, $this->bleedingEdge);
+		$driverType = $this->driverDetector->detect($connection);
 
-		if ($driverType === DriverType::PGSQL || $driverType === DriverType::PDO_PGSQL) {
+		if ($driverType === DriverDetector::PGSQL || $driverType === DriverDetector::PDO_PGSQL) {
 			return new \PHPStan\Type\BooleanType();
 		}
 
-		if (
-			$driverType === DriverType::SQLITE3
-			|| $driverType === DriverType::PDO_SQLITE
-			|| $driverType === DriverType::MYSQLI
-			|| $driverType === DriverType::PDO_MYSQL
-		) {
+		if (in_array($driverType, [
+			DriverDetector::SQLITE3,
+			DriverDetector::PDO_SQLITE,
+			DriverDetector::MYSQLI,
+			DriverDetector::PDO_MYSQL,
+		], true)) {
 			return TypeCombinator::union(
 				new ConstantIntegerType(0),
 				new ConstantIntegerType(1)

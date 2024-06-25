@@ -90,6 +90,10 @@ services:
 		factory: @PHPStan\Type\Doctrine\DescriptorRegistryFactory::createRegistry
 
 	-
+		class: PHPStan\Doctrine\Driver\DriverDetector
+		arguments:
+			failOnInvalidConnection: %featureToggles.bleedingEdge%
+	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
 	-
 		class: PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension
@@ -317,8 +321,6 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\BooleanType
 		tags: [phpstan.doctrine.typeDescriptor]
-		arguments:
-			bleedingEdge: %featureToggles.bleedingEdge%
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\DateImmutableType
 		tags: [phpstan.doctrine.typeDescriptor]
@@ -343,13 +345,9 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\DecimalType
 		tags: [phpstan.doctrine.typeDescriptor]
-		arguments:
-			bleedingEdge: %featureToggles.bleedingEdge%
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\FloatType
 		tags: [phpstan.doctrine.typeDescriptor]
-		arguments:
-			bleedingEdge: %featureToggles.bleedingEdge%
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\GuidType
 		tags: [phpstan.doctrine.typeDescriptor]

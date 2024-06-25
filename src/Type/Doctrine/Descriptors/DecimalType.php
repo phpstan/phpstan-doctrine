@@ -3,7 +3,7 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use Doctrine\DBAL\Connection;
-use PHPStan\Doctrine\Driver\DriverType;
+use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -11,16 +11,17 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use function in_array;
 
 class DecimalType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
-	/** @var bool */
-	private $bleedingEdge;
+	/** @var DriverDetector */
+	private $driverDetector;
 
-	public function __construct(bool $bleedingEdge)
+	public function __construct(DriverDetector $driverDetector)
 	{
-		$this->bleedingEdge = $bleedingEdge;
+		$this->driverDetector = $driverDetector;
 	}
 
 	public function getType(): string
@@ -45,18 +46,18 @@ class DecimalType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 
 	public function getDatabaseInternalTypeForDriver(Connection $connection): Type
 	{
-		$driverType = DriverType::detect($connection, $this->bleedingEdge);
+		$driverType = $this->driverDetector->detect($connection);
 
-		if ($driverType === DriverType::SQLITE3 || $driverType === DriverType::PDO_SQLITE) {
+		if ($driverType === DriverDetector::SQLITE3 || $driverType === DriverDetector::PDO_SQLITE) {
 			return TypeCombinator::union(new FloatType(), new IntegerType());
 		}
 
-		if (
-			$driverType === DriverType::MYSQLI
-			|| $driverType === DriverType::PDO_MYSQL
-			|| $driverType === DriverType::PGSQL
-			|| $driverType === DriverType::PDO_PGSQL
-		) {
+		if (in_array($driverType, [
+			DriverDetector::MYSQLI,
+			DriverDetector::PDO_MYSQL,
+			DriverDetector::PGSQL,
+			DriverDetector::PDO_PGSQL,
+		], true)) {
 			return new IntersectionType([
 				new StringType(),
 				new AccessoryNumericStringType(),

@@ -53,7 +53,7 @@ parameters:
 		-
 			message: '#^Call to function method_exists\(\) with Doctrine\\DBAL\\Connection and ''getNativeConnection'' will always evaluate to true\.$#' # needed for older DBAL versions
 			paths:
-				- src/Doctrine/Driver/DriverType.php
+				- src/Doctrine/Driver/DriverDetector.php
 
 		-
 			messages: # needed for older DBAL versions

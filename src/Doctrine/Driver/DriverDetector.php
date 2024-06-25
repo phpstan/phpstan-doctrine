@@ -23,7 +23,7 @@ use function is_resource;
 use function method_exists;
 use function strpos;
 
-class DriverType
+class DriverDetector
 {
 
 	public const IBM_DB2 = 'ibm_db2';
@@ -38,11 +38,18 @@ class DriverType
 	public const SQLITE3 = 'sqlite3';
 	public const SQLSRV = 'sqlsrv';
 
+	/** @var bool */
+	private $failOnInvalidConnection;
+
+	public function __construct(bool $failOnInvalidConnection)
+	{
+		$this->failOnInvalidConnection = $failOnInvalidConnection;
+	}
 
 	/**
 	 * @return self::*|null
 	 */
-	public static function detect(Connection $connection, bool $failOnInvalidConnection): ?string
+	public function detect(Connection $connection): ?string
 	{
 		$driver = $connection->getDriver();
 
@@ -99,7 +106,7 @@ class DriverType
 		try {
 			$nativeConnection = $connection->getNativeConnection();
 		} catch (Throwable $e) {
-			if ($failOnInvalidConnection) {
+			if ($this->failOnInvalidConnection) {
 				throw $e;
 			}
 			return null; // connection cannot be established
