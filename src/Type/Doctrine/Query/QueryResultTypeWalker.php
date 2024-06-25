@@ -14,6 +14,7 @@ use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\ParserResult;
 use Doctrine\ORM\Query\SqlWalker;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
@@ -575,6 +576,79 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 	}
 
+	private function createFloat(bool $nullable): Type
+	{
+		$float = new FloatType();
+		return $nullable ? TypeCombinator::addNull($float) : $float;
+	}
+
+	private function createFloatOrInt(bool $nullable): Type // @phpstan-ignore-line unused, but kept to ease conflict resolution with origin (#506)
+	{
+		$union = TypeCombinator::union(
+			new FloatType(),
+			new IntegerType()
+		);
+		return $nullable ? TypeCombinator::addNull($union) : $union;
+	}
+
+	private function createInteger(bool $nullable): Type
+	{
+		$integer = new IntegerType();
+		return $nullable ? TypeCombinator::addNull($integer) : $integer;
+	}
+
+	private function createNonNegativeInteger(bool $nullable): Type // @phpstan-ignore-line unused, but kept to ease conflict resolution with origin (#506)
+	{
+		$integer = IntegerRangeType::fromInterval(0, null);
+		return $nullable ? TypeCombinator::addNull($integer) : $integer;
+	}
+
+	private function createNumericString(bool $nullable): Type
+	{
+		$numericString = TypeCombinator::intersect(
+			new StringType(),
+			new AccessoryNumericStringType()
+		);
+
+		return $nullable ? TypeCombinator::addNull($numericString) : $numericString;
+	}
+
+	private function createString(bool $nullable): Type
+	{
+		$string = new StringType();
+		return $nullable ? TypeCombinator::addNull($string) : $string;
+	}
+
+	/**
+	 * E.g. to ensure SUM(1) is inferred as int, not 1
+	 */
+	private function generalizeConstantType(Type $type, bool $makeNullable): Type
+	{
+		$containsNull = $this->canBeNull($type);
+		$typeNoNull = TypeCombinator::removeNull($type);
+
+		if (!$typeNoNull->isConstantScalarValue()->yes()) {
+			$result = $type;
+
+		} elseif ($typeNoNull->isInteger()->yes()) {
+			$result = $this->createInteger($containsNull);
+
+		} elseif ($typeNoNull->isFloat()->yes()) {
+			$result = $this->createFloat($containsNull);
+
+		} elseif ($typeNoNull->isNumericString()->yes()) {
+			$result = $this->createNumericString($containsNull);
+
+		} elseif ($typeNoNull->isString()->yes()) {
+			$result = $this->createString($containsNull);
+
+		} else {
+			$result = $type;
+		}
+
+		return $makeNullable ? TypeCombinator::addNull($result) : $result;
+	}
+
 	/**
 	 * @param AST\OrderByClause $orderByClause
 	 */
@@ -642,7 +716,10 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = $this->unmarshalType($expression->dispatch($this));
 			$allTypesContainNull = $allTypesContainNull && TypeCombinator::containsNull($type);
 
-			$expressionTypes[] = $type;
+			// Some drivers manipulate the types, lets avoid false positives by generalizing constant types
+			// e.g. sqlsrv: "COALESCE returns the data type of value with the highest precedence"
+			// e.g. mysql: COALESCE(1, 'foo') === '1' (undocumented? https://gist.github.com/jrunning/4535434)
+			$expressionTypes[] = $this->generalizeConstantType($type, false);
 		}
 
 		$type = TypeCombinator::union(...$expressionTypes);
@@ -1398,6 +1475,11 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		return $type;
+	}
+
+	private function canBeNull(Type $type): bool
+	{
+		return !$type->isSuperTypeOf(new NullType())->no();
 	}
 
 	private function toNumericOrNull(Type $type): Type
