@@ -3,8 +3,12 @@
 namespace PHPStan\Type\Doctrine\Descriptors;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Type as DbalType;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Doctrine\DefaultDescriptorRegistry;
+use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -13,19 +17,27 @@ use PHPStan\Type\TypeCombinator;
 class ReflectionDescriptor implements DoctrineTypeDescriptor
 {
 
-	/** @var class-string<\Doctrine\DBAL\Types\Type> */
+	/** @var class-string<DbalType> */
 	private $type;
 
 	/** @var ReflectionProvider */
 	private $reflectionProvider;
 
+	/** @var Container */
+	private $container;
+
 	/**
-	 * @param class-string<\Doctrine\DBAL\Types\Type> $type
+	 * @param class-string<DbalType> $type
 	 */
-	public function __construct(string $type, ReflectionProvider $reflectionProvider)
+	public function __construct(
+		string $type,
+		ReflectionProvider $reflectionProvider,
+		Container $container
+	)
 	{
 		$this->type = $type;
 		$this->reflectionProvider = $reflectionProvider;
+		$this->container = $container;
 	}
 
 	public function getType(): string
@@ -57,6 +69,24 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
+		if (!$this->reflectionProvider->hasClass($this->type)) {
+			return new MixedType();
+		}
+
+		$registry = $this->container->getByType(DefaultDescriptorRegistry::class);
+		$parents = $this->reflectionProvider->getClass($this->type)->getParentClassesNames();
+
+		foreach ($parents as $dbalTypeParentClass) {
+			try {
+				// this assumes that if somebody inherits from DecimalType,
+				// the real database type remains decimal and we can reuse its descriptor
+				return $registry->getByClassName($dbalTypeParentClass)->getDatabaseInternalType();
+
+			} catch (DescriptorNotRegisteredException $e) {
+				continue;
+			}
+		}
+
 		return new MixedType();
 	}
 
