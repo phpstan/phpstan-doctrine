@@ -3,7 +3,8 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\StringType as DbalStringType;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -817,28 +818,15 @@ class QueryResultTypeWalker extends SqlWalker
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $this->scalarResultCounter++;
 			$type = $this->unmarshalType($expr->dispatch($this));
 
-			if (class_exists(TypedExpression::class) && $expr instanceof TypedExpression) {
-				$enforcedType = $this->resolveDoctrineType(Types::INTEGER);
-				$type = TypeTraverser::map($type, static function (Type $type, callable $traverse) use ($enforcedType): Type {
-					if ($type instanceof UnionType || $type instanceof IntersectionType) {
-						return $traverse($type);
-					}
-					if ($type instanceof NullType) {
-						return $type;
-					}
-					if ($enforcedType->accepts($type, true)->yes()) {
-						return $type;
-					}
-					if ($enforcedType instanceof StringType) {
-						if ($type instanceof IntegerType || $type instanceof FloatType) {
-							return TypeCombinator::union($type->toString(), $type);
-						}
-						if ($type instanceof BooleanType) {
-							return TypeCombinator::union($type->toInteger()->toString(), $type);
-						}
-					}
-					return $enforcedType;
-				});
+			if (
+				$expr instanceof TypedExpression
+				&& !$expr->getReturnType() instanceof DbalStringType // StringType is no-op, so using TypedExpression with that does nothing
+			) {
+				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
+				$type = TypeCombinator::intersect( // e.g. count is typed as int, but we infer int<0, max>
+					$type,
+					$this->resolveDoctrineType($dbalTypeName, null, TypeCombinator::containsNull($type))
+				);
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on

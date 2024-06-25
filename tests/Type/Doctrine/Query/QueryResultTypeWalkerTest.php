@@ -9,7 +9,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
@@ -615,9 +614,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(3),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(4),
@@ -625,9 +622,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantIntegerType(5),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(6),
@@ -682,9 +677,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				],
 				[
 					new ConstantStringType('count'),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 			]),
 			'
@@ -1360,23 +1353,17 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[
 					new ConstantIntegerType(1),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::addNull(
-						$this->hasTypedExpressions()
-						? $this->uint()
-						: $this->uintStringified()
+						$this->uint()
 					),
 				],
 				[
 					new ConstantIntegerType(3),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 			]),
 			'
@@ -1568,9 +1555,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				[new ConstantIntegerType(1), TypeCombinator::addNull($this->numericStringOrInt())],
 				[
 					new ConstantIntegerType(2),
-					$this->hasTypedExpressions()
-					? $this->uint()
-					: $this->uintStringified(),
+					$this->uint(),
 				],
 			]),
 			'
@@ -1704,11 +1689,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			IntegerRangeType::fromInterval(0, null),
 			$this->numericString()
 		);
-	}
-
-	private function hasTypedExpressions(): bool
-	{
-		return class_exists(TypedExpression::class);
 	}
 
 	/**
