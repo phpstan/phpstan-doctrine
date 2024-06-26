@@ -39,7 +39,7 @@ class DriverDetector
 	{
 		$driver = $connection->getDriver();
 
-		return $this->deduceFromDriverClass(get_class($driver)) ?? $this->deduceFromReflection($connection);
+		return $this->deduceFromDriverClass(get_class($driver)) ?? $this->deduceFromParams($connection);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class DriverDetector
 	/**
 	 * @return self::*|null
 	 */
-	private function deduceFromReflection(Connection $connection): ?string
+	private function deduceFromParams(Connection $connection): ?string
 	{
 		$params = $connection->getParams();
 
