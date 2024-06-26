@@ -1,5 +1,17 @@
 FROM php:8.1-cli
 
+# MSSQL
+RUN apt update  \
+    && apt install -y gnupg2 \
+    && apt install -y unixodbc-dev unixodbc \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
+    && apt update \
+    && ACCEPT_EULA=Y apt install -y msodbcsql17 \
+    && pecl install sqlsrv \
+    && pecl install pdo_sqlsrv \
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv
+
 COPY ./docker-setup.sh /opt/src/scripts/setup.sh
 RUN /opt/src/scripts/setup.sh
 

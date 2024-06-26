@@ -46,6 +46,11 @@ class DriverDetector
 		$this->failOnInvalidConnection = $failOnInvalidConnection;
 	}
 
+	public function failsOnInvalidConnection(): bool
+	{
+		return $this->failOnInvalidConnection;
+	}
+
 	/**
 	 * @return self::*|null
 	 */

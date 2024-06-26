@@ -2,6 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type as DbalType;
 use PHPStan\DependencyInjection\Container;
@@ -14,7 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 
-class ReflectionDescriptor implements DoctrineTypeDescriptor
+class ReflectionDescriptor implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
 	/** @var class-string<DbalType> */
@@ -69,6 +70,16 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 
 	public function getDatabaseInternalType(): Type
 	{
+		return $this->doGetDatabaseInternalType(null);
+	}
+
+	public function getDatabaseInternalTypeForDriver(Connection $connection): Type
+	{
+		return $this->doGetDatabaseInternalType($connection);
+	}
+
+	private function doGetDatabaseInternalType(?Connection $connection): Type
+	{
 		if (!$this->reflectionProvider->hasClass($this->type)) {
 			return new MixedType();
 		}
@@ -80,7 +91,11 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor
 			try {
 				// this assumes that if somebody inherits from DecimalType,
 				// the real database type remains decimal and we can reuse its descriptor
-				return $registry->getByClassName($dbalTypeParentClass)->getDatabaseInternalType();
+				$descriptor = $registry->getByClassName($dbalTypeParentClass);
+
+				return $descriptor instanceof DoctrineTypeDriverAwareDescriptor && $connection !== null
+					? $descriptor->getDatabaseInternalTypeForDriver($connection)
+					: $descriptor->getDatabaseInternalType();
 
 			} catch (DescriptorNotRegisteredException $e) {
 				continue;

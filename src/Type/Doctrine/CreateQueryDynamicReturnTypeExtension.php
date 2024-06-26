@@ -12,6 +12,8 @@ use Doctrine\ORM\Query;
 use Doctrine\Persistence\Mapping\MappingException;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Doctrine\Driver\DriverDetector;
+use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
@@ -37,10 +39,23 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 	/** @var DescriptorRegistry */
 	private $descriptorRegistry;
 
-	public function __construct(ObjectMetadataResolver $objectMetadataResolver, DescriptorRegistry $descriptorRegistry)
+	/** @var PhpVersion */
+	private $phpVersion;
+
+	/** @var DriverDetector */
+	private $driverDetector;
+
+	public function __construct(
+		ObjectMetadataResolver $objectMetadataResolver,
+		DescriptorRegistry $descriptorRegistry,
+		PhpVersion $phpVersion,
+		DriverDetector $driverDetector
+	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->descriptorRegistry = $descriptorRegistry;
+		$this->phpVersion = $phpVersion;
+		$this->driverDetector = $driverDetector;
 	}
 
 	public function getClass(): string
@@ -87,7 +102,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 
 				try {
 					$query = $em->createQuery($queryString);
-					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry);
+					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion, $this->driverDetector);
 				} catch (ORMException | DBALException | NewDBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
 					return new QueryType($queryString, null, null);
 				} catch (AssertionError $e) {

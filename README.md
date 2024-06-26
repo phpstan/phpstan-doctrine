@@ -128,6 +128,14 @@ Queries are analyzed statically and do not require a running database server. Th
 
 Most DQL features are supported, including `GROUP BY`, `DISTINCT`, all flavors of `JOIN`, arithmetic expressions, functions, aggregations, `NEW`, etc. Sub queries and `INDEX BY` are not yet supported (infered type will be `mixed`).
 
+### Query type inference of expressions
+
+Whether e.g. `SUM(e.column)` is fetched as `float`, `numeric-string` or `int` highly [depends on drivers, their setup and PHP version](https://github.com/janedbal/php-database-drivers-fetch-test).
+This extension autodetects your setup and provides quite accurate results for `pdo_mysql`, `mysqli`, `pdo_sqlite`, `sqlite3`, `pdo_pgsql` and `pgsql`.
+Sadly, this autodetection often needs real database connection, so in order to utilize precise types, your `objectManagerLoader` need to be able to connect to real database.
+
+If you are using `bleedingEdge`, the connection failure is propagated. If not, it will be silently ignored and the type will be `mixed` or an union of possible types.
+
 ### Supported methods
 
 The `getResult` method is supported when called without argument, or with the hydrateMode argument set to `Query::HYDRATE_OBJECT`:
