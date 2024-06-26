@@ -14,7 +14,6 @@ use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\ParserResult;
 use Doctrine\ORM\Query\SqlWalker;
 use PDO;
-use PDOException;
 use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\ShouldNotHappenException;
@@ -41,7 +40,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use Throwable;
 use function array_key_exists;
 use function array_map;
 use function array_values;
@@ -55,7 +53,6 @@ use function is_int;
 use function is_numeric;
 use function is_object;
 use function is_string;
-use function method_exists;
 use function serialize;
 use function sprintf;
 use function stripos;
@@ -108,6 +105,9 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var DriverDetector::*|null */
 	private $driverType;
 
+	/** @var array<mixed> */
+	private $driverOptions;
+
 	/**
 	 * Map of all components/classes that appear in the DQL query.
 	 *
@@ -130,8 +130,6 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @var bool */
 	private $hasGroupByClause;
 
-	/** @var bool */
-	private $failOnInvalidConnection;
 
 	/**
 	 * @param Query<mixed> $query
@@ -224,8 +222,10 @@ class QueryResultTypeWalker extends SqlWalker
 				is_object($driverDetector) ? get_class($driverDetector) : gettype($driverDetector)
 			));
 		}
-		$this->driverType = $driverDetector->detect($this->em->getConnection());
-		$this->failOnInvalidConnection = $driverDetector->failsOnInvalidConnection();
+		$connection = $this->em->getConnection();
+
+		$this->driverType = $driverDetector->detect($connection);
+		$this->driverOptions = $driverDetector->detectDriverOptions($connection);
 
 		parent::__construct($query, $parserResult, $queryComponents);
 	}
@@ -2042,20 +2042,10 @@ class QueryResultTypeWalker extends SqlWalker
 	private function shouldStringifyExpressions(Type $type): TrinaryLogic
 	{
 		if (in_array($this->driverType, [DriverDetector::PDO_MYSQL, DriverDetector::PDO_PGSQL, DriverDetector::PDO_SQLITE], true)) {
-			try {
-				$nativeConnection = $this->getNativeConnection();
-				assert($nativeConnection instanceof PDO);
-			} catch (Throwable $e) { // connection cannot be established
-				if ($this->failOnInvalidConnection) {
-					throw $e;
-				}
-				return TrinaryLogic::createMaybe();
-			}
-
-			$stringifyFetches = $this->isPdoStringifyEnabled($nativeConnection);
+			$stringifyFetches = isset($this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES]) ? (bool) $this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES] : false;
 
 			if ($this->driverType === DriverDetector::PDO_MYSQL) {
-				$emulatedPrepares = $this->isPdoEmulatePreparesEnabled($nativeConnection);
+				$emulatedPrepares = isset($this->driverOptions[PDO::ATTR_EMULATE_PREPARES]) ? (bool) $this->driverOptions[PDO::ATTR_EMULATE_PREPARES] : true;
 
 				if ($stringifyFetches) {
 					return TrinaryLogic::createYes();
@@ -2103,49 +2093,6 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		return TrinaryLogic::createMaybe();
-	}
-
-	private function isPdoStringifyEnabled(PDO $pdo): bool
-	{
-		// this fails for most PHP versions, see https://github.com/php/php-src/issues/12969
-		// working since 8.2.15 and 8.3.2
-		try {
-			return (bool) $pdo->getAttribute(PDO::ATTR_STRINGIFY_FETCHES);
-		} catch (PDOException $e) {
-			$selectOne = $pdo->query('SELECT 1');
-			if ($selectOne === false) {
-				return false; // this should not happen, just return attribute default value
-			}
-			$one = $selectOne->fetchColumn();
-
-			// string can be returned due to old PHP used or because ATTR_STRINGIFY_FETCHES is enabled,
-			// but it should not matter as it behaves the same way
-			// (the attribute is there to maintain BC)
-			return is_string($one);
-		}
-	}
-
-	private function isPdoEmulatePreparesEnabled(PDO $pdo): bool
-	{
-		return (bool) $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
-	}
-
-	/**
-	 * @return object|resource|null
-	 */
-	private function getNativeConnection()
-	{
-		$connection = $this->em->getConnection();
-
-		if (method_exists($connection, 'getNativeConnection')) {
-			return $connection->getNativeConnection();
-		}
-
-		if ($connection->getWrappedConnection() instanceof PDO) {
-			return $connection->getWrappedConnection();
-		}
-
-		return null;
 	}
 
 	private function isSupportedDriver(): bool

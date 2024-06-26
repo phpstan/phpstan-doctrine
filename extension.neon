@@ -91,8 +91,6 @@ services:
 
 	-
 		class: PHPStan\Doctrine\Driver\DriverDetector
-		arguments:
-			failOnInvalidConnection: %featureToggles.bleedingEdge%
 	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
 	-
