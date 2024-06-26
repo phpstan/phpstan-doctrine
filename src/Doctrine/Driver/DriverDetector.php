@@ -127,11 +127,11 @@ class DriverDetector
 					return self::PDO_SQLSRV;
 				case 'mysqli':
 					return self::MYSQLI;
-				case 'pgsql':
+				case 'pgsql': // @phpstan-ignore-line never matches on PHP 7.3- with old dbal
 					return self::PGSQL;
 				case 'sqlsrv':
 					return self::SQLSRV;
-				case 'sqlite3':
+				case 'sqlite3': // @phpstan-ignore-line never matches on PHP 7.3- with old dbal
 					return self::SQLITE3;
 				default:
 					return null;
