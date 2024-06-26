@@ -3,7 +3,8 @@
 namespace PHPStan\Platform;
 
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
-use Doctrine\DBAL\Driver\PDO\Connection;
+use Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Doctrine\DBAL\Driver\PDO\Connection as PdoDriverConnection;
 use PDO;
 use SensitiveParameter;
 
@@ -16,10 +17,10 @@ class UnknownDriver extends AbstractMySQLDriver
 	public function connect(
 		#[SensitiveParameter]
 		array $params
-	)
+	): DriverConnection
 	{
 		$pdo = new PDO('mysql:host=localhost;dbname=dummy;charset=utf8mb4');
-		return new Connection($pdo);
+		return new PdoDriverConnection($pdo);
 	}
 
 }
