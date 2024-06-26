@@ -77,9 +77,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	private const CONFIG_NO_EMULATE = 'pdo_no_emulate';
 	private const CONFIG_STRINGIFY_NO_EMULATE = 'pdo_stringify_no_emulate';
 
-	private const INVALID_CONNECTION = 'invalid_connection';
-	private const INVALID_CONNECTION_UNKNOWN_DRIVER = 'invalid_connection_and_unknown_driver';
-
 	private const CONNECTION_CONFIGS = [
 		self::CONFIG_DEFAULT => [],
 		self::CONFIG_STRINGIFY => [
@@ -582,8 +579,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	}
 
 	/**
-	 * Connection failure test
-	 *
 	 * @param array<string, mixed> $data
 	 * @param mixed $mysqlExpectedResult
 	 * @param mixed $sqliteExpectedResult
@@ -594,93 +589,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	 *
 	 * @dataProvider provideCases
 	 */
-	public function testKnownDriverUnknownSetupDefault(
-		array $data,
-		string $dqlTemplate,
-		Type $mysqlExpectedType,
-		?Type $sqliteExpectedType,
-		?Type $pdoPgsqlExpectedType,
-		?Type $pgsqlExpectedType,
-		?Type $mssqlExpectedType,
-		$mysqlExpectedResult,
-		$sqliteExpectedResult,
-		$pdoPgsqlExpectedResult,
-		$pgsqlExpectedResult,
-		$mssqlExpectedResult,
-		string $stringify
-	): void
-	{
-		$this->performDriverTest(
-			'pdo_mysql',
-			self::CONFIG_DEFAULT,
-			$data,
-			$dqlTemplate,
-			(string) $this->dataName(),
-			PHP_VERSION_ID,
-			$this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify),
-			$mysqlExpectedResult,
-			$stringify,
-			self::INVALID_CONNECTION
-		);
-	}
-
-	/**
-	 * Connection failure test
-	 *
-	 * @param array<string, mixed> $data
-	 * @param mixed $mysqlExpectedResult
-	 * @param mixed $sqliteExpectedResult
-	 * @param mixed $pdoPgsqlExpectedResult
-	 * @param mixed $pgsqlExpectedResult
-	 * @param mixed $mssqlExpectedResult
-	 * @param self::STRINGIFY_* $stringify
-	 *
-	 * @dataProvider provideCases
-	 */
-	public function testKnownDriverUnknownSetupStringify(
-		array $data,
-		string $dqlTemplate,
-		Type $mysqlExpectedType,
-		?Type $sqliteExpectedType,
-		?Type $pdoPgsqlExpectedType,
-		?Type $pgsqlExpectedType,
-		?Type $mssqlExpectedType,
-		$mysqlExpectedResult,
-		$sqliteExpectedResult,
-		$pdoPgsqlExpectedResult,
-		$pgsqlExpectedResult,
-		$mssqlExpectedResult,
-		string $stringify
-	): void
-	{
-		$this->performDriverTest(
-			'pdo_mysql',
-			self::CONFIG_STRINGIFY,
-			$data,
-			$dqlTemplate,
-			(string) $this->dataName(),
-			PHP_VERSION_ID,
-			$this->determineTypeForKnownDriverUnknownSetup($mysqlExpectedType, $stringify),
-			$mysqlExpectedResult,
-			$stringify,
-			self::INVALID_CONNECTION
-		);
-	}
-
-	/**
-	 * Connection failure test
-	 *
-	 * @param array<string, mixed> $data
-	 * @param mixed $mysqlExpectedResult
-	 * @param mixed $sqliteExpectedResult
-	 * @param mixed $pdoPgsqlExpectedResult
-	 * @param mixed $pgsqlExpectedResult
-	 * @param mixed $mssqlExpectedResult
-	 * @param self::STRINGIFY_* $stringify
-	 *
-	 * @dataProvider provideCases
-	 */
-	public function testUnknownDriverUnknownSetupDefault(
+	public function testUnknownDriver(
 		array $data,
 		string $dqlTemplate,
 		Type $mysqlExpectedType,
@@ -706,13 +615,11 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
 			$mysqlExpectedResult,
 			$stringify,
-			self::INVALID_CONNECTION_UNKNOWN_DRIVER
+			true
 		);
 	}
 
 	/**
-	 * Connection failure test
-	 *
 	 * @param array<string, mixed> $data
 	 * @param mixed $mysqlExpectedResult
 	 * @param mixed $sqliteExpectedResult
@@ -723,7 +630,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	 *
 	 * @dataProvider provideCases
 	 */
-	public function testUnknownDriverUnknownSetupStringify(
+	public function testUnknownDriverStringify(
 		array $data,
 		string $dqlTemplate,
 		Type $mysqlExpectedType,
@@ -749,7 +656,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
 			$mysqlExpectedResult,
 			$stringify,
-			self::INVALID_CONNECTION_UNKNOWN_DRIVER
+			true
 		);
 	}
 
@@ -4267,7 +4174,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	 * @param mixed $expectedFirstResult
 	 * @param array<string, mixed> $data
 	 * @param self::STRINGIFY_* $stringification
-	 * @param self::INVALID_*|null $invalidConnectionSetup
 	 */
 	private function performDriverTest(
 		string $driver,
@@ -4279,7 +4185,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		?Type $expectedInferredType,
 		$expectedFirstResult,
 		string $stringification,
-		?string $invalidConnectionSetup = null
+		bool $useUnknownDriverForInference = false
 	): void
 	{
 		$connectionParams = [
@@ -4299,11 +4205,11 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$result = $query->getSingleResult();
 			$realResultType = ConstantTypeHelper::getTypeFromValue($result);
 
-			if ($invalidConnectionSetup !== null) {
-				$inferredType = $this->getInferredType($this->cloneQueryAndInjectInvalidConnection($query, $driver, $invalidConnectionSetup), false);
-			} else {
-				$inferredType = $this->getInferredType($query, true);
+			if ($useUnknownDriverForInference) {
+				$query = $this->cloneQueryAndInjectConnectionWithUnknownPdoMysqlDriver($query);
 			}
+
+			$inferredType = $this->getInferredType($query);
 
 		} catch (Throwable $e) {
 			if ($expectedInferredType === null) {
@@ -4327,13 +4233,13 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			));
 		}
 
-		$driverDetector = new DriverDetector(true);
-		$driverType = $driverDetector->detect($query->getEntityManager()->getConnection());
+		$driverDetector = new DriverDetector();
+		$driverType = $driverDetector->detect($connection);
 
 		$stringify = $this->shouldStringify($stringification, $driverType, $phpVersion, $configName);
 		if (
 			$stringify
-			&& $invalidConnectionSetup === null // do not stringify, we already passed union with stringified one above
+			&& !$useUnknownDriverForInference // do not stringify, we already passed union with stringified one above
 		) {
 			$expectedInferredType = self::stringifyType($expectedInferredType);
 		}
@@ -4420,7 +4326,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	/**
 	 * @param Query<mixed> $query
 	 */
-	private function getInferredType(Query $query, bool $failOnInvalidConnection): Type
+	private function getInferredType(Query $query): Type
 	{
 		$typeBuilder = new QueryResultTypeBuilder();
 		$phpVersion = new PhpVersion(PHP_VERSION_ID); // @phpstan-ignore-line ctor not in bc promise
@@ -4429,7 +4335,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$typeBuilder,
 			self::getContainer()->getByType(DescriptorRegistry::class),
 			$phpVersion,
-			new DriverDetector($failOnInvalidConnection)
+			new DriverDetector()
 		);
 
 		return $typeBuilder->getResultType();
@@ -4883,29 +4789,19 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 
 	/**
 	 * @param Query<mixed> $query
-	 * @param self::INVALID_* $invalidSetup
 	 * @return Query<mixed>
 	 */
-	private function cloneQueryAndInjectInvalidConnection(Query $query, string $driver, string $invalidSetup): Query
+	private function cloneQueryAndInjectConnectionWithUnknownPdoMysqlDriver(Query $query): Query
 	{
 		if ($query->getDQL() === null) {
 			throw new LogicException('Query does not have DQL');
 		}
 
-		$connectionConfig = new DbalConfiguration();
+		$connection = DriverManager::getConnection([
+			'driverClass' => UnknownDriver::class,
+			'serverVersion' => $this->getSampleServerVersionForDriver('pdo_mysql'),
+		]);
 
-		if ($invalidSetup === self::INVALID_CONNECTION_UNKNOWN_DRIVER) {
-			$connectionConfig->setMiddlewares([
-				new Middleware($this->createMock(LoggerInterface::class)), // ensures DriverType fallback detection is used
-			]);
-		}
-
-		$serverVersion = $this->getSampleServerVersionForDriver($driver);
-		$connection = DriverManager::getConnection([ // @phpstan-ignore-line ignore dynamic driver
-			'driver' => $driver,
-			'user' => 'invalid',
-			'serverVersion' => $serverVersion, // otherwise the connection fails while trying to determine the platform
-		], $connectionConfig);
 		$entityManager = new EntityManager($connection, $this->createOrmConfig());
 		$newQuery = new Query($entityManager);
 		$newQuery->setDQL($query->getDQL());
@@ -4932,15 +4828,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$config->addCustomStringFunction('STRING_PI', TypedExpressionStringPiFunction::class);
 
 		return $config;
-	}
-
-	private function determineTypeForKnownDriverUnknownSetup(Type $originalExpectedType, string $stringify): Type
-	{
-		if ($stringify === self::STRINGIFY_NONE) {
-			return $originalExpectedType;
-		}
-
-		return TypeCombinator::union($originalExpectedType, self::stringifyType($originalExpectedType));
 	}
 
 	private function determineTypeForUnknownDriverUnknownSetup(Type $originalExpectedType, string $stringify): Type

@@ -132,9 +132,6 @@ Most DQL features are supported, including `GROUP BY`, `DISTINCT`, all flavors o
 
 Whether e.g. `SUM(e.column)` is fetched as `float`, `numeric-string` or `int` highly [depends on drivers, their setup and PHP version](https://github.com/janedbal/php-database-drivers-fetch-test).
 This extension autodetects your setup and provides quite accurate results for `pdo_mysql`, `mysqli`, `pdo_sqlite`, `sqlite3`, `pdo_pgsql` and `pgsql`.
-Sadly, this autodetection often needs real database connection, so in order to utilize precise types, your `objectManagerLoader` need to be able to connect to real database.
-
-If you are using `bleedingEdge`, the connection failure is propagated. If not, it will be silently ignored and the type will be `mixed` or an union of possible types.
 
 ### Supported methods
 
