@@ -2042,10 +2042,10 @@ class QueryResultTypeWalker extends SqlWalker
 	private function shouldStringifyExpressions(Type $type): TrinaryLogic
 	{
 		if (in_array($this->driverType, [DriverDetector::PDO_MYSQL, DriverDetector::PDO_PGSQL, DriverDetector::PDO_SQLITE], true)) {
-			$stringifyFetches = isset($this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES]) && (bool) $this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES];
+			$stringifyFetches = isset($this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES]) ? (bool) $this->driverOptions[PDO::ATTR_STRINGIFY_FETCHES] : false;
 
 			if ($this->driverType === DriverDetector::PDO_MYSQL) {
-				$emulatedPrepares = isset($this->driverOptions[PDO::ATTR_EMULATE_PREPARES]) && (bool) $this->driverOptions[PDO::ATTR_EMULATE_PREPARES];
+				$emulatedPrepares = isset($this->driverOptions[PDO::ATTR_EMULATE_PREPARES]) ? (bool) $this->driverOptions[PDO::ATTR_EMULATE_PREPARES] : true;
 
 				if ($stringifyFetches) {
 					return TrinaryLogic::createYes();
