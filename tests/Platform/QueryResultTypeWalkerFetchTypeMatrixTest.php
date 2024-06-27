@@ -722,7 +722,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => -1,
 			'mssqlResult' => -1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 1' => [
@@ -739,7 +739,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 1.0' => [
@@ -756,7 +756,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 1.00' => [
@@ -773,7 +773,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00',
 			'mssqlResult' => '1.00',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 0.1' => [
@@ -790,7 +790,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 0.10' => [
@@ -807,7 +807,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.10',
 			'mssqlResult' => '.10',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '0.125e0' => [
@@ -824,7 +824,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.125',
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield ' 1e0' => [
@@ -841,7 +841,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield " '1'" => [
@@ -858,7 +858,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => '1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield " '1e0'" => [
@@ -875,7 +875,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1e0',
 			'mssqlResult' => '1e0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 + 1' => [
@@ -892,7 +892,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2,
 			'mssqlResult' => 2,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 + 'foo'" => [
@@ -909,7 +909,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 + '1.0'" => [
@@ -926,7 +926,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 + '1'" => [
@@ -943,7 +943,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2,
 			'mssqlResult' => 2,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 + '1e0'" => [
@@ -960,7 +960,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 + 1 * 1 - 1' => [
@@ -977,7 +977,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 + 1 * 1 / 1 - 1' => [
@@ -994,7 +994,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_int' => [
@@ -1011,7 +1011,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 18,
 			'mssqlResult' => 18,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint + t.col_bigint' => [
@@ -1028,7 +1028,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 4294967296,
 			'mssqlResult' => '4294967296',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_float' => [
@@ -1045,7 +1045,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9.125,
 			'mssqlResult' => 9.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_mixed' => [
@@ -1062,7 +1062,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 10,
 			'mssqlResult' => 10,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint + t.col_float' => [
@@ -1079,7 +1079,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2147483648.125,
 			'mssqlResult' => 2147483648.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint + t.col_float (int data)' => [
@@ -1096,7 +1096,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2.0,
 			'mssqlResult' => 2.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float + t.col_float' => [
@@ -1113,7 +1113,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.25,
 			'mssqlResult' => 0.25,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_decimal' => [
@@ -1130,7 +1130,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '9.1',
 			'mssqlResult' => '9.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_decimal (int data)' => [
@@ -1147,7 +1147,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '2.0',
 			'mssqlResult' => '2.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float + t.col_decimal' => [
@@ -1164,7 +1164,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.225,
 			'mssqlResult' => 0.225,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float + t.col_decimal (int data)' => [
@@ -1181,7 +1181,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2.0,
 			'mssqlResult' => 2.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal + t.col_decimal (int data)' => [
@@ -1198,7 +1198,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '2.0',
 			'mssqlResult' => '2.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_float + t.col_decimal' => [
@@ -1215,7 +1215,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9.225,
 			'mssqlResult' => 9.225,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal + t.col_decimal' => [
@@ -1232,7 +1232,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.2',
 			'mssqlResult' => '.2',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_string' => [
@@ -1249,7 +1249,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_string (int data)' => [
@@ -1266,7 +1266,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 2,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_bool' => [
@@ -1283,7 +1283,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 10,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float + t.col_string' => [
@@ -1300,7 +1300,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal + t.col_bool' => [
@@ -1317,7 +1317,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => '1.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal + t.col_string' => [
@@ -1334,7 +1334,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int + t.col_int_nullable' => [
@@ -1351,7 +1351,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_int' => [
@@ -1368,7 +1368,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint / t.col_bigint' => [
@@ -1385,7 +1385,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => '1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_float' => [
@@ -1402,7 +1402,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 72.0,
 			'mssqlResult' => 72.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_float / t.col_decimal' => [
@@ -1419,7 +1419,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 720.0,
 			'mssqlResult' => 720.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint / t.col_float' => [
@@ -1436,7 +1436,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 17179869184.0,
 			'mssqlResult' => 17179869184.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float / t.col_float' => [
@@ -1453,7 +1453,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_decimal' => [
@@ -1470,7 +1470,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '90.0000000000000000',
 			'mssqlResult' => '90.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_decimal (int data)' => [
@@ -1487,7 +1487,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float / t.col_decimal' => [
@@ -1504,7 +1504,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.25,
 			'mssqlResult' => 1.25,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_decimal' => [
@@ -1521,7 +1521,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_decimal (int data)' => [
@@ -1538,7 +1538,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_mixed' => [
@@ -1555,7 +1555,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.10000000000000000000',
 			'mssqlResult' => '.100000000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_string' => [
@@ -1572,7 +1572,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_string (int data)' => [
@@ -1589,7 +1589,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_string / t.col_int' => [
@@ -1606,7 +1606,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_bool' => [
@@ -1623,7 +1623,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float / t.col_string' => [
@@ -1640,7 +1640,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_string / t.col_float' => [
@@ -1657,7 +1657,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_bool' => [
@@ -1674,7 +1674,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => '.100000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_bool (int data)' => [
@@ -1691,7 +1691,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal / t.col_string' => [
@@ -1708,7 +1708,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_string / t.col_decimal' => [
@@ -1725,7 +1725,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int / t.col_int_nullable' => [
@@ -1742,7 +1742,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 - 1' => [
@@ -1759,7 +1759,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 * 1' => [
@@ -1776,7 +1776,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 * '1'" => [
@@ -1793,7 +1793,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 * '1.0'" => [
@@ -1810,7 +1810,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 / 1' => [
@@ -1827,7 +1827,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 / 1.0' => [
@@ -1844,7 +1844,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 / 1e0' => [
@@ -1861,7 +1861,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "'foo' / 1" => [
@@ -1878,7 +1878,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 / 'foo'" => [
@@ -1895,7 +1895,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 / '1'" => [
@@ -1912,7 +1912,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "'1' / 1" => [
@@ -1929,7 +1929,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "1 / '1.0'" => [
@@ -1946,7 +1946,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '2147483648 ' => [
@@ -1963,7 +1963,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2147483648,
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "''" => [
@@ -1980,7 +1980,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '',
 			'mssqlResult' => '',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '(TRUE)' => [
@@ -1997,7 +1997,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => true,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_PG_BOOL,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '(FALSE)' => [
@@ -2014,7 +2014,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => false,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_PG_BOOL,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bool' => [
@@ -2031,7 +2031,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => true,
 			'mssqlResult' => true,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bool_nullable' => [
@@ -2048,7 +2048,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_bool, t.col_bool)' => [
@@ -2065,7 +2065,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => true,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_PG_BOOL,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_decimal, t.col_decimal) + int data' => [
@@ -2082,7 +2082,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_float, t.col_float) + int data' => [
@@ -2099,7 +2099,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_decimal' => [
@@ -2116,7 +2116,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_int' => [
@@ -2133,7 +2133,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_bigint' => [
@@ -2150,7 +2150,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => self::hasDbal4() ? 2147483648 : '2147483648',
 			'mssqlResult' => self::hasDbal4() ? 2147483648 : '2147483648',
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_float' => [
@@ -2167,7 +2167,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_float)' => [
@@ -2184,7 +2184,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_float) + no data' => [
@@ -2201,7 +2201,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_float) + GROUP BY' => [
@@ -2218,7 +2218,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_float_nullable) + GROUP BY' => [
@@ -2235,7 +2235,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_decimal)' => [
@@ -2252,7 +2252,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.10000000000000000000',
 			'mssqlResult' => '.100000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_decimal) + int data' => [
@@ -2269,7 +2269,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_mixed)' => [
@@ -2286,7 +2286,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_int)' => [
@@ -2303,7 +2303,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '9.0000000000000000',
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_bool)' => [
@@ -2320,7 +2320,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_string)' => [
@@ -2337,7 +2337,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(1)' => [
@@ -2354,7 +2354,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "AVG('1')" => [
@@ -2371,7 +2371,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "AVG('1.0')" => [
@@ -2388,7 +2388,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "AVG('1e0')" => [
@@ -2405,7 +2405,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "AVG('foo')" => [
@@ -2422,7 +2422,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(1) + GROUP BY' => [
@@ -2439,7 +2439,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(1.0)' => [
@@ -2456,7 +2456,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(1e0)' => [
@@ -2473,7 +2473,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.00000000000000000000',
 			'mssqlResult' => '1.000000',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'AVG(t.col_bigint)' => [
@@ -2490,7 +2490,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '2147483648.00000000',
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_float)' => [
@@ -2507,7 +2507,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_float) + no data' => [
@@ -2524,7 +2524,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_float) + GROUP BY' => [
@@ -2541,7 +2541,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '1 + -(CASE WHEN MIN(t.col_float) = 0 THEN SUM(t.col_float) ELSE 0 END)' => [ // agg function (causing null) deeply inside AST
@@ -2558,7 +2558,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_decimal)' => [
@@ -2575,7 +2575,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_decimal) + int data' => [
@@ -2592,7 +2592,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_int)' => [
@@ -2609,7 +2609,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '-SUM(t.col_int)' => [
@@ -2626,7 +2626,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => -9,
 			'mssqlResult' => -9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '-SUM(t.col_int) + no data' => [
@@ -2643,7 +2643,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_mixed)' => [
@@ -2660,7 +2660,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_bool)' => [
@@ -2677,7 +2677,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_string)' => [
@@ -2694,7 +2694,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SUM('foo')" => [
@@ -2711,7 +2711,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SUM('1')" => [
@@ -2728,7 +2728,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SUM('1.0')" => [
@@ -2745,7 +2745,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SUM('1.1')" => [
@@ -2762,7 +2762,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(1)' => [
@@ -2779,7 +2779,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(1) + GROUP BY' => [
@@ -2796,7 +2796,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(1.0)' => [
@@ -2813,7 +2813,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(1e0)' => [
@@ -2830,7 +2830,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SUM(t.col_bigint)' => [
@@ -2847,7 +2847,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '2147483648',
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_float)' => [
@@ -2864,7 +2864,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_float) + no data' => [
@@ -2881,7 +2881,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_float) + GROUP BY' => [
@@ -2898,7 +2898,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_decimal)' => [
@@ -2915,7 +2915,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_decimal) + int data' => [
@@ -2932,7 +2932,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_int)' => [
@@ -2949,7 +2949,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_mixed)' => [
@@ -2966,7 +2966,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_bool)' => [
@@ -2983,7 +2983,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_string)' => [
@@ -3000,7 +3000,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 'foobar',
 			'mssqlResult' => 'foobar',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "MAX('foobar')" => [
@@ -3017,7 +3017,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 'foobar',
 			'mssqlResult' => 'foobar',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "MAX('1')" => [
@@ -3034,7 +3034,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => '1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "MAX('1.0')" => [
@@ -3051,7 +3051,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(1)' => [
@@ -3068,7 +3068,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(1) + GROUP BY' => [
@@ -3085,7 +3085,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(1.0)' => [
@@ -3102,7 +3102,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(1e0)' => [
@@ -3119,7 +3119,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MAX(t.col_bigint)' => [
@@ -3136,7 +3136,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2147483648,
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_float)' => [
@@ -3153,7 +3153,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_decimal)' => [
@@ -3170,7 +3170,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_decimal) + int data' => [
@@ -3187,7 +3187,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_int)' => [
@@ -3204,7 +3204,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield '-ABS(t.col_int)' => [
@@ -3221,7 +3221,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => -9,
 			'mssqlResult' => -9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_int_nullable)' => [
@@ -3238,7 +3238,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_string)' => [
@@ -3255,7 +3255,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_string) + int data' => [
@@ -3272,7 +3272,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_bool)' => [
@@ -3289,7 +3289,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(-1)' => [
@@ -3306,7 +3306,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(1)' => [
@@ -3323,7 +3323,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(1.0)' => [
@@ -3340,7 +3340,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.0',
 			'mssqlResult' => '1.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(1e0)' => [
@@ -3357,7 +3357,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "ABS('1.0')" => [
@@ -3374,7 +3374,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "ABS('1')" => [
@@ -3391,7 +3391,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_bigint)' => [
@@ -3408,7 +3408,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2147483648,
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'ABS(t.col_mixed)' => [
@@ -3425,7 +3425,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, 0)' => [
@@ -3442,7 +3442,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, 1)' => [
@@ -3459,7 +3459,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_mixed, 1)' => [
@@ -3476,7 +3476,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "MOD(t.col_int, '1')" => [
@@ -3493,7 +3493,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "MOD(t.col_int, '1.0')" => [
@@ -3510,7 +3510,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, t.col_float)' => [
@@ -3527,7 +3527,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, t.col_decimal)' => [
@@ -3544,7 +3544,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.0',
 			'mssqlResult' => '.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_float, t.col_int)' => [
@@ -3561,7 +3561,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_decimal, t.col_int)' => [
@@ -3578,7 +3578,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0.1',
 			'mssqlResult' => '.1',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_string, t.col_string)' => [
@@ -3595,7 +3595,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, t.col_int)' => [
@@ -3612,7 +3612,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_int, t.col_int_nullable)' => [
@@ -3629,7 +3629,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(10, 7)' => [
@@ -3646,7 +3646,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 3,
 			'mssqlResult' => 3,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(10, -7)' => [
@@ -3663,7 +3663,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 3,
 			'mssqlResult' => 3,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'MOD(t.col_bigint, t.col_bigint)' => [
@@ -3680,7 +3680,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => '0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(t.col_bigint, t.col_bigint)' => [
@@ -3697,7 +3697,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 2147483648,
 			'mssqlResult' => '2147483648',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(t.col_int, t.col_int)' => [
@@ -3714,7 +3714,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(t.col_mixed, t.col_mixed)' => [
@@ -3731,7 +3731,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(t.col_int, t.col_int_nullable)' => [
@@ -3748,7 +3748,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(1, 0)' => [
@@ -3765,7 +3765,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BIT_AND(t.col_string, t.col_string)' => [
@@ -3782,7 +3782,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'DATE_DIFF(CURRENT_DATE(), CURRENT_DATE())' => [
@@ -3799,7 +3799,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'DATE_DIFF(CURRENT_DATE(), t.col_string_nullable)' => [
@@ -3816,7 +3816,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'DATE_DIFF(CURRENT_DATE(), t.col_mixed)' => [
@@ -3833,7 +3833,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 45289,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_float)' => [
@@ -3850,7 +3850,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_decimal)' => [
@@ -3867,7 +3867,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.000000000000000',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_int)' => [
@@ -3884,7 +3884,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 3.0,
 			'mssqlResult' => 3.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_mixed)' => [
@@ -3901,7 +3901,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_int_nullable)' => [
@@ -3918,7 +3918,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(-1)' => [
@@ -3935,7 +3935,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(1)' => [
@@ -3952,7 +3952,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SQRT('1')" => [
@@ -3969,7 +3969,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SQRT('1.0')" => [
@@ -3986,7 +3986,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SQRT('1e0')" => [
@@ -4003,7 +4003,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1.0,
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "SQRT('foo')" => [
@@ -4020,7 +4020,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(t.col_string)' => [
@@ -4037,7 +4037,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'SQRT(1.0)' => [
@@ -4054,7 +4054,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '1.000000000000000',
 			'mssqlResult' => 1.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COUNT(t)' => [
@@ -4071,7 +4071,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COUNT(t.col_int)' => [
@@ -4088,7 +4088,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COUNT(t.col_mixed)' => [
@@ -4105,7 +4105,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COUNT(1)' => [
@@ -4122,7 +4122,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 't.col_mixed' => [
@@ -4139,7 +4139,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'INT_PI()' => [
@@ -4156,7 +4156,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 3,
 			'mssqlResult' => 3,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'BOOL_PI()' => [
@@ -4173,7 +4173,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => true,
 			'mssqlResult' => true,
 			'stringify' => self::STRINGIFY_NONE,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'STRING_PI()' => [
@@ -4190,7 +4190,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '3.14159',
 			'mssqlResult' => '3.14159',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_datetime, t.col_datetime)' => [
@@ -4207,7 +4207,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '2024-01-31 12:59:59',
 			'mssqlResult' => '2024-01-31 12:59:59.000000', // doctrine/dbal changes default ReturnDatesAsStrings to true
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(SUM(t.col_int_nullable), 0)' => [
@@ -4224,7 +4224,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(SUM(ABS(t.col_int)), 0)' => [
@@ -4241,7 +4241,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 9,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "COALESCE(t.col_int_nullable, 'foo')" => [
@@ -4258,7 +4258,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "COALESCE(t.col_int, 'foo')" => [
@@ -4275,7 +4275,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 9,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "COALESCE(t.col_bool, 'foo')" => [
@@ -4292,7 +4292,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield "COALESCE(1, 'foo')" => [
@@ -4309,7 +4309,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, 0)' => [
@@ -4326,7 +4326,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0,
 			'mssqlResult' => 0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_float_nullable, 0)' => [
@@ -4343,7 +4343,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_float_nullable, 0.0)' => [
@@ -4360,7 +4360,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, 0)' => [
@@ -4377,7 +4377,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => '0',
 			'mssqlResult' => '.0',
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0)' => [
@@ -4394,7 +4394,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, t.col_string)' => [
@@ -4411,7 +4411,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => null,
 			'mssqlResult' => null,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 
 		yield 'IDENTITY(t.related_entity)' => [
@@ -4428,7 +4428,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pgsqlResult' => 1,
 			'mssqlResult' => 1,
 			'stringify' => self::STRINGIFY_DEFAULT,
-			'hydrationMode' => AbstractQuery::HYDRATE_OBJECT,
+			'hydrationMode' => null,
 		];
 	}
 
