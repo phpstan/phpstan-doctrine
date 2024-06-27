@@ -3913,6 +3913,22 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'stringify' => self::STRINGIFY_NONE,
 		];
 
+		yield '-INT_PI()' => [
+			'data' => self::dataDefault(),
+			'select' => 'SELECT -INT_PI() FROM %s t',
+			'mysql' => self::mixed(),
+			'sqlite' => self::mixed(),
+			'pdo_pgsql' => self::mixed(),
+			'pgsql' => self::mixed(),
+			'mssql' => self::mixed(),
+			'mysqlResult' => '-3.14159',
+			'sqliteResult' => -3.14159,
+			'pdoPgsqlResult' => '-3.14159',
+			'pgsqlResult' => '-3.14159',
+			'mssqlResult' => '-3.14159',
+			'stringify' => self::STRINGIFY_DEFAULT,
+		];
+
 		yield 'BOOL_PI()' => [
 			'data' => self::dataDefault(),
 			'select' => 'SELECT BOOL_PI() FROM %s t',
