@@ -92,6 +92,8 @@ services:
 	-
 		class: PHPStan\Doctrine\Driver\DriverDetector
 	-
+		class: PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver
+	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
 	-
 		class: PHPStan\Reflection\Doctrine\EntityRepositoryClassReflectionExtension
