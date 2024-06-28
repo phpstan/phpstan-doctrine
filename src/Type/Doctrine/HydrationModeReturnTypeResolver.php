@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\Persistence\ObjectManager;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BenevolentUnionType;
@@ -24,7 +25,8 @@ class HydrationModeReturnTypeResolver
 		string $methodName,
 		int $hydrationMode,
 		Type $queryKeyType,
-		Type $queryResultType
+		Type $queryResultType,
+		?ObjectManager $objectManager
 	): ?Type
 	{
 		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
@@ -45,7 +47,7 @@ class HydrationModeReturnTypeResolver
 			case AbstractQuery::HYDRATE_OBJECT:
 				break;
 			case AbstractQuery::HYDRATE_ARRAY:
-				$queryResultType = $this->getArrayHydratedReturnType($queryResultType);
+				$queryResultType = $this->getArrayHydratedReturnType($queryResultType, $objectManager);
 				break;
 			case AbstractQuery::HYDRATE_SIMPLEOBJECT:
 				$queryResultType = $this->getSimpleObjectHydratedReturnType($queryResultType);
@@ -94,10 +96,8 @@ class HydrationModeReturnTypeResolver
 	 *
 	 * @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
 	 */
-	private function getArrayHydratedReturnType(Type $queryResultType): ?Type
+	private function getArrayHydratedReturnType(Type $queryResultType, ?ObjectManager $objectManager): ?Type
 	{
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-
 		$mixedFound = false;
 		$queryResultType = TypeTraverser::map(
 			$queryResultType,

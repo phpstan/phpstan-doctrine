@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\SchemaTool;
+use LogicException;
 use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Testing\PHPStanTestCase;
@@ -21,6 +22,7 @@ use PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
@@ -29,7 +31,6 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
 use QueryResult\Entities\Simple;
 use Type\Doctrine\data\QueryResult\CustomIntType;
-use function count;
 use function sprintf;
 use const PHP_VERSION_ID;
 
@@ -44,12 +45,8 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 	}
 
 	/** @dataProvider getTestData */
-	public function test(Type $expectedType, string $dql, string $methodName, int $hydrationMode): void
+	public function test(Type $expectedType, string $dql, string $methodName, ?int $hydrationMode = null): void
 	{
-		if (PHP_VERSION_ID < 80100) {
-			self::markTestSkipped('Tests only non-stringified types so far.'); // TODO can be eliminated
-		}
-
 		/** @var EntityManagerInterface $entityManager */
 		$entityManager = require __DIR__ . '/../data/QueryResult/entity-manager.php';
 
@@ -89,7 +86,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 
 		$type = $resolver->getMethodReturnTypeForHydrationMode(
 			$methodName,
-			$hydrationMode,
+			$this->getRealHydrationMode($methodName, $hydrationMode),
 			$typeBuilder->getIndexType(),
 			$typeBuilder->getResultType(),
 			$entityManager
@@ -101,8 +98,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 		);
 
 		$query = $entityManager->createQuery($dql);
-		$result = $query->$methodName($hydrationMode); // @phpstan-ignore-line TODO should be improved
-		self::assertGreaterThan(0, count($result));
+		$result = $this->getQueryResult($query, $methodName, $hydrationMode);
 
 		$resultType = ConstantTypeHelper::getTypeFromValue($result);
 		self::assertTrue(
@@ -132,26 +128,6 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			Query::HYDRATE_OBJECT,
 		];
 
-		yield 'getResult(array), full entity' => [
-			new MixedType(),
-			'
-				SELECT		s
-				FROM		QueryResult\Entities\Simple s
-			',
-			'getResult',
-			Query::HYDRATE_ARRAY,
-		];
-
-		yield 'getArray(), full entity' => [
-			new MixedType(),
-			'
-				SELECT		s
-				FROM		QueryResult\Entities\Simple s
-			',
-			'getArrayResult',
-			Query::HYDRATE_ARRAY,
-		];
-
 		yield 'getResult(simple_object), full entity' => [
 			self::list(new ObjectType(Simple::class)),
 			'
@@ -162,13 +138,164 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			Query::HYDRATE_SIMPLEOBJECT,
 		];
 
-		yield 'getResult(single_scalar), full entity' => [
+		yield 'getResult(array), full entity' => [
 			new MixedType(),
 			'
 				SELECT		s
 				FROM		QueryResult\Entities\Simple s
 			',
-			'getScalarResult',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getResult(array), fields' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getResult(array), expressions' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getResult(object), fields' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_OBJECT,
+		];
+
+		yield 'getResult(object), expressions' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_OBJECT,
+		];
+
+		yield 'toIterable(object), full entity' => [
+			new IterableType(new IntegerType(), new ObjectType(Simple::class)),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_OBJECT,
+		];
+
+		yield 'toIterable(object), fields' => [
+			new IterableType(new IntegerType(), self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_OBJECT,
+		];
+
+		yield 'toIterable(object), expressions' => [
+			new IterableType(new IntegerType(), self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_OBJECT,
+		];
+
+		yield 'toIterable(simple_object), full entity' => [
+			new IterableType(new IntegerType(), new ObjectType(Simple::class)),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_SIMPLEOBJECT,
+		];
+
+		yield 'toIterable(array), full entity' => [
+			new MixedType(),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getArrayResult(), full entity' => [
+			new MixedType(),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getArrayResult',
+		];
+
+		yield 'getArrayResult(), fields' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getArrayResult',
+		];
+
+		yield 'getArrayResult(), expressions' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getArrayResult',
+		];
+
+		yield 'getResult(single_scalar), decimal field' => [
+			new MixedType(),
+			'
+				SELECT		s.decimalColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
 			Query::HYDRATE_SINGLE_SCALAR,
 		];
 
@@ -182,64 +309,50 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			Query::HYDRATE_SCALAR,
 		];
 
-		yield 'getResult(scalar), bigint field' => [
-			self::list(self::constantArray([
-				[new ConstantStringType('id'), self::numericString()],
-			])),
+		yield 'getResult(scalar), decimal field' => [
+			new MixedType(),
 			'
-				SELECT		s.id
+				SELECT		s.decimalColumn
 				FROM		QueryResult\Entities\Simple s
 			',
 			'getResult',
 			Query::HYDRATE_SCALAR,
 		];
 
-		yield 'getScalarResult(), bigint field' => [
-			self::list(self::constantArray([
-				[new ConstantStringType('id'), self::numericString()],
-			])),
+		yield 'getScalarResult, full entity' => [
+			new MixedType(),
 			'
-				SELECT		s.id
+				SELECT		s
 				FROM		QueryResult\Entities\Simple s
 			',
 			'getScalarResult',
-			Query::HYDRATE_SCALAR,
 		];
 
 		yield 'getScalarResult(), decimal field' => [
-			self::list(self::constantArray([
-				[new ConstantStringType('decimalColumn'), self::numericString()],
-			])),
+			new MixedType(),
 			'
 				SELECT		s.decimalColumn
 				FROM		QueryResult\Entities\Simple s
 			',
 			'getScalarResult',
-			Query::HYDRATE_SCALAR,
-		];
-
-		yield 'getScalarResult(), bigint expression' => [
-			self::list(self::constantArray([
-				[new ConstantStringType('col'), new IntegerType()],
-			])),
-			'
-				SELECT		-s.id as col
-				FROM		QueryResult\Entities\Simple s
-			',
-			'getScalarResult',
-			Query::HYDRATE_SCALAR,
 		];
 
 		yield 'getScalarResult(), decimal expression' => [
-			self::list(self::constantArray([
-				[new ConstantStringType('col'), TypeCombinator::union(new IntegerType(), new FloatType())],
-			])),
+			new MixedType(),
 			'
 				SELECT		-s.decimalColumn as col
 				FROM		QueryResult\Entities\Simple s
 			',
 			'getScalarResult',
-			Query::HYDRATE_SCALAR,
+		];
+
+		yield 'getSingleScalarResult(), decimal field' => [
+			new MixedType(),
+			'
+				SELECT		s.decimalColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getSingleScalarResult',
 		];
 	}
 
@@ -271,6 +384,101 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			new StringType(),
 			new AccessoryNumericStringType(),
 		]);
+	}
+
+	/**
+	 * @param Query<mixed, mixed> $query
+	 * @return mixed
+	 */
+	private function getQueryResult(Query $query, string $methodName, ?int $hydrationMode)
+	{
+		if ($methodName === 'getResult') {
+			if ($hydrationMode === null) {
+				throw new LogicException('Hydration mode must be set for getResult() method.');
+			}
+			return $query->getResult($hydrationMode);  // @phpstan-ignore-line dynamic arg
+		}
+
+		if ($methodName === 'getArrayResult') {
+			if ($hydrationMode !== null) {
+				throw new LogicException('Hydration mode must NOT be set for getArrayResult() method.');
+			}
+			return $query->getArrayResult();
+		}
+
+		if ($methodName === 'getScalarResult') {
+			if ($hydrationMode !== null) {
+				throw new LogicException('Hydration mode must NOT be set for getScalarResult() method.');
+			}
+			return $query->getScalarResult();
+		}
+
+		if ($methodName === 'getSingleResult') {
+			if ($hydrationMode === null) {
+				throw new LogicException('Hydration mode must be set for getSingleResult() method.');
+			}
+
+			return $query->getSingleResult($hydrationMode); // @phpstan-ignore-line dynamic arg
+		}
+
+		if ($methodName === 'getSingleScalarResult') {
+			if ($hydrationMode !== null) {
+				throw new LogicException('Hydration mode must NOT be set for getSingleScalarResult() method.');
+			}
+
+			return $query->getSingleScalarResult();
+		}
+
+		if ($methodName === 'toIterable') {
+			if ($hydrationMode === null) {
+				throw new LogicException('Hydration mode must be set for toIterable() method.');
+			}
+
+			return $query->toIterable([], $hydrationMode);  // @phpstan-ignore-line dynamic arg
+		}
+
+		throw new LogicException(sprintf('Unsupported method %s.', $methodName));
+	}
+
+	private function getRealHydrationMode(string $methodName, ?int $hydrationMode): int
+	{
+		if ($hydrationMode !== null) {
+			return $hydrationMode;
+		}
+
+		if ($methodName === 'getArrayResult') {
+			return Query::HYDRATE_ARRAY;
+		}
+
+		if ($methodName === 'getScalarResult') {
+			return Query::HYDRATE_SCALAR;
+		}
+
+		if ($methodName === 'getSingleScalarResult') {
+			return Query::HYDRATE_SCALAR;
+		}
+
+		throw new LogicException("Using $methodName without hydration mode is not supported.");
+	}
+
+
+	private static function stringifies(): bool
+	{
+		return PHP_VERSION_ID < 80100;
+	}
+
+	private static function floatOrStringified(): Type
+	{
+		return self::stringifies()
+			? self::numericString()
+			: new FloatType();
+	}
+
+	private static function floatOrIntOrStringified(): Type
+	{
+		return self::stringifies()
+			? self::numericString()
+			: TypeCombinator::union(new FloatType(), new IntegerType());
 	}
 
 }

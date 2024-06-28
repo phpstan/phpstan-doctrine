@@ -8,24 +8,12 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Accessory\AccessoryArrayListType;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\IterableType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeTraverser;
-use PHPStan\Type\TypeUtils;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\VoidType;
 
 final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -107,7 +95,8 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			$methodReflection->getName(),
 			$hydrationMode->getValue(),
 			$queryType->getTemplateType(AbstractQuery::class, 'TKey'),
-			$queryType->getTemplateType(AbstractQuery::class, 'TResult')
+			$queryType->getTemplateType(AbstractQuery::class, 'TResult'),
+			$this->objectMetadataResolver->getObjectManager()
 		);
 	}
 
