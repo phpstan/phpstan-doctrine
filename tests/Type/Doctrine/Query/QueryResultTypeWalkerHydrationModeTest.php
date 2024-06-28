@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Type\Doctrine\Query;
+namespace PHPStan\Type\Doctrine\Query;
 
 use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,8 +18,6 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver;
-use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
-use PHPStan\Type\Doctrine\Query\QueryResultTypeWalker;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -103,7 +101,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 		);
 
 		$query = $entityManager->createQuery($dql);
-		$result = $query->$methodName($hydrationMode); // TODO should be improved
+		$result = $query->$methodName($hydrationMode); // @phpstan-ignore-line TODO should be improved
 		self::assertGreaterThan(0, count($result));
 
 		$resultType = ConstantTypeHelper::getTypeFromValue($result);
