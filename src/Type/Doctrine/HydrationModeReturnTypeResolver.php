@@ -92,7 +92,7 @@ class HydrationModeReturnTypeResolver
 
 	/**
 	 * When we're array-hydrating object, we're not sure of the shape of the array.
-	 * We could return `new ArrayTyp(new MixedType(), new MixedType())`
+	 * We could return `new ArrayType(new MixedType(), new MixedType())`
 	 * but the lack of precision in the array keys/values would give false positive.
 	 *
 	 * @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
