@@ -254,9 +254,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	 */
 	public function getTestData(): iterable
 	{
-		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
-		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;
-
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
 		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
 
@@ -536,48 +533,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				FROM		QueryResult\Entities\One o
 			',
 		];
-
-		if (property_exists(Column::class, 'enumType') && PHP_VERSION_ID >= 80100) {
-			assert(class_exists(StringEnum::class));
-			assert(class_exists(IntEnum::class));
-
-			// https://github.com/doctrine/orm/issues/9622
-			if (!$this->isDoctrine211()) {
-				yield 'enum' => [
-					$this->constantArray([
-						[new ConstantStringType('stringEnumColumn'), new ObjectType(StringEnum::class)],
-						[new ConstantStringType('intEnumColumn'), new ObjectType(IntEnum::class)],
-					]),
-					'
-						SELECT		e.stringEnumColumn, e.intEnumColumn
-						FROM		QueryResult\EntitiesEnum\EntityWithEnum e
-					',
-				];
-			}
-
-			yield 'enum in expression' => [
-				$this->constantArray([
-					[
-						new ConstantIntegerType(1),
-						new StringType(),
-					],
-					[
-						new ConstantIntegerType(2),
-						new IntegerType(),
-					],
-					[
-						new ConstantIntegerType(3),
-						$this->numericString(),
-					],
-				]),
-				'
-					SELECT		COALESCE(e.stringEnumColumn, e.stringEnumColumn),
-								COALESCE(e.intEnumColumn, e.intEnumColumn),
-								COALESCE(e.intEnumOnStringColumn, e.intEnumOnStringColumn)
-					FROM		QueryResult\EntitiesEnum\EntityWithEnum e
-				',
-			];
-		}
 
 		yield 'hidden' => [
 			$this->constantArray([
@@ -1275,40 +1230,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
-		if (!$hasOrm3) {
-			yield 'date_add function' => [
-				$this->constantArray([
-					[new ConstantIntegerType(1), new StringType()],
-					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-					[new ConstantIntegerType(4), new StringType()],
-				]),
-				'
-				SELECT		DATE_ADD(m.datetimeColumn, m.intColumn, \'day\'),
-							DATE_ADD(m.stringNullColumn, m.intColumn, \'day\'),
-							DATE_ADD(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
-							DATE_ADD(\'2020-01-01\', 7, \'day\')
-				FROM		QueryResult\Entities\Many m
-			',
-			];
-
-			yield 'date_sub function' => [
-				$this->constantArray([
-					[new ConstantIntegerType(1), new StringType()],
-					[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
-					[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
-					[new ConstantIntegerType(4), new StringType()],
-				]),
-				'
-				SELECT		DATE_SUB(m.datetimeColumn, m.intColumn, \'day\'),
-							DATE_SUB(m.stringNullColumn, m.intColumn, \'day\'),
-							DATE_SUB(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
-							DATE_SUB(\'2020-01-01\', 7, \'day\')
-				FROM		QueryResult\Entities\Many m
-			',
-			];
-		}
-
 		yield 'date_diff function' => [
 			$this->constantArray([
 				[new ConstantIntegerType(1), $this->floatOrStringified()],
@@ -1324,26 +1245,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				FROM		QueryResult\Entities\Many m
 			',
 		];
-
-		/*yield 'sqrt function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), $this->floatStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->floatStringified())],
-				[new ConstantIntegerType(3), $this->floatStringified()],
-			]),
-			'
-				SELECT		SQRT(m.intColumn),
-							SQRT(NULLIF(m.intColumn, 1)),
-							SQRT(1)
-				FROM		QueryResult\Entities\Many m
-			',
-			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '<3') && PHP_VERSION_ID >= 80100
-				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
-				: null,
-			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3') && PHP_VERSION_ID >= 80100
-				? 'sqrt(): Passing null to parameter #1 ($num) of type float is deprecated'
-				: null,
-		];*/
 
 		yield 'length function' => [
 			$this->constantArray([
@@ -1367,36 +1268,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				FROM		QueryResult\Entities\Many m
 			',
 		];
-
-		if (PHP_VERSION_ID >= 70400) {
-			yield 'locate function' => [
-				$this->constantArray([
-					[new ConstantIntegerType(1), $this->uintOrStringified()],
-					[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintOrStringified())],
-					[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintOrStringified())],
-					[new ConstantIntegerType(4), $this->uintOrStringified()],
-				]),
-				'
-				SELECT		LOCATE(m.stringColumn, m.stringColumn, 0),
-							LOCATE(m.stringNullColumn, m.stringColumn, 0),
-							LOCATE(m.stringColumn, m.stringNullColumn, 0),
-							LOCATE(\'f\', \'foo\', 0)
-				FROM		QueryResult\Entities\Many m
-			',
-				null,
-				InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
-					? null
-					: (
-				PHP_VERSION_ID >= 80100
-					? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
-					: (
-				PHP_VERSION_ID < 80000
-					? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
-					: null
-					)
-				),
-			];
-		}
 
 		yield 'lower function' => [
 			$this->constantArray([
@@ -1608,6 +1479,125 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 							-COUNT(o.intColumn) as minusIntRange
 				FROM		QueryResult\Entities\One o
 			',
+		];
+
+		yield from $this->yieldConditionalDataset();
+	}
+
+	/**
+	 * @return iterable<mixed>
+	 */
+	private function yieldConditionalDataset(): iterable
+	{
+		if (property_exists(Column::class, 'enumType') && PHP_VERSION_ID >= 80100) {
+			assert(class_exists(StringEnum::class));
+			assert(class_exists(IntEnum::class));
+
+			// https://github.com/doctrine/orm/issues/9622
+			if (!$this->isDoctrine211()) {
+				yield 'enum' => [
+					$this->constantArray([
+						[new ConstantStringType('stringEnumColumn'), new ObjectType(StringEnum::class)],
+						[new ConstantStringType('intEnumColumn'), new ObjectType(IntEnum::class)],
+					]),
+					'
+						SELECT		e.stringEnumColumn, e.intEnumColumn
+						FROM		QueryResult\EntitiesEnum\EntityWithEnum e
+					',
+				];
+			}
+
+			yield 'enum in expression' => [
+				$this->constantArray([
+					[
+						new ConstantIntegerType(1),
+						new StringType(),
+					],
+					[
+						new ConstantIntegerType(2),
+						new IntegerType(),
+					],
+					[
+						new ConstantIntegerType(3),
+						$this->numericString(),
+					],
+				]),
+				'
+					SELECT		COALESCE(e.stringEnumColumn, e.stringEnumColumn),
+								COALESCE(e.intEnumColumn, e.intEnumColumn),
+								COALESCE(e.intEnumOnStringColumn, e.intEnumOnStringColumn)
+					FROM		QueryResult\EntitiesEnum\EntityWithEnum e
+				',
+			];
+		}
+
+		if (PHP_VERSION_ID >= 70400) {
+			yield 'locate function' => [
+				$this->constantArray([
+					[new ConstantIntegerType(1), $this->uintOrStringified()],
+					[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintOrStringified())],
+					[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintOrStringified())],
+					[new ConstantIntegerType(4), $this->uintOrStringified()],
+				]),
+				'
+				SELECT		LOCATE(m.stringColumn, m.stringColumn, 0),
+							LOCATE(m.stringNullColumn, m.stringColumn, 0),
+							LOCATE(m.stringColumn, m.stringNullColumn, 0),
+							LOCATE(\'f\', \'foo\', 0)
+				FROM		QueryResult\Entities\Many m
+			',
+				null,
+				InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
+					? null
+					: (
+				PHP_VERSION_ID >= 80100
+					? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
+					: (
+				PHP_VERSION_ID < 80000
+					? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
+					: null
+					)
+				),
+			];
+		}
+
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;
+
+		if ($hasOrm3) {
+			return;
+		}
+
+		yield 'date_add function' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), new StringType()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+				[new ConstantIntegerType(4), new StringType()],
+			]),
+			'
+            SELECT      DATE_ADD(m.datetimeColumn, m.intColumn, \'day\'),
+                        DATE_ADD(m.stringNullColumn, m.intColumn, \'day\'),
+                        DATE_ADD(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
+                        DATE_ADD(\'2020-01-01\', 7, \'day\')
+            FROM        QueryResult\Entities\Many m
+        ',
+		];
+
+		yield 'date_sub function' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), new StringType()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull(new StringType())],
+				[new ConstantIntegerType(3), TypeCombinator::addNull(new StringType())],
+				[new ConstantIntegerType(4), new StringType()],
+			]),
+			'
+            SELECT      DATE_SUB(m.datetimeColumn, m.intColumn, \'day\'),
+                        DATE_SUB(m.stringNullColumn, m.intColumn, \'day\'),
+                        DATE_SUB(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\'),
+                        DATE_SUB(\'2020-01-01\', 7, \'day\')
+            FROM        QueryResult\Entities\Many m
+        ',
 		];
 	}
 
