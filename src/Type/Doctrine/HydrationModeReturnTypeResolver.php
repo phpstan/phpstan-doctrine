@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BenevolentUnionType;
+use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -34,7 +35,7 @@ class HydrationModeReturnTypeResolver
 		if ($isVoidType->yes()) {
 			// A void query result type indicates an UPDATE or DELETE query.
 			// In this case all methods return the number of affected rows.
-			return new IntegerType();
+			return IntegerRangeType::fromInterval(0, null);
 		}
 
 		if ($isVoidType->maybe()) {
