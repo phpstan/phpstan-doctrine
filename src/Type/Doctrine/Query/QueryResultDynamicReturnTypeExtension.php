@@ -28,10 +28,6 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		'getSingleResult' => 0,
 	];
 
-	private const METHOD_HYDRATION_MODE = [
-		'getArrayResult' => AbstractQuery::HYDRATE_ARRAY,
-	];
-
 	/** @var ObjectMetadataResolver */
 	private $objectMetadataResolver;
 
@@ -54,8 +50,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return isset(self::METHOD_HYDRATION_MODE_ARG[$methodReflection->getName()])
-			|| isset(self::METHOD_HYDRATION_MODE[$methodReflection->getName()]);
+		return isset(self::METHOD_HYDRATION_MODE_ARG[$methodReflection->getName()]);
 	}
 
 	public function getTypeFromMethodCall(
@@ -66,23 +61,21 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 	{
 		$methodName = $methodReflection->getName();
 
-		if (isset(self::METHOD_HYDRATION_MODE[$methodName])) {
-			$hydrationMode = new ConstantIntegerType(self::METHOD_HYDRATION_MODE[$methodName]);
-		} elseif (isset(self::METHOD_HYDRATION_MODE_ARG[$methodName])) {
-			$argIndex = self::METHOD_HYDRATION_MODE_ARG[$methodName];
-			$args = $methodCall->getArgs();
-
-			if (isset($args[$argIndex])) {
-				$hydrationMode = $scope->getType($args[$argIndex]->value);
-			} else {
-				$parametersAcceptor = ParametersAcceptorSelector::selectSingle(
-					$methodReflection->getVariants()
-				);
-				$parameter = $parametersAcceptor->getParameters()[$argIndex];
-				$hydrationMode = $parameter->getDefaultValue() ?? new NullType();
-			}
-		} else {
+		if (!isset(self::METHOD_HYDRATION_MODE_ARG[$methodName])) {
 			throw new ShouldNotHappenException();
+		}
+
+		$argIndex = self::METHOD_HYDRATION_MODE_ARG[$methodName];
+		$args = $methodCall->getArgs();
+
+		if (isset($args[$argIndex])) {
+			$hydrationMode = $scope->getType($args[$argIndex]->value);
+		} else {
+			$parametersAcceptor = ParametersAcceptorSelector::selectSingle(
+				$methodReflection->getVariants()
+			);
+			$parameter = $parametersAcceptor->getParameters()[$argIndex];
+			$hydrationMode = $parameter->getDefaultValue() ?? new NullType();
 		}
 
 		$queryType = $scope->getType($methodCall->var);
