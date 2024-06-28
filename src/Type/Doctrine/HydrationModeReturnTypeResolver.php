@@ -10,13 +10,10 @@ use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VoidType;
 
 class HydrationModeReturnTypeResolver
@@ -46,9 +43,6 @@ class HydrationModeReturnTypeResolver
 
 		switch ($hydrationMode) {
 			case AbstractQuery::HYDRATE_OBJECT:
-				break;
-			case AbstractQuery::HYDRATE_ARRAY:
-				$queryResultType = $this->getArrayHydratedReturnType($queryResultType, $objectManager);
 				break;
 			case AbstractQuery::HYDRATE_SIMPLEOBJECT:
 				$queryResultType = $this->getSimpleObjectHydratedReturnType($queryResultType);
@@ -88,48 +82,6 @@ class HydrationModeReturnTypeResolver
 					$queryResultType
 				);
 		}
-	}
-
-	/**
-	 * When we're array-hydrating object, we're not sure of the shape of the array.
-	 * We could return `new ArrayType(new MixedType(), new MixedType())`
-	 * but the lack of precision in the array keys/values would give false positive.
-	 *
-	 * @see https://github.com/phpstan/phpstan-doctrine/pull/412#issuecomment-1497092934
-	 */
-	private function getArrayHydratedReturnType(Type $queryResultType, ?ObjectManager $objectManager): ?Type
-	{
-		$mixedFound = false;
-		$queryResultType = TypeTraverser::map(
-			$queryResultType,
-			static function (Type $type, callable $traverse) use ($objectManager, &$mixedFound): Type {
-				$isObject = (new ObjectWithoutClassType())->isSuperTypeOf($type);
-				if ($isObject->no()) {
-					return $traverse($type);
-				}
-				if (
-					$isObject->maybe()
-					|| !$type instanceof TypeWithClassName
-					|| $objectManager === null
-				) {
-					$mixedFound = true;
-
-					return new MixedType();
-				}
-
-				/** @var class-string $className */
-				$className = $type->getClassName();
-				if (!$objectManager->getMetadataFactory()->hasMetadataFor($className)) {
-					return $traverse($type);
-				}
-
-				$mixedFound = true;
-
-				return new MixedType();
-			}
-		);
-
-		return $mixedFound ? null : $queryResultType;
 	}
 
 	private function getSimpleObjectHydratedReturnType(Type $queryResultType): ?Type
