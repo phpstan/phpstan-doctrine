@@ -458,7 +458,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			return Query::HYDRATE_SCALAR;
 		}
 
-		throw new LogicException("Using $methodName without hydration mode is not supported.");
+		throw new LogicException(sprintf('Using %s without hydration mode is not supported.', $methodName));
 	}
 
 
