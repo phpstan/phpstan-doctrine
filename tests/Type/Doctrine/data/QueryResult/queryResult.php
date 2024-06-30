@@ -188,6 +188,41 @@ class QueryResultTest
 			'mixed',
 			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
 		);
+
+
+		$query = $em->createQuery('
+			SELECT		m.intColumn, m.stringNullColumn, m.datetimeColumn
+			FROM		QueryResult\Entities\Many m
+		');
+
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}>',
+			$query->getResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}>',
+			$query->getArrayResult()
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}>',
+			$query->execute(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}>',
+			$query->executeIgnoreQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'list<array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}>',
+			$query->executeUsingQueryCache(null, AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}',
+			$query->getSingleResult(AbstractQuery::HYDRATE_ARRAY)
+		);
+		assertType(
+			'array{intColumn: int, stringNullColumn: string|null, datetimeColumn: DateTime}|null',
+			$query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
+		);
 	}
 
 

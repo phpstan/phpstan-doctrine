@@ -138,6 +138,42 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			Query::HYDRATE_SIMPLEOBJECT,
 		];
 
+		yield 'getResult(array), full entity' => [
+			new MixedType(),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getResult(array), fields' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
+		yield 'getResult(array), expressions' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getResult',
+			Query::HYDRATE_ARRAY,
+		];
+
 		yield 'getResult(object), fields' => [
 			self::list(self::constantArray([
 				[new ConstantStringType('decimalColumn'), self::numericString()],
@@ -210,10 +246,44 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			Query::HYDRATE_SIMPLEOBJECT,
 		];
 
+		yield 'toIterable(array), full entity' => [
+			new MixedType(),
+			'
+				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'toIterable',
+			Query::HYDRATE_ARRAY,
+		];
+
 		yield 'getArrayResult(), full entity' => [
 			new MixedType(),
 			'
 				SELECT		s
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getArrayResult',
+		];
+
+		yield 'getArrayResult(), fields' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::numericString()],
+				[new ConstantStringType('floatColumn'), new FloatType()],
+			])),
+			'
+				SELECT		s.decimalColumn, s.floatColumn
+				FROM		QueryResult\Entities\Simple s
+			',
+			'getArrayResult',
+		];
+
+		yield 'getArrayResult(), expressions' => [
+			self::list(self::constantArray([
+				[new ConstantStringType('decimalColumn'), self::floatOrIntOrStringified()],
+				[new ConstantStringType('floatColumn'), self::floatOrStringified()],
+			])),
+			'
+				SELECT		-s.decimalColumn as decimalColumn, -s.floatColumn as floatColumn
 				FROM		QueryResult\Entities\Simple s
 			',
 			'getArrayResult',
