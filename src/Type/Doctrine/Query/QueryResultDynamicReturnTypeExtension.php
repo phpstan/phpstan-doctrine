@@ -8,7 +8,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -80,13 +79,9 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 
 		$queryType = $scope->getType($methodCall->var);
 
-		if (!$hydrationMode instanceof ConstantIntegerType) {
-			return null;
-		}
-
 		return $this->hydrationModeReturnTypeResolver->getMethodReturnTypeForHydrationMode(
 			$methodReflection->getName(),
-			$hydrationMode->getValue(),
+			$hydrationMode,
 			$queryType->getTemplateType(AbstractQuery::class, 'TKey'),
 			$queryType->getTemplateType(AbstractQuery::class, 'TResult'),
 			$this->objectMetadataResolver->getObjectManager()
