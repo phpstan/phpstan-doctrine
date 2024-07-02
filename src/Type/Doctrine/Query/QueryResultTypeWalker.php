@@ -978,6 +978,7 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkCoalesceExpression($coalesceExpression): string
 	{
+		$rawTypes = [];
 		$expressionTypes = [];
 		$allTypesContainNull = true;
 
@@ -987,22 +988,67 @@ class QueryResultTypeWalker extends SqlWalker
 				continue;
 			}
 
-			$type = $this->unmarshalType($expression->dispatch($this));
-			$allTypesContainNull = $allTypesContainNull && $this->canBeNull($type);
+			$rawType = $this->unmarshalType($expression->dispatch($this));
+			$rawTypes[] = $rawType;
+
+			$allTypesContainNull = $allTypesContainNull && $this->canBeNull($rawType);
 
 			// Some drivers manipulate the types, lets avoid false positives by generalizing constant types
 			// e.g. sqlsrv: "COALESCE returns the data type of value with the highest precedence"
 			// e.g. mysql: COALESCE(1, 'foo') === '1' (undocumented? https://gist.github.com/jrunning/4535434)
-			$expressionTypes[] = $this->generalizeConstantType($type, false);
+			$expressionTypes[] = $this->generalizeConstantType($rawType, false);
 		}
 
-		$type = TypeCombinator::union(...$expressionTypes);
+		$generalizedUnion = TypeCombinator::union(...$expressionTypes);
 
 		if (!$allTypesContainNull) {
-			$type = TypeCombinator::removeNull($type);
+			$generalizedUnion = TypeCombinator::removeNull($generalizedUnion);
 		}
 
-		return $this->marshalType($type);
+		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL) {
+			return $this->marshalType(
+				$this->inferCoalesceForMySql($rawTypes, $generalizedUnion)
+			);
+		}
+
+		return $this->marshalType($generalizedUnion);
+	}
+
+	/**
+	 * @param list<Type> $rawTypes
+	 */
+	private function inferCoalesceForMySql(array $rawTypes, Type $originalResult): Type
+	{
+		$containsString = false;
+		$containsFloat = false;
+		$allIsNumericExcludingLiteralString = true;
+
+		foreach ($rawTypes as $rawType) {
+			$rawTypeNoNull = TypeCombinator::removeNull($rawType);
+			$isLiteralString = $rawTypeNoNull instanceof DqlConstantStringType && $rawTypeNoNull->getOriginLiteralType() === AST\Literal::STRING;
+
+			if (!$this->containsOnlyNumericTypes($rawTypeNoNull) || $isLiteralString) {
+				$allIsNumericExcludingLiteralString = false;
+			}
+
+			if ($rawTypeNoNull->isString()->yes()) {
+				$containsString = true;
+			}
+
+			if (!$rawTypeNoNull->isFloat()->yes()) {
+				continue;
+			}
+
+			$containsFloat = true;
+		}
+
+		if ($containsFloat && $allIsNumericExcludingLiteralString) {
+			return $this->simpleFloatify($originalResult);
+		} elseif ($containsString) {
+			return $this->simpleStringify($originalResult);
+		}
+
+		return $originalResult;
 	}
 
 	/**
@@ -2105,6 +2151,36 @@ class QueryResultTypeWalker extends SqlWalker
 			DriverDetector::SQLITE3,
 			DriverDetector::PDO_SQLITE,
 		], true);
+	}
+
+	private function simpleStringify(Type $type): Type
+	{
+		return TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+			if ($type instanceof UnionType || $type instanceof IntersectionType) {
+				return $traverse($type);
+			}
+
+			if ($type instanceof IntegerType || $type instanceof FloatType || $type instanceof BooleanType) {
+				return $type->toString();
+			}
+
+			return $traverse($type);
+		});
+	}
+
+	private function simpleFloatify(Type $type): Type
+	{
+		return TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+			if ($type instanceof UnionType || $type instanceof IntersectionType) {
+				return $traverse($type);
+			}
+
+			if ($type instanceof IntegerType || $type instanceof BooleanType || $type instanceof StringType) {
+				return $type->toFloat();
+			}
+
+			return $traverse($type);
+		});
 	}
 
 }
