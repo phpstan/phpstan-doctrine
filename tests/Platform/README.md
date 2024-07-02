@@ -21,5 +21,5 @@ You can also run utilize those containers for PHPStorm PHPUnit configuration.
 
 Since the dataset is huge and takes few minutes to run, you can filter only functions you are interested in:
 ```sh
-`docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php81 php -d memory_limit=1G vendor/bin/phpunit --group=platform --filter "AVG"`
+docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php81 php -d memory_limit=1G vendor/bin/phpunit --group=platform --filter "AVG"
 ```
