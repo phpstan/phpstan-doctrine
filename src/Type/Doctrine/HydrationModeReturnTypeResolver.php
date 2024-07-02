@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BenevolentUnionType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
@@ -21,7 +22,7 @@ class HydrationModeReturnTypeResolver
 
 	public function getMethodReturnTypeForHydrationMode(
 		string $methodName,
-		int $hydrationMode,
+		Type $hydrationMode,
 		Type $queryKeyType,
 		Type $queryResultType,
 		?ObjectManager $objectManager
@@ -41,7 +42,11 @@ class HydrationModeReturnTypeResolver
 			return null;
 		}
 
-		switch ($hydrationMode) {
+		if (!$hydrationMode instanceof ConstantIntegerType) {
+			return null;
+		}
+
+		switch ($hydrationMode->getValue()) {
 			case AbstractQuery::HYDRATE_OBJECT:
 				break;
 			case AbstractQuery::HYDRATE_SIMPLEOBJECT:
