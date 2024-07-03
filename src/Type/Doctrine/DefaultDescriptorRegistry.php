@@ -25,13 +25,13 @@ class DefaultDescriptorRegistry implements DescriptorRegistry
 	{
 		$typesMap = Type::getTypesMap();
 		if (!isset($typesMap[$type])) {
-			throw new DescriptorNotRegisteredException();
+			throw new DescriptorNotRegisteredException($type);
 		}
 
 		/** @var class-string<Type> $typeClass */
 		$typeClass = $typesMap[$type];
 		if (!isset($this->descriptors[$typeClass])) {
-			throw new DescriptorNotRegisteredException();
+			throw new DescriptorNotRegisteredException($typeClass);
 		}
 		return $this->descriptors[$typeClass];
 	}
@@ -42,7 +42,7 @@ class DefaultDescriptorRegistry implements DescriptorRegistry
 	public function getByClassName(string $className): DoctrineTypeDescriptor
 	{
 		if (!isset($this->descriptors[$className])) {
-			throw new DescriptorNotRegisteredException();
+			throw new DescriptorNotRegisteredException($className);
 		}
 		return $this->descriptors[$className];
 	}
