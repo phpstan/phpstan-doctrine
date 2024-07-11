@@ -48,7 +48,6 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\Constraint\IsIdentical;
-use Platform\TypedExpressionIntegerWrapFunction;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use function class_exists;
