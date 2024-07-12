@@ -242,3 +242,47 @@ abstract class Uuid7Entity
     private Uuid7 $hsCode;
 
 ```
+
+## Custom DQL functions
+
+Any custom DQL function that implements Doctrine's `TypedExpression` is understood by this extension and is inferred with the type used in its `getReturnType()` method.
+All other custom DQL functions are inferred as `mixed`.
+Please note that you cannot use native `StringType` to cast (and infer) string results (see [ORM issue](https://github.com/doctrine/orm/issues/11537)).
+
+```php
+
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Query\AST\TypedExpression;
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\TokenType;
+
+class Floor extends FunctionNode implements TypedExpression
+{
+    private AST\Node|string $arithmeticExpression;
+
+    public function getSql(SqlWalker $sqlWalker): string
+    {
+        return 'FLOOR(' . $sqlWalker->walkSimpleArithmeticExpression($this->arithmeticExpression) . ')';
+    }
+
+    public function parse(Parser $parser): void
+    {
+        $parser->match(TokenType::T_IDENTIFIER);
+        $parser->match(TokenType::T_OPEN_PARENTHESIS);
+
+        $this->arithmeticExpression = $parser->SimpleArithmeticExpression();
+
+        $parser->match(TokenType::T_CLOSE_PARENTHESIS);
+    }
+
+
+    public function getReturnType(): Type
+    {
+        return Type::getType(Types::INTEGER);
+    }
+}
+
+```
