@@ -25,6 +25,10 @@ class QueryAggregateFunctionDetectorTreeWalker extends Query\TreeWalkerAdapter
 			return;
 		}
 
+		if ($node instanceof AST\Subselect) {
+			return;
+		}
+
 		if ($this->isAggregateFunction($node)) {
 			$this->markAggregateFunctionFound();
 			return;
