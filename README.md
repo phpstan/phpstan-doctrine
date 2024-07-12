@@ -245,7 +245,7 @@ abstract class Uuid7Entity
 
 ## Custom DQL functions
 
-Any custom DQL function that implements Doctrine's `TypedExpression` is understood by this extension and is inferred with the type used in its `getReturnType()` method.
+Any [custom DQL function](https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/cookbook/dql-user-defined-functions.html) that implements Doctrine's `TypedExpression` is understood by this extension and is inferred with the type used in its `getReturnType()` method.
 All other custom DQL functions are inferred as `mixed`.
 Please note that you cannot use native `StringType` to cast (and infer) string results (see [ORM issue](https://github.com/doctrine/orm/issues/11537)).
 
