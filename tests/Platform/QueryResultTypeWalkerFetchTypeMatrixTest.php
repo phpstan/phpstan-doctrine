@@ -3833,6 +3833,22 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'stringify' => self::STRINGIFY_NONE,
 		];
 
+		yield 'SUBSELECT' => [
+			'data' => self::dataDefault(),
+			'select' => 'SELECT t1.col_int, (SELECT COUNT(t2.col_int) FROM ' . PlatformEntity::class . ' t2) FROM %s t1',
+			'mysql' => self::int(),
+			'sqlite' => self::int(),
+			'pdo_pgsql' => self::int(),
+			'pgsql' => self::int(),
+			'mssql' => self::int(),
+			'mysqlResult' => 9,
+			'sqliteResult' => 9,
+			'pdoPgsqlResult' => 9,
+			'pgsqlResult' => 9,
+			'mssqlResult' => 9,
+			'stringify' => self::STRINGIFY_NONE,
+		];
+
 		yield 'COUNT(t.col_int)' => [
 			'data' => self::dataDefault(),
 			'select' => 'SELECT COUNT(t.col_int) FROM %s t',
