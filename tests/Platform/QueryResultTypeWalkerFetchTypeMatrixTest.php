@@ -3961,6 +3961,38 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
+		yield 'INT_WRAP(MIN(t.col_float)) + no data' => [
+			'data' => self::dataNone(),
+			'select' => 'SELECT INT_WRAP(MIN(t.col_float)) FROM %s t',
+			'mysql' => self::intOrNull(),
+			'sqlite' => self::intOrNull(),
+			'pdo_pgsql' => self::intOrNull(),
+			'pgsql' => self::intOrNull(),
+			'mssql' => self::intOrNull(),
+			'mysqlResult' => null,
+			'sqliteResult' => null,
+			'pdoPgsqlResult' => null,
+			'pgsqlResult' => null,
+			'mssqlResult' => null,
+			'stringify' => self::STRINGIFY_NONE,
+		];
+
+		yield 'INT_WRAP(MIN(t.col_float))' => [
+			'data' => self::dataDefault(),
+			'select' => 'SELECT INT_WRAP(MIN(t.col_float)) FROM %s t',
+			'mysql' => self::intOrNull(),
+			'sqlite' => self::intOrNull(),
+			'pdo_pgsql' => self::intOrNull(),
+			'pgsql' => self::intOrNull(),
+			'mssql' => self::intOrNull(),
+			'mysqlResult' => 0,
+			'sqliteResult' => 0,
+			'pdoPgsqlResult' => 0,
+			'pgsqlResult' => 0,
+			'mssqlResult' => 0,
+			'stringify' => self::STRINGIFY_NONE,
+		];
+
 		yield 'COALESCE(t.col_datetime, t.col_datetime)' => [
 			'data' => self::dataDefault(),
 			'select' => 'SELECT COALESCE(t.col_datetime, t.col_datetime) FROM %s t',
@@ -5018,6 +5050,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$config->addCustomStringFunction('INT_PI', TypedExpressionIntegerPiFunction::class);
 		$config->addCustomStringFunction('BOOL_PI', TypedExpressionBooleanPiFunction::class);
 		$config->addCustomStringFunction('STRING_PI', TypedExpressionStringPiFunction::class);
+		$config->addCustomStringFunction('INT_WRAP', TypedExpressionIntegerWrapFunction::class);
 
 		return $config;
 	}

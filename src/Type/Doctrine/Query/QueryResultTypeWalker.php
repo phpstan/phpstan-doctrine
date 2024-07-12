@@ -1226,6 +1226,10 @@ class QueryResultTypeWalker extends SqlWalker
 					$this->resolveDoctrineType($dbalTypeName, null, TypeCombinator::containsNull($type))
 				);
 
+				if ($this->hasAggregateWithoutGroupBy() && !$expr instanceof AST\Functions\CountFunction) {
+					$type = TypeCombinator::addNull($type);
+				}
+
 			} else {
 				// Expressions default to Doctrine's StringType, whose
 				// convertToPHPValue() is a no-op. So the actual type depends on
