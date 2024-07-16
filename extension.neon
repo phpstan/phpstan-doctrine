@@ -92,6 +92,10 @@ services:
 	-
 		class: PHPStan\Doctrine\Driver\DriverDetector
 	-
+		class: PHPStan\Doctrine\DoctrineDiagnoseExtension
+		tags:
+			- phpstan.diagnoseExtension
+	-
 		class: PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver
 	-
 		class: PHPStan\Reflection\Doctrine\DoctrineSelectableClassReflectionExtension
