@@ -37,9 +37,6 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$files[] = $stubsDir . '/DBAL/Connection.stub';
 		}
 
-		$files[] = $stubsDir . '/ORM/QueryBuilder.stub';
-		$files[] = $stubsDir . '/EntityRepository.stub';
-
 		$hasLazyServiceEntityRepositoryAsParent = false;
 
 		try {

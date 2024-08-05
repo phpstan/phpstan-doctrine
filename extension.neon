@@ -34,6 +34,7 @@ parameters:
 		- stubs/EntityManager.stub
 		- stubs/EntityManagerDecorator.stub
 		- stubs/EntityManagerInterface.stub
+		- stubs/EntityRepository.stub
 		- stubs/MongoClassMetadataInfo.stub
 
 		- stubs/Persistence/ManagerRegistry.stub
@@ -61,6 +62,7 @@ parameters:
 		- stubs/ORM/UnexpectedResultException.stub
 		- stubs/ORM/Query/Expr.stub
 		- stubs/ORM/Query.stub
+		- stubs/ORM/QueryBuilder.stub
 		- stubs/ORM/Query/Expr/Comparison.stub
 		- stubs/ORM/Query/Expr/Composite.stub
 		- stubs/ORM/Query/Expr/Func.stub
