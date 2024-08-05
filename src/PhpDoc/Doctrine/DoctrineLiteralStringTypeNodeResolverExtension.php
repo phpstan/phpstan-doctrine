@@ -15,11 +15,11 @@ class DoctrineLiteralStringTypeNodeResolverExtension implements TypeNodeResolver
 {
 
 	/** @var bool */
-	private $bleedingEdge;
+	private $enabled;
 
-	public function __construct(bool $bleedingEdge)
+	public function __construct(bool $enabled)
 	{
-		$this->bleedingEdge = $bleedingEdge;
+		$this->enabled = $enabled;
 	}
 
 	public function resolve(TypeNode $typeNode, NameScope $nameScope): ?Type
@@ -32,7 +32,7 @@ class DoctrineLiteralStringTypeNodeResolverExtension implements TypeNodeResolver
 			return null;
 		}
 
-		if ($this->bleedingEdge) {
+		if ($this->enabled) {
 			return new IntersectionType([
 				new StringType(),
 				new AccessoryLiteralStringType(),

@@ -17,6 +17,7 @@ parametersSchema:
 		reportDynamicQueryBuilders: bool()
 		reportUnknownTypes: bool()
 		allowNullablePropertyForRequiredField: bool()
+		literalString: bool()
 	])
 
 rules:

@@ -1,5 +1,8 @@
 parameters:
 	doctrine:
+		reportDynamicQueryBuilders: false
+		reportUnknownTypes: false
+		allowNullablePropertyForRequiredField: false
 		repositoryClass: null
 		ormRepositoryClass: null
 		odmRepositoryClass: null
@@ -8,6 +11,7 @@ parameters:
 		objectManagerLoader: null
 		searchOtherMethodsForQueryBuilderBeginning: true
 		queryBuilderFastAlgorithm: false
+		literalString: false
 	featureToggles:
 		skipCheckGenericClasses:
 			- Doctrine\ODM\MongoDB\Mapping\ClassMetadata
@@ -75,6 +79,10 @@ parametersSchema:
 		objectManagerLoader: schema(string(), nullable())
 		searchOtherMethodsForQueryBuilderBeginning: bool()
 		queryBuilderFastAlgorithm: bool()
+		reportDynamicQueryBuilders: bool()
+		reportUnknownTypes: bool()
+		allowNullablePropertyForRequiredField: bool()
+		literalString: bool()
 	])
 
 conditionalTags:
@@ -435,7 +443,7 @@ services:
 	-
 		class: PHPStan\PhpDoc\Doctrine\DoctrineLiteralStringTypeNodeResolverExtension
 		arguments:
-			bleedingEdge: %featureToggles.bleedingEdge%
+			enabled: %doctrine.literalString%
 		tags:
 			- phpstan.phpDoc.typeNodeResolverExtension
 
