@@ -286,3 +286,19 @@ class Floor extends FunctionNode implements TypedExpression
 }
 
 ```
+
+## Literal strings
+
+Stub files in phpstan-doctrine come with many parameters marked with `literal-string`. This is a security-focused type that only allows literal strings written in code to be passed into these parameters.
+
+This reduces risk of SQL injection because dynamic strings from user input are not accepted in place of `literal-string`.
+
+An example where this type is used is `$sql` parameter in `Doctrine\Dbal\Connection::executeQuery()`.
+
+To enable this advanced type in phpstan-doctrine, use this configuration parameter:
+
+```neon
+parameters:
+	doctrine:
+		literalString: true
+```
