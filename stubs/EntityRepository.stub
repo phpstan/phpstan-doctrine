@@ -63,4 +63,12 @@ class EntityRepository implements ObjectRepository
 	 */
 	public function matching(Criteria $criteria);
 
+	/**
+	 * @param __doctrine-literal-string      $alias
+	 * @param __doctrine-literal-string|null $indexBy
+	 *
+	 * @return QueryBuilder
+	 */
+	public function createQueryBuilder($alias, $indexBy = null);
+
 }

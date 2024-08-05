@@ -2,6 +2,8 @@
 
 namespace Doctrine\ORM;
 
+use Doctrine\ORM\Query\Expr;
+
 class QueryBuilder
 {
 
@@ -20,5 +22,137 @@ class QueryBuilder
 	public function getQuery()
 	{
 	}
+
+	/**
+	 * @param string                                                                            $dqlPartName
+	 * @param __doctrine-literal-string|object|list<__doctrine-literal-string>|array{join: array<int|string, object>} $dqlPart
+	 * @param bool                                                                              $append
+	 *
+	 * @return $this
+	 */
+	public function add($dqlPartName, $dqlPart, $append = false)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|null $delete
+	 * @param __doctrine-literal-string|null $alias
+	 *
+	 * @return $this
+	 */
+	public function delete($delete = null, $alias = null)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|null $update
+	 * @param __doctrine-literal-string|null $alias
+	 *
+	 * @return $this
+	 */
+	public function update($update = null, $alias = null)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|class-string $from
+	 * @param __doctrine-literal-string              $alias
+	 * @param __doctrine-literal-string|null         $indexBy
+	 *
+	 * @return $this
+	 */
+	public function from($from, $alias, $indexBy = null)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|class-string                        $join
+	 * @param __doctrine-literal-string                                     $alias
+	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
+	 * @param __doctrine-literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
+	 * @param __doctrine-literal-string|null                                $indexBy
+	 *
+	 * @return $this
+	 */
+	public function innerJoin($join, $alias, $conditionType = null, $condition = null, $indexBy = null)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|class-string                        $join
+	 * @param __doctrine-literal-string                                     $alias
+	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
+	 * @param __doctrine-literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
+	 * @param __doctrine-literal-string|null                                $indexBy
+	 *
+	 * @return $this
+	 */
+	public function leftJoin($join, $alias, $conditionType = null, $condition = null, $indexBy = null)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|class-string                        $join
+	 * @param __doctrine-literal-string                                     $alias
+	 * @param Expr\Join::ON|Expr\Join::WITH|null                 $conditionType
+	 * @param __doctrine-literal-string|Expr\Comparison|Expr\Composite|Expr\Func|null $condition
+	 * @param __doctrine-literal-string|null                                $indexBy
+	 *
+	 * @return $this
+	 */
+	public function join($join, $alias, $conditionType = null, $condition = null, $indexBy = null)
+	{
+
+	}
+
+	/**
+	 * @return __doctrine-literal-string
+	 */
+	public function getRootAlias()
+	{
+
+	}
+
+	/**
+	 * @return list<__doctrine-literal-string>
+	 */
+	public function getRootAliases()
+	{
+
+	}
+
+	/**
+	 * @return list<__doctrine-literal-string>
+	 */
+	public function getAllAlias()
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|object|array<mixed> $predicates
+	 * @return $this
+	 */
+	public function where($predicates)
+	{
+
+	}
+
+	/**
+	 * @param __doctrine-literal-string|object|array<mixed> $predicates
+	 * @return $this
+	 */
+	public function andWhere($predicates)
+	{
+
+	}
+
+
 
 }
