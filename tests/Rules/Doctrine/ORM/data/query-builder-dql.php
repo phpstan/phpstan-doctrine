@@ -291,6 +291,14 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
+	public function bug602(array $objectConditions): void
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere($queryBuilder->expr()->orX(...$objectConditions));
+	}
+
 }
 
 class CustomExpr extends \Doctrine\ORM\Query\Expr
