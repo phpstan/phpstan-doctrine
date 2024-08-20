@@ -71,4 +71,11 @@ class EntityRepository implements ObjectRepository
 	 */
 	public function createQueryBuilder($alias, $indexBy = null);
 
+	/**
+	 * @param array<string, mixed> $criteria
+	 *
+	 * @return int<0, max>
+	 */
+	public function count(array $criteria);
+
 }
