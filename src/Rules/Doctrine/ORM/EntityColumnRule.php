@@ -21,6 +21,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
 use function get_class;
@@ -115,25 +116,58 @@ class EntityColumnRule implements Rule
 
 		$enumTypeString = $fieldMapping['enumType'] ?? null;
 		if ($enumTypeString !== null) {
-			if ($this->reflectionProvider->hasClass($enumTypeString)) {
-				$enumReflection = $this->reflectionProvider->getClass($enumTypeString);
-				$backedEnumType = $enumReflection->getBackedEnumType();
-				if ($backedEnumType !== null) {
-					if (!$backedEnumType->equals($writableToDatabaseType) || !$backedEnumType->equals($writableToPropertyType)) {
-						$errors[] = RuleErrorBuilder::message(sprintf(
-							'Property %s::$%s type mapping mismatch: backing type %s of enum %s does not match database type %s.',
-							$className,
-							$propertyName,
-							$backedEnumType->describe(VerbosityLevel::typeOnly()),
-							$enumReflection->getDisplayName(),
-							$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
-						))->identifier('doctrine.enumType')->build();
+			if ($writableToDatabaseType->isArray()->no() && $writableToPropertyType->isArray()->no()) {
+				if ($this->reflectionProvider->hasClass($enumTypeString)) {
+					$enumReflection = $this->reflectionProvider->getClass($enumTypeString);
+					$backedEnumType = $enumReflection->getBackedEnumType();
+					if ($backedEnumType !== null) {
+						if (!$backedEnumType->equals($writableToDatabaseType) || !$backedEnumType->equals($writableToPropertyType)) {
+							$errors[] = RuleErrorBuilder::message(sprintf(
+								'Property %s::$%s type mapping mismatch: backing type %s of enum %s does not match database type %s.',
+								$className,
+								$propertyName,
+								$backedEnumType->describe(VerbosityLevel::typeOnly()),
+								$enumReflection->getDisplayName(),
+								$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
+							))->identifier('doctrine.enumType')->build();
+						}
 					}
 				}
+				$enumType = new ObjectType($enumTypeString);
+				$writableToPropertyType = $enumType;
+				$writableToDatabaseType = $enumType;
+			} else {
+				$enumType = new ObjectType($enumTypeString);
+				if ($this->reflectionProvider->hasClass($enumTypeString)) {
+					$enumReflection = $this->reflectionProvider->getClass($enumTypeString);
+					$backedEnumType = $enumReflection->getBackedEnumType();
+					if ($backedEnumType !== null) {
+						if (!$backedEnumType->equals($writableToDatabaseType->getIterableValueType()) || !$backedEnumType->equals($writableToPropertyType->getIterableValueType())) {
+							$errors[] = RuleErrorBuilder::message(
+								sprintf(
+									'Property %s::$%s type mapping mismatch: backing type %s of enum %s does not match value type %s of the database type %s.',
+									$className,
+									$propertyName,
+									$backedEnumType->describe(VerbosityLevel::typeOnly()),
+									$enumReflection->getDisplayName(),
+									$writableToDatabaseType->getIterableValueType()->describe(VerbosityLevel::typeOnly()),
+									$writableToDatabaseType->describe(VerbosityLevel::typeOnly())
+								)
+							)->identifier('doctrine.enumType')->build();
+						}
+					}
+				}
+
+				$writableToPropertyType = TypeCombinator::intersect(new ArrayType(
+					$writableToPropertyType->getIterableKeyType(),
+					$enumType
+				), ...TypeUtils::getAccessoryTypes($writableToPropertyType));
+				$writableToDatabaseType = TypeCombinator::intersect(new ArrayType(
+					$writableToDatabaseType->getIterableKeyType(),
+					$enumType
+				), ...TypeUtils::getAccessoryTypes($writableToDatabaseType));
+
 			}
-			$enumType = new ObjectType($enumTypeString);
-			$writableToPropertyType = $enumType;
-			$writableToDatabaseType = $enumType;
 		}
 
 		$identifiers = [];

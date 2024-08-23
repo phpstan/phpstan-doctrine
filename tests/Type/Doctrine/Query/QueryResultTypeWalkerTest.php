@@ -14,7 +14,9 @@ use Doctrine\ORM\Tools\SchemaTool;
 use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Testing\PHPStanTestCase;
+use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
@@ -181,6 +183,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$entityWithEnum->stringEnumColumn = StringEnum::A;
 			$entityWithEnum->intEnumColumn = IntEnum::A;
 			$entityWithEnum->intEnumOnStringColumn = IntEnum::A;
+			$entityWithEnum->stringEnumListColumn = [StringEnum::A, StringEnum::B];
 			$em->persist($entityWithEnum);
 		}
 
@@ -1499,9 +1502,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					$this->constantArray([
 						[new ConstantStringType('stringEnumColumn'), new ObjectType(StringEnum::class)],
 						[new ConstantStringType('intEnumColumn'), new ObjectType(IntEnum::class)],
+						[new ConstantStringType('stringEnumListColumn'), AccessoryArrayListType::intersectWith(new ArrayType(new IntegerType(), new ObjectType(StringEnum::class)))],
 					]),
 					'
-						SELECT		e.stringEnumColumn, e.intEnumColumn
+						SELECT		e.stringEnumColumn, e.intEnumColumn, e.stringEnumListColumn
 						FROM		QueryResult\EntitiesEnum\EntityWithEnum e
 					',
 				];
