@@ -19,6 +19,7 @@ use PHPStan\Php\PhpVersion;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
@@ -39,6 +40,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use function array_key_exists;
 use function array_map;
@@ -2009,17 +2011,28 @@ class QueryResultTypeWalker extends SqlWalker
 	/** @param ?class-string<BackedEnum> $enumType */
 	private function resolveDoctrineType(string $typeName, ?string $enumType = null, bool $nullable = false): Type
 	{
-		if ($enumType !== null) {
-			$type = new ObjectType($enumType);
-		} else {
-			try {
-				$type = $this->descriptorRegistry
-					->get($typeName)
-					->getWritableToPropertyType();
-				if ($type instanceof NeverType) {
-					$type = new MixedType();
+		try {
+			$type = $this->descriptorRegistry
+				->get($typeName)
+				->getWritableToPropertyType();
+
+			if ($enumType !== null) {
+				if ($type->isArray()->no()) {
+					$type = new ObjectType($enumType);
+				} else {
+					$type = TypeCombinator::intersect(new ArrayType(
+						$type->getIterableKeyType(),
+						new ObjectType($enumType)
+					), ...TypeUtils::getAccessoryTypes($type));
 				}
-			} catch (DescriptorNotRegisteredException $e) {
+			}
+			if ($type instanceof NeverType) {
+					$type = new MixedType();
+			}
+		} catch (DescriptorNotRegisteredException $e) {
+			if ($enumType !== null) {
+				$type = new ObjectType($enumType);
+			} else {
 				$type = new MixedType();
 			}
 		}
@@ -2028,7 +2041,7 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = TypeCombinator::addNull($type);
 		}
 
-		return $type;
+			return $type;
 	}
 
 	/** @param ?class-string<BackedEnum> $enumType */

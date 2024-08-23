@@ -38,4 +38,10 @@ class EntityWithEnum
 	 * @Column(type="string", enumType="QueryResult\EntitiesEnum\IntEnum")
 	 */
 	public $intEnumOnStringColumn;
+
+	/**
+	 * @var list<StringEnum>
+	 * @Column(type="simple_array", enumType="QueryResult\EntitiesEnum\StringEnum")
+	 */
+	public $stringEnumListColumn;
 }
