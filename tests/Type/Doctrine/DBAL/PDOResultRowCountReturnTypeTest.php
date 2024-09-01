@@ -2,6 +2,8 @@
 
 namespace PHPStan\Type\Doctrine\DBAL;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 class PDOResultRowCountReturnTypeTest extends TypeInferenceTestCase
@@ -10,7 +12,12 @@ class PDOResultRowCountReturnTypeTest extends TypeInferenceTestCase
 	/** @return iterable<mixed> */
 	public function dataFileAsserts(): iterable
 	{
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/pdo-result-row-count.php');
+		$versionParser = new VersionParser();
+		if (InstalledVersions::satisfies($versionParser, 'doctrine/dbal', '<3')) {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/pdo-result-row-count-dbal-2.php');
+		} else {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/pdo-result-row-count.php');
+		}
 	}
 
 	/**
