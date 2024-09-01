@@ -12,6 +12,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtensionTest extends TypeInferenceTe
 	{
 		yield from $this->gatherAssertTypes(__DIR__ . '/../data/QueryResult/queryBuilderGetQuery.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/../data/QueryResult/bug-245.php');
+		yield from $this->gatherAssertTypes(__DIR__ . '/../data/QueryResult/bug-512.php');
 	}
 
 	/**

@@ -3,6 +3,7 @@
 namespace QueryResult\Entities;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embedded as ORMEmbedded;
 use Doctrine\ORM\Mapping\Entity;
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @Entity
@@ -84,5 +86,12 @@ class One
 	public function __construct()
 	{
 		$this->subOne = new SubOne();
+	}
+
+	public static function createQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('o')
+			->from(self::class, 'o');
 	}
 }

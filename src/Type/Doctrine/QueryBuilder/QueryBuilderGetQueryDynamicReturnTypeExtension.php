@@ -155,7 +155,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 				if ($lowerMethodName === 'set') {
 					try {
-						$args = $this->argumentsProcessor->processArgs($scope, $methodName, array_slice($calledMethodCall->getArgs(), 0, 1));
+						$args = $this->argumentsProcessor->processArgs($queryBuilderType->getScope(), $methodName, array_slice($calledMethodCall->getArgs(), 0, 1));
 					} catch (DynamicQueryBuilderArgumentException $e) {
 						return null;
 					}
@@ -170,7 +170,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				}
 
 				try {
-					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->getArgs());
+					$args = $this->argumentsProcessor->processArgs($queryBuilderType->getScope(), $methodName, $calledMethodCall->getArgs());
 				} catch (DynamicQueryBuilderArgumentException $e) {
 					if (in_array($lowerMethodName, self::METHODS_NOT_AFFECTING_RESULT_TYPE, true)) {
 						continue;
