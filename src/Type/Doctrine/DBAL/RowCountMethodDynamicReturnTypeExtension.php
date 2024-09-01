@@ -105,9 +105,9 @@ class RowCountMethodDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 			case DriverDetector::PDO_SQLSRV:
 				return 'Doctrine\DBAL\Driver\PDO\Result';
 			case DriverDetector::PGSQL:
-				return 'Doctrine\DBAL\Driver\PgSQL\Result';
+				return 'Doctrine\DBAL\Driver\PgSQL\Result'; // @phpstan-ignore return.type
 			case DriverDetector::SQLITE3:
-				return 'Doctrine\DBAL\Driver\SQLite3\Result';
+				return 'Doctrine\DBAL\Driver\SQLite3\Result'; // @phpstan-ignore return.type
 			case DriverDetector::SQLSRV:
 				return 'Doctrine\DBAL\Driver\SQLSrv\Result';
 		}
