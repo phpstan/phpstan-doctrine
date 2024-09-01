@@ -313,6 +313,18 @@ services:
 		class: PHPStan\Type\Doctrine\DBAL\QueryBuilder\QueryBuilderExecuteMethodExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\DBAL\RowCountMethodDynamicReturnTypeExtension
+		arguments:
+			class: Doctrine\DBAL\Result
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\Doctrine\DBAL\RowCountMethodDynamicReturnTypeExtension
+		arguments:
+			class: Doctrine\DBAL\Driver\Result
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 
 	# Type descriptors
 	-
