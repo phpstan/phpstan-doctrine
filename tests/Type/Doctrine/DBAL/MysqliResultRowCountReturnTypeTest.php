@@ -2,6 +2,8 @@
 
 namespace PHPStan\Type\Doctrine\DBAL;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 class MysqliResultRowCountReturnTypeTest extends TypeInferenceTestCase
@@ -10,7 +12,11 @@ class MysqliResultRowCountReturnTypeTest extends TypeInferenceTestCase
 	/** @return iterable<mixed> */
 	public function dataFileAsserts(): iterable
 	{
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count.php');
+		if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=4.0')) {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count.php');
+		} else {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count-dbal-3.php');
+		}
 	}
 
 	/**
