@@ -291,12 +291,17 @@ class TestQueryBuilderRepository
 		$queryBuilder->getQuery();
 	}
 
-	public function bug602(array $objectConditions): void
+	public function bug602(array $objectConditions, bool $rand): void
 	{
+		$orParts = ['e.title LIKE :termLike'];
+		if ($rand) {
+			$orParts[] = 'p.version = :term';
+		}
 		$queryBuilder = $this->entityManager->createQueryBuilder();
 		$queryBuilder->select('e')
 			->from(MyEntity::class, 'e')
-			->andWhere($queryBuilder->expr()->orX(...$objectConditions));
+			->andWhere($queryBuilder->expr()->orX(...$orParts))
+				->setParameter('termLike', 'someTerm');
 	}
 
 }

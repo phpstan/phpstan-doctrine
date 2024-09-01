@@ -34,6 +34,9 @@ class ArgumentsProcessor
 	{
 		$args = [];
 		foreach ($methodCallArgs as $arg) {
+			if ($arg->unpack) {
+				throw new DynamicQueryBuilderArgumentException();
+			}
 			$value = $scope->getType($arg->value);
 			if (
 				$value instanceof ExprType
