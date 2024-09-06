@@ -33,7 +33,7 @@ class DoctrineProxyForbiddenClassNamesExtensionTest extends RuleTestCase
 					20,
 					'This is most likely unintentional. Did you mean to type \TestPhpStanEntity?',
 				],
-			]
+			],
 		);
 	}
 

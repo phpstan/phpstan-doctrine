@@ -28,14 +28,11 @@ use function sprintf;
 class EntityRelationRule implements Rule
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var bool */
-	private $allowNullablePropertyForRequiredField;
+	private bool $allowNullablePropertyForRequiredField;
 
-	/** @var bool */
-	private $bleedingEdge;
+	private bool $bleedingEdge;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
@@ -102,7 +99,7 @@ class EntityRelationRule implements Rule
 			$toMany = true;
 			$columnType = TypeCombinator::intersect(
 				new ObjectType('Doctrine\Common\Collections\Collection'),
-				new IterableType(new MixedType(), new ObjectType($associationMapping['targetEntity']))
+				new IterableType(new MixedType(), new ObjectType($associationMapping['targetEntity'])),
 			);
 		}
 
@@ -125,7 +122,7 @@ class EntityRelationRule implements Rule
 			) {
 				$propertyTypeToCheckAgainst = TypeCombinator::intersect(
 					$collectionObjectType,
-					new IterableType(new MixedType(true), $propertyType->getIterableValueType())
+					new IterableType(new MixedType(true), $propertyType->getIterableValueType()),
 				);
 			}
 			if (!$propertyTypeToCheckAgainst->isSuperTypeOf($columnType)->yes()) {
@@ -134,14 +131,14 @@ class EntityRelationRule implements Rule
 					$className,
 					$propertyName,
 					$columnType->describe(VerbosityLevel::typeOnly()),
-					$propertyType->describe(VerbosityLevel::typeOnly())
+					$propertyType->describe(VerbosityLevel::typeOnly()),
 				))->identifier('doctrine.associationType')->build();
 			}
 			if (
 				!$columnType->isSuperTypeOf(
 					$this->allowNullablePropertyForRequiredField
 						? TypeCombinator::removeNull($propertyType)
-						: $propertyType
+						: $propertyType,
 				)->yes()
 			) {
 				$errors[] = RuleErrorBuilder::message(sprintf(
@@ -149,7 +146,7 @@ class EntityRelationRule implements Rule
 					$className,
 					$propertyName,
 					$propertyType->describe(VerbosityLevel::typeOnly()),
-					$columnType->describe(VerbosityLevel::typeOnly())
+					$columnType->describe(VerbosityLevel::typeOnly()),
 				))->identifier('doctrine.associationType')->build();
 			}
 		}

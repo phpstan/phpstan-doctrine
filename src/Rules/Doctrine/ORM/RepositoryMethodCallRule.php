@@ -19,8 +19,7 @@ use function sprintf;
 class RepositoryMethodCallRule implements Rule
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
 	{
@@ -82,7 +81,7 @@ class RepositoryMethodCallRule implements Rule
 						$calledOnType->describe(VerbosityLevel::typeOnly()),
 						$methodName,
 						$entityClassNames[0],
-						$fieldName->getValue()
+						$fieldName->getValue(),
 					))->identifier(sprintf('doctrine.%sArgument', $methodName))->build();
 				}
 			}

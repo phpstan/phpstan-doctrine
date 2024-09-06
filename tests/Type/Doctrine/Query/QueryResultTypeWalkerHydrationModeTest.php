@@ -79,7 +79,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			$typeBuilder,
 			self::getContainer()->getByType(DescriptorRegistry::class),
 			self::getContainer()->getByType(PhpVersion::class),
-			self::getContainer()->getByType(DriverDetector::class)
+			self::getContainer()->getByType(DriverDetector::class),
 		);
 
 		$resolver = self::getContainer()->getByType(HydrationModeReturnTypeResolver::class);
@@ -89,12 +89,12 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			new ConstantIntegerType($this->getRealHydrationMode($methodName, $hydrationMode)),
 			$typeBuilder->getIndexType(),
 			$typeBuilder->getResultType(),
-			$entityManager
+			$entityManager,
 		) ?? new MixedType();
 
 		self::assertSame(
 			$expectedType->describe(VerbosityLevel::precise()),
-			$type->describe(VerbosityLevel::precise())
+			$type->describe(VerbosityLevel::precise()),
 		);
 
 		$query = $entityManager->createQuery($dql);
@@ -106,8 +106,8 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			sprintf(
 				"The inferred type\n%s\nshould accept actual type\n%s",
 				$type->describe(VerbosityLevel::precise()),
-				$resultType->describe(VerbosityLevel::precise())
-			)
+				$resultType->describe(VerbosityLevel::precise()),
+			),
 		);
 	}
 

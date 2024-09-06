@@ -12,8 +12,7 @@ use function in_array;
 class PropertiesExtension implements ReadWritePropertiesExtension
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
 	{

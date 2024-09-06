@@ -84,53 +84,45 @@ class QueryResultTypeWalker extends SqlWalker
 	/**
 	 * Counter for generating unique scalar result.
 	 *
-	 * @var int
 	 */
-	private $scalarResultCounter = 1;
+	private int $scalarResultCounter = 1;
 
 	/**
 	 * Counter for generating indexes.
 	 *
-	 * @var int
 	 */
-	private $newObjectCounter = 0;
+	private int $newObjectCounter = 0;
 
 	/** @var Query<mixed> */
-	private $query;
+	private Query $query;
 
-	/** @var EntityManagerInterface */
-	private $em;
+	private EntityManagerInterface $em;
 
-	/** @var PhpVersion */
-	private $phpVersion;
+	private PhpVersion $phpVersion;
 
 	/** @var DriverDetector::*|null */
 	private $driverType;
 
 	/** @var array<mixed> */
-	private $driverOptions;
+	private array $driverOptions;
 
 	/**
 	 * Map of all components/classes that appear in the DQL query.
 	 *
 	 * @var array<array-key,QueryComponent> $queryComponents
 	 */
-	private $queryComponents;
+	private array $queryComponents;
 
 	/** @var array<array-key,bool> */
-	private $nullableQueryComponents;
+	private array $nullableQueryComponents;
 
-	/** @var QueryResultTypeBuilder */
-	private $typeBuilder;
+	private QueryResultTypeBuilder $typeBuilder;
 
-	/** @var DescriptorRegistry */
-	private $descriptorRegistry;
+	private DescriptorRegistry $descriptorRegistry;
 
-	/** @var bool */
-	private $hasAggregateFunction;
+	private bool $hasAggregateFunction;
 
-	/** @var bool */
-	private $hasGroupByClause;
+	private bool $hasGroupByClause;
 
 
 	/**
@@ -182,7 +174,7 @@ class QueryResultTypeWalker extends SqlWalker
 				'Expected the query hint %s to contain a %s, but got a %s',
 				self::HINT_TYPE_MAPPING,
 				QueryResultTypeBuilder::class,
-				is_object($typeBuilder) ? get_class($typeBuilder) : gettype($typeBuilder)
+				is_object($typeBuilder) ? get_class($typeBuilder) : gettype($typeBuilder),
 			));
 		}
 
@@ -195,7 +187,7 @@ class QueryResultTypeWalker extends SqlWalker
 				'Expected the query hint %s to contain a %s, but got a %s',
 				self::HINT_DESCRIPTOR_REGISTRY,
 				DescriptorRegistry::class,
-				is_object($descriptorRegistry) ? get_class($descriptorRegistry) : gettype($descriptorRegistry)
+				is_object($descriptorRegistry) ? get_class($descriptorRegistry) : gettype($descriptorRegistry),
 			));
 		}
 
@@ -208,7 +200,7 @@ class QueryResultTypeWalker extends SqlWalker
 				'Expected the query hint %s to contain a %s, but got a %s',
 				self::HINT_PHP_VERSION,
 				PhpVersion::class,
-				is_object($phpVersion) ? get_class($phpVersion) : gettype($phpVersion)
+				is_object($phpVersion) ? get_class($phpVersion) : gettype($phpVersion),
 			));
 		}
 
@@ -221,7 +213,7 @@ class QueryResultTypeWalker extends SqlWalker
 				'Expected the query hint %s to contain a %s, but got a %s',
 				self::HINT_DRIVER_DETECTOR,
 				DriverDetector::class,
-				is_object($driverDetector) ? get_class($driverDetector) : gettype($driverDetector)
+				is_object($driverDetector) ? get_class($driverDetector) : gettype($driverDetector),
 			));
 		}
 		$connection = $this->em->getConnection();
@@ -818,7 +810,7 @@ class QueryResultTypeWalker extends SqlWalker
 			if ($exprTypeNoNull->isInteger()->yes()) {
 				return TypeCombinator::union(
 					$this->createInteger($nullable),
-					$this->createNumericString($nullable)
+					$this->createNumericString($nullable),
 				);
 			}
 
@@ -838,7 +830,7 @@ class QueryResultTypeWalker extends SqlWalker
 	{
 		$union = TypeCombinator::union(
 			new FloatType(),
-			new IntegerType()
+			new IntegerType(),
 		);
 		return $nullable ? TypeCombinator::addNull($union) : $union;
 	}
@@ -859,7 +851,7 @@ class QueryResultTypeWalker extends SqlWalker
 	{
 		$numericString = TypeCombinator::intersect(
 			new StringType(),
-			new AccessoryNumericStringType()
+			new AccessoryNumericStringType(),
 		);
 
 		return $nullable ? TypeCombinator::addNull($numericString) : $numericString;
@@ -1009,7 +1001,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL) {
 			return $this->marshalType(
-				$this->inferCoalesceForMySql($rawTypes, $generalizedUnion)
+				$this->inferCoalesceForMySql($rawTypes, $generalizedUnion),
 			);
 		}
 
@@ -1091,13 +1083,13 @@ class QueryResultTypeWalker extends SqlWalker
 			}
 
 			$types[] = $this->unmarshalType(
-				$thenScalarExpression->dispatch($this)
+				$thenScalarExpression->dispatch($this),
 			);
 		}
 
 		if ($elseScalarExpression instanceof AST\Node) {
 			$types[] = $this->unmarshalType(
-				$elseScalarExpression->dispatch($this)
+				$elseScalarExpression->dispatch($this),
 			);
 		}
 
@@ -1128,13 +1120,13 @@ class QueryResultTypeWalker extends SqlWalker
 			}
 
 			$types[] = $this->unmarshalType(
-				$thenScalarExpression->dispatch($this)
+				$thenScalarExpression->dispatch($this),
 			);
 		}
 
 		if ($elseScalarExpression instanceof AST\Node) {
 			$types[] = $this->unmarshalType(
-				$elseScalarExpression->dispatch($this)
+				$elseScalarExpression->dispatch($this),
 			);
 		}
 
@@ -1225,7 +1217,7 @@ class QueryResultTypeWalker extends SqlWalker
 				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
 				$type = TypeCombinator::intersect( // e.g. count is typed as int, but we infer int<0, max>
 					$type,
-					$this->resolveDoctrineType($dbalTypeName, null, TypeCombinator::containsNull($type))
+					$this->resolveDoctrineType($dbalTypeName, null, TypeCombinator::containsNull($type)),
 				);
 
 				if ($this->hasAggregateWithoutGroupBy() && !$expr instanceof AST\Functions\CountFunction) {
@@ -1689,7 +1681,7 @@ class QueryResultTypeWalker extends SqlWalker
 			}
 
 			$types[] = $this->castStringLiteralForNumericExpression(
-				$this->unmarshalType($this->walkArithmeticPrimary($term))
+				$this->unmarshalType($this->walkArithmeticPrimary($term)),
 			);
 		}
 
@@ -1716,7 +1708,7 @@ class QueryResultTypeWalker extends SqlWalker
 			}
 
 			$types[] = $this->castStringLiteralForNumericExpression(
-				$this->unmarshalType($this->walkArithmeticPrimary($factor))
+				$this->unmarshalType($this->walkArithmeticPrimary($factor)),
 			);
 		}
 
@@ -1917,7 +1909,7 @@ class QueryResultTypeWalker extends SqlWalker
 		} elseif ($type instanceof IntegerRangeType && $factor->sign === false) {
 			$type = IntegerRangeType::fromInterval(
 				$type->getMax() === null ? null : $type->getMax() * -1,
-				$type->getMin() === null ? null : $type->getMin() * -1
+				$type->getMin() === null ? null : $type->getMin() * -1,
 			);
 
 		} elseif ($type instanceof ConstantFloatType && $factor->sign === false) {
@@ -2022,7 +2014,7 @@ class QueryResultTypeWalker extends SqlWalker
 				} else {
 					$type = TypeCombinator::intersect(new ArrayType(
 						$type->getIterableKeyType(),
-						new ObjectType($enumType)
+						new ObjectType($enumType),
 					), ...TypeUtils::getAccessoryTypes($type));
 				}
 			}
@@ -2058,9 +2050,7 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		if ($enumType !== null) {
-			$enumTypes = array_map(static function ($enumType) {
-				return ConstantTypeHelper::getTypeFromValue($enumType->value);
-			}, $enumType::cases());
+			$enumTypes = array_map(static fn ($enumType) => ConstantTypeHelper::getTypeFromValue($enumType->value), $enumType::cases());
 			$enumType = TypeCombinator::union(...$enumTypes);
 			$enumType = TypeCombinator::union($enumType, $enumType->toString());
 			$type = TypeCombinator::intersect($enumType, $type);

@@ -73,18 +73,18 @@ class HydrationModeReturnTypeResolver
 			case 'toIterable':
 				return new IterableType(
 					$queryKeyType->isNull()->yes() ? new IntegerType() : $queryKeyType,
-					$queryResultType
+					$queryResultType,
 				);
 			default:
 				if ($queryKeyType->isNull()->yes()) {
 					return AccessoryArrayListType::intersectWith(new ArrayType(
 						new IntegerType(),
-						$queryResultType
+						$queryResultType,
 					));
 				}
 				return new ArrayType(
 					$queryKeyType,
-					$queryResultType
+					$queryResultType,
 				);
 		}
 	}

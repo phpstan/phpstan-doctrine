@@ -21,11 +21,9 @@ class ReflectionDescriptor implements DoctrineTypeDescriptor, DoctrineTypeDriver
 	/** @var class-string<DbalType> */
 	private $type;
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
+	private ReflectionProvider $reflectionProvider;
 
-	/** @var Container */
-	private $container;
+	private Container $container;
 
 	/**
 	 * @param class-string<DbalType> $type

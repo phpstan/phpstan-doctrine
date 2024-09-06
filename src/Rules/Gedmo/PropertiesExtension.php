@@ -41,11 +41,9 @@ class PropertiesExtension implements ReadWritePropertiesExtension
 		Gedmo\Language::class,
 	];
 
-	/** @var AnnotationReader|null */
-	private $annotationReader;
+	private ?AnnotationReader $annotationReader = null;
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
 	{

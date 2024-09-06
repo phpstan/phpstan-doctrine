@@ -19,13 +19,13 @@ $config->setMetadataCache(new ArrayCachePool());
 $metadataDriver = new MappingDriverChain();
 $metadataDriver->addDriver(new AnnotationDriver(
 	new AnnotationReader(),
-	[__DIR__ . '/data']
+	[__DIR__ . '/data'],
 ), 'PHPStan\\Rules\\Doctrine\\ORM\\');
 
 if (PHP_VERSION_ID >= 80100) {
 	$metadataDriver->addDriver(
 		new AttributeDriver([__DIR__ . '/data-attributes']),
-		'PHPStan\\Rules\\Doctrine\\ORMAttributes\\'
+		'PHPStan\\Rules\\Doctrine\\ORMAttributes\\',
 	);
 }
 
@@ -33,7 +33,7 @@ $config->setMetadataDriverImpl($metadataDriver);
 
 Type::overrideType(
 	'date',
-	DateTimeImmutableType::class
+	DateTimeImmutableType::class,
 );
 
 return new EntityManager(
@@ -41,5 +41,5 @@ return new EntityManager(
 		'driver' => 'pdo_sqlite',
 		'memory' => true,
 	]),
-	$config
+	$config,
 );

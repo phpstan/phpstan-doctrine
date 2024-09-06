@@ -15,8 +15,7 @@ use PHPUnit\Framework\TestCase;
 final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 {
 
-	/** @var DoctrineSelectableDynamicReturnTypeExtension */
-	private $extension;
+	private DoctrineSelectableDynamicReturnTypeExtension $extension;
 
 	protected function setUp(): void
 	{
@@ -52,10 +51,8 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 		$scope = $this->createMock(Scope::class);
 		$scope->method('getType')->will(
 			self::returnCallback(
-				static function (): Type {
-					return new ObjectType(Collection::class);
-				}
-			)
+				static fn (): Type => new ObjectType(Collection::class),
+			),
 		);
 
 		$var = $this->createMock(Expr::class);

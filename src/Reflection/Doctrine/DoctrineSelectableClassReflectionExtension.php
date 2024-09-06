@@ -10,8 +10,7 @@ use PHPStan\Reflection\ReflectionProvider;
 class DoctrineSelectableClassReflectionExtension implements MethodsClassReflectionExtension
 {
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
+	private ReflectionProvider $reflectionProvider;
 
 	public function __construct(ReflectionProvider $reflectionProvider)
 	{

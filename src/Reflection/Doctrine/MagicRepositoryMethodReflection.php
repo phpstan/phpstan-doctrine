@@ -21,14 +21,11 @@ use function strpos;
 class MagicRepositoryMethodReflection implements MethodReflection
 {
 
-	/** @var ClassReflection */
-	private $declaringClass;
+	private ClassReflection $declaringClass;
 
-	/** @var string */
-	private $name;
+	private string $name;
 
-	/** @var Type */
-	private $type;
+	private Type $type;
 
 	public function __construct(
 		ClassReflection $declaringClass,
@@ -104,7 +101,7 @@ class MagicRepositoryMethodReflection implements MethodReflection
 				null,
 				$arguments,
 				false,
-				$this->type
+				$this->type,
 			),
 		];
 	}

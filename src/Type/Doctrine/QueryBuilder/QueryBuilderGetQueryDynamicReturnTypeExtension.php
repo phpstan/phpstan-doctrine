@@ -55,23 +55,17 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		'orhaving',
 	];
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var ArgumentsProcessor */
-	private $argumentsProcessor;
+	private ArgumentsProcessor $argumentsProcessor;
 
-	/** @var string|null */
-	private $queryBuilderClass;
+	private ?string $queryBuilderClass = null;
 
-	/** @var DescriptorRegistry */
-	private $descriptorRegistry;
+	private DescriptorRegistry $descriptorRegistry;
 
-	/** @var PhpVersion */
-	private $phpVersion;
+	private PhpVersion $phpVersion;
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,

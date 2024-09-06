@@ -17,17 +17,14 @@ use function sprintf;
 final class ObjectMetadataResolver
 {
 
-	/** @var string|null */
-	private $objectManagerLoader;
+	private ?string $objectManagerLoader = null;
 
 	/** @var ObjectManager|false|null */
 	private $objectManager;
 
-	/** @var ClassMetadataFactory|null */
-	private $metadataFactory;
+	private ?ClassMetadataFactory $metadataFactory = null;
 
-	/** @var string */
-	private $tmpDir;
+	private string $tmpDir;
 
 	public function __construct(
 		?string $objectManagerLoader,
@@ -150,14 +147,14 @@ final class ObjectMetadataResolver
 		if (!is_file($objectManagerLoader)) {
 			throw new ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" does not exist',
-				$objectManagerLoader
+				$objectManagerLoader,
 			));
 		}
 
 		if (!is_readable($objectManagerLoader)) {
 			throw new ShouldNotHappenException(sprintf(
 				'Object manager could not be loaded: file "%s" is not readable',
-				$objectManagerLoader
+				$objectManagerLoader,
 			));
 		}
 

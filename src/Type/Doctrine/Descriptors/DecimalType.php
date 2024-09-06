@@ -16,8 +16,7 @@ use function in_array;
 class DecimalType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(DriverDetector $driverDetector)
 	{

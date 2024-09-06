@@ -23,8 +23,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 
 	private const MAX_COMBINATIONS = 16;
 
-	/** @var string|null */
-	private $queryBuilderClass;
+	private ?string $queryBuilderClass = null;
 
 	public function __construct(
 		?string $queryBuilderClass
@@ -41,7 +40,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
 		$returnType = ParametersAcceptorSelector::selectSingle(
-			$methodReflection->getVariants()
+			$methodReflection->getVariants(),
 		)->getReturnType();
 		if ($returnType instanceof MixedType) {
 			return false;

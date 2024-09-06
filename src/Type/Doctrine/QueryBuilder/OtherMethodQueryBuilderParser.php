@@ -28,21 +28,18 @@ use function sprintf;
 class OtherMethodQueryBuilderParser
 {
 
-	/** @var bool */
-	private $descendIntoOtherMethods;
+	private bool $descendIntoOtherMethods;
 
-	/** @var Parser */
-	private $parser;
+	private Parser $parser;
 
-	/** @var Container */
-	private $container;
+	private Container $container;
 
 	/**
 	 * Null if the method is currently being processed
 	 *
 	 * @var array<string, list<QueryBuilderType>|null>
 	 */
-	private $cache = [];
+	private array $cache = [];
 
 	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
 	{

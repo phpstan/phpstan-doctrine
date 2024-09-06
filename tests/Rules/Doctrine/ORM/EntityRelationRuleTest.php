@@ -14,18 +14,16 @@ use const PHP_VERSION_ID;
 class EntityRelationRuleTest extends RuleTestCase
 {
 
-	/** @var bool */
-	private $allowNullablePropertyForRequiredField;
+	private bool $allowNullablePropertyForRequiredField;
 
-	/** @var string|null */
-	private $objectManagerLoader;
+	private ?string $objectManagerLoader = null;
 
 	protected function getRule(): Rule
 	{
 		return new EntityRelationRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
 			$this->allowNullablePropertyForRequiredField,
-			true
+			true,
 		);
 	}
 

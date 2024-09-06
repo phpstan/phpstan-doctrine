@@ -23,8 +23,7 @@ use function count;
 class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTypeResolverExtension
 {
 
-	/** @var OtherMethodQueryBuilderParser */
-	private $otherMethodQueryBuilderParser;
+	private OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser;
 
 	public function __construct(
 		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser

@@ -11,14 +11,11 @@ use PHPStan\Type\Type;
 class QueryType extends GenericObjectType
 {
 
-	/** @var Type */
-	private $indexType;
+	private Type $indexType;
 
-	/** @var Type */
-	private $resultType;
+	private Type $resultType;
 
-	/** @var string */
-	private $dql;
+	private string $dql;
 
 	public function __construct(string $dql, ?Type $indexType = null, ?Type $resultType = null, ?Type $subtractedType = null)
 	{

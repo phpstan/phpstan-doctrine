@@ -15,11 +15,9 @@ use function sprintf;
 class DoctrineDiagnoseExtension implements DiagnoseExtension
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
@@ -34,7 +32,7 @@ class DoctrineDiagnoseExtension implements DiagnoseExtension
 	{
 		$output->writeLineFormatted(sprintf(
 			'<info>Doctrine\'s objectManagerLoader:</info> %s',
-			$this->objectMetadataResolver->hasObjectManagerLoader() ? 'In use' : 'No'
+			$this->objectMetadataResolver->hasObjectManagerLoader() ? 'In use' : 'No',
 		));
 
 		$objectManager = $this->objectMetadataResolver->getObjectManager();
@@ -44,7 +42,7 @@ class DoctrineDiagnoseExtension implements DiagnoseExtension
 
 			$output->writeLineFormatted(sprintf(
 				'<info>Detected driver:</info> %s',
-				$driver === null ? 'None' : $driver
+				$driver === null ? 'None' : $driver,
 			));
 		}
 

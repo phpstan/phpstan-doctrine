@@ -18,8 +18,7 @@ use const PHP_VERSION_ID;
 class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 {
 
-	/** @var string */
-	private $tmpDir;
+	private string $tmpDir;
 
 	public function __construct(string $tmpDir)
 	{

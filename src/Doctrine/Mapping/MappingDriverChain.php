@@ -11,7 +11,7 @@ class MappingDriverChain implements MappingDriver
 {
 
 	/** @var MappingDriver[] */
-	private $drivers;
+	private array $drivers;
 
 	/**
 	 * @param MappingDriver[] $drivers

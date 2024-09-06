@@ -61,11 +61,9 @@ use const PHP_VERSION_ID;
 final class QueryResultTypeWalkerTest extends PHPStanTestCase
 {
 
-	/** @var EntityManagerInterface */
-	private static $em;
+	private static EntityManagerInterface $em;
 
-	/** @var DescriptorRegistry */
-	private $descriptorRegistry;
+	private DescriptorRegistry $descriptorRegistry;
 
 	public static function getAdditionalConfigFiles(): array
 	{
@@ -222,14 +220,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$typeBuilder,
 			$this->descriptorRegistry,
 			self::getContainer()->getByType(PhpVersion::class),
-			self::getContainer()->getByType(DriverDetector::class)
+			self::getContainer()->getByType(DriverDetector::class),
 		);
 
 		$type = $typeBuilder->getResultType();
 
 		self::assertSame(
 			$expectedType->describe(VerbosityLevel::precise()),
-			$type->describe(VerbosityLevel::precise())
+			$type->describe(VerbosityLevel::precise()),
 		);
 
 		// Double-check our expectations
@@ -246,8 +244,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				sprintf(
 					"The inferred type\n%s\nshould accept actual type\n%s",
 					$type->describe(VerbosityLevel::precise()),
-					$rowType->describe(VerbosityLevel::precise())
-				)
+					$rowType->describe(VerbosityLevel::precise()),
+				),
 			);
 		}
 	}
@@ -293,7 +291,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'arbitrary left join, selected' => [
 			TypeCombinator::union(
 				new ObjectType(Many::class),
-				TypeCombinator::addNull(new ObjectType(One::class))
+				TypeCombinator::addNull(new ObjectType(One::class)),
 			),
 			'
 				SELECT		m, o
@@ -306,7 +304,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'arbitrary inner join, selected' => [
 			TypeCombinator::union(
 				new ObjectType(Many::class),
-				new ObjectType(One::class)
+				new ObjectType(One::class),
 			),
 			'
 				SELECT		m, o
@@ -323,7 +321,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), TypeCombinator::addNull(new ObjectType(One::class))],
-				])
+				]),
 			),
 			'
 				SELECT		m AS many, o
@@ -340,7 +338,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantStringType('one'), TypeCombinator::addNull(new ObjectType(One::class))],
-				])
+				]),
 			),
 			'
 				SELECT		m AS many, o AS one
@@ -357,7 +355,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantStringType('one'), new ObjectType(One::class)],
-				])
+				]),
 			),
 			'
 				SELECT		m AS many, o AS one
@@ -378,7 +376,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					[new ConstantIntegerType(0), new ObjectType(One::class)],
 					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
-				])
+				]),
 			),
 			'
 				SELECT		m, o, m.id, o.intColumn
@@ -400,7 +398,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					[new ConstantIntegerType(0), new ObjectType(Many::class)],
 					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
-				])
+				]),
 			),
 			'
 				SELECT		o, m2, m, m.id, o.intColumn
@@ -421,7 +419,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					[new ConstantStringType('one'), new ObjectType(One::class)],
 					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
-				])
+				]),
 			),
 			'
 				SELECT		m AS many, o AS one, m.id, o.intColumn
@@ -674,42 +672,42 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						$this->intOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::union(
 						$this->intOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
 					new ConstantIntegerType(3),
 					TypeCombinator::union(
 						$this->intOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
 					new ConstantIntegerType(4),
 					TypeCombinator::union(
 						$this->intOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
 					new ConstantIntegerType(5),
 					TypeCombinator::union(
 						$this->floatOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
 					new ConstantIntegerType(6),
 					TypeCombinator::union(
 						$this->floatOrStringified(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
@@ -754,7 +752,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						$this->stringifies() ? new ConstantStringType('1') : new ConstantIntegerType(1),
-						new NullType()
+						new NullType(),
 					),
 				],
 			]),
@@ -770,14 +768,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
-						$this->intOrStringified()
+						$this->intOrStringified(),
 					),
 				],
 				[
 					new ConstantIntegerType(2),
 					TypeCombinator::union(
 						new StringType(),
-						new NullType()
+						new NullType(),
 					),
 				],
 				[
@@ -790,7 +788,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 						? $this->numericString()
 						: TypeCombinator::union(
 							new IntegerType(),
-							new FloatType()
+							new FloatType(),
 						),
 				],
 			]),
@@ -809,7 +807,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
-						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0)
+						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0),
 					),
 				],
 			]),
@@ -829,7 +827,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						new StringType(),
-						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0)
+						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0),
 					),
 				],
 			]),
@@ -849,7 +847,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0),
-						$this->stringifies() ? new ConstantStringType('1') : new ConstantIntegerType(1)
+						$this->stringifies() ? new ConstantStringType('1') : new ConstantIntegerType(1),
 					),
 				],
 			]),
@@ -868,7 +866,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					new ConstantIntegerType(1),
 					TypeCombinator::union(
 						$this->stringifies() ? new ConstantStringType('0') : new ConstantIntegerType(0),
-						$this->stringifies() ? new ConstantStringType('1') : new ConstantIntegerType(1)
+						$this->stringifies() ? new ConstantStringType('1') : new ConstantIntegerType(1),
 					),
 				],
 			]),
@@ -1083,7 +1081,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 						new ConstantIntegerType(1),
 						new ObjectType(OneId::class),
 					],
-				])
+				]),
 			),
 			'
 				SELECT		NEW QueryResult\Entities\ManyId(m.id),

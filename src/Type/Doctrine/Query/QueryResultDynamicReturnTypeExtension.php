@@ -27,11 +27,9 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		'getSingleResult' => 0,
 	];
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var HydrationModeReturnTypeResolver */
-	private $hydrationModeReturnTypeResolver;
+	private HydrationModeReturnTypeResolver $hydrationModeReturnTypeResolver;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
@@ -71,7 +69,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			$hydrationMode = $scope->getType($args[$argIndex]->value);
 		} else {
 			$parametersAcceptor = ParametersAcceptorSelector::selectSingle(
-				$methodReflection->getVariants()
+				$methodReflection->getVariants(),
 			);
 			$parameter = $parametersAcceptor->getParameters()[$argIndex];
 			$hydrationMode = $parameter->getDefaultValue() ?? new NullType();
@@ -84,7 +82,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			$hydrationMode,
 			$queryType->getTemplateType(AbstractQuery::class, 'TKey'),
 			$queryType->getTemplateType(AbstractQuery::class, 'TResult'),
-			$this->objectMetadataResolver->getObjectManager()
+			$this->objectMetadataResolver->getObjectManager(),
 		);
 	}
 

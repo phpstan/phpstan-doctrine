@@ -18,11 +18,9 @@ use function method_exists;
 class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var ArgumentsProcessor */
-	private $argumentsProcessor;
+	private ArgumentsProcessor $argumentsProcessor;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,

@@ -13,13 +13,12 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 class EntityNotFinalRuleTest extends RuleTestCase
 {
 
-	/** @var string|null */
-	private $objectManagerLoader;
+	private ?string $objectManagerLoader = null;
 
 	protected function getRule(): Rule
 	{
 		return new EntityNotFinalRule(
-			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp')
+			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
 		);
 	}
 

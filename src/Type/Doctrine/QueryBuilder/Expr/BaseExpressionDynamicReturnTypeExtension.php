@@ -17,8 +17,7 @@ use function method_exists;
 class BaseExpressionDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ArgumentsProcessor */
-	private $argumentsProcessor;
+	private ArgumentsProcessor $argumentsProcessor;
 
 	public function __construct(
 		ArgumentsProcessor $argumentsProcessor

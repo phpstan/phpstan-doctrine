@@ -9,11 +9,9 @@ use PHPStan\Testing\PHPStanTestCase;
 final class DoctrineSelectableClassReflectionExtensionTest extends PHPStanTestCase
 {
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
+	private ReflectionProvider $reflectionProvider;
 
-	/** @var DoctrineSelectableClassReflectionExtension */
-	private $extension;
+	private DoctrineSelectableClassReflectionExtension $extension;
 
 	protected function setUp(): void
 	{

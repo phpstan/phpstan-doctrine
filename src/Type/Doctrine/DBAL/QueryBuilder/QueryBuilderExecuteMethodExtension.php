@@ -19,8 +19,7 @@ use PHPStan\Type\TypeCombinator;
 class QueryBuilderExecuteMethodExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
+	private ReflectionProvider $reflectionProvider;
 
 	public function __construct(ReflectionProvider $reflectionProvider)
 	{

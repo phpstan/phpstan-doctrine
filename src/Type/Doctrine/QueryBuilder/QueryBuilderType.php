@@ -14,7 +14,7 @@ abstract class QueryBuilderType extends ObjectType
 {
 
 	/** @var array<string, MethodCall> */
-	private $methodCalls = [];
+	private array $methodCalls = [];
 
 	final public function __construct(
 		string $className,

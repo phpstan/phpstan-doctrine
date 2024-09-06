@@ -8,8 +8,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 class DoctrineProxyForbiddenClassNamesExtension implements ForbiddenClassNameExtension
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
 	{

@@ -27,23 +27,17 @@ use function count;
 class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ReflectionProvider */
-	private $reflectionProvider;
+	private ReflectionProvider $reflectionProvider;
 
-	/** @var string|null */
-	private $repositoryClass;
+	private ?string $repositoryClass = null;
 
-	/** @var string|null */
-	private $ormRepositoryClass;
+	private ?string $ormRepositoryClass = null;
 
-	/** @var string|null */
-	private $odmRepositoryClass;
+	private ?string $odmRepositoryClass = null;
 
-	/** @var string */
-	private $managerClass;
+	private string $managerClass;
 
-	/** @var ObjectMetadataResolver */
-	private $metadataResolver;
+	private ObjectMetadataResolver $metadataResolver;
 
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
@@ -87,7 +81,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 		if (count($methodCall->getArgs()) === 0) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,
-				[new ObjectWithoutClassType()]
+				[new ObjectWithoutClassType()],
 			);
 		}
 		$argType = $scope->getType($methodCall->getArgs()[0]->value);
@@ -101,7 +95,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 		if (count($objectNames) === 0) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,
-				[$classType]
+				[$classType],
 			);
 		}
 
@@ -127,13 +121,13 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 		$defaultType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
 			$args,
-			$methodReflection->getVariants()
+			$methodReflection->getVariants(),
 		)->getReturnType();
 		$entity = $defaultType->getTemplateType(ObjectRepository::class, 'TEntityClass');
 		if (!$entity instanceof ErrorType) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,
-				[$entity]
+				[$entity],
 			);
 		}
 

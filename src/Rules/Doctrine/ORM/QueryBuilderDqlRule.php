@@ -26,11 +26,9 @@ use function strpos;
 class QueryBuilderDqlRule implements Rule
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var bool */
-	private $reportDynamicQueryBuilders;
+	private bool $reportDynamicQueryBuilders;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,

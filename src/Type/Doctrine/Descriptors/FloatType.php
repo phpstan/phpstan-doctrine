@@ -15,8 +15,7 @@ use function in_array;
 class FloatType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(DriverDetector $driverDetector)
 	{
@@ -45,7 +44,7 @@ class FloatType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescri
 			new IntersectionType([
 				new StringType(),
 				new AccessoryNumericStringType(),
-			])
+			]),
 		);
 	}
 

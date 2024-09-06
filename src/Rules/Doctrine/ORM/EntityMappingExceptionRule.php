@@ -18,8 +18,7 @@ use ReflectionException;
 class EntityMappingExceptionRule implements Rule
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver

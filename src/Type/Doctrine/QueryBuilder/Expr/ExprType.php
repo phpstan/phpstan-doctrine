@@ -8,8 +8,7 @@ use PHPStan\Type\ObjectType;
 class ExprType extends ObjectType
 {
 
-	/** @var object */
-	private $exprObject;
+	private object $exprObject;
 
 	/**
 	 * @param object $exprObject

@@ -19,11 +19,10 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 	private const FIRST_METHOD_NAME = 'first';
 	private const LAST_METHOD_NAME = 'last';
 
-	/** @var TypeSpecifier */
-	private $typeSpecifier;
+	private TypeSpecifier $typeSpecifier;
 
 	/** @var class-string */
-	private $collectionClass;
+	private string $collectionClass;
 
 	/**
 	 * @param class-string $collectionClass
@@ -61,13 +60,13 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 		$first = $this->typeSpecifier->create(
 			new MethodCall($node->var, self::FIRST_METHOD_NAME),
 			new ConstantBooleanType(false),
-			$context
+			$context,
 		);
 
 		$last = $this->typeSpecifier->create(
 			new MethodCall($node->var, self::LAST_METHOD_NAME),
 			new ConstantBooleanType(false),
-			$context
+			$context,
 		);
 
 		return $first->unionWith($last);

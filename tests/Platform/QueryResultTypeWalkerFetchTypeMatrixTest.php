@@ -134,7 +134,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mysqlExpectedType,
 			$mysqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -174,7 +174,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mysqlExpectedType,
 			$mysqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -214,7 +214,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mysqlExpectedType,
 			$mysqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -254,7 +254,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mysqlExpectedType,
 			$mysqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -294,7 +294,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mysqlExpectedType,
 			$mysqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -334,7 +334,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$sqliteExpectedType,
 			$sqliteExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -374,7 +374,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$sqliteExpectedType,
 			$sqliteExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -414,7 +414,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$sqliteExpectedType,
 			$sqliteExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -454,7 +454,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$pdoPgsqlExpectedType,
 			$pdoPgsqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -494,7 +494,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$pdoPgsqlExpectedType,
 			$pdoPgsqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -534,7 +534,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$pgsqlExpectedType,
 			$pgsqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -574,7 +574,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			PHP_VERSION_ID,
 			$mssqlExpectedType,
 			$mssqlExpectedResult,
-			$stringify
+			$stringify,
 		);
 	}
 
@@ -615,7 +615,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
 			$mysqlExpectedResult,
 			$stringify,
-			true
+			true,
 		);
 	}
 
@@ -656,7 +656,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$this->determineTypeForUnknownDriverUnknownSetup($mysqlExpectedType, $stringify),
 			$mysqlExpectedResult,
 			$stringify,
-			true
+			true,
 		);
 	}
 
@@ -4469,7 +4469,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				$dql,
 				$sql,
 				$realResultType->describe(VerbosityLevel::precise()),
-				$inferredType->describe(VerbosityLevel::precise())
+				$inferredType->describe(VerbosityLevel::precise()),
 			));
 		}
 
@@ -4575,7 +4575,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$typeBuilder,
 			self::getContainer()->getByType(DescriptorRegistry::class),
 			$phpVersion,
-			new DriverDetector()
+			new DriverDetector(),
 		);
 
 		return $typeBuilder->getResultType();
@@ -4617,8 +4617,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 					$dataset,
 					$dql,
 					$humanReadablePhpVersion,
-					$realFirstResult
-				)
+					$realFirstResult,
+				),
 			);
 		}
 
@@ -4634,8 +4634,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				$sql,
 				$humanReadablePhpVersion,
 				$realFirstResult,
-				$expectedFirstResultExported
-			)
+				$expectedFirstResultExported,
+			),
 		);
 	}
 
@@ -4669,8 +4669,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				$this->getHumanReadablePhpVersion($phpVersion),
 				$realFirstResult,
 				$inferredType->describe(VerbosityLevel::precise()),
-				$realType->describe(VerbosityLevel::precise())
-			)
+				$realType->describe(VerbosityLevel::precise()),
+			),
 		);
 	}
 
@@ -4707,8 +4707,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				$this->getHumanReadablePhpVersion($phpVersion),
 				$realFirstResult,
 				$inferredFirstItemType->describe(VerbosityLevel::precise()),
-				$expectedFirstItemType->describe(VerbosityLevel::precise())
-			)
+				$expectedFirstItemType->describe(VerbosityLevel::precise()),
+			),
 		);
 	}
 

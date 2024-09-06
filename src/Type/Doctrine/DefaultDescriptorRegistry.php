@@ -9,7 +9,7 @@ class DefaultDescriptorRegistry implements DescriptorRegistry
 {
 
 	/** @var array<class-string<Type>, DoctrineTypeDescriptor> */
-	private $descriptors = [];
+	private array $descriptors = [];
 
 	/**
 	 * @param DoctrineTypeDescriptor[] $descriptors

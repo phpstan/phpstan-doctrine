@@ -35,11 +35,9 @@ use const PHP_VERSION_ID;
 class EntityColumnRuleTest extends RuleTestCase
 {
 
-	/** @var bool */
-	private $allowNullablePropertyForRequiredField;
+	private bool $allowNullablePropertyForRequiredField;
 
-	/** @var string|null */
-	private $objectManagerLoader;
+	private ?string $objectManagerLoader = null;
 
 	protected function getRule(): Rule
 	{
@@ -85,7 +83,7 @@ class EntityColumnRuleTest extends RuleTestCase
 			$this->createReflectionProvider(),
 			true,
 			$this->allowNullablePropertyForRequiredField,
-			true
+			true,
 		);
 	}
 

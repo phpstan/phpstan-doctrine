@@ -11,11 +11,9 @@ use PHPStan\Type\Type;
 class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var string|null */
-	private $queryBuilderClass;
+	private ?string $queryBuilderClass = null;
 
-	/** @var bool */
-	private $fasterVersion;
+	private bool $fasterVersion;
 
 	public function __construct(
 		?string $queryBuilderClass,
@@ -48,7 +46,7 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodRetur
 		}
 
 		return new $class(
-			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder'
+			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder',
 		);
 	}
 

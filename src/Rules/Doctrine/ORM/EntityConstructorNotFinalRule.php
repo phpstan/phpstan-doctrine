@@ -17,8 +17,7 @@ use function sprintf;
 class EntityConstructorNotFinalRule implements Rule
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
 	public function __construct(ObjectMetadataResolver $objectMetadataResolver)
 	{
@@ -57,7 +56,7 @@ class EntityConstructorNotFinalRule implements Rule
 		return [
 			RuleErrorBuilder::message(sprintf(
 				'Constructor of class %s is final which can cause problems with proxies.',
-				$classReflection->getDisplayName()
+				$classReflection->getDisplayName(),
 			))->identifier('doctrine.finalConstructor')->build(),
 		];
 	}

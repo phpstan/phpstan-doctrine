@@ -14,8 +14,7 @@ use function strpos;
 class StubFilesExtensionLoader implements StubFilesExtension
 {
 
-	/** @var Reflector */
-	private $reflector;
+	private Reflector $reflector;
 
 	public function __construct(
 		Reflector $reflector

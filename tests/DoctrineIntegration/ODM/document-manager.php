@@ -16,11 +16,11 @@ $config->setHydratorNamespace('PHPstan\Doctrine\OdmHydrators');
 $config->setMetadataDriverImpl(
 	new AnnotationDriver(
 		new AnnotationReader(),
-		[__DIR__ . '/data']
-	)
+		[__DIR__ . '/data'],
+	),
 );
 
 return DocumentManager::create(
 	null,
-	$config
+	$config,
 );

@@ -33,17 +33,13 @@ use PHPStan\Type\UnionType;
 final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ObjectMetadataResolver */
-	private $objectMetadataResolver;
+	private ObjectMetadataResolver $objectMetadataResolver;
 
-	/** @var DescriptorRegistry */
-	private $descriptorRegistry;
+	private DescriptorRegistry $descriptorRegistry;
 
-	/** @var PhpVersion */
-	private $phpVersion;
+	private PhpVersion $phpVersion;
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
@@ -80,7 +76,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 		if (!isset($args[$queryStringArgIndex])) {
 			return new GenericObjectType(
 				Query::class,
-				[new MixedType(), new MixedType()]
+				[new MixedType(), new MixedType()],
 			);
 		}
 
@@ -113,7 +109,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 			}
 			return new GenericObjectType(
 				Query::class,
-				[new MixedType(), new MixedType()]
+				[new MixedType(), new MixedType()],
 			);
 		});
 	}

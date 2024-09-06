@@ -16,10 +16,9 @@ class PlatformRelatedEntity
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer", nullable=false)
-	 * @var int
 	 */
 	#[ORM\Id]
 	#[ORM\Column(type: 'integer', nullable: false)]
-	public $id;
+	public int $id;
 
 }

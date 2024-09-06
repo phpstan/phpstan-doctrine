@@ -17,7 +17,7 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 	{
 		return new QueryBuilderDqlRule(
 			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp'),
-			true
+			true,
 		);
 	}
 

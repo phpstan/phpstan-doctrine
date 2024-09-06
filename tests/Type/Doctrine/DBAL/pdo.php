@@ -13,7 +13,7 @@ $config->setProxyNamespace('App\GeneratedProxy');
 $config->setMetadataCache(new ArrayCachePool());
 $config->setMetadataDriverImpl(new AnnotationDriver(
 	new AnnotationReader(),
-	[__DIR__ . '/data']
+	[__DIR__ . '/data'],
 ));
 
 return new EntityManager(
@@ -21,5 +21,5 @@ return new EntityManager(
 		'driver' => 'pdo_pgsql',
 		'memory' => true,
 	]),
-	$config
+	$config,
 );

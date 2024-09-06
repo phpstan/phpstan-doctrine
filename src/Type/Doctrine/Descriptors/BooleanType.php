@@ -12,8 +12,7 @@ use function in_array;
 class BooleanType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescriptor
 {
 
-	/** @var DriverDetector */
-	private $driverDetector;
+	private DriverDetector $driverDetector;
 
 	public function __construct(DriverDetector $driverDetector)
 	{
@@ -40,7 +39,7 @@ class BooleanType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 		return TypeCombinator::union(
 			new ConstantIntegerType(0),
 			new ConstantIntegerType(1),
-			new \PHPStan\Type\BooleanType()
+			new \PHPStan\Type\BooleanType(),
 		);
 	}
 
@@ -60,7 +59,7 @@ class BooleanType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 		], true)) {
 			return TypeCombinator::union(
 				new ConstantIntegerType(0),
-				new ConstantIntegerType(1)
+				new ConstantIntegerType(1),
 			);
 		}
 

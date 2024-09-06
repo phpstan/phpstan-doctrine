@@ -23,8 +23,7 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 		FakeTestingUuidType::class,
 	];
 
-	/** @var string */
-	private $uuidTypeName;
+	private string $uuidTypeName;
 
 	public function __construct(
 		string $uuidTypeName
@@ -33,7 +32,7 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 		if (!in_array($uuidTypeName, self::SUPPORTED_UUID_TYPES, true)) {
 			throw new ShouldNotHappenException(sprintf(
 				'Unexpected UUID column type "%s" provided',
-				$uuidTypeName
+				$uuidTypeName,
 			));
 		}
 
@@ -55,7 +54,7 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 	{
 		return TypeCombinator::union(
 			new StringType(),
-			new ObjectType(UuidInterface::class)
+			new ObjectType(UuidInterface::class),
 		);
 	}
 

@@ -21,15 +21,13 @@ use function is_int;
 final class QueryResultTypeBuilder
 {
 
-	/** @var bool */
-	private $selectQuery = false;
+	private bool $selectQuery = false;
 
 	/**
 	 * Whether the result is an array shape or a single entity or NEW object
 	 *
-	 * @var bool
 	 */
-	private $isShape = false;
+	private bool $isShape = false;
 
 	/**
 	 * Map from selected entity aliases to entity types
@@ -38,7 +36,7 @@ final class QueryResultTypeBuilder
 	 *
 	 * @var array<array-key,Type>
 	 */
-	private $entities = [];
+	private array $entities = [];
 
 	/**
 	 * Map from selected entity alias to result alias
@@ -47,24 +45,23 @@ final class QueryResultTypeBuilder
 	 *
 	 * @var array<array-key,string>
 	 */
-	private $entityResultAliases = [];
+	private array $entityResultAliases = [];
 
 	/**
 	 * Map from selected scalar result alias to scalar type
 	 *
 	 * @var array<array-key,Type>
 	 */
-	private $scalars = [];
+	private array $scalars = [];
 
 	/**
 	 * Map from selected NEW objcet result alias to NEW object type
 	 *
 	 * @var array<array-key,Type>
 	 */
-	private $newObjects = [];
+	private array $newObjects = [];
 
-	/** @var Type */
-	private $indexedBy;
+	private Type $indexedBy;
 
 	public function __construct()
 	{

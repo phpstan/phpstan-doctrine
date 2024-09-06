@@ -17,90 +17,58 @@ class PlatformEntity
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="string",nullable=false)
-	 * @var string
 	 */
 	#[ORM\Id]
 	#[ORM\Column(type: 'string', nullable: false)]
-	public $id;
+	public string $id;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=PlatformRelatedEntity::class)
 	 * @ORM\JoinColumn(name="related_entity_id", referencedColumnName="id", nullable=false)
-	 * @var PlatformRelatedEntity
 	 */
 	#[ORM\ManyToOne(targetEntity: PlatformRelatedEntity::class)]
 	#[ORM\JoinColumn(name: 'related_entity_id', referencedColumnName: 'id', nullable: false)]
-	public $related_entity;
+	public PlatformRelatedEntity $related_entity;
 
-	/**
-	 * @ORM\Column(type="string", name="col_string", nullable=false)
-	 * @var string
-	 */
+	/** @ORM\Column(type="string", name="col_string", nullable=false) */
 	#[ORM\Column(type: 'string', name: 'col_string', nullable: false)]
-	public $col_string;
+	public string $col_string;
 
-	/**
-	 * @ORM\Column(type="string", name="col_string_nullable", nullable=true)
-	 * @var string|null
-	 */
+	/** @ORM\Column(type="string", name="col_string_nullable", nullable=true) */
 	#[ORM\Column(type: 'string', name: 'col_string_nullable', nullable: true)]
-	public $col_string_nullable;
+	public ?string $col_string_nullable = null;
 
-	/**
-	 * @ORM\Column(type="boolean", name="col_bool", nullable=false)
-	 * @var bool
-	 */
+	/** @ORM\Column(type="boolean", name="col_bool", nullable=false) */
 	#[ORM\Column(type: 'boolean', name: 'col_bool', nullable: false)]
-	public $col_bool;
+	public bool $col_bool;
 
-	/**
-	 * @ORM\Column(type="boolean", name="col_bool_nullable", nullable=true)
-	 * @var bool|null
-	 */
+	/** @ORM\Column(type="boolean", name="col_bool_nullable", nullable=true) */
 	#[ORM\Column(type: 'boolean', name: 'col_bool_nullable', nullable: true)]
-	public $col_bool_nullable;
+	public ?bool $col_bool_nullable = null;
 
-	/**
-	 * @ORM\Column(type="float", name="col_float", nullable=false)
-	 * @var float
-	 */
+	/** @ORM\Column(type="float", name="col_float", nullable=false) */
 	#[ORM\Column(type: 'float', name: 'col_float', nullable: false)]
-	public $col_float;
+	public float $col_float;
 
-	/**
-	 * @ORM\Column(type="float", name="col_float_nullable", nullable=true)
-	 * @var float|null
-	 */
+	/** @ORM\Column(type="float", name="col_float_nullable", nullable=true) */
 	#[ORM\Column(type: 'float', name: 'col_float_nullable', nullable: true)]
-	public $col_float_nullable;
+	public ?float $col_float_nullable = null;
 
-	/**
-	 * @ORM\Column(type="decimal", name="col_decimal", nullable=false, scale=1, precision=2)
-	 * @var string
-	 */
+	/** @ORM\Column(type="decimal", name="col_decimal", nullable=false, scale=1, precision=2) */
 	#[ORM\Column(type: 'decimal', name: 'col_decimal', nullable: false, scale: 1, precision: 2)]
-	public $col_decimal;
+	public string $col_decimal;
 
-	/**
-	 * @ORM\Column(type="decimal", name="col_decimal_nullable", nullable=true, scale=1, precision=2)
-	 * @var string|null
-	 */
+	/** @ORM\Column(type="decimal", name="col_decimal_nullable", nullable=true, scale=1, precision=2) */
 	#[ORM\Column(type: 'decimal', name: 'col_decimal_nullable', nullable: true, scale: 1, precision: 2)]
-	public $col_decimal_nullable;
+	public ?string $col_decimal_nullable = null;
 
-	/**
-	 * @ORM\Column(type="integer", name="col_int", nullable=false)
-	 * @var int
-	 */
+	/** @ORM\Column(type="integer", name="col_int", nullable=false) */
 	#[ORM\Column(type: 'integer', name: 'col_int', nullable: false)]
-	public $col_int;
+	public int $col_int;
 
-	/**
-	 * @ORM\Column(type="integer", name="col_int_nullable", nullable=true)
-	 * @var int|null
-	 */
+	/** @ORM\Column(type="integer", name="col_int_nullable", nullable=true) */
 	#[ORM\Column(type: 'integer', name: 'col_int_nullable', nullable: true)]
-	public $col_int_nullable;
+	public ?int $col_int_nullable = null;
 
 	/**
 	 * @ORM\Column(type="bigint", name="col_bigint", nullable=false)
@@ -123,11 +91,8 @@ class PlatformEntity
 	#[ORM\Column(type: 'mixed', name: 'col_mixed', nullable: false)]
 	public $col_mixed;
 
-	/**
-	 * @ORM\Column(type="datetime", name="col_datetime", nullable=false)
-	 * @var DateTimeInterface
-	 */
+	/** @ORM\Column(type="datetime", name="col_datetime", nullable=false) */
 	#[ORM\Column(type: 'datetime', name: 'col_datetime', nullable: false)]
-	public $col_datetime;
+	public DateTimeInterface $col_datetime;
 
 }

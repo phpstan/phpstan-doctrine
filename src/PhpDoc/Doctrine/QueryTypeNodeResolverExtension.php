@@ -18,8 +18,7 @@ use function count;
 class QueryTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
 
-	/** @var TypeNodeResolver */
-	private $typeNodeResolver;
+	private TypeNodeResolver $typeNodeResolver;
 
 	public function setTypeNodeResolver(TypeNodeResolver $typeNodeResolver): void
 	{
@@ -47,7 +46,7 @@ class QueryTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeN
 			[
 				new NullType(),
 				$this->typeNodeResolver->resolve($typeNode->genericTypes[0], $nameScope),
-			]
+			],
 		);
 	}
 
