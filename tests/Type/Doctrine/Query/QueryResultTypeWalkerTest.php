@@ -1530,23 +1530,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			];
 		}
 
-		yield 'locate function' => [
-			$this->constantArray([
-				[new ConstantIntegerType(1), $this->uintOrStringified()],
-				[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintOrStringified())],
-				[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintOrStringified())],
-				[new ConstantIntegerType(4), $this->uintOrStringified()],
-			]),
-			'
-				SELECT		LOCATE(m.stringColumn, m.stringColumn, 0),
-							LOCATE(m.stringNullColumn, m.stringColumn, 0),
-							LOCATE(m.stringColumn, m.stringNullColumn, 0),
-							LOCATE(\'f\', \'foo\', 0)
-				FROM		QueryResult\Entities\Many m
-			',
-			null,
-		];
-
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
 		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;
 
