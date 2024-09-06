@@ -26,6 +26,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         update-packages:
           - ""
         include:
@@ -34,6 +35,8 @@ jobs:
           - php-version: "8.2"
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
           - php-version: "8.3"
+            update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
+          - php-version: "8.4"
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
 
     steps:
