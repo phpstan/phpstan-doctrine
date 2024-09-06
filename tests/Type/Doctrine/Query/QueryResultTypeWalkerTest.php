@@ -199,7 +199,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	}
 
 	/** @dataProvider getTestData */
-	public function test(Type $expectedType, string $dql, ?string $expectedExceptionMessage = null, ?string $expectedDeprecationMessage = null): void
+	public function test(Type $expectedType, string $dql, ?string $expectedExceptionMessage = null): void
 	{
 		$em = self::$em;
 
@@ -210,9 +210,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		if ($expectedExceptionMessage !== null) {
 			$this->expectException(Throwable::class);
 			$this->expectExceptionMessage($expectedExceptionMessage);
-		} elseif ($expectedDeprecationMessage !== null) {
-			$this->expectDeprecation();
-			$this->expectDeprecationMessage($expectedDeprecationMessage);
 		}
 
 		QueryResultTypeWalker::walk(
@@ -1548,17 +1545,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				FROM		QueryResult\Entities\Many m
 			',
 			null,
-			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
-				? null
-				: (
-			PHP_VERSION_ID >= 80100
-				? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
-				: (
-					PHP_VERSION_ID < 80000
-						? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
-						: null
-				)
-			),
 		];
 
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
