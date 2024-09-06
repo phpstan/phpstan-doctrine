@@ -17,8 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "7.2"
-          - "7.3"
           - "7.4"
           - "8.0"
           - "8.1"
@@ -44,10 +42,6 @@ jobs:
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
         run: "composer config platform.php 8.3.99"
-
-      - name: "Downgrade PHPUnit"
-        if: matrix.php-version == '7.2' || matrix.php-version == '7.3'
-        run: "composer require --dev phpunit/phpunit:^8.5.31 --no-update --update-with-dependencies"
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
@@ -103,8 +97,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "7.2"
-          - "7.3"
           - "7.4"
           - "8.0"
           - "8.1"
@@ -139,17 +131,9 @@ jobs:
         if: matrix.php-version == '8.4'
         run: "composer config platform.php 8.3.99"
 
-      - name: "Downgrade PHPUnit"
-        if: matrix.php-version == '7.2' || matrix.php-version == '7.3'
-        run: "composer require --dev phpunit/phpunit:^8.5.31 --no-update --update-with-dependencies"
-
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
         run: "composer update --prefer-lowest --no-interaction --no-progress"
-
-      - name: "Update Doctrine DBAl to ^3"
-        if: matrix.php-version != '7.2' && matrix.dependencies == 'lowest'
-        run: "composer require --dev doctrine/dbal:^3.3.8 --no-interaction --no-progress"
 
       - name: "Install highest dependencies"
         if: ${{ matrix.dependencies == 'highest' }}
@@ -197,10 +181,6 @@ jobs:
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
         run: "composer config platform.php 8.3.99"
-
-      - name: "Downgrade PHPUnit"
-        if: matrix.php-version == '7.2' || matrix.php-version == '7.3'
-        run: "composer require --dev phpunit/phpunit:^8.5.31 --no-update --update-with-dependencies"
 
       - name: "Install dependencies"
         run: "composer update --no-interaction --no-progress"

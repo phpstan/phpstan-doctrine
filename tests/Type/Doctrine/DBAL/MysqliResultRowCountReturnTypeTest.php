@@ -15,10 +15,8 @@ class MysqliResultRowCountReturnTypeTest extends TypeInferenceTestCase
 		$versionParser = new VersionParser();
 		if (InstalledVersions::satisfies($versionParser, 'doctrine/dbal', '>=4.0')) {
 			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count.php');
-		} elseif (InstalledVersions::satisfies($versionParser, 'doctrine/dbal', '>=3.0')) {
-			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count-dbal-3.php');
 		} else {
-			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count-dbal-2.php');
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/mysqli-result-row-count-dbal-3.php');
 		}
 	}
 
