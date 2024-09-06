@@ -21,7 +21,7 @@
 		"composer/semver": "^3.3.2",
 		"cweagans/composer-patches": "^1.7.3",
 		"doctrine/annotations": "^2.0",
-		"doctrine/collections": "^2.1",
+		"doctrine/collections": "^1.6 || ^2.1",
 		"doctrine/common": "^2.7 || ^3.0",
 		"doctrine/dbal": "^3.3.8",
 		"doctrine/lexer": "^2.0 || ^3.0",
