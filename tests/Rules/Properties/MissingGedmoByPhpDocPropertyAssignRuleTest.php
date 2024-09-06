@@ -7,7 +7,6 @@ use PHPStan\Rules\Gedmo\PropertiesExtension;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<UnusedPrivatePropertyRule>
@@ -34,10 +33,6 @@ class MissingGedmoByPhpDocPropertyAssignRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		if (PHP_VERSION_ID < 70400) {
-			self::markTestSkipped('Test requires PHP 7.4.');
-		}
-
 		$this->analyse([__DIR__ . '/data/gedmo-property-assign-phpdoc.php'], [
 			// No errors expected
 		]);

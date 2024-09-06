@@ -27,10 +27,6 @@ class UnusedPrivatePropertyRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		if (PHP_VERSION_ID < 70400) {
-			self::markTestSkipped('Test requires PHP 7.4.');
-		}
-
 		$this->analyse([__DIR__ . '/data/unused-private-property.php'], [
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\UnusedPrivateProperty\EntityWithAGeneratedId::$unused is never written, only read.',

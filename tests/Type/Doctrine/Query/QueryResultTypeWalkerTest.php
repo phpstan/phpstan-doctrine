@@ -1533,35 +1533,33 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			];
 		}
 
-		if (PHP_VERSION_ID >= 70400) {
-			yield 'locate function' => [
-				$this->constantArray([
-					[new ConstantIntegerType(1), $this->uintOrStringified()],
-					[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintOrStringified())],
-					[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintOrStringified())],
-					[new ConstantIntegerType(4), $this->uintOrStringified()],
-				]),
-				'
+		yield 'locate function' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), $this->uintOrStringified()],
+				[new ConstantIntegerType(2), TypeCombinator::addNull($this->uintOrStringified())],
+				[new ConstantIntegerType(3), TypeCombinator::addNull($this->uintOrStringified())],
+				[new ConstantIntegerType(4), $this->uintOrStringified()],
+			]),
+			'
 				SELECT		LOCATE(m.stringColumn, m.stringColumn, 0),
 							LOCATE(m.stringNullColumn, m.stringColumn, 0),
 							LOCATE(m.stringColumn, m.stringNullColumn, 0),
 							LOCATE(\'f\', \'foo\', 0)
 				FROM		QueryResult\Entities\Many m
 			',
-				null,
-				InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
-					? null
-					: (
-				PHP_VERSION_ID >= 80100
-					? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
-					: (
-				PHP_VERSION_ID < 80000
-					? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
-					: null
-					)
-				),
-			];
-		}
+			null,
+			InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '>=3.4')
+				? null
+				: (
+			PHP_VERSION_ID >= 80100
+				? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
+				: (
+			PHP_VERSION_ID < 80000
+				? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
+				: null
+			)
+			),
+		];
 
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
 		$hasOrm3 = $ormVersion !== null && strpos($ormVersion, '3.') === 0;

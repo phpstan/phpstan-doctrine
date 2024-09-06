@@ -5,7 +5,6 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
-use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -23,9 +22,6 @@ class QueryBuilderDqlRuleSlowTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		if (PHP_VERSION_ID < 70300) {
-			self::markTestSkipped('For some reason PHP 7.2 cannot recover from Trying to get property value of non-object');
-		}
 		$this->analyse([__DIR__ . '/data/query-builder-dql.php'], [
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 66: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1)",
