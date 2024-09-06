@@ -1554,10 +1554,10 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			PHP_VERSION_ID >= 80100
 				? 'strpos(): Passing null to parameter #2 ($needle) of type string is deprecated'
 				: (
-			PHP_VERSION_ID < 80000
-				? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
-				: null
-			)
+					PHP_VERSION_ID < 80000
+						? 'strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior'
+						: null
+				)
 			),
 		];
 
