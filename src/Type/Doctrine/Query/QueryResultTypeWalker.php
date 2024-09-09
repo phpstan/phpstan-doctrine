@@ -463,10 +463,6 @@ class QueryResultTypeWalker extends SqlWalker
 				}
 
 				if ($this->containsOnlyNumericTypes($exprTypeNoNull)) {
-					if ($this->driverType === DriverDetector::PDO_PGSQL) {
-						return $this->marshalType($this->createNumericString($nullable));
-					}
-
 					return $this->marshalType($exprType); // retains underlying type
 				}
 
@@ -619,13 +615,7 @@ class QueryResultTypeWalker extends SqlWalker
 						$type = TypeCombinator::addNull($type);
 					}
 
-				} elseif ($this->driverType === DriverDetector::PDO_PGSQL) {
-					$type = new IntersectionType([
-						new StringType(),
-						new AccessoryNumericStringType(),
-					]);
-
-				} elseif ($this->driverType === DriverDetector::PGSQL) {
+				} elseif ($this->driverType === DriverDetector::PGSQL || $this->driverType === DriverDetector::PDO_PGSQL) {
 					$castedExprType = $this->castStringLiteralForNumericExpression($exprTypeNoNull);
 
 					if ($castedExprType->isInteger()->yes() || $castedExprType->isFloat()->yes()) {
@@ -1763,12 +1753,6 @@ class QueryResultTypeWalker extends SqlWalker
 			return $this->createInteger($nullable);
 		}
 
-		if ($this->driverType === DriverDetector::PDO_PGSQL) {
-			if ($this->containsOnlyNumericTypes($unionWithoutNull)) {
-				return $this->createNumericString($nullable);
-			}
-		}
-
 		if ($this->driverType === DriverDetector::SQLITE3 || $this->driverType === DriverDetector::PDO_SQLITE) {
 			if (!$this->containsOnlyNumericTypes(...$typesNoNull)) {
 				return new MixedType();
@@ -1783,7 +1767,7 @@ class QueryResultTypeWalker extends SqlWalker
 			return $this->createFloatOrInt($nullable);
 		}
 
-		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL || $this->driverType === DriverDetector::PGSQL) {
+		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL || $this->driverType === DriverDetector::PGSQL || $this->driverType === DriverDetector::PDO_PGSQL) {
 			if ($this->containsOnlyTypes($unionWithoutNull, [new IntegerType(), new FloatType()])) {
 				return $this->createFloat($nullable);
 			}
@@ -1849,12 +1833,6 @@ class QueryResultTypeWalker extends SqlWalker
 			return new MixedType();
 		}
 
-		if ($this->driverType === DriverDetector::PDO_PGSQL) {
-			if ($this->containsOnlyTypes($unionWithoutNull, [new IntegerType(), new FloatType(), $this->createNumericString(false)])) {
-				return $this->createNumericString($nullable);
-			}
-		}
-
 		if ($this->driverType === DriverDetector::SQLITE3 || $this->driverType === DriverDetector::PDO_SQLITE) {
 			if (!$this->containsOnlyNumericTypes(...$typesNoNull)) {
 				return new MixedType();
@@ -1869,7 +1847,7 @@ class QueryResultTypeWalker extends SqlWalker
 			return $this->createFloatOrInt($nullable);
 		}
 
-		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL || $this->driverType === DriverDetector::PGSQL) {
+		if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL || $this->driverType === DriverDetector::PGSQL || $this->driverType === DriverDetector::PDO_PGSQL) {
 			if ($this->containsOnlyTypes($unionWithoutNull, [new IntegerType(), new FloatType()])) {
 				return $this->createFloat($nullable);
 			}
@@ -2090,6 +2068,9 @@ class QueryResultTypeWalker extends SqlWalker
 	 * - pdo_sqlite: https://github.com/php/php-src/commit/438b025a28cda2935613af412fc13702883dd3a2
 	 * - pdo_pgsql: https://github.com/php/php-src/commit/737195c3ae6ac53b9501cfc39cc80fd462909c82
 	 *
+	 * Notable 8.4 changes:
+	 * - pdo_pgsql: https://github.com/php/php-src/commit/6d10a6989897e9089d62edf939344437128e93ad
+	 *
 	 * @param IntegerType|FloatType|BooleanType $type
 	 */
 	private function shouldStringifyExpressions(Type $type): TrinaryLogic
@@ -2134,7 +2115,14 @@ class QueryResultTypeWalker extends SqlWalker
 					}
 
 					return TrinaryLogic::createNo();
+				}
 
+				if ($type->isFloat()->yes()) {
+					if ($this->phpVersion->getVersionId() >= 80400) {
+						return TrinaryLogic::createFromBoolean($stringifyFetches);
+					}
+
+					return TrinaryLogic::createYes();
 				}
 
 				return TrinaryLogic::createFromBoolean($stringifyFetches);

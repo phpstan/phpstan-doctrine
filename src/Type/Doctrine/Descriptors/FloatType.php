@@ -52,18 +52,12 @@ class FloatType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDescri
 	{
 		$driverType = $this->driverDetector->detect($connection);
 
-		if ($driverType === DriverDetector::PDO_PGSQL) {
-			return new IntersectionType([
-				new StringType(),
-				new AccessoryNumericStringType(),
-			]);
-		}
-
 		if (in_array($driverType, [
 			DriverDetector::SQLITE3,
 			DriverDetector::PDO_SQLITE,
 			DriverDetector::MYSQLI,
 			DriverDetector::PDO_MYSQL,
+			DriverDetector::PDO_PGSQL,
 			DriverDetector::PGSQL,
 		], true)) {
 			return new \PHPStan\Type\FloatType();
