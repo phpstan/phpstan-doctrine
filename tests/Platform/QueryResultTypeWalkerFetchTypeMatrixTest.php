@@ -2743,7 +2743,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'pdoPgsqlResult' => 0.125,
 			'pgsqlResult' => 0.125,
 			'mssqlResult' => 0.125,
-			'stringify' => self::STRINGIFY_DEFAULT,
+			'stringify' => self::STRINGIFY_PG_FLOAT,
 		];
 
 		yield 'MAX(t.col_decimal)' => [
@@ -4170,6 +4170,38 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
+		yield 'COALESCE(0, 0)' => [
+			'data' => self::dataDefault(),
+			'select' => 'SELECT COALESCE(0, 0) FROM %s t',
+			'mysql' => self::int(),
+			'sqlite' => self::int(),
+			'pdo_pgsql' => self::int(),
+			'pgsql' => self::int(),
+			'mssql' => self::mixed(),
+			'mysqlResult' => 0,
+			'sqliteResult' => 0,
+			'pdoPgsqlResult' => 0,
+			'pgsqlResult' => 0,
+			'mssqlResult' => 0,
+			'stringify' => self::STRINGIFY_DEFAULT,
+		];
+
+		yield 'COALESCE(1.0, 1.0)' => [
+			'data' => self::dataDefault(),
+			'select' => 'SELECT COALESCE(1.0, 1.0) FROM %s t',
+			'mysql' => self::numericString(),
+			'sqlite' => self::float(),
+			'pdo_pgsql' => self::numericString(),
+			'pgsql' => self::numericString(),
+			'mssql' => self::mixed(),
+			'mysqlResult' => '1.0',
+			'sqliteResult' => 1.0,
+			'pdoPgsqlResult' => '1.0',
+			'pgsqlResult' => '1.0',
+			'mssqlResult' => '1.0',
+			'stringify' => self::STRINGIFY_DEFAULT,
+		];
+
 		yield 'COALESCE(1e0, 1.0)' => [
 			'data' => self::dataDefault(),
 			'select' => 'SELECT COALESCE(1e0, 1.0) FROM %s t',
@@ -4255,15 +4287,17 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'select' => 'SELECT COALESCE(t.col_float_nullable, 0) FROM %s t',
 			'mysql' => self::float(),
 			'sqlite' => TypeCombinator::union(self::float(), self::int()),
-			'pdo_pgsql' => TypeCombinator::union(self::float(), self::int()),
+			'pdo_pgsql' => PHP_VERSION_ID < 80400
+				? TypeCombinator::union(self::numericString(), self::int())
+				: TypeCombinator::union(self::float(), self::int()),
 			'pgsql' => TypeCombinator::union(self::float(), self::int()),
 			'mssql' => self::mixed(),
 			'mysqlResult' => 0.0,
 			'sqliteResult' => 0,
-			'pdoPgsqlResult' => 0.0,
+			'pdoPgsqlResult' => PHP_VERSION_ID < 80400 ? '0' : 0.0,
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
-			'stringify' => self::STRINGIFY_PG_FLOAT,
+			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
 		yield 'COALESCE(t.col_float_nullable, 0.0)' => [
@@ -4303,15 +4337,17 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'select' => 'SELECT COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0) FROM %s t',
 			'mysql' => self::float(),
 			'sqlite' => TypeCombinator::union(self::float(), self::int()),
-			'pdo_pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
+			'pdo_pgsql' => PHP_VERSION_ID < 80400
+				? TypeCombinator::union(self::numericString(), self::int())
+				: TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'mssql' => self::mixed(),
 			'mysqlResult' => 0.0,
 			'sqliteResult' => 0,
-			'pdoPgsqlResult' => 0.0,
+			'pdoPgsqlResult' => PHP_VERSION_ID < 80400 ? '0' : 0.0,
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
-			'stringify' => self::STRINGIFY_PG_FLOAT,
+			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0.0)' => [
@@ -4319,15 +4355,17 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'select' => 'SELECT COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0.0) FROM %s t',
 			'mysql' => self::float(),
 			'sqlite' => TypeCombinator::union(self::float(), self::int()),
-			'pdo_pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
+			'pdo_pgsql' => PHP_VERSION_ID < 80400
+				? TypeCombinator::union(self::numericString(), self::int())
+				: TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'mssql' => self::mixed(),
 			'mysqlResult' => 0.0,
 			'sqliteResult' => 0.0,
-			'pdoPgsqlResult' => 0.0,
+			'pdoPgsqlResult' => PHP_VERSION_ID < 80400 ? '0' : 0.0,
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
-			'stringify' => self::STRINGIFY_PG_FLOAT,
+			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0e0)' => [
@@ -4335,15 +4373,17 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'select' => 'SELECT COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, 0e0) FROM %s t',
 			'mysql' => self::float(),
 			'sqlite' => TypeCombinator::union(self::float(), self::int()),
-			'pdo_pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
+			'pdo_pgsql' => PHP_VERSION_ID < 80400
+				? TypeCombinator::union(self::numericString(), self::int())
+				: TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'mssql' => self::mixed(),
 			'mysqlResult' => 0.0,
 			'sqliteResult' => 0.0,
-			'pdoPgsqlResult' => 0.0,
+			'pdoPgsqlResult' => PHP_VERSION_ID < 80400 ? '0' : 0.0,
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
-			'stringify' => self::STRINGIFY_PG_FLOAT,
+			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
 		yield "COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, '0')" => [
@@ -4351,15 +4391,17 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'select' => 'SELECT COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, \'0\') FROM %s t',
 			'mysql' => self::numericString(),
 			'sqlite' => TypeCombinator::union(self::float(), self::int(), self::numericString()),
-			'pdo_pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
+			'pdo_pgsql' => PHP_VERSION_ID < 80400
+				? TypeCombinator::union(self::numericString(), self::int())
+				: TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'pgsql' => TypeCombinator::union(self::numericString(), self::int(), self::float()),
 			'mssql' => self::mixed(),
 			'mysqlResult' => '0',
 			'sqliteResult' => '0',
-			'pdoPgsqlResult' => 0.0,
+			'pdoPgsqlResult' => PHP_VERSION_ID < 80400 ? '0' : 0.0,
 			'pgsqlResult' => 0.0,
 			'mssqlResult' => 0.0,
-			'stringify' => self::STRINGIFY_PG_FLOAT,
+			'stringify' => self::STRINGIFY_DEFAULT,
 		];
 
 		yield 'COALESCE(t.col_int_nullable, t.col_decimal_nullable, t.col_float_nullable, t.col_string)' => [
