@@ -1587,11 +1587,6 @@ class QueryResultTypeWalker extends SqlWalker
 						if (stripos($value, 'e') !== false) {
 							$type = new DqlConstantStringType((string) (float) $value, $literal->type);
 						} else {
-							//                          if ($this->phpVersion->getVersionId() >= 80400) {
-							//                              $type = new ConstantFloatType((float) $value);
-							//                          } else {
-							//                              $type = new DqlConstantStringType($value, $literal->type);
-							//                          }
 							$type = new DqlConstantStringType($value, $literal->type);
 						}
 
