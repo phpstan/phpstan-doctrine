@@ -8,18 +8,22 @@ Set current working directory to project root.
 - `printf "UID=$(id -u)\nGID=$(id -g)" > .env`
 - `docker-compose -f tests/Platform/docker/docker-compose.yml up -d`
 
-# Test behaviour with old stringification
+# Test behaviour for PHP 8.0 (old stringification)
 - `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php80 composer update`
 - `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php80 php -d memory_limit=1G vendor/bin/phpunit --group=platform`
 
-# Test behaviour with new stringification
+# Test behaviour for PHP 8.1 (adjusted stringification)
 - `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php81 composer update`
 - `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php81 php -d memory_limit=1G vendor/bin/phpunit --group=platform`
+
+# Test behaviour for PHP 8.4 (pdo_pgsql float stringification fix)
+- `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php84 composer update`
+- `docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php84 php -d memory_limit=1G vendor/bin/phpunit --group=platform`
 ```
 
 You can also run utilize those containers for PHPStorm PHPUnit configuration.
 
 Since the dataset is huge and takes few minutes to run, you can filter only functions you are interested in:
 ```sh
-docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php81 php -d memory_limit=1G vendor/bin/phpunit --group=platform --filter "AVG"
+docker-compose -f tests/Platform/docker/docker-compose.yml run --rm php84 php -d memory_limit=1G vendor/bin/phpunit --group=platform --filter "AVG"
 ```

@@ -63,3 +63,17 @@ services:
         user: ${UID:-1000}:${GID:-1000}
         volumes:
           - ../../../:/app
+
+    php84:
+        depends_on: [mysql, pgsql]
+        build:
+            context: .
+            dockerfile: ./Dockerfile84
+        environment:
+            MYSQL_HOST: mysql
+            PGSQL_HOST: pgsql
+            MSSQL_HOST: mssql
+        working_dir: /app
+        user: ${UID:-1000}:${GID:-1000}
+        volumes:
+          - ../../../:/app
