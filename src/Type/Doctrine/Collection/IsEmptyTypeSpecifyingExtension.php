@@ -61,12 +61,14 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 			new MethodCall($node->var, self::FIRST_METHOD_NAME),
 			new ConstantBooleanType(false),
 			$context,
+			$scope,
 		);
 
 		$last = $this->typeSpecifier->create(
 			new MethodCall($node->var, self::LAST_METHOD_NAME),
 			new ConstantBooleanType(false),
 			$context,
+			$scope,
 		);
 
 		return $first->unionWith($last);

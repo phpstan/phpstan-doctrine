@@ -98,8 +98,8 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$queryBuilderNode,
 			TypeCombinator::union(...$resultTypes),
 			TypeSpecifierContext::createTruthy(),
-			true,
-		);
+			$scope,
+		)->setAlwaysOverwriteTypes();
 	}
 
 }
