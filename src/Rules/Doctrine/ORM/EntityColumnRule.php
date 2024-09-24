@@ -49,7 +49,7 @@ class EntityColumnRule implements Rule
 		DescriptorRegistry $descriptorRegistry,
 		ReflectionProvider $reflectionProvider,
 		bool $reportUnknownTypes,
-		bool $allowNullablePropertyForRequiredField,
+		bool $allowNullablePropertyForRequiredField
 	)
 	{
 		$this->objectMetadataResolver = $objectMetadataResolver;
