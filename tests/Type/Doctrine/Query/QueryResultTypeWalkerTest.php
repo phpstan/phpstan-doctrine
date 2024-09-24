@@ -1497,7 +1497,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 					$this->constantArray([
 						[new ConstantStringType('stringEnumColumn'), new ObjectType(StringEnum::class)],
 						[new ConstantStringType('intEnumColumn'), new ObjectType(IntEnum::class)],
-						[new ConstantStringType('stringEnumListColumn'), AccessoryArrayListType::intersectWith(new ArrayType(new IntegerType(), new ObjectType(StringEnum::class)))],
+						[new ConstantStringType('stringEnumListColumn'), TypeCombinator::intersect(new ArrayType(new IntegerType(), new ObjectType(StringEnum::class)), new AccessoryArrayListType())],
 					]),
 					'
 						SELECT		e.stringEnumColumn, e.intEnumColumn, e.stringEnumListColumn

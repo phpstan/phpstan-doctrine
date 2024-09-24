@@ -116,8 +116,6 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 	 */
 	public static function getTestData(): iterable
 	{
-		AccessoryArrayListType::setListTypeEnabled(true);
-
 		yield 'getResult(object), full entity' => [
 			self::list(new ObjectType(Simple::class)),
 			'
@@ -305,7 +303,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 
 	private static function list(Type $values): Type
 	{
-		return AccessoryArrayListType::intersectWith(new ArrayType(new IntegerType(), $values));
+		return TypeCombinator::intersect(new ArrayType(new IntegerType(), $values), new AccessoryArrayListType());
 	}
 
 	private static function numericString(): Type

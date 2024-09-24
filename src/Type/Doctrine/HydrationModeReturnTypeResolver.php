@@ -77,10 +77,10 @@ class HydrationModeReturnTypeResolver
 				);
 			default:
 				if ($queryKeyType->isNull()->yes()) {
-					return AccessoryArrayListType::intersectWith(new ArrayType(
+					return TypeCombinator::intersect(new ArrayType(
 						new IntegerType(),
 						$queryResultType,
-					));
+					), new AccessoryArrayListType());
 				}
 				return new ArrayType(
 					$queryKeyType,

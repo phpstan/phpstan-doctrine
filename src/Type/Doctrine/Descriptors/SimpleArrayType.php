@@ -8,6 +8,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 class SimpleArrayType implements DoctrineTypeDescriptor
 {
@@ -19,7 +20,7 @@ class SimpleArrayType implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return AccessoryArrayListType::intersectWith(new ArrayType(new IntegerType(), new StringType()));
+		return TypeCombinator::intersect(new ArrayType(new IntegerType(), new StringType()), new AccessoryArrayListType());
 	}
 
 	public function getWritableToDatabaseType(): Type
