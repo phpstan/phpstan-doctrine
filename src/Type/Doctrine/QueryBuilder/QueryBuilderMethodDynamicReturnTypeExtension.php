@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\MixedType;
@@ -39,9 +38,7 @@ class QueryBuilderMethodDynamicReturnTypeExtension implements DynamicMethodRetur
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		$returnType = ParametersAcceptorSelector::selectSingle(
-			$methodReflection->getVariants(),
-		)->getReturnType();
+		$returnType = $methodReflection->getVariants()[0]->getReturnType();
 		if ($returnType instanceof MixedType) {
 			return false;
 		}

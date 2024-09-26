@@ -609,7 +609,7 @@ class QueryResultTypeWalker extends SqlWalker
 				if ($this->driverType === DriverDetector::MYSQLI || $this->driverType === DriverDetector::PDO_MYSQL || $this->driverType === DriverDetector::SQLITE3 || $this->driverType === DriverDetector::PDO_SQLITE) {
 					$type = new FloatType();
 
-					$cannotBeNegative = $exprType->isSmallerThan(new ConstantIntegerType(0))->no();
+					$cannotBeNegative = $exprType->isSmallerThan(new ConstantIntegerType(0), $this->phpVersion)->no();
 					$canBeNegative = !$cannotBeNegative;
 					if ($canBeNegative) {
 						$type = TypeCombinator::addNull($type);

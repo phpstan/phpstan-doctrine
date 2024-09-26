@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -76,7 +75,7 @@ class RowCountMethodDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 		}
 
 		$rowCountMethod = $resultReflection->getNativeMethod('rowCount');
-		$variant = ParametersAcceptorSelector::selectSingle($rowCountMethod->getVariants());
+		$variant = $rowCountMethod->getOnlyVariant();
 
 		return $variant->getReturnType();
 	}
