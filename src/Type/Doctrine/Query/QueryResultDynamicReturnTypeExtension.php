@@ -71,7 +71,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			$parametersAcceptor = ParametersAcceptorSelector::selectFromArgs(
 				$scope,
 				$methodCall->getArgs(),
-				$methodReflection->getVariants()
+				$methodReflection->getVariants(),
 			);
 			$parameter = $parametersAcceptor->getParameters()[$argIndex];
 			$hydrationMode = $parameter->getDefaultValue() ?? new NullType();

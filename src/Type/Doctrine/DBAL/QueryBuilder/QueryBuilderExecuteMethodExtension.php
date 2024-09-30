@@ -41,7 +41,7 @@ class QueryBuilderExecuteMethodExtension implements DynamicMethodReturnTypeExten
 		$defaultReturnType = ParametersAcceptorSelector::selectFromArgs(
 			$scope,
 			$methodCall->getArgs(),
-			$methodReflection->getVariants()
+			$methodReflection->getVariants(),
 		)->getReturnType();
 
 		$queryBuilderType = new ObjectType(QueryBuilder::class);
