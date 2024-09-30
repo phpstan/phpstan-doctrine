@@ -13,15 +13,11 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodRetur
 
 	private ?string $queryBuilderClass = null;
 
-	private bool $fasterVersion;
-
 	public function __construct(
-		?string $queryBuilderClass,
-		bool $fasterVersion
+		?string $queryBuilderClass
 	)
 	{
 		$this->queryBuilderClass = $queryBuilderClass;
-		$this->fasterVersion = $fasterVersion;
 	}
 
 	public function getClass(): string
@@ -40,12 +36,7 @@ class CreateQueryBuilderDynamicReturnTypeExtension implements DynamicMethodRetur
 		Scope $scope
 	): Type
 	{
-		$class = SimpleQueryBuilderType::class;
-		if (!$this->fasterVersion) {
-			$class = BranchingQueryBuilderType::class;
-		}
-
-		return new $class(
+		return new BranchingQueryBuilderType(
 			$this->queryBuilderClass ?? 'Doctrine\ORM\QueryBuilder',
 		);
 	}

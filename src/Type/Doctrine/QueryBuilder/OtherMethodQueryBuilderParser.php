@@ -28,8 +28,6 @@ use function sprintf;
 class OtherMethodQueryBuilderParser
 {
 
-	private bool $descendIntoOtherMethods;
-
 	private Parser $parser;
 
 	private Container $container;
@@ -41,9 +39,8 @@ class OtherMethodQueryBuilderParser
 	 */
 	private array $cache = [];
 
-	public function __construct(bool $descendIntoOtherMethods, Parser $parser, Container $container)
+	public function __construct(Parser $parser, Container $container)
 	{
-		$this->descendIntoOtherMethods = $descendIntoOtherMethods;
 		$this->parser = $parser;
 		$this->container = $container;
 	}
@@ -53,10 +50,6 @@ class OtherMethodQueryBuilderParser
 	 */
 	public function findQueryBuilderTypesInCalledMethod(Scope $scope, MethodReflection $methodReflection): array
 	{
-		if (!$this->descendIntoOtherMethods) {
-			return [];
-		}
-
 		$methodName = $methodReflection->getName();
 		$className = $methodReflection->getDeclaringClass()->getName();
 		$fileName = $methodReflection->getDeclaringClass()->getFileName();

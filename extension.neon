@@ -9,8 +9,6 @@ parameters:
 		queryBuilderClass: null
 		allCollectionsSelectable: true
 		objectManagerLoader: null
-		searchOtherMethodsForQueryBuilderBeginning: true
-		queryBuilderFastAlgorithm: false
 		literalString: false
 	featureToggles:
 		skipCheckGenericClasses:
@@ -79,8 +77,6 @@ parametersSchema:
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
-		searchOtherMethodsForQueryBuilderBeginning: bool()
-		queryBuilderFastAlgorithm: bool()
 		reportDynamicQueryBuilders: bool()
 		reportUnknownTypes: bool()
 		allowNullablePropertyForRequiredField: bool()
@@ -117,7 +113,6 @@ services:
 		class: PHPStan\Type\Doctrine\QueryBuilder\CreateQueryBuilderDynamicReturnTypeExtension
 		arguments:
 			queryBuilderClass: %doctrine.queryBuilderClass%
-			fasterVersion: %doctrine.queryBuilderFastAlgorithm%
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
@@ -194,7 +189,6 @@ services:
 	-
 		class: PHPStan\Type\Doctrine\QueryBuilder\OtherMethodQueryBuilderParser
 		arguments:
-			descendIntoOtherMethods: %doctrine.searchOtherMethodsForQueryBuilderBeginning%
 			parser: @defaultAnalysisParser
 
 	-

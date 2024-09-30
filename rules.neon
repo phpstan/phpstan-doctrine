@@ -12,8 +12,6 @@ parametersSchema:
 		queryBuilderClass: schema(string(), nullable())
 		allCollectionsSelectable: bool()
 		objectManagerLoader: schema(string(), nullable())
-		searchOtherMethodsForQueryBuilderBeginning: bool()
-		queryBuilderFastAlgorithm: bool()
 		reportDynamicQueryBuilders: bool()
 		reportUnknownTypes: bool()
 		allowNullablePropertyForRequiredField: bool()
