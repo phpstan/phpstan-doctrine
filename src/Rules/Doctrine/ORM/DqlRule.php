@@ -11,7 +11,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeUtils;
 use function count;
 use function sprintf;
 
@@ -54,7 +53,7 @@ class DqlRule implements Rule
 			return [];
 		}
 
-		$dqls = TypeUtils::getConstantStrings($scope->getType($node->getArgs()[0]->value));
+		$dqls = $scope->getType($node->getArgs()[0]->value)->getConstantStrings();
 		if (count($dqls) === 0) {
 			return [];
 		}

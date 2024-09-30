@@ -13,7 +13,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeUtils;
 use Throwable;
 use function array_values;
 use function count;
@@ -81,7 +80,7 @@ class QueryBuilderDqlRule implements Rule
 			];
 		}
 
-		$dqls = TypeUtils::getConstantStrings($dqlType);
+		$dqls = $dqlType->getConstantStrings();
 		if (count($dqls) === 0) {
 			if ($this->reportDynamicQueryBuilders) {
 				return [

@@ -85,7 +85,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 			);
 		}
 		$argType = $scope->getType($methodCall->getArgs()[0]->value);
-		if (!$argType->isClassStringType()->yes()) {
+		if (!$argType->isClassString()->yes()) {
 			return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 		}
 

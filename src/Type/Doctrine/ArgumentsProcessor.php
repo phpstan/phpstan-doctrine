@@ -58,7 +58,7 @@ class ArgumentsProcessor
 				continue;
 			}
 
-			if ($value->isClassStringType()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
+			if ($value->isClassString()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
 				/** @var class-string $className */
 				$className = $value->getClassStringObjectType()->getObjectClassNames()[0];
 				if ($this->objectMetadataResolver->isTransient($className)) {

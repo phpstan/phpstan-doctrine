@@ -35,7 +35,7 @@ class EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension implements Dy
 		$entityNameExpr = new MethodCall($methodCall->var, new Identifier('getEntityName'));
 
 		$entityNameExprType = $scope->getType($entityNameExpr);
-		if ($entityNameExprType->isClassStringType()->yes() && count($entityNameExprType->getClassStringObjectType()->getObjectClassNames()) === 1) {
+		if ($entityNameExprType->isClassString()->yes() && count($entityNameExprType->getClassStringObjectType()->getObjectClassNames()) === 1) {
 			$entityNameExpr = new String_($entityNameExprType->getClassStringObjectType()->getObjectClassNames()[0]);
 		}
 
