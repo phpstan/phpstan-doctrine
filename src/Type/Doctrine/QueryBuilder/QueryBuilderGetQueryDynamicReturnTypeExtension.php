@@ -59,6 +59,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 	private ArgumentsProcessor $argumentsProcessor;
 
+	/** @var class-string|null */
 	private ?string $queryBuilderClass = null;
 
 	private DescriptorRegistry $descriptorRegistry;
@@ -67,6 +68,9 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 	private DriverDetector $driverDetector;
 
+	/**
+	 * @param class-string|null $queryBuilderClass
+	 */
 	public function __construct(
 		ObjectMetadataResolver $objectMetadataResolver,
 		ArgumentsProcessor $argumentsProcessor,

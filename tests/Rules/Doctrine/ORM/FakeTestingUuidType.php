@@ -47,6 +47,7 @@ final class FakeTestingUuidType extends GuidType
 			return null;
 		}
 
+		/** @throws ConversionException */
 		return (string) $value;
 	}
 

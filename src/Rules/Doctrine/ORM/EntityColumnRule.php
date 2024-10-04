@@ -16,7 +16,6 @@ use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
@@ -176,7 +175,7 @@ class EntityColumnRule implements Rule
 		}
 
 		$phpDocType = $node->getPhpDocType();
-		$nativeType = $node->getNativeType() !== null ? ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $scope->getClassReflection()) : new MixedType();
+		$nativeType = $node->getNativeType() ?? new MixedType();
 		$propertyType = TypehintHelper::decideType($nativeType, $phpDocType);
 
 		if (get_class($propertyType) === MixedType::class || $propertyType instanceof ErrorType || $propertyType instanceof NeverType) {

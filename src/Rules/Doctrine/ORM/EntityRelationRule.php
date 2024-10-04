@@ -13,7 +13,6 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\VerbosityLevel;
@@ -96,7 +95,7 @@ class EntityRelationRule implements Rule
 		}
 
 		$phpDocType = $node->getPhpDocType();
-		$nativeType = $node->getNativeType() !== null ? ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $scope->getClassReflection()) : new MixedType();
+		$nativeType = $node->getNativeType() ?? new MixedType();
 		$propertyType = TypehintHelper::decideType($nativeType, $phpDocType);
 
 		$errors = [];

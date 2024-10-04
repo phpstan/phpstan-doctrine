@@ -10,7 +10,7 @@ final class EntityRepositoryDynamicReturnIntegrationTest extends LevelsTestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataTopics(): array
+	public static function dataTopics(): array
 	{
 		return [
 			['entityRepositoryDynamicReturn'],

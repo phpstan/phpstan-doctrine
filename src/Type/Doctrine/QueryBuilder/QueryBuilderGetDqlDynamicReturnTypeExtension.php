@@ -13,8 +13,12 @@ use PHPStan\Type\TypeCombinator;
 class QueryBuilderGetDqlDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
+	/** @var class-string|null */
 	private ?string $queryBuilderClass = null;
 
+	/**
+	 * @param class-string|null $queryBuilderClass
+	 */
 	public function __construct(
 		?string $queryBuilderClass
 	)

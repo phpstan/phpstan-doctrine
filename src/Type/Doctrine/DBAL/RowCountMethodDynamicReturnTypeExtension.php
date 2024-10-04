@@ -16,6 +16,7 @@ use PHPStan\Type\Type;
 class RowCountMethodDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
+	/** @var class-string */
 	private string $class;
 
 	private ObjectMetadataResolver $objectMetadataResolver;
@@ -24,6 +25,9 @@ class RowCountMethodDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 
 	private ReflectionProvider $reflectionProvider;
 
+	/**
+	 * @param class-string $class
+	 */
 	public function __construct(
 		string $class,
 		ObjectMetadataResolver $objectMetadataResolver,

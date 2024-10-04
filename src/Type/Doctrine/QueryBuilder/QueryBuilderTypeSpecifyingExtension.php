@@ -24,10 +24,14 @@ class QueryBuilderTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 
 	private const MAX_COMBINATIONS = 16;
 
+	/** @var class-string|null */
 	private ?string $queryBuilderClass = null;
 
 	private TypeSpecifier $typeSpecifier;
 
+	/**
+	 * @param class-string|null $queryBuilderClass
+	 */
 	public function __construct(?string $queryBuilderClass)
 	{
 		$this->queryBuilderClass = $queryBuilderClass;

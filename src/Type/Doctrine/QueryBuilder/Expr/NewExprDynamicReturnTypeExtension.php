@@ -20,10 +20,14 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 
 	private ArgumentsProcessor $argumentsProcessor;
 
+	/** @var class-string */
 	private string $class;
 
 	private ReflectionProvider $reflectionProvider;
 
+	/**
+	 * @param class-string $class
+	 */
 	public function __construct(
 		ArgumentsProcessor $argumentsProcessor,
 		string $class,

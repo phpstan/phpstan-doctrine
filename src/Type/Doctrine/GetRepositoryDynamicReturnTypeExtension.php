@@ -35,10 +35,14 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 
 	private ?string $odmRepositoryClass = null;
 
+	/** @var class-string */
 	private string $managerClass;
 
 	private ObjectMetadataResolver $metadataResolver;
 
+	/**
+	 * @param class-string $managerClass
+	 */
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
 		?string $repositoryClass,

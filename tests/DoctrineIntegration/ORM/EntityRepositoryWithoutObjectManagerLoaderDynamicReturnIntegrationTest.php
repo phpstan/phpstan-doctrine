@@ -10,7 +10,7 @@ final class EntityRepositoryWithoutObjectManagerLoaderDynamicReturnIntegrationTe
 	/**
 	 * @return string[][]
 	 */
-	public function dataTopics(): array
+	public static function dataTopics(): array
 	{
 		return [
 			['entityRepositoryDynamicReturn'],
