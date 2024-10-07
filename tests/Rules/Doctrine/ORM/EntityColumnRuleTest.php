@@ -159,7 +159,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				156,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain list<string> but property expects array<int>.',
 				162,
 			],
 			[
@@ -230,7 +230,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				156,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain array<int, string> but property expects array<int>.',
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: database can contain list<string> but property expects array<int>.',
 				162,
 			],
 			[
@@ -399,7 +399,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				45,
 			],
 			[
-				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type5 type mapping mismatch: database can contain array<int, PHPStan\Rules\Doctrine\ORMAttributes\FooEnum> but property expects PHPStan\Rules\Doctrine\ORMAttributes\FooEnum.',
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type5 type mapping mismatch: database can contain list<PHPStan\Rules\Doctrine\ORMAttributes\FooEnum> but property expects PHPStan\Rules\Doctrine\ORMAttributes\FooEnum.',
 				51,
 			],
 			[
