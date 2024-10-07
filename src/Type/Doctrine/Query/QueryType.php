@@ -2,8 +2,8 @@
 
 namespace PHPStan\Type\Doctrine\Query;
 
-use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
@@ -44,10 +44,10 @@ class QueryType extends GenericObjectType
 		return new self('Doctrine\ORM\Query', $this->indexType, $this->resultType, $subtractedType);
 	}
 
-	public function isSuperTypeOf(Type $type): TrinaryLogic
+	public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
 	{
 		if ($type instanceof self) {
-			return TrinaryLogic::createFromBoolean($this->equals($type));
+			return IsSuperTypeOfResult::createFromBoolean($this->equals($type));
 		}
 
 		return parent::isSuperTypeOf($type);

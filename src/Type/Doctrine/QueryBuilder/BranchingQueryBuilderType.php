@@ -2,7 +2,7 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder;
 
-use PHPStan\TrinaryLogic;
+use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\Type;
 use function array_keys;
 use function count;
@@ -35,10 +35,10 @@ class BranchingQueryBuilderType extends QueryBuilderType
 		return parent::equals($type);
 	}
 
-	public function isSuperTypeOf(Type $type): TrinaryLogic
+	public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
 	{
 		if ($type instanceof parent) {
-			return TrinaryLogic::createFromBoolean($this->equals($type));
+			return IsSuperTypeOfResult::createFromBoolean($this->equals($type));
 		}
 
 		return parent::isSuperTypeOf($type);
