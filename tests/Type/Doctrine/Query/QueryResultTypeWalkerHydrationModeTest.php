@@ -11,6 +11,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
+use PHPStan\Type\Accessory\AccessoryLowercaseStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
@@ -308,12 +309,17 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 		return AccessoryArrayListType::intersectWith(new ArrayType(new IntegerType(), $values));
 	}
 
-	private static function numericString(): Type
+	private static function numericString(bool $lowercase = false): Type
 	{
-		return new IntersectionType([
+		$types = [
 			new StringType(),
 			new AccessoryNumericStringType(),
-		]);
+		];
+		if ($lowercase) {
+			$types[] = new AccessoryLowercaseStringType();
+		}
+
+		return new IntersectionType($types);
 	}
 
 	/**

@@ -15,6 +15,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
+use PHPStan\Type\Accessory\AccessoryLowercaseStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
@@ -1474,7 +1475,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			$this->constantArray([
 				[new ConstantStringType('minusInt'), $this->stringifies() ? new ConstantStringType('-1') : new ConstantIntegerType(-1)],
 				[new ConstantStringType('minusFloat'), $this->stringifies() ? $this->numericString() : new ConstantFloatType(-0.1)],
-				[new ConstantStringType('minusIntRange'), $this->stringifies() ? $this->numericString() : IntegerRangeType::fromInterval(null, 0)],
+				[new ConstantStringType('minusIntRange'), $this->stringifies() ? $this->numericString(true) : IntegerRangeType::fromInterval(null, 0)],
 			]),
 			'
 				SELECT		-1 as minusInt,
@@ -1622,12 +1623,17 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		return $builder->getArray();
 	}
 
-	private function numericString(): Type
+	private function numericString(bool $lowercase = false): Type
 	{
-		return new IntersectionType([
+		$types = [
 			new StringType(),
 			new AccessoryNumericStringType(),
-		]);
+		];
+		if ($lowercase) {
+			$types[] = new AccessoryLowercaseStringType();
+		}
+
+		return new IntersectionType($types);
 	}
 
 	private function uint(): Type
@@ -1673,14 +1679,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	private function intOrStringified(): Type
 	{
 		return $this->stringifies()
-			? $this->numericString()
+			? $this->numericString(true)
 			: new IntegerType();
 	}
 
 	private function uintOrStringified(): Type
 	{
 		return $this->stringifies()
-			? $this->numericString()
+			? $this->numericString(true)
 			: $this->uint();
 	}
 
