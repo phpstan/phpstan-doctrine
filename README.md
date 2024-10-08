@@ -126,7 +126,7 @@ $query->getResult(); // array<Acme\User>
 
 Queries are analyzed statically and do not require a running database server. This makes use of the Doctrine DQL parser and entities metadata.
 
-Most DQL features are supported, including `GROUP BY`, `DISTINCT`, all flavors of `JOIN`, arithmetic expressions, functions, aggregations, `NEW`, etc. Sub queries and `INDEX BY` are not yet supported (infered type will be `mixed`).
+Most DQL features are supported, including `GROUP BY`, `INDEX BY`, `DISTINCT`, all flavors of `JOIN`, arithmetic expressions, functions, aggregations, `NEW`, etc. Sub queries are not yet supported (infered type will be `mixed`).
 
 ### Query type inference of expressions
 
