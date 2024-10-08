@@ -50,6 +50,16 @@ class QueryBuilderGetQuery
 		assertType('Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}>', $query);
 	}
 
+	public function testEventAlias(EntityManagerInterface $em): void
+	{
+		$query = $em->createQueryBuilder()
+			->select('event')
+			->from(Many::class, 'event')
+			->getQuery();
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
+	}
+
 	public function testIndexByInfering(EntityManagerInterface $em): void
 	{
 		$query = $em->createQueryBuilder()
