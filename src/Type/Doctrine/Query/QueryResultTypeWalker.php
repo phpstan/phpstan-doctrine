@@ -3,8 +3,10 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType as DbalStringType;
 use Doctrine\DBAL\Types\Type as DbalType;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
@@ -16,6 +18,7 @@ use Doctrine\ORM\Query\SqlWalker;
 use PDO;
 use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
@@ -2008,6 +2011,10 @@ class QueryResultTypeWalker extends SqlWalker
 					$type = new MixedType();
 			}
 		} catch (DescriptorNotRegisteredException $e) {
+			if (TypeRegistry::has($typeName)) {
+				return $this->autodetectDbalTypePhpValue(TypeRegistry::get($typeName));
+			}
+
 			if ($enumType !== null) {
 				$type = new ObjectType($enumType);
 			} else {
@@ -2019,7 +2026,7 @@ class QueryResultTypeWalker extends SqlWalker
 			$type = TypeCombinator::addNull($type);
 		}
 
-			return $type;
+		return $type;
 	}
 
 	/** @param ?class-string<BackedEnum> $enumType */
@@ -2186,6 +2193,20 @@ class QueryResultTypeWalker extends SqlWalker
 
 			return $traverse($type);
 		});
+	}
+
+	private function autodetectDbalTypePhpValue(DbalType $dbalType): Type
+	{
+		$method = $this->reflectionProvider
+			->getClass(get_class($dbalType))
+			->getNativeMethod('convertToPHPValue');
+
+		$type = ParametersAcceptorSelector::selectFromTypes([
+			new MixedType(),
+			new ObjectType(AbstractPlatform::class),
+		], $method->getVariants(), false)->getReturnType();
+
+		return TypeCombinator::removeNull($type);
 	}
 
 }
