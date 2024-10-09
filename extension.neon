@@ -10,15 +10,6 @@ parameters:
 		allCollectionsSelectable: true
 		objectManagerLoader: null
 		literalString: false
-	featureToggles:
-		skipCheckGenericClasses:
-			- Doctrine\ODM\MongoDB\Mapping\ClassMetadata
-			- Doctrine\ORM\Mapping\ClassMetadata
-			- Doctrine\ORM\Mapping\ClassMetadataInfo
-			- Doctrine\Persistence\Mapping\ClassMetadata
-			- Doctrine\ORM\AbstractQuery
-			- Doctrine\ORM\Query
-			- Doctrine\ORM\Tools\Pagination\Paginator
 	stubFiles:
 		- stubs/Criteria.stub
 		- stubs/DBAL/Cache/CacheException.stub
