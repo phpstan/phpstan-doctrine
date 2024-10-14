@@ -169,7 +169,7 @@ class QueryResultTest
 		);
 
 		assertType(
-			'array',
+			'array<mixed>',
 			$query->getArrayResult()
 		);
 		assertType(
