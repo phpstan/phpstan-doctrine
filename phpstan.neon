@@ -64,3 +64,9 @@ parameters:
 				- '#^Call to function method_exists\(\) with Doctrine\\DBAL\\Connection and ''createSchemaManager'' will always evaluate to true\.$#'
 				- '#^Call to an undefined method Doctrine\\DBAL\\Connection\:\:getSchemaManager\(\)\.$#'
 			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+services:
+	-
+		class: PHPStan\BackedEnumStubExtension
+		tags:
+			- phpstan.stubFilesExtension
