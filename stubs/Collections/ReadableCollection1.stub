@@ -1,0 +1,86 @@
+<?php
+
+namespace Doctrine\Common\Collections;
+
+use Closure;
+use Countable;
+use IteratorAggregate;
+
+/**
+ * @template TKey of array-key
+ * @template-covariant T
+ * @extends IteratorAggregate<TKey, T>
+ */
+interface ReadableCollection extends Countable, IteratorAggregate
+{
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return bool
+     */
+    public function exists(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(T, TKey):bool $p
+     *
+     * @return ReadableCollection<TKey, T>
+     */
+    public function filter(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $func
+     *
+     * @param Closure(T):U $func
+     *
+     * @return Collection<TKey, U>
+     *
+     * @template U
+     */
+    public function map(Closure $func);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return array{0: ReadableCollection<TKey, T>, 1: ReadableCollection<TKey, T>}
+     */
+    public function partition(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.
+     */
+    public function forAll(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return T|null
+     */
+    public function findFirst(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $func
+     *
+     * @param Closure(TReturn|TInitial, T):TReturn $func
+     * @param TInitial $initial
+     *
+     * @return TReturn|TInitial
+     *
+     * @template TReturn
+     * @template TInitial
+     */
+    public function reduce(Closure $func, mixed $initial = null);
+
+}

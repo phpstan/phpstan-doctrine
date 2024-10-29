@@ -43,7 +43,6 @@ parameters:
 		- stubs/Persistence/ObjectRepository.stub
 		- stubs/RepositoryFactory.stub
 		- stubs/Collections/ArrayCollection.stub
-		- stubs/Collections/ReadableCollection.stub
 		- stubs/Collections/Selectable.stub
 		- stubs/ORM/AbstractQuery.stub
 		- stubs/ORM/Exception/ORMException.stub

@@ -64,8 +64,10 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$collectionVersion = null;
 		}
 		if ($collectionVersion !== null && strpos($collectionVersion, '1.') === 0) {
+			$files[] = $stubsDir . '/Collections/ReadableCollection1.stub';
 			$files[] = $stubsDir . '/Collections/Collection1.stub';
 		} else {
+			$files[] = $stubsDir . '/Collections/ReadableCollection.stub';
 			$files[] = $stubsDir . '/Collections/Collection.stub';
 		}
 
