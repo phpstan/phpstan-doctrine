@@ -2,6 +2,8 @@
 
 namespace Doctrine\Common\Collections;
 
+use Closure;
+
 /**
  * @template TKey of array-key
  * @template T
@@ -10,5 +12,34 @@ namespace Doctrine\Common\Collections;
  */
 class ArrayCollection implements Collection, Selectable
 {
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(T, TKey):bool $p
+     *
+     * @return static<TKey, T>
+     */
+    public function filter(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $func
+     *
+     * @param Closure(T):U $func
+     *
+     * @return static<TKey, U>
+     *
+     * @template U
+     */
+    public function map(Closure $func);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return array{0: static<TKey, T>, 1: static<TKey, T>}
+     */
+    public function partition(Closure $p);
 
 }

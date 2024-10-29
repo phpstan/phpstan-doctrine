@@ -3,6 +3,7 @@
 namespace Doctrine\Common\Collections;
 
 use ArrayAccess;
+use Closure;
 use Countable;
 use IteratorAggregate;
 
@@ -42,5 +43,34 @@ interface Collection extends Countable, IteratorAggregate, ArrayAccess, Readable
      * @return bool
      */
     public function removeElement($element) {}
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(T, TKey):bool $p
+     *
+     * @return Collection<TKey, T>
+     */
+    public function filter(Closure $p);
+
+    /**
+     * @param-immediately-invoked-callable $func
+     *
+     * @param Closure(T):U $func
+     *
+     * @return Collection<TKey, U>
+     *
+     * @template U
+     */
+    public function map(Closure $func);
+
+    /**
+     * @param-immediately-invoked-callable $p
+     *
+     * @param Closure(TKey, T):bool $p
+     *
+     * @return array{0: Collection<TKey, T>, 1: Collection<TKey, T>}
+     */
+    public function partition(Closure $p);
 
 }
