@@ -4,6 +4,7 @@ namespace Doctrine\ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @template-covariant TKey The type of column used in indexBy
@@ -12,21 +13,75 @@ use Doctrine\ORM\NonUniqueResultException;
 abstract class AbstractQuery
 {
 
+    public const HYDRATE_OBJECT = 1;
+
 	/**
 	 * @param ArrayCollection<array-key, mixed>|array<mixed> $parameters
 	 * @return static
 	 */
 	public function setParameters($parameters)
 	{
-
 	}
 
-	/**
-	* @return bool|float|int|string|null
-	*
-	* @throws NoResultException
-	* @throws NonUniqueResultException
-	*/
-	public function getSingleScalarResult();
+    /**
+     * @phpstan-impure
+     * @param string|AbstractQuery::HYDRATE_* $hydrationMode
+     */
+    public function getResult($hydrationMode = self::HYDRATE_OBJECT): mixed
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @return mixed[]
+     */
+    public function getArrayResult(): array
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @return mixed[]
+     */
+    public function getSingleColumnResult(): array
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @return mixed[]
+     */
+    public function getScalarResult(): array
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     * @throws NonUniqueResultException
+     */
+    public function getOneOrNullResult($hydrationMode = null): mixed
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getSingleResult($hydrationMode = null): mixed
+    {
+    }
+
+    /**
+     * @phpstan-impure
+     * @return bool|float|int|string|null
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getSingleScalarResult()
+    {
+    }
 
 }
