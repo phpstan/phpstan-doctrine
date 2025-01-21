@@ -166,4 +166,5 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 * @var list<string>
 	 */
 	private $validSimpleArray;
+
 }
