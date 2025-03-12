@@ -43,11 +43,9 @@ final class IsEmptyTypeSpecifyingExtension implements MethodTypeSpecifyingExtens
 		TypeSpecifierContext $context
 	): bool
 	{
-		return (
-			$methodReflection->getDeclaringClass()->getName() === $this->collectionClass
-			|| $methodReflection->getDeclaringClass()->isSubclassOf($this->collectionClass)
-		)
-		&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
+		return
+			$methodReflection->getDeclaringClass()->is($this->collectionClass)
+			&& $methodReflection->getName() === self::IS_EMPTY_METHOD_NAME;
 	}
 
 	public function specifyTypes(
