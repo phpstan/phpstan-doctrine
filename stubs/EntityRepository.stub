@@ -20,6 +20,7 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-param int|null $lockMode
 	 * @phpstan-param int|null $lockVersion
 	 * @phpstan-return TEntityClass|null
+	 * @phpstan-impure
 	 */
 	public function find($id, $lockMode = null, $lockVersion = null);
 
@@ -41,6 +42,7 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-param array<string, mixed> $criteria The criteria.
 	 * @phpstan-param array<string, string>|null $orderBy
 	 * @phpstan-return TEntityClass|null
+	 * @phpstan-impure
 	 */
 	public function findOneBy(array $criteria, ?array $orderBy = null);
 
