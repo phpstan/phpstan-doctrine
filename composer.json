@@ -31,6 +31,7 @@
 		"gedmo/doctrine-extensions": "^3.8",
 		"nesbot/carbon": "^2.49",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
+		"phpstan/phpstan-deprecation-rules": "^2.0",
 		"phpstan/phpstan-phpunit": "^2.0",
 		"phpstan/phpstan-strict-rules": "^2.0",
 		"phpunit/phpunit": "^9.6.20",
