@@ -1,0 +1,127 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '''
+				#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\ArrayType\:
+				Use \{@link JsonType\} instead\.$#
+			'''
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ArrayType.php
+
+		-
+			message: '''
+				#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\ObjectType\:
+				Use \{@link JsonType\} instead\.$#
+			'''
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/ObjectType.php
+
+		-
+			message: '''
+				#^Call to deprecated method getSchemaManager\(\) of class Doctrine\\DBAL\\Connection\:
+				Use \{@see createSchemaManager\(\)\} instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			message: '''
+				#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\ArrayType\:
+				Use \{@link JsonType\} instead\.$#
+			'''
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: '''
+				#^Call to deprecated method create\(\) of class Doctrine\\ORM\\EntityManager\:
+				Use \{@see DriverManager\:\:getConnection\(\)\} to bootstrap the connection and call the constructor\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: '''
+				#^Fetching class constant class of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Classes/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/DoctrineIntegration/ORM/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Rules/DeadCode/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Rules/Properties/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Type/Doctrine/DBAL/mysqli.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Type/Doctrine/DBAL/pdo.php
