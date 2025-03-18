@@ -54,3 +54,102 @@ parameters:
 			message: "#^Parameter \\#2 \\$className of static method Doctrine\\\\DBAL\\\\Types\\\\Type\\:\\:addType\\(\\) expects class\\-string\\<Doctrine\\\\DBAL\\\\Types\\\\Type\\>, string given\\.$#"
 			count: 1
 			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: '''
+				#^Fetching class constant class of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Classes/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/DoctrineIntegration/ORM/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Rules/DeadCode/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Rules/Properties/entity-manager.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Type/Doctrine/DBAL/mysqli.php
+
+		-
+			message: '''
+				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
+				This class will be removed in 3\.0 without replacement\.
+				Copyright \(c\) Doctrine Project
+				From https\://github\.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver\.php$#
+			'''
+			identifier: new.deprecated
+			count: 1
+			path: tests/Type/Doctrine/DBAL/pdo.php
