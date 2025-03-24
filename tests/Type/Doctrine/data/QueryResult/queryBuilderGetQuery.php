@@ -262,6 +262,23 @@ class QueryBuilderGetQuery
 		assertType('mixed', $result);
 	}
 
+	public function testDynamicMethodCallInGroupBy(
+		EntityManagerInterface $em,
+		Andx $and,
+		Criteria $criteria,
+		string $string
+	): void
+	{
+		$result = $em->createQueryBuilder()
+			->select('AVG(m.intColumn) AS average')
+			->from(Many::class, 'm')
+			->addGroupBy($string)
+			->getQuery()
+			->getResult();
+
+		assertType('list<array{average: float}>', $result); // not nullable, we have GROUP BY present
+	}
+ú
 	private function createVehicule(): VehicleInterface
 	{
 		return new Truck();
