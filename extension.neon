@@ -354,6 +354,9 @@ services:
 		class: PHPStan\Type\Doctrine\Descriptors\DecimalType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
+		class: PHPStan\Type\Doctrine\Descriptors\EnumType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
 		class: PHPStan\Type\Doctrine\Descriptors\FloatType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
@@ -373,6 +376,9 @@ services:
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\SimpleArrayType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\SmallFloatType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
 		class: PHPStan\Type\Doctrine\Descriptors\SmallIntType

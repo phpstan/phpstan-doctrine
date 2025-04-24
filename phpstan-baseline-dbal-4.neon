@@ -1,0 +1,33 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Class Doctrine\\DBAL\\Types\\EnumType not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Type/Doctrine/Descriptors/EnumType.php
+
+		-
+			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\EnumType\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Type/Doctrine/Descriptors/EnumType.php
+
+		-
+			message: '#^Class Doctrine\\DBAL\\Types\\SmallFloatType not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Type/Doctrine/Descriptors/SmallFloatType.php
+
+		-
+			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\SmallFloatType\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Type/Doctrine/Descriptors/SmallFloatType.php
+
+		-
+			message: '#^Class Doctrine\\DBAL\\Types\\EnumType not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+

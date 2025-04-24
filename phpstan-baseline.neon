@@ -317,3 +317,9 @@ parameters:
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/pdo.php
+
+		-
+			message: '#^Parameter references internal interface Doctrine\\ORM\\Query\\AST\\Phase2OptimizableConditional in its type\.$#'
+			identifier: parameter.internalInterface
+			count: 2
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php

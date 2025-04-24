@@ -3,6 +3,7 @@
 namespace PHPStan\Type\Doctrine\Query;
 
 use BackedEnum;
+use Doctrine\DBAL\Types\EnumType as DbalEnumType;
 use Doctrine\DBAL\Types\StringType as DbalStringType;
 use Doctrine\DBAL\Types\Type as DbalType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -1235,6 +1236,7 @@ class QueryResultTypeWalker extends SqlWalker
 			if (
 				$expr instanceof TypedExpression
 				&& !$expr->getReturnType() instanceof DbalStringType // StringType is no-op, so using TypedExpression with that does nothing
+				&& !$expr->getReturnType() instanceof DbalEnumType // EnumType is also no-op
 			) {
 				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
 				$type = TypeCombinator::intersect( // e.g. count is typed as int, but we infer int<0, max>
