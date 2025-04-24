@@ -1,4 +1,4 @@
-FROM php:8.4.0beta4-cli
+FROM php:8.4-cli
 
 # MSSQL
 RUN apt update  \
@@ -12,13 +12,8 @@ RUN apt update  \
     && pecl install pdo_sqlsrv \
     && docker-php-ext-enable sqlsrv pdo_sqlsrv
 
-RUN set -ex \
-      && apt update \
-      && apt install -y bash zip libpq-dev libsqlite3-dev \
-      && pecl install xdebug-3.4 mongodb \
-      && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-      && docker-php-ext-install pdo mysqli pgsql pdo_mysql pdo_pgsql pdo_sqlite \
-      && docker-php-ext-enable mongodb # TODO xdebug not yet supported here
+COPY ./docker-setup.sh /opt/src/scripts/setup.sh
+RUN /opt/src/scripts/setup.sh
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
