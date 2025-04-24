@@ -4807,6 +4807,9 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 					'host' => getenv('MSSQL_HOST'),
 					'user' => 'SA',
 					'password' => 'Secret.123',
+					'driverOptions' => [
+						'TrustServerCertificate' => 'yes',
+					],
 					// user database is created after connection
 				];
 			default:

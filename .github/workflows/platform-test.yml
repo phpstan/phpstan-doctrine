@@ -45,7 +45,7 @@ jobs:
 
       - uses: Yarden-zamir/install-mssql-odbc@main
         with:
-          ODBC_VERSION: 17
+          ODBC_VERSION: 18
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
