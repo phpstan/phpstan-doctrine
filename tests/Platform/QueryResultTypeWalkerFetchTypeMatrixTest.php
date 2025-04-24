@@ -4808,6 +4808,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 					'user' => 'SA',
 					'password' => 'Secret.123',
 					'driverOptions' => [
+						'Encrypt' => false,
 						'TrustServerCertificate' => true,
 					],
 					// user database is created after connection
