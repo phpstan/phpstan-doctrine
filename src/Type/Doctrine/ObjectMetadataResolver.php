@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
+use Throwable;
 use function class_exists;
 use function is_file;
 use function is_readable;
@@ -25,6 +26,8 @@ final class ObjectMetadataResolver
 	private ?ClassMetadataFactory $metadataFactory = null;
 
 	private string $tmpDir;
+
+	private ?Throwable $lastError = null;
 
 	public function __construct(
 		?string $objectManagerLoader,
@@ -87,6 +90,11 @@ final class ObjectMetadataResolver
 		} catch (ReflectionException $e) {
 			return true;
 		}
+	}
+
+	public function getLastError(): ?Throwable
+	{
+		return $this->lastError;
 	}
 
 	private function getMetadataFactory(): ?ClassMetadataFactory
@@ -160,7 +168,13 @@ final class ObjectMetadataResolver
 			));
 		}
 
-		return require $objectManagerLoader;
+		try {
+			return require $objectManagerLoader;
+		} catch (Throwable $error) {
+			$this->lastError = $error;
+
+			return null;
+		}
 	}
 
 }

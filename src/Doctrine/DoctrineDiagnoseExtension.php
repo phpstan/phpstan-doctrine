@@ -30,12 +30,22 @@ class DoctrineDiagnoseExtension implements DiagnoseExtension
 
 	public function print(Output $output): void
 	{
+		$objectManager = $this->objectMetadataResolver->getObjectManager();
+
 		$output->writeLineFormatted(sprintf(
 			'<info>Doctrine\'s objectManagerLoader:</info> %s',
 			$this->objectMetadataResolver->hasObjectManagerLoader() ? 'In use' : 'No',
 		));
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
+		if ($this->objectMetadataResolver->getLastError() !== null) {
+			$output->writeLineFormatted(sprintf(
+				'<error>Doctrine\'s objectManagerLoader error:</error> %s',
+				$this->objectMetadataResolver->getLastError()->getMessage(),
+			));
+
+			$output->writeLineFormatted('');
+		}
+
 		if ($objectManager instanceof EntityManagerInterface) {
 			$connection = $objectManager->getConnection();
 			$driver = $this->driverDetector->detect($connection);
