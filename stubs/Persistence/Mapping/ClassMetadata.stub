@@ -5,7 +5,7 @@ namespace Doctrine\Persistence\Mapping;
 use ReflectionClass;
 
 /**
- * @template-covariant T of object
+ * @template T of object
  */
 interface ClassMetadata
 {

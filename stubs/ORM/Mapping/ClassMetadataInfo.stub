@@ -7,7 +7,7 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 use ReflectionClass;
 
 /**
- * @template-covariant T of object
+ * @template T of object
  * @template-implements ClassMetadata<T>
  * @phpstan-import-type AssociationMapping from \Doctrine\ORM\Mapping\ClassMetadata
  * @phpstan-import-type FieldMapping from \Doctrine\ORM\Mapping\ClassMetadata

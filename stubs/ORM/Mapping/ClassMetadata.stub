@@ -3,7 +3,7 @@
 namespace Doctrine\ORM\Mapping;
 
 /**
- * @template-covariant T of object
+ * @template T of object
  * @extends ClassMetadataInfo<T>
  * @phpstan-type FieldMapping = array{
  *      type: string,
