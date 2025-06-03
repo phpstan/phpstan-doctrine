@@ -24,7 +24,9 @@ use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
+use PHPStan\Type\Doctrine\Descriptors\Symfony\DatePointType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use Symfony\Component\Clock\DatePoint;
 use function array_unshift;
 use function strpos;
 use const PHP_VERSION_ID;
@@ -59,6 +61,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType('array')) {
 			Type::addType('array', \Doctrine\DBAL\Types\ArrayType::class);
 		}
+		if (!Type::hasType('date_point')) {
+			Type::addType('date_point', \Symfony\Bridge\Doctrine\Types\DatePointType::class);
+		}
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
@@ -79,6 +84,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new ReflectionDescriptor(CarbonType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CustomType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CustomNumericType::class, $this->createReflectionProvider(), self::getContainer()),
+				new DatePointType(),
 			]),
 			$this->createReflectionProvider(),
 			true,
@@ -166,6 +172,14 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
 			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: database can contain Symfony\Component\Clock\DatePoint but property expects DateTime.',
+				175,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: property can contain DateTime but database expects Symfony\Component\Clock\DatePoint.',
+				175,
+			],
 		];
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
@@ -236,6 +250,14 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidSimpleArray type mapping mismatch: property can contain array<int> but database expects array<string>.',
 				162,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: database can contain Symfony\Component\Clock\DatePoint but property expects DateTime.',
+				175,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: property can contain DateTime but database expects Symfony\Component\Clock\DatePoint.',
+				175,
 			],
 		];
 
