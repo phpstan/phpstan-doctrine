@@ -36,10 +36,7 @@
 		"phpstan/phpstan-strict-rules": "^2.0",
 		"phpunit/phpunit": "^9.6.20",
 		"ramsey/uuid": "^4.2",
-		"symfony/cache": "^6.4",
-		"symfony/clock": "^6.4",
-		"symfony/doctrine-bridge": "^7.3",
-		"symfony/validator": "^6.4"
+		"symfony/cache": "^5.4"
 	},
 	"config": {
 		"sort-packages": true,

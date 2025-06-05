@@ -6,14 +6,15 @@ use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use Symfony\Component\Clock\DatePoint;
 
-class DatePointType implements DoctrineTypeDescriptor
+class DatePointTypeDescriptor implements DoctrineTypeDescriptor
 {
 
 	public function getType(): string
 	{
-		return \Symfony\Bridge\Doctrine\Types\DatePointType::class;
+		return DatePointType::class;
 	}
 
 	public function getWritableToPropertyType(): Type

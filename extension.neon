@@ -413,7 +413,7 @@ services:
 		arguments:
 			uuidTypeName: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
 	-
-		class: PHPStan\Type\Doctrine\Descriptors\Symfony\DatePointType
+		class: PHPStan\Type\Doctrine\Descriptors\Symfony\DatePointTypeDescriptor
 		tags: [phpstan.doctrine.typeDescriptor]
 
 	# Doctrine Collection

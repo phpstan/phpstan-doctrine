@@ -167,17 +167,4 @@ class MyBrokenEntity extends MyBrokenSuperclass
 	 */
 	private $validSimpleArray;
 
-
-	/**
-	 * @ORM\Column(type="date_point")
-	 * @var \DateTime
-	 */
-	private $invalidDatePoint;
-
-	/**
-	 * @ORM\Column(type="date_point")
-	 * @var \Symfony\Component\Clock\DatePoint
-	 */
-	private $validDatePoint;
-
 }
