@@ -35,6 +35,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use QueryResult\Entities\Embedded;
 use QueryResult\Entities\JoinedChild;
@@ -1547,7 +1548,11 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				$this->constantArray([
 					[
 						new ConstantStringType('enum'),
-						new StringType(),
+						new UnionType([
+							new ConstantStringType('a'),
+							new ConstantStringType('b'),
+							new ConstantStringType('c'),
+						]),
 					],
 					[
 						new ConstantStringType('smallfloat'),
@@ -1556,7 +1561,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				'
 					SELECT		e.enum, e.smallfloat
-					FROM		QueryResult\Entities\Dbal4Entity e
+					FROM		QueryResult\EntitiesDbal42\Dbal4Entity e
 				',
 			];
 		}
