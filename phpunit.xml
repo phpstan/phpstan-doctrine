@@ -13,9 +13,6 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
 		 convertDeprecationsToExceptions="true"
 >
-	<php>
-		<ini name="assert.exception" value="0"/>
-	</php>
 	<coverage>
         <include>
             <directory suffix=".php">./src</directory>
