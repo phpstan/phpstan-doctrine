@@ -15,7 +15,6 @@ jobs:
     env:
       MYSQL_HOST: '127.0.0.1'
       PGSQL_HOST: '127.0.0.1'
-      MSSQL_HOST: '127.0.0.1'
 
     strategy:
       fail-fast: false
@@ -83,12 +82,3 @@ jobs:
           MYSQL_DATABASE: foo
         ports:
           - "3306:3306"
-
-      mssql:
-        image: mcr.microsoft.com/mssql/server:latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: 'Secret.123'
-          MSSQL_PID: Developer
-        ports:
-          - 1433:1433

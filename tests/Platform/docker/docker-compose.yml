@@ -27,24 +27,14 @@ services:
                 type: tmpfs
                 target: /var/lib/postgresql/data
 
-    mssql:
-        image: mcr.microsoft.com/mssql/server:latest
-        environment:
-            ACCEPT_EULA: Y
-            SA_PASSWORD: 'Secret.123'
-            MSSQL_PID: Developer
-        ports:
-            - 1433:1433
-
     php80:
-        depends_on: [mysql, pgsql, mssql]
+        depends_on: [mysql, pgsql]
         build:
             context: .
             dockerfile: ./Dockerfile80
         environment:
             MYSQL_HOST: mysql
             PGSQL_HOST: pgsql
-            MSSQL_HOST: mssql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
@@ -58,7 +48,6 @@ services:
         environment:
             MYSQL_HOST: mysql
             PGSQL_HOST: pgsql
-            MSSQL_HOST: mssql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:
@@ -72,7 +61,6 @@ services:
         environment:
             MYSQL_HOST: mysql
             PGSQL_HOST: pgsql
-            MSSQL_HOST: mssql
         working_dir: /app
         user: ${UID:-1000}:${GID:-1000}
         volumes:

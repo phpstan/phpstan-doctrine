@@ -552,46 +552,6 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	 *
 	 * @dataProvider provideCases
 	 */
-	public function testUnsupportedDriver(
-		array $data,
-		string $dqlTemplate,
-		Type $mysqlExpectedType,
-		?Type $sqliteExpectedType,
-		?Type $pdoPgsqlExpectedType,
-		?Type $pgsqlExpectedType,
-		?Type $mssqlExpectedType,
-		$mysqlExpectedResult,
-		$sqliteExpectedResult,
-		$pdoPgsqlExpectedResult,
-		$pgsqlExpectedResult,
-		$mssqlExpectedResult,
-		string $stringify
-	): void
-	{
-		$this->performDriverTest(
-			'sqlsrv',
-			self::CONFIG_DEFAULT,
-			$data,
-			$dqlTemplate,
-			(string) $this->dataName(),
-			PHP_VERSION_ID,
-			$mssqlExpectedType,
-			$mssqlExpectedResult,
-			$stringify,
-		);
-	}
-
-	/**
-	 * @param array<string, mixed> $data
-	 * @param mixed $mysqlExpectedResult
-	 * @param mixed $sqliteExpectedResult
-	 * @param mixed $pdoPgsqlExpectedResult
-	 * @param mixed $pgsqlExpectedResult
-	 * @param mixed $mssqlExpectedResult
-	 * @param self::STRINGIFY_* $stringify
-	 *
-	 * @dataProvider provideCases
-	 */
 	public function testUnknownDriver(
 		array $data,
 		string $dqlTemplate,
