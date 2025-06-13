@@ -44,6 +44,9 @@ parameters:
 		-
 			message: '#^Call to function method_exists\(\) with ''Doctrine\\\\ORM\\\\EntityManager'' and ''create'' will always evaluate to true\.$#'
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+		-
+			message: '#^Call to function ini_set\(\) with deprecated option ''assert\.exception''\.$#'
+			path: tests/bootstrap.php
 
 		-
 			message: '#^Call to function method_exists\(\) with Doctrine\\DBAL\\Connection and ''getNativeConnection'' will always evaluate to true\.$#' # needed for older DBAL versions
