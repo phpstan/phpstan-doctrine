@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace QueryResult\Entities;
+namespace QueryResult\EntitiesDbal42;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
