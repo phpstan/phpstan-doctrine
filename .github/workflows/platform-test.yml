@@ -89,7 +89,7 @@ jobs:
           - "3306:3306"
 
       mssql:
-        image: mcr.microsoft.com/mssql/server:latest
+        image: mcr.microsoft.com/mssql/server:2019-latest
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: 'Secret.123'
