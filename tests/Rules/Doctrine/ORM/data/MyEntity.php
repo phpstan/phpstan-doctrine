@@ -83,4 +83,10 @@ class MyEntity
 	 * @ORM\Column(type="json")
 	 */
 	private $jsonString;
+
+	/**
+	 * @var string
+	 * @ORM\Column(type="binary")
+	 */
+	private $binaryString;
 }
