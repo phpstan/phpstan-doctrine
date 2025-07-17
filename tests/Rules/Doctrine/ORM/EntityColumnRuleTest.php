@@ -18,6 +18,7 @@ use PHPStan\Type\Doctrine\Descriptors\DateTimeImmutableType;
 use PHPStan\Type\Doctrine\Descriptors\DateTimeType;
 use PHPStan\Type\Doctrine\Descriptors\DateType;
 use PHPStan\Type\Doctrine\Descriptors\DecimalType;
+use PHPStan\Type\Doctrine\Descriptors\EnumType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\JsonType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
@@ -26,6 +27,7 @@ use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function array_unshift;
+use function defined;
 use function strpos;
 use const PHP_VERSION_ID;
 
@@ -74,6 +76,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new IntegerType(),
 				new StringType(),
 				new SimpleArrayType(),
+				new EnumType(),
 				new UuidTypeDescriptor(FakeTestingUuidType::class),
 				new ReflectionDescriptor(CarbonImmutableType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CarbonType::class, $this->createReflectionProvider(), self::getContainer()),
@@ -411,6 +414,20 @@ class EntityColumnRuleTest extends RuleTestCase
 				63,
 			],
 		]);
+	}
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testEnumValues(?string $objectManagerLoader): void
+	{
+		if (!defined('\Doctrine\DBAL\Types\Types::ENUM')) {
+			self::markTestSkipped('Test requires ENUM type.');
+		}
+
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->analyse([__DIR__ . '/data-attributes/enum-values.php'], []);
 	}
 
 	/**
