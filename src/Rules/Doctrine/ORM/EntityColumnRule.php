@@ -9,6 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
@@ -21,10 +22,14 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
+use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
+use function count;
 use function get_class;
 use function in_array;
+use function is_array;
+use function is_string;
 use function sprintf;
 
 /**
@@ -99,6 +104,26 @@ class EntityColumnRule implements Rule
 
 		$writableToPropertyType = $descriptor->getWritableToPropertyType();
 		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
+
+		if ($fieldMapping['type'] === 'enum') {
+			$values = $fieldMapping['options']['values'] ?? null;
+			if (is_array($values)) {
+				$enumTypes = [];
+				foreach ($values as $value) {
+					if (!is_string($value)) {
+						$enumTypes = [];
+						break;
+					}
+
+					$enumTypes[] = new ConstantStringType($value);
+				}
+
+				if (count($enumTypes) > 0) {
+					$writableToPropertyType = new UnionType($enumTypes);
+					$writableToDatabaseType = new UnionType($enumTypes);
+				}
+			}
+		}
 
 		$enumTypeString = $fieldMapping['enumType'] ?? null;
 		if ($enumTypeString !== null) {
