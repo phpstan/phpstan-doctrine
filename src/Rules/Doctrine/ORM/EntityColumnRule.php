@@ -105,26 +105,6 @@ class EntityColumnRule implements Rule
 		$writableToPropertyType = $descriptor->getWritableToPropertyType();
 		$writableToDatabaseType = $descriptor->getWritableToDatabaseType();
 
-		if ($fieldMapping['type'] === 'enum') {
-			$values = $fieldMapping['options']['values'] ?? null;
-			if (is_array($values)) {
-				$enumTypes = [];
-				foreach ($values as $value) {
-					if (!is_string($value)) {
-						$enumTypes = [];
-						break;
-					}
-
-					$enumTypes[] = new ConstantStringType($value);
-				}
-
-				if (count($enumTypes) > 0) {
-					$writableToPropertyType = new UnionType($enumTypes);
-					$writableToDatabaseType = new UnionType($enumTypes);
-				}
-			}
-		}
-
 		$enumTypeString = $fieldMapping['enumType'] ?? null;
 		if ($enumTypeString !== null) {
 			if ($writableToDatabaseType->isArray()->no() && $writableToPropertyType->isArray()->no()) {
@@ -178,6 +158,24 @@ class EntityColumnRule implements Rule
 					$enumType,
 				), ...TypeUtils::getAccessoryTypes($writableToDatabaseType));
 
+			}
+		} elseif ($fieldMapping['type'] === 'enum') {
+			$values = $fieldMapping['options']['values'] ?? null;
+			if (is_array($values)) {
+				$enumTypes = [];
+				foreach ($values as $value) {
+					if (!is_string($value)) {
+						$enumTypes = [];
+						break;
+					}
+
+					$enumTypes[] = new ConstantStringType($value);
+				}
+
+				if (count($enumTypes) > 0) {
+					$writableToPropertyType = new UnionType($enumTypes);
+					$writableToDatabaseType = new UnionType($enumTypes);
+				}
 			}
 		}
 

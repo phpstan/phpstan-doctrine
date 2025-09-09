@@ -461,4 +461,21 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/bug-677.php'], []);
 	}
 
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testBug679(?string $objectManagerLoader): void
+	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('Test requires PHP 8.1');
+		}
+		if (!class_exists(\Doctrine\DBAL\Types\EnumType::class)) {
+			self::markTestSkipped('Test requires EnumType.');
+		}
+
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->analyse([__DIR__ . '/data/bug-679.php'], []);
+	}
+
 }
