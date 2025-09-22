@@ -76,6 +76,38 @@ class RepositoryMethodCallRuleTest extends RuleTestCase
 				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::count() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
 				45,
 			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
+				54,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				55,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				56,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
+				56,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
+				64,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				65,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $nonexistent.',
+				66,
+			],
+			[
+				'Call to method Doctrine\ORM\EntityRepository<PHPStan\Rules\Doctrine\ORM\MyEntity>::findOneBy() - entity PHPStan\Rules\Doctrine\ORM\MyEntity does not have a field named $transient.',
+				66,
+			],
 		]);
 	}
 

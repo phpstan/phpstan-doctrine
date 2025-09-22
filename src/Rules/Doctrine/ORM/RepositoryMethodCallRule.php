@@ -87,6 +87,37 @@ class RepositoryMethodCallRule implements Rule
 			}
 		}
 
+		$orderByType = count($node->getArgs()) > 1 ? $scope->getType($node->getArgs()[1]->value) : null;
+
+		if (
+			in_array($methodName, [
+				'findBy',
+				'findOneBy',
+			], true)
+			&& $orderByType !== null
+		) {
+			foreach ($orderByType->getConstantArrays() as $constantArray) {
+				foreach ($constantArray->getKeyTypes() as $keyType) {
+					foreach ($keyType->getConstantStrings() as $fieldName) {
+						if (
+							$classMetadata->hasField($fieldName->getValue())
+							|| $classMetadata->hasAssociation($fieldName->getValue())
+						) {
+							continue;
+						}
+
+						$messages[] = RuleErrorBuilder::message(sprintf(
+							'Call to method %s::%s() - entity %s does not have a field named $%s.',
+							$calledOnType->describe(VerbosityLevel::typeOnly()),
+							$methodName,
+							$entityClassNames[0],
+							$fieldName->getValue(),
+						))->identifier(sprintf('doctrine.%sArgument', $methodName))->build();
+					}
+				}
+			}
+		}
+
 		return $messages;
 	}
 

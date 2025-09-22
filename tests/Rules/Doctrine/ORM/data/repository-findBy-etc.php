@@ -45,4 +45,25 @@ class RepositoryFindByCalls
 		$entityRepository->count(['nonexistent' => 'test', 'transient' => 'test']);
 	}
 
+
+	public function doFindByOrder(): void
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$entityRepository->findBy([], ['id' => 'ASC']);
+		$entityRepository->findBy([], ['title' => 'DESC']);
+		$entityRepository->findBy([], ['transient' => 'ASC']);
+		$entityRepository->findBy([], ['nonexistent' => 'DESC']);
+		$entityRepository->findBy([], ['nonexistent' => 'ASC', 'transient' => 'DESC']);
+	}
+
+	public function doFindOneByOrder(): void
+	{
+		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
+		$entityRepository->findOneBy([], ['id' => 'ASC']);
+		$entityRepository->findOneBy([], ['title' => 'DESC']);
+		$entityRepository->findOneBy([], ['transient' => 'ASC']);
+		$entityRepository->findOneBy([], ['nonexistent' => 'DESC']);
+		$entityRepository->findOneBy([], ['nonexistent' => 'ASC', 'transient' => 'DESC']);
+	}
+
 }
