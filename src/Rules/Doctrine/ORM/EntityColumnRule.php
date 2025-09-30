@@ -22,7 +22,6 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
-use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Throwable;
 use function count;
@@ -173,8 +172,8 @@ class EntityColumnRule implements Rule
 				}
 
 				if (count($enumTypes) > 0) {
-					$writableToPropertyType = new UnionType($enumTypes);
-					$writableToDatabaseType = new UnionType($enumTypes);
+					$writableToPropertyType = TypeCombinator::union(...$enumTypes);
+					$writableToDatabaseType = TypeCombinator::union(...$enumTypes);
 				}
 			}
 		}
