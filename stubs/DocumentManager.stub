@@ -15,6 +15,7 @@ class DocumentManager implements ObjectManager
 	 * @phpstan-param integer|null $lockMode
 	 * @phpstan-param integer|null $lockVersion
 	 * @phpstan-return T|null
+	 * @phpstan-impure
 	 */
 	public function find($documentName, $identifier, $lockMode = null, $lockVersion = null);
 

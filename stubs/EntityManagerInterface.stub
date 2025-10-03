@@ -15,6 +15,7 @@ interface EntityManagerInterface extends ObjectManager
 	 * @phpstan-param class-string<T> $className
 	 * @phpstan-param mixed  $id
 	 * @phpstan-return T|null
+	 * @phpstan-impure
 	 */
 	public function find($className, $id);
 

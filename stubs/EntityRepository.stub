@@ -26,6 +26,7 @@ class EntityRepository implements ObjectRepository
 
 	/**
 	 * @phpstan-return list<TEntityClass>
+	 * @phpstan-impure
 	 */
 	public function findAll();
 
@@ -35,6 +36,7 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-param int|null $limit
 	 * @phpstan-param int|null $offset
 	 * @phpstan-return list<TEntityClass>
+	 * @phpstan-impure
 	 */
 	public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null);
 
@@ -77,6 +79,8 @@ class EntityRepository implements ObjectRepository
 	 * @param array<string, mixed> $criteria
 	 *
 	 * @return int<0, max>
+	 *
+	 * @phpstan-impure
 	 */
 	public function count(array $criteria);
 
