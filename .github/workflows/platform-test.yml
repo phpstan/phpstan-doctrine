@@ -28,6 +28,9 @@ jobs:
           - "8.4"
         update-packages:
           - ""
+        run-infection:
+            - ""
+
         include:
           - php-version: "8.1"
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
@@ -37,6 +40,8 @@ jobs:
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
           - php-version: "8.4"
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
+          - php-version: "8.4"
+            run-infection: "true"
 
     steps:
       - name: "Checkout"
@@ -63,6 +68,12 @@ jobs:
 
       - name: "Run platform matrix test"
         run: vendor/bin/phpunit --group=platform
+        if: ${{ matrix.run-infection == '' }}
+
+      - name: "Run infection"
+        run: vendor/bin/infection
+        #run: vendor/bin/infection --git-diff-filter=AM
+        if: ${{ matrix.run-infection != '' }}
 
     services:
       postgres:
