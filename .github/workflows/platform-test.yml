@@ -42,6 +42,7 @@ jobs:
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
           - php-version: "8.4"
             run-infection: "true"
+            update-packages: infection/infection
 
     steps:
       - name: "Checkout"
