@@ -49,8 +49,18 @@ jobs:
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
+        if: ${{ matrix.run-infection == '' }}
         with:
           coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          ini-file: development
+          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        if: ${{ matrix.run-infection != '' }}
+        with:
+          coverage: "xdebug"
           php-version: "${{ matrix.php-version }}"
           ini-file: development
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
