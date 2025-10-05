@@ -271,12 +271,26 @@ class EntityColumnRuleTest extends RuleTestCase
 	{
 		$this->allowNullablePropertyForRequiredField = false;
 		$this->objectManagerLoader = $objectManagerLoader;
-		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
-			[
-				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
-				17,
-			],
-		]);
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
+		if ($hasDbal4) {
+			$errors = [
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain string but property expects int.',
+					17,
+				],
+			];
+		} else {
+			$errors = [
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
+					17,
+				],
+			];
+		}
+
+		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], $errors);
 	}
 
 	/**
@@ -493,6 +507,32 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->allowNullablePropertyForRequiredField = false;
 		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/bug-single-enum.php'], []);
+	}
+
+	public function testBug659(?string $objectManagerLoader): void
+	{
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+
+		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
+		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
+		if ($hasDbal4) {
+			$errors = [
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\MyEntity659::$binaryResource type mapping mismatch: database can contain string but property expects resource.',
+					31,
+				],
+			];
+		} else {
+			$errors = [
+				[
+					'Property PHPStan\Rules\Doctrine\ORM\MyEntity659::$binaryString type mapping mismatch: database can contain resource but property expects string.',
+					25,
+				],
+			];
+		}
+
+		$this->analyse([__DIR__ . '/data/bug-659.php'], $errors);
 	}
 
 }
