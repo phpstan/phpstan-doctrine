@@ -74,7 +74,7 @@ jobs:
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
 
       - name: "Run infection"
-        run: vendor/bin/infection
+        run: make infection
         #run: vendor/bin/infection --git-diff-filter=AM
 
     services:
