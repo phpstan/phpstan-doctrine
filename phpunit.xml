@@ -11,7 +11,8 @@
          failOnRisky="true"
          failOnWarning="true"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-		 convertDeprecationsToExceptions="true"
+         convertDeprecationsToExceptions="true"
+         executionOrder="random"
 >
 	<coverage>
         <include>
