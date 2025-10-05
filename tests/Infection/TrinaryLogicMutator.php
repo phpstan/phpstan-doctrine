@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PHPStan\Infection;
 
@@ -7,11 +7,13 @@ use Infection\Mutator\Mutator;
 use Infection\Mutator\MutatorCategory;
 use LogicException;
 use PhpParser\Node;
+use function in_array;
 
 /**
  * @implements Mutator<Node\Expr\MethodCall>
  */
-final class TrinaryLogicMutator implements Mutator {
+final class TrinaryLogicMutator implements Mutator
+{
 
 	public static function getDefinition(): Definition
 	{
@@ -63,4 +65,5 @@ final class TrinaryLogicMutator implements Mutator {
 			yield new Node\Expr\BooleanNot(new Node\Expr\MethodCall($node->var, 'yes'));
 		}
 	}
+
 }
