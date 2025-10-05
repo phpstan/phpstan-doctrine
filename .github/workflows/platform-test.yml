@@ -45,7 +45,6 @@ jobs:
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
-        if: ${{ matrix.run-infection == '' }}
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
