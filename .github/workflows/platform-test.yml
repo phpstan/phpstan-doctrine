@@ -52,15 +52,6 @@ jobs:
           ini-file: development
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        if: ${{ matrix.run-infection != '' }}
-        with:
-          coverage: "xdebug"
-          php-version: "${{ matrix.php-version }}"
-          ini-file: development
-          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
         run: "composer config platform.php 8.3.99"
@@ -74,6 +65,14 @@ jobs:
 
       - name: "Run platform matrix test"
         run: vendor/bin/phpunit --group=platform
+
+      - name: "Install Coverage driver"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "pcov"
+          php-version: "${{ matrix.php-version }}"
+          ini-file: development
+          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
 
       - name: "Run infection"
         run: vendor/bin/infection
