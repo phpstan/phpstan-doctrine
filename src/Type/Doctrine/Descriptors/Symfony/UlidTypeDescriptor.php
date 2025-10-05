@@ -1,26 +1,24 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\Type\Doctrine\Descriptors\Ramsey;
+namespace PHPStan\Type\Doctrine\Descriptors\Symfony;
 
-use PHPStan\Rules\Doctrine\ORM\FakeTestingRamseyUuidType;
+use PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUlidType;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Uid\Ulid;
 use function in_array;
 use function sprintf;
 
-class UuidTypeDescriptor implements DoctrineTypeDescriptor
+class UlidTypeDescriptor implements DoctrineTypeDescriptor
 {
 
 	private const SUPPORTED_UUID_TYPES = [
-		'Ramsey\Uuid\Doctrine\UuidType',
-		'Ramsey\Uuid\Doctrine\UuidBinaryType',
-		'Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType',
-		FakeTestingRamseyUuidType::class,
+		'Symfony\Bridge\Doctrine\Types\UlidType',
+		FakeTestingSymfonyUlidType::class,
 	];
 
 	private string $uuidTypeName;
@@ -47,14 +45,14 @@ class UuidTypeDescriptor implements DoctrineTypeDescriptor
 
 	public function getWritableToPropertyType(): Type
 	{
-		return new ObjectType(UuidInterface::class);
+		return new ObjectType(Ulid::class);
 	}
 
 	public function getWritableToDatabaseType(): Type
 	{
 		return TypeCombinator::union(
 			new StringType(),
-			new ObjectType(UuidInterface::class),
+			new ObjectType(Ulid::class),
 		);
 	}
 

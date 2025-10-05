@@ -13,7 +13,7 @@ use function is_string;
  * From https://github.com/ramsey/uuid-doctrine/blob/fafebbe972cdaba9274c286ea8923e2de2579027/src/UuidType.php
  * Copyright (c) 2012-2022 Ben Ramsey <ben@benramsey.com>
  */
-final class FakeTestingUuidType extends GuidType
+final class FakeTestingRamseyUuidType extends GuidType
 {
 
 	public const NAME = 'uuid';

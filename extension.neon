@@ -418,6 +418,16 @@ services:
 		tags: [phpstan.doctrine.typeDescriptor]
 		arguments:
 			uuidTypeName: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\Symfony\UuidTypeDescriptor
+		tags: [phpstan.doctrine.typeDescriptor]
+		arguments:
+			uuidTypeName: Symfony\Bridge\Doctrine\Types\UuidType
+	-
+		class: PHPStan\Type\Doctrine\Descriptors\Symfony\UlidTypeDescriptor
+		tags: [phpstan.doctrine.typeDescriptor]
+		arguments:
+			uuidTypeName: Symfony\Bridge\Doctrine\Types\UlidType
 
 	# Doctrine Collection
 	-

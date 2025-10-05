@@ -21,10 +21,12 @@ use PHPStan\Type\Doctrine\Descriptors\DecimalType;
 use PHPStan\Type\Doctrine\Descriptors\EnumType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\JsonType;
-use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
+use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor as RamseyUuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
+use PHPStan\Type\Doctrine\Descriptors\Symfony\UlidTypeDescriptor as SymfonyUlidTypeDescriptor;
+use PHPStan\Type\Doctrine\Descriptors\Symfony\UuidTypeDescriptor as SymfonyUuidTypeDescriptor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function array_unshift;
 use function class_exists;
@@ -41,6 +43,8 @@ class EntityColumnRuleTest extends RuleTestCase
 
 	private ?string $objectManagerLoader = null;
 
+	private bool $useSymfonyUuid = false;
+
 	protected function getRule(): Rule
 	{
 		if (!Type::hasType(CustomType::NAME)) {
@@ -49,8 +53,23 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType(CustomNumericType::NAME)) {
 			Type::addType(CustomNumericType::NAME, CustomNumericType::class);
 		}
-		if (!Type::hasType(FakeTestingUuidType::NAME)) {
-			Type::addType(FakeTestingUuidType::NAME, FakeTestingUuidType::class);
+		if ($this->useSymfonyUuid) {
+			if (!Type::hasType(FakeTestingSymfonyUuidType::NAME)) {
+				Type::addType(FakeTestingSymfonyUuidType::NAME, FakeTestingSymfonyUuidType::class);
+			} else {
+				// Override Ramsay definition
+				Type::overrideType(FakeTestingSymfonyUuidType::NAME, FakeTestingSymfonyUuidType::class);
+			}
+			if (!Type::hasType(FakeTestingSymfonyUlidType::NAME)) {
+				Type::addType(FakeTestingSymfonyUlidType::NAME, FakeTestingSymfonyUlidType::class);
+			}
+		} else {
+			if (!Type::hasType(FakeTestingRamseyUuidType::NAME)) {
+				Type::addType(FakeTestingRamseyUuidType::NAME, FakeTestingRamseyUuidType::class);
+			} else {
+				// Override Symfony definition
+				Type::overrideType(FakeTestingRamseyUuidType::NAME, FakeTestingRamseyUuidType::class);
+			}
 		}
 		if (!Type::hasType('carbon')) {
 			Type::addType('carbon', CarbonType::class);
@@ -76,8 +95,10 @@ class EntityColumnRuleTest extends RuleTestCase
 				new IntegerType(),
 				new StringType(),
 				new SimpleArrayType(),
-				new UuidTypeDescriptor(FakeTestingUuidType::class),
 				new EnumType(),
+				new RamseyUuidTypeDescriptor(FakeTestingRamseyUuidType::class),
+				new SymfonyUuidTypeDescriptor(FakeTestingSymfonyUuidType::class),
+				new SymfonyUlidTypeDescriptor(FakeTestingSymfonyUlidType::class),
 				new ReflectionDescriptor(CarbonImmutableType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CarbonType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CustomType::class, $this->createReflectionProvider(), self::getContainer()),
@@ -459,6 +480,27 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->allowNullablePropertyForRequiredField = false;
 		$this->objectManagerLoader = $objectManagerLoader;
 		$this->analyse([__DIR__ . '/data/bug-677.php'], []);
+	}
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testSymfonyUuid(?string $objectManagerLoader): void
+	{
+		$this->allowNullablePropertyForRequiredField = true;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->useSymfonyUuid = true;
+
+		$this->analyse([__DIR__ . '/data/EntityWithSymfonyUid.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithSymfonyUid::$uuidInvalidType type mapping mismatch: database can contain Symfony\Component\Uid\Uuid but property expects string.',
+				32,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\EntityWithSymfonyUid::$ulidInvalidType type mapping mismatch: database can contain Symfony\Component\Uid\Ulid but property expects string.',
+				44,
+			],
+		]);
 	}
 
 	/**
