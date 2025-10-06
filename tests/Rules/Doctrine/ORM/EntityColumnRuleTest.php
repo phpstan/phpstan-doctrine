@@ -503,6 +503,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/bug-single-enum.php'], []);
 	}
 
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
 	public function testBug659(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
