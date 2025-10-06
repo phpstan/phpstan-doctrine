@@ -189,3 +189,28 @@ parameters:
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/pdo.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+
