@@ -28,6 +28,7 @@ use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use function array_unshift;
 use function class_exists;
+use function sprintf;
 use function strpos;
 use const PHP_VERSION_ID;
 
@@ -274,23 +275,16 @@ class EntityColumnRuleTest extends RuleTestCase
 
 		$dbalVersion = InstalledVersions::getVersion('doctrine/dbal');
 		$hasDbal4 = $dbalVersion !== null && strpos($dbalVersion, '4.') === 0;
-		if ($hasDbal4) {
-			$errors = [
-				[
-					'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain string but property expects int.',
-					17,
-				],
-			];
-		} else {
-			$errors = [
-				[
-					'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain resource but property expects int.',
-					17,
-				],
-			];
-		}
 
-		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], $errors);
+		$this->analyse([__DIR__ . '/data/MyBrokenSuperclass.php'], [
+			[
+				sprintf(
+					'Property PHPStan\Rules\Doctrine\ORM\MyBrokenSuperclass::$five type mapping mismatch: database can contain %s but property expects int.',
+					$hasDbal4 ? 'string' : 'resource',
+				),
+				17,
+			],
+		]);
 	}
 
 	/**
