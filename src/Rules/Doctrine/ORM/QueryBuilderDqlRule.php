@@ -58,7 +58,7 @@ class QueryBuilderDqlRule implements Rule
 		if (count($queryBuilderTypes) === 0) {
 			if (
 				$this->reportDynamicQueryBuilders
-				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes()
+				&& (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType)->yes() && true
 			) {
 				return [
 					RuleErrorBuilder::message('Could not analyse QueryBuilder with unknown beginning.')
