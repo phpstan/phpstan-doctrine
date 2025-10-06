@@ -180,7 +180,9 @@ jobs:
 
       - name: "Run infection"
         if: matrix.php-version == '8.2' || matrix.php-version == '8.3' || matrix.php-version == '8.4'
-        run: vendor/bin/infection --git-diff-lines --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
+        run: |
+          git fetch --depth=1 origin $GITHUB_BASE_REF
+          infection --git-diff-base=origin/$GITHUB_BASE_REF --git-diff-filter=AM --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
 
   static-analysis:
     name: "PHPStan"
