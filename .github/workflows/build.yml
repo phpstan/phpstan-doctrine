@@ -164,6 +164,8 @@ jobs:
         include:
           - php-version: "8.3"
             update-packages: "composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3 -W"
+          - php-version: "8.4"
+            update-packages: "composer require --dev doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3 symfony/cache:^6.4 symfony/clock:^6.4 symfony/doctrine-bridge:^7.3 symfony/validator:^6.4 -W"
 
     steps:
       - name: "Checkout"

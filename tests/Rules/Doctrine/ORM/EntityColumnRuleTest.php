@@ -25,7 +25,9 @@ use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
+use PHPStan\Type\Doctrine\Descriptors\Symfony\DatePointTypeDescriptor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use Symfony\Bridge\Doctrine\Types\DatePointType;
 use function array_unshift;
 use function class_exists;
 use function strpos;
@@ -61,6 +63,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType('array')) {
 			Type::addType('array', \Doctrine\DBAL\Types\ArrayType::class);
 		}
+		if (!Type::hasType('date_point') && class_exists(DatePointType::class)) {
+			Type::addType('date_point', DatePointType::class);
+		}
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
@@ -82,6 +87,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new ReflectionDescriptor(CarbonType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CustomType::class, $this->createReflectionProvider(), self::getContainer()),
 				new ReflectionDescriptor(CustomNumericType::class, $this->createReflectionProvider(), self::getContainer()),
+				new DatePointTypeDescriptor(),
 			]),
 			$this->createReflectionProvider(),
 			true,
@@ -181,6 +187,33 @@ class EntityColumnRuleTest extends RuleTestCase
 		}
 
 		$this->analyse([__DIR__ . '/data/MyBrokenEntity.php'], $errors);
+	}
+
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testRuleSymfony(?string $objectManagerLoader): void
+	{
+		if (!InstalledVersions::isInstalled('symfony/doctrine-bridge')) {
+			self::markTestSkipped('symfony/doctrine-bridge');
+		}
+
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+
+		$errors = [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: database can contain Symfony\Component\Clock\DatePoint but property expects DateTime.',
+				175,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\MyBrokenEntity::$invalidDatePoint type mapping mismatch: property can contain DateTime but database expects Symfony\Component\Clock\DatePoint.',
+				175,
+			],
+		];
+
+		$this->analyse([__DIR__ . '/data/MySymfonyBrokenEntity.php'], $errors);
 	}
 
 	/**

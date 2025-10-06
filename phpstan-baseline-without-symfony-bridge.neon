@@ -1,0 +1,25 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Class Symfony\\Bridge\\Doctrine\\Types\\DatePointType not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Type/Doctrine/Descriptors/Symfony/DatePointTypeDescriptor.php
+
+		-
+			message: '#^Class Symfony\\Component\\Clock\\DatePoint not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/Type/Doctrine/Descriptors/Symfony/DatePointTypeDescriptor.php
+
+		-
+			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\Symfony\\DatePointTypeDescriptor\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Type/Doctrine/Descriptors/Symfony/DatePointTypeDescriptor.php
+
+		-
+			message: '#^Parameter \#2 \$className of static method Doctrine\\DBAL\\Types\\Type\:\:addType\(\) expects class\-string\<Doctrine\\DBAL\\Types\\Type\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
