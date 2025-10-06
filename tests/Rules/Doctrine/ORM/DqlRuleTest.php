@@ -11,6 +11,7 @@ use function strpos;
 
 /**
  * @extends RuleTestCase<DqlRule>
+ * @runInSeparateProcess
  */
 class DqlRuleTest extends RuleTestCase
 {

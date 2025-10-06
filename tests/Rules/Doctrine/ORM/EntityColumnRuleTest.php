@@ -36,6 +36,7 @@ use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<EntityColumnRule>
+ * @runInSeparateProcess
  */
 class EntityColumnRuleTest extends RuleTestCase
 {

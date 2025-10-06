@@ -9,6 +9,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
  * @extends RuleTestCase<EntityConstructorNotFinalRule>
+ * @runInSeparateProcess
  */
 class EntityConstructorNotFinalRuleTest extends RuleTestCase
 {

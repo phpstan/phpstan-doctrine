@@ -9,6 +9,7 @@ use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<EntityMappingExceptionRule>
+ * @runInSeparateProcess
  */
 class EntityMappingExceptionRuleTest extends RuleTestCase
 {

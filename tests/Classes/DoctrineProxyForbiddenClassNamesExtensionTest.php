@@ -9,6 +9,7 @@ use function array_merge;
 
 /**
  * @extends RuleTestCase<InstantiationRule>
+ * @runInSeparateProcess
  */
 class DoctrineProxyForbiddenClassNamesExtensionTest extends RuleTestCase
 {

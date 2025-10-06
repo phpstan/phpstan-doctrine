@@ -10,6 +10,7 @@ use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<EntityRelationRule>
+ * @runInSeparateProcess
  */
 class EntityRelationRuleTest extends RuleTestCase
 {
