@@ -2,44 +2,31 @@
 
 namespace PHPStan\Type\Doctrine\Descriptors\Symfony;
 
-use PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUuidType;
-use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Symfony\Component\Uid\Uuid;
-use function in_array;
-use function sprintf;
 
 class UuidTypeDescriptor implements DoctrineTypeDescriptor
 {
 
-	private const SUPPORTED_UUID_TYPES = [
-		'Symfony\Bridge\Doctrine\Types\UuidType',
-		FakeTestingSymfonyUuidType::class,
-	];
-
+	/**
+	 * @var class-string<\Doctrine\DBAL\Types\Type>
+	 */
 	private string $uuidTypeName;
 
-	public function __construct(
-		string $uuidTypeName
-	)
+	/**
+	 * @param class-string<\Doctrine\DBAL\Types\Type> $uuidTypeName
+	 */
+	public function __construct(string $uuidTypeName)
 	{
-		if (!in_array($uuidTypeName, self::SUPPORTED_UUID_TYPES, true)) {
-			throw new ShouldNotHappenException(sprintf(
-				'Unexpected UUID column type "%s" provided',
-				$uuidTypeName,
-			));
-		}
-
 		$this->uuidTypeName = $uuidTypeName;
 	}
 
 	public function getType(): string
 	{
-		/** @var class-string<\Doctrine\DBAL\Types\Type> */
 		return $this->uuidTypeName;
 	}
 
