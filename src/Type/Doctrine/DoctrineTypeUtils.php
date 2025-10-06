@@ -17,6 +17,7 @@ class DoctrineTypeUtils
 	{
 		if ($type instanceof QueryBuilderType) {
 			return [$type];
+			// XXX test change - to be reverted
 		}
 
 		if ($type instanceof UnionType) {
