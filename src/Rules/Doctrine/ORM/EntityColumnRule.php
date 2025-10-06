@@ -172,8 +172,9 @@ class EntityColumnRule implements Rule
 				}
 
 				if (count($enumTypes) > 0) {
-					$writableToPropertyType = TypeCombinator::union(...$enumTypes);
-					$writableToDatabaseType = TypeCombinator::union(...$enumTypes);
+					$unionType = TypeCombinator::union(...$enumTypes);
+					$writableToPropertyType = $unionType;
+					$writableToDatabaseType = $unionType;
 				}
 			}
 		}
