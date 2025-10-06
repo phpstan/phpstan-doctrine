@@ -145,8 +145,8 @@ jobs:
       - name: "Tests"
         run: "make tests"
 
-  mutating-testing:
-    name: "Mutating Testing"
+  mutation-testing:
+    name: "Mutation Testing"
     runs-on: "ubuntu-latest"
     needs: "tests"
 
