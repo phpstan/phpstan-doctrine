@@ -42,8 +42,7 @@
 	"config": {
 		"sort-packages": true,
 		"allow-plugins": {
-			"cweagans/composer-patches": true,
-			"infection/extension-installer": false
+			"cweagans/composer-patches": true
 		}
 	},
 	"extra": {
