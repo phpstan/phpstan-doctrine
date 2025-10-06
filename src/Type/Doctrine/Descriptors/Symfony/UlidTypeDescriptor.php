@@ -12,9 +12,7 @@ use Symfony\Component\Uid\Ulid;
 class UlidTypeDescriptor implements DoctrineTypeDescriptor
 {
 
-	/**
-	 * @var class-string<\Doctrine\DBAL\Types\Type>
-	 */
+	/** @var class-string<\Doctrine\DBAL\Types\Type> */
 	private string $uuidTypeName;
 
 	/**

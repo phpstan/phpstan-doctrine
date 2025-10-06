@@ -11,9 +11,8 @@ use Ramsey\Uuid\UuidInterface;
 
 class UuidTypeDescriptor implements DoctrineTypeDescriptor
 {
-	/**
-	 * @var class-string<\Doctrine\DBAL\Types\Type>
-	 */
+
+	/** @var class-string<\Doctrine\DBAL\Types\Type> */
 	private string $uuidTypeName;
 
 	/**
