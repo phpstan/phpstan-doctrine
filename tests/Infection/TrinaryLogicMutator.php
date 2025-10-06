@@ -19,15 +19,15 @@ final class TrinaryLogicMutator implements Mutator
 	{
 		return new Definition(
 			<<<'TXT'
-                Replaces TrinaryLogic->yes() with !TrinaryLogic->no()
-                TXT
+				Replaces TrinaryLogic->yes() with !TrinaryLogic->no()
+				TXT
 			,
 			MutatorCategory::ORTHOGONAL_REPLACEMENT,
 			null,
 			<<<'DIFF'
-                - $type->isBoolean()->yes();
-                + !$type->isBoolean()->no();
-                DIFF,
+				- $type->isBoolean()->yes();
+				+ !$type->isBoolean()->no();
+			DIFF,
 		);
 	}
 
