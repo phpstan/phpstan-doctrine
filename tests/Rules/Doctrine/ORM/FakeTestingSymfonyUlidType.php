@@ -100,7 +100,7 @@ final class FakeTestingSymfonyUlidType extends Type
 		}
 	}
 
-	public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+	public function requiresSQLCommentHint(AbstractPlatform $platform): bool // @phpstan-ignore return.tooWideBool
 	{
 		return true;
 	}

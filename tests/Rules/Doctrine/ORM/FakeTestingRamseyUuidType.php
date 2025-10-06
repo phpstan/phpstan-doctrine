@@ -56,7 +56,7 @@ final class FakeTestingRamseyUuidType extends GuidType
 		return self::NAME;
 	}
 
-	public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+	public function requiresSQLCommentHint(AbstractPlatform $platform): bool // @phpstan-ignore return.tooWideBool
 	{
 		return true;
 	}
