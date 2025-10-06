@@ -182,7 +182,7 @@ jobs:
         if: matrix.php-version == '8.2' || matrix.php-version == '8.3' || matrix.php-version == '8.4'
         run: |
           git fetch --depth=1 origin $GITHUB_BASE_REF
-          infection --git-diff-base=origin/$GITHUB_BASE_REF --git-diff-filter=AM --git-diff-lines --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
+          infection --git-diff-base=origin/$GITHUB_BASE_REF --git-diff-lines --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
 
   static-analysis:
     name: "PHPStan"
