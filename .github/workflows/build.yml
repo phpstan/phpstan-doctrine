@@ -169,6 +169,7 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-file: development
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
+          tools: infection
 
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
@@ -179,8 +180,7 @@ jobs:
 
       - name: "Run infection"
         if: matrix.php-version == '8.2' || matrix.php-version == '8.3' || matrix.php-version == '8.4'
-        run: make infection
-        #run: vendor/bin/infection --git-diff-filter=AM
+        run: vendor/bin/infection --git-diff-lines --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
 
   static-analysis:
     name: "PHPStan"
