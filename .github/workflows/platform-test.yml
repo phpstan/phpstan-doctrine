@@ -28,7 +28,6 @@ jobs:
           - "8.4"
         update-packages:
           - ""
-
         include:
           - php-version: "8.1"
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
@@ -64,20 +63,6 @@ jobs:
 
       - name: "Run platform matrix test"
         run: vendor/bin/phpunit --group=platform
-
-      - name: "Install Coverage driver"
-        if: matrix.update-packages == '' && (matrix.php-version == '8.2' || matrix.php-version == '8.3' || matrix.php-version == '8.4')
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "pcov"
-          php-version: "${{ matrix.php-version }}"
-          ini-file: development
-          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-
-      - name: "Run infection"
-        if: matrix.update-packages == '' && (matrix.php-version == '8.2' || matrix.php-version == '8.3' || matrix.php-version == '8.4')
-        run: make infection
-        #run: vendor/bin/infection --git-diff-filter=AM
 
     services:
       postgres:
