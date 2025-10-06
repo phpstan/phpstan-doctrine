@@ -1,325 +1,356 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to internal method Doctrine\\DBAL\\Connection\:\:getParams\(\) from outside its root namespace Doctrine\.$#'
+			rawMessage: 'Call to internal method Doctrine\DBAL\Connection::getParams() from outside its root namespace Doctrine.'
 			identifier: method.internal
 			count: 2
 			path: src/Doctrine/Driver/DriverDetector.php
 
 		-
-			message: '''
-				#^Access to constant on deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Access to constant on deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: classConstant.deprecatedClass
 			count: 1
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: src/Doctrine/Mapping/ClassMetadataFactory.php
 
 		-
-			message: '#^Calling PHPStan\\Type\\TypehintHelper\:\:decideType\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version\.$#'
+			rawMessage: 'Calling PHPStan\Type\TypehintHelper::decideType() is not covered by backward compatibility promise. The method might change in a minor PHPStan version.'
 			identifier: phpstanApi.method
 			count: 1
 			path: src/Rules/Doctrine/ORM/EntityColumnRule.php
 
 		-
-			message: '#^Calling PHPStan\\Type\\TypehintHelper\:\:decideType\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version\.$#'
+			rawMessage: 'Calling PHPStan\Type\TypehintHelper::decideType() is not covered by backward compatibility promise. The method might change in a minor PHPStan version.'
 			identifier: phpstanApi.method
 			count: 1
 			path: src/Rules/Doctrine/ORM/EntityRelationRule.php
 
 		-
-			message: '#^PHPDoc tag @var with type class\-string is not subtype of native type ''Doctrine\\\\Bundle…''\.$#'
+			rawMessage: PHPDoc tag @var with type class-string is not subtype of native type 'Doctrine\\Bundle…'.
 			identifier: varTag.nativeType
 			count: 1
 			path: src/Stubs/Doctrine/StubFilesExtensionLoader.php
 
 		-
-			message: '''
-				#^Catching deprecated class Doctrine\\Common\\CommonException\:
-				The doctrine/common package is deprecated, please use specific packages and their exceptions instead\.$#
+			rawMessage: '''
+				Catching deprecated class Doctrine\Common\CommonException:
+				The doctrine/common package is deprecated, please use specific packages and their exceptions instead.
 			'''
 			identifier: catch.deprecatedClass
 			count: 1
 			path: src/Type/Doctrine/CreateQueryDynamicReturnTypeExtension.php
 
 		-
-			message: '''
-				#^Catching deprecated class Doctrine\\ORM\\ORMException\:
-				Use Doctrine\\ORM\\Exception\\ORMException for catch and instanceof$#
-			'''
-			identifier: catch.deprecatedClass
-			count: 1
-			path: src/Type/Doctrine/CreateQueryDynamicReturnTypeExtension.php
-
-		-
-			message: '''
-				#^Access to constant on deprecated class Doctrine\\DBAL\\Types\\ArrayType\:
-				Use \{@link JsonType\} instead\.$#
-			'''
-			identifier: classConstant.deprecatedClass
-			count: 1
-			path: src/Type/Doctrine/Descriptors/ArrayType.php
-
-		-
-			message: '''
-				#^Access to constant on deprecated class Doctrine\\DBAL\\Types\\ObjectType\:
-				Use \{@link JsonType\} instead\.$#
-			'''
-			identifier: classConstant.deprecatedClass
-			count: 1
-			path: src/Type/Doctrine/Descriptors/ObjectType.php
-
-		-
-			message: '#^Parameter \$condExpr of method PHPStan\\Type\\Doctrine\\Query\\QueryResultTypeWalker\:\:walkConditionalExpression\(\) has typehint with internal interface Doctrine\\ORM\\Query\\AST\\Phase2OptimizableConditional\.$#'
+			rawMessage: 'Parameter $condExpr of method PHPStan\Type\Doctrine\Query\QueryResultTypeWalker::walkConditionalExpression() has typehint with internal interface Doctrine\ORM\Query\AST\Phase2OptimizableConditional.'
 			identifier: parameter.internalInterface
 			count: 1
 			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
 		-
-			message: '#^Parameter \$condExpr of method PHPStan\\Type\\Doctrine\\Query\\QueryResultTypeWalker\:\:walkJoinAssociationDeclaration\(\) has typehint with internal interface Doctrine\\ORM\\Query\\AST\\Phase2OptimizableConditional\.$#'
+			rawMessage: 'Parameter $condExpr of method PHPStan\Type\Doctrine\Query\QueryResultTypeWalker::walkJoinAssociationDeclaration() has typehint with internal interface Doctrine\ORM\Query\AST\Phase2OptimizableConditional.'
 			identifier: parameter.internalInterface
 			count: 1
 			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
 		-
-			message: '''
-				#^Catching deprecated class Doctrine\\Common\\CommonException\:
-				The doctrine/common package is deprecated, please use specific packages and their exceptions instead\.$#
+			rawMessage: '''
+				Catching deprecated class Doctrine\Common\CommonException:
+				The doctrine/common package is deprecated, please use specific packages and their exceptions instead.
 			'''
 			identifier: catch.deprecatedClass
 			count: 1
 			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
 
 		-
-			message: '''
-				#^Catching deprecated class Doctrine\\ORM\\ORMException\:
-				Use Doctrine\\ORM\\Exception\\ORMException for catch and instanceof$#
-			'''
-			identifier: catch.deprecatedClass
-			count: 1
-			path: src/Type/Doctrine/QueryBuilder/QueryBuilderGetQueryDynamicReturnTypeExtension.php
-
-		-
-			message: '#^Accessing PHPStan\\Rules\\Classes\\InstantiationRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\Classes\InstantiationRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Classes/DoctrineProxyForbiddenClassNamesExtensionTest.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Classes/entity-manager.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Classes/entity-manager.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/DoctrineIntegration/ORM/entity-manager.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/DoctrineIntegration/ORM/entity-manager.php
 
 		-
-			message: '#^Call to internal method PHPUnit\\Framework\\TestCase\:\:dataName\(\) from outside its root namespace PHPUnit\.$#'
+			rawMessage: 'Call to internal method PHPUnit\Framework\TestCase::dataName() from outside its root namespace PHPUnit.'
 			identifier: method.internal
-			count: 14
+			count: 13
 			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
 
 		-
-			message: '#^Call to internal method Doctrine\\DBAL\\Driver\\PDO\\Connection\:\:__construct\(\) from outside its root namespace Doctrine\.$#'
+			rawMessage: 'Call to internal method Doctrine\DBAL\Driver\PDO\Connection::__construct() from outside its root namespace Doctrine.'
 			identifier: method.internal
 			count: 1
 			path: tests/Platform/UnknownDriver.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\DeadCode\\UnusedPrivatePropertyRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/DeadCode/UnusedPrivatePropertyRuleTest.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Rules/DeadCode/entity-manager.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Rules/DeadCode/entity-manager.php
 
 		-
-			message: '''
-				#^Access to constant on deprecated class Doctrine\\DBAL\\Types\\ArrayType\:
-				Use \{@link JsonType\} instead\.$#
-			'''
-			identifier: classConstant.deprecatedClass
+			rawMessage: 'Parameter #2 $type of static method Doctrine\DBAL\Types\Type::addType() expects class-string<Doctrine\DBAL\Types\Type>|Doctrine\DBAL\Types\Type, string given.'
+			identifier: argument.type
 			count: 1
 			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\Methods\\CallMethodsRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingRamseyUuidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
+			path: tests/Rules/Doctrine/ORM/FakeTestingRamseyUuidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
+
+		-
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUlidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+
+		-
+			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+
+		-
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUuidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
+			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+
+		-
+			rawMessage: Accessing PHPStan\Rules\Methods\CallMethodsRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Doctrine/ORM/MagicRepositoryMethodCallRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\Exceptions\\CatchWithUnthrownExceptionRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\Exceptions\CatchWithUnthrownExceptionRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Exceptions/CatchWithUnthrownExceptionRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\Exceptions\\TooWideMethodThrowTypeRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\Exceptions\TooWideMethodThrowTypeRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Exceptions/TooWideMethodThrowTypeRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\DeadCode\\UnusedPrivatePropertyRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Properties/MissingGedmoByPhpDocPropertyAssignRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\DeadCode\\UnusedPrivatePropertyRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Properties/MissingGedmoPropertyAssignRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\Properties\\MissingReadOnlyByPhpDocPropertyAssignRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\Properties\MissingReadOnlyByPhpDocPropertyAssignRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Properties/MissingReadOnlyByPhpDocPropertyAssignRuleTest.php
 
 		-
-			message: '#^Accessing PHPStan\\Rules\\Properties\\MissingReadOnlyPropertyAssignRule\:\:class is not covered by backward compatibility promise\. The class might change in a minor PHPStan version\.$#'
+			rawMessage: Accessing PHPStan\Rules\Properties\MissingReadOnlyPropertyAssignRule::class is not covered by backward compatibility promise. The class might change in a minor PHPStan version.
 			identifier: phpstanApi.classConstant
 			count: 1
 			path: tests/Rules/Properties/MissingReadOnlyPropertyAssignRuleTest.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Rules/Properties/entity-manager.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Rules/Properties/entity-manager.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/mysqli.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/mysqli.php
 
 		-
-			message: '''
-				#^Call to method __construct\(\) of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/pdo.php
 
 		-
-			message: '''
-				#^Instantiation of deprecated class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver\:
-				This class will be removed in 3\.0 without replacement\.$#
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
 			count: 1
 			path: tests/Type/Doctrine/DBAL/pdo.php
-
-		-
-			message: '#^Parameter references internal interface Doctrine\\ORM\\Query\\AST\\Phase2OptimizableConditional in its type\.$#'
-			identifier: parameter.internalInterface
-			count: 2
-			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
