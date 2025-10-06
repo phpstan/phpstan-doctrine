@@ -1,15 +1,16 @@
 {
-    "$schema": "vendor/infection/infection/resources/schema.json",
-    "source": {
-        "directories": [
-            "src"
-        ]
-    },
-    "logs": {
-        "text": "tmp/infection.log"
-    },
-    "mutators": {
-        "@default": false,
-        "PHPStan\\Infection\\TrinaryLogicMutator": true
-    }
+  "$schema": "vendor/infection/infection/resources/schema.json",
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "staticAnalysisTool": "phpstan",
+  "logs": {
+    "text": "tmp/infection.log"
+  },
+  "mutators": {
+    "@default": false,
+    "PHPStan\\Infection\\TrinaryLogicMutator": true
+  }
 }
