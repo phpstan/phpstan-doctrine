@@ -1,47 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Class Doctrine\\DBAL\\Types\\EnumType not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Type/Doctrine/Descriptors/EnumType.php
-
-		-
-			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\EnumType\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Type/Doctrine/Descriptors/EnumType.php
-
-		-
-			message: '#^Class Doctrine\\DBAL\\Types\\SmallFloatType not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Type/Doctrine/Descriptors/SmallFloatType.php
-
-		-
-			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\SmallFloatType\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Type/Doctrine/Descriptors/SmallFloatType.php
-
-		-
-			message: '#^Class Doctrine\\DBAL\\Types\\EnumType not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
-
-		-
-			rawMessage: '''
-				Access to constant on deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
-				This class will be removed in 3.0 without replacement.
-				Copyright (c) Doctrine Project
-				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
-			'''
-			identifier: classConstant.deprecatedClass
-			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
-
-		-
 			rawMessage: '''
 				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
 				This class will be removed in 3.0 without replacement.
@@ -50,7 +9,7 @@ parameters:
 			'''
 			identifier: method.deprecatedClass
 			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+			path: tests/Classes/entity-manager.php
 
 		-
 			rawMessage: '''
@@ -61,28 +20,160 @@ parameters:
 			'''
 			identifier: new.deprecatedClass
 			count: 1
-			path: src/Doctrine/Mapping/ClassMetadataFactory.php
+			path: tests/Classes/entity-manager.php
 
 		-
-			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
-			identifier: staticMethod.notFound
-			count: 2
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/DoctrineIntegration/ORM/entity-manager.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/DoctrineIntegration/ORM/entity-manager.php
+
+		-
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/Rules/DeadCode/entity-manager.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/Rules/DeadCode/entity-manager.php
+
+		-
+			rawMessage: 'Parameter #2 $type of static method Doctrine\DBAL\Types\Type::addType() expects class-string<Doctrine\DBAL\Types\Type>|Doctrine\DBAL\Types\Type, string given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingRamseyUuidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
+			path: tests/Rules/Doctrine/ORM/FakeTestingRamseyUuidType.php
+
+		-
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUlidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
 			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
 
 		-
-			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
-			identifier: staticMethod.notFound
-			count: 2
-			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUlidType.php
-
-		-
-			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailed().'
-			identifier: staticMethod.notFound
-			count: 2
+			rawMessage: 'Method PHPStan\Rules\Doctrine\ORM\FakeTestingSymfonyUuidType::requiresSQLCommentHint() never returns false so the return type can be changed to true.'
+			identifier: return.tooWideBool
+			count: 1
 			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
 
 		-
-			rawMessage: 'Call to an undefined static method Doctrine\DBAL\Types\ConversionException::conversionFailedInvalidType().'
-			identifier: staticMethod.notFound
-			count: 2
-			path: tests/Rules/Doctrine/ORM/FakeTestingSymfonyUuidType.php
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/Rules/Properties/entity-manager.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/Rules/Properties/entity-manager.php
+
+		-
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/Type/Doctrine/DBAL/mysqli.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/Type/Doctrine/DBAL/mysqli.php
+
+		-
+			rawMessage: '''
+				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: tests/Type/Doctrine/DBAL/pdo.php
+
+		-
+			rawMessage: '''
+				Instantiation of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
+				This class will be removed in 3.0 without replacement.
+				Copyright (c) Doctrine Project
+				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
+			'''
+			identifier: new.deprecatedClass
+			count: 1
+			path: tests/Type/Doctrine/DBAL/pdo.php
