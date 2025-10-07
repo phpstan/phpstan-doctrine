@@ -235,5 +235,6 @@ jobs:
 
       - uses: "actions/upload-artifact@v4"
         with:
-          name: "result-cache-${{ matrix.php-version }}"
+          # update-packages is not relevant for the download-artifact part, but we need it here to get unique artifact names across all jobs
+          name: "result-cache-${{ matrix.php-version }}${{ matrix.update-packages }}"
           path: "tmp/resultCache.php"
