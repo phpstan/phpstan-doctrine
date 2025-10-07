@@ -17,6 +17,8 @@ parameters:
 	paths:
 		- src
 		- tests
+		
+	resultCachePath: %tmpDir%/resultCache.php
 
 	excludePaths:
 		- tests/*/data/*
