@@ -169,7 +169,7 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-file: development
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-          tools: infection
+          tools: infection:0.31.2
 
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
