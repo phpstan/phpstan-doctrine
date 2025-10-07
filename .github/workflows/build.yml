@@ -188,6 +188,11 @@ jobs:
           git fetch --depth=1 origin $GITHUB_BASE_REF
           infection --git-diff-base=origin/$GITHUB_BASE_REF --git-diff-lines --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
 
+      - uses: "actions/upload-artifact@v4"
+        with:
+          name: "infection-log-${{ matrix.php-version }}"
+          path: "tmp/infection.log"
+
   static-analysis:
     name: "PHPStan"
     runs-on: "ubuntu-latest"
