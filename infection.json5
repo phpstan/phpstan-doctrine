@@ -6,7 +6,7 @@
     ]
   },
   "staticAnalysisTool": "phpstan",
-  "staticAnalysisToolOptions": "--level=8",
+  "staticAnalysisToolOptions": "--level=8 src tests",
   "logs": {
     "text": "tmp/infection.log"
   },
