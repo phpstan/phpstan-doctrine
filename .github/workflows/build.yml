@@ -178,6 +178,11 @@ jobs:
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
 
+      - uses: "actions/download-artifact@v4"
+        with:
+          name: "result-cache"
+          path: "/tmp/"
+
       - name: "Run infection"
         run: |
           git fetch --depth=1 origin $GITHUB_BASE_REF
@@ -227,3 +232,8 @@ jobs:
 
       - name: "PHPStan"
         run: "make phpstan"
+
+      - uses: "actions/upload-artifact@v4"
+        with:
+          name: "result-cache"
+          path: "/tmp/resultCache.php"
