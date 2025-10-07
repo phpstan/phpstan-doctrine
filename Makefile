@@ -27,8 +27,8 @@ cs-fix:
 
 .PHONY: phpstan
 phpstan:
-	php vendor/bin/phpstan analyse -l 8 -c phpstan.neon
+	php vendor/bin/phpstan analyse -c phpstan.neon
 
 .PHONY: phpstan-generate-baseline
 phpstan-generate-baseline:
-	php vendor/bin/phpstan analyse -l 8 -c phpstan.neon -b phpstan-baseline.neon
+	php vendor/bin/phpstan analyse -c phpstan.neon -b phpstan-baseline.neon
