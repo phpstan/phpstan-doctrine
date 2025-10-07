@@ -19,7 +19,7 @@ final class TrinaryLogicMutator implements Mutator
 	{
 		return new Definition(
 			<<<'TXT'
-				Replaces TrinaryLogic->yes() with !TrinaryLogic->no()
+				Replaces TrinaryLogic->yes() with !TrinaryLogic->no() and vice versa.
 				TXT
 			,
 			MutatorCategory::ORTHOGONAL_REPLACEMENT,
