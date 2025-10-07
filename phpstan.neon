@@ -13,6 +13,10 @@ includes:
 	- phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
+	paths:
+		- src
+		- tests
+
 	excludePaths:
 		- tests/*/data/*
 		- tests/*/data-attributes/*
