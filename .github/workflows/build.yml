@@ -181,7 +181,7 @@ jobs:
       - uses: "actions/download-artifact@v4"
         with:
           name: "result-cache"
-          path: "/tmp/"
+          path: "${{ runner.temp }}"
 
       - name: "Run infection"
         run: |
@@ -236,4 +236,4 @@ jobs:
       - uses: "actions/upload-artifact@v4"
         with:
           name: "result-cache"
-          path: "/tmp/resultCache.php"
+          path: "${{ runner.temp }}/resultCache.php"
