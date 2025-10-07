@@ -6,7 +6,7 @@
     ]
   },
   "staticAnalysisTool": "phpstan",
-  "staticAnalysisToolOptions": "-l 8 -c phpstan.neon src tests",
+  "staticAnalysisToolOptions": "-l 8 -c phpstan.neon",
   "logs": {
     "text": "tmp/infection.log"
   },
