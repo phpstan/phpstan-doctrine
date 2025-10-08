@@ -69,15 +69,6 @@ class QueryBuilderDqlRule implements Rule
 			return [];
 		}
 
-		// testing stuff
-		$obj = (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType);
-		if ($obj->yes()) {
-			$x = 1;
-		} else {
-			$x = 2;
-		}
-
-
 		try {
 			$dqlType = $scope->getType(new MethodCall($node, new Node\Identifier('getDQL'), []));
 		} catch (Throwable $e) {
