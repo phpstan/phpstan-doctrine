@@ -4,13 +4,13 @@ namespace PHPStan\Type\Doctrine;
 
 use PHPStan\Testing\TypeInferenceTestCase;
 
-final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtensionTest extends TypeInferenceTestCase
+final class UnitOfWorkGetOriginalEntityDataDynamicReturnTypeExtensionTest extends TypeInferenceTestCase
 {
 
 	/** @return iterable<mixed> */
 	public function dataFileAsserts(): iterable
 	{
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/UnitOfWork/unitOfWork-change-set.php');
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/UnitOfWork/unitOfWork-original-entity-data.php');
 	}
 
 	/**

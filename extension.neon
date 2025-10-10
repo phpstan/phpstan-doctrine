@@ -164,6 +164,13 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
+		class: PHPStan\Type\Doctrine\UnitOfWorkGetOriginalEntityDataDynamicReturnTypeExtension
+		arguments:
+			metadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
+			descriptorRegistry: @doctrineTypeDescriptorRegistry
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\Doctrine\Query\QueryResultDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
