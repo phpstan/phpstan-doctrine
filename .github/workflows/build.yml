@@ -194,7 +194,7 @@ jobs:
             --min-covered-msi=100 \
             --log-verbosity=all \
             --debug \
-            --logger-text=php://stdout \
+            --logger-text=php://stdout
 
   static-analysis:
     name: "PHPStan"
