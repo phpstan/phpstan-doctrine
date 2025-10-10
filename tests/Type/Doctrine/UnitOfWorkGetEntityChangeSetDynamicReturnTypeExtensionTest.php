@@ -33,4 +33,3 @@ final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtensionTest extends T
 	}
 
 }
-

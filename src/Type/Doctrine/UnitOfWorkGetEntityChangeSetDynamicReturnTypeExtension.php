@@ -12,11 +12,10 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use function count;
 use function is_array;
@@ -109,7 +108,7 @@ final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtension implements Dy
 
 			$builder->setOffsetValueType(
 				new ConstantStringType($fieldName),
-				$fieldBuilder->getArray()
+				$fieldBuilder->getArray(),
 			);
 		}
 
@@ -131,7 +130,7 @@ final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtension implements Dy
 
 				$builder->setOffsetValueType(
 					new ConstantStringType($fieldName),
-					$fieldBuilder->getArray()
+					$fieldBuilder->getArray(),
 				);
 				continue;
 			}
@@ -146,7 +145,7 @@ final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtension implements Dy
 
 			$builder->setOffsetValueType(
 				new ConstantStringType($fieldName),
-				$fieldBuilder->getArray()
+				$fieldBuilder->getArray(),
 			);
 		}
 
@@ -180,7 +179,7 @@ final class UnitOfWorkGetEntityChangeSetDynamicReturnTypeExtension implements Dy
 		return ParametersAcceptorSelector::selectFromArgs(
 			$scope,
 			$methodCall->getArgs(),
-			$methodReflection->getVariants()
+			$methodReflection->getVariants(),
 		)->getReturnType();
 	}
 
