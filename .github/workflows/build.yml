@@ -178,6 +178,9 @@ jobs:
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
 
+      - name: "Install build-infection"
+        run: "composer require phpstan/build-infection --no-interaction --no-progress"
+
       - uses: "actions/download-artifact@v4"
         with:
           name: "result-cache-${{ matrix.php-version }}"
