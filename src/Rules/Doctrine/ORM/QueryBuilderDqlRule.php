@@ -72,9 +72,9 @@ class QueryBuilderDqlRule implements Rule
 		// testing stuff
 		$obj = (new ObjectType('Doctrine\ORM\QueryBuilder'))->isSuperTypeOf($calledOnType);
 		if ($obj->yes()) {
-			$x = 1;
+			$x = true;
 		} else {
-			$x = 0;
+			$x = false;
 		}
 
 		if ($x) {
