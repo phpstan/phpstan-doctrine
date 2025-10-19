@@ -74,7 +74,7 @@ class QueryBuilderDqlRule implements Rule
 		if ($obj->yes()) {
 			$x = 1;
 		} else {
-			$x = 3;
+			$x = 0;
 		}
 
 		if ($x) {
