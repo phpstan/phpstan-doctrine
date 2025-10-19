@@ -178,8 +178,16 @@ jobs:
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
 
-      - name: "Install build-infection"
-        run: "composer require phpstan/build-infection --no-interaction --no-progress"
+      - name: "Checkout build-infection"
+        uses: actions/checkout@v5
+        with:
+          repository: "phpstan/build-infection"
+          path: "build-infection"
+          ref: "1.x"
+
+      - name: "Install build-infection dependencies"
+        working-directory: "build-infection"
+        run: "composer install --no-interaction --no-progress"
 
       - uses: "actions/download-artifact@v4"
         with:
