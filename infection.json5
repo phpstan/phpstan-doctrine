@@ -10,7 +10,7 @@
   "logs": {
     "text": "tmp/infection.log"
   },
-  "bootstrap":"build-infection/vendor/autoload.php",
+  "bootstrap": "build-infection/vendor/autoload.php",
   "mutators": {
     "@default": false,
     "PHPStan\\Infection\\TrinaryLogicMutator": true
