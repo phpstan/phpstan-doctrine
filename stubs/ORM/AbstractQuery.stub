@@ -24,6 +24,7 @@ abstract class AbstractQuery
 	}
 
     /**
+     * @phpstan-return TResult[]
      * @phpstan-impure
      * @param string|AbstractQuery::HYDRATE_* $hydrationMode
      */
@@ -56,6 +57,7 @@ abstract class AbstractQuery
     }
 
     /**
+     * @phpstan-return ?TResult
      * @phpstan-impure
      * @param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      * @throws NonUniqueResultException
@@ -65,6 +67,7 @@ abstract class AbstractQuery
     }
 
     /**
+     * @phpstan-return TResult
      * @phpstan-impure
      * @param string|AbstractQuery::HYDRATE_*|null $hydrationMode
      * @throws NonUniqueResultException
