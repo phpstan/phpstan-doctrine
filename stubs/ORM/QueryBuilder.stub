@@ -2,6 +2,7 @@
 
 namespace Doctrine\ORM;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr;
 
 class QueryBuilder
@@ -17,7 +18,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * @return Query<null, mixed, 1>
+	 * @return Query<null, mixed, AbstractQuery::HYDRATE_OBJECT>
 	 */
 	public function getQuery()
 	{
