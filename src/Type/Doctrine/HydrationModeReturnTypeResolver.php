@@ -3,7 +3,6 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\Persistence\ObjectManager;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BenevolentUnionType;
@@ -25,7 +24,7 @@ class HydrationModeReturnTypeResolver
 		Type $hydrationMode,
 		Type $queryKeyType,
 		Type $queryResultType,
-		?ObjectManager $objectManager
+		?Type $defaultHydrationModeType = null
 	): ?Type
 	{
 		$isVoidType = (new VoidType())->isSuperTypeOf($queryResultType);
@@ -40,6 +39,10 @@ class HydrationModeReturnTypeResolver
 			// We can't be sure what the query type is, so we return the
 			// declared return type of the method.
 			return null;
+		}
+
+		if ($defaultHydrationModeType !== null && $hydrationMode->isNull()->yes()) {
+			$hydrationMode = $defaultHydrationModeType;
 		}
 
 		if (!$hydrationMode instanceof ConstantIntegerType) {

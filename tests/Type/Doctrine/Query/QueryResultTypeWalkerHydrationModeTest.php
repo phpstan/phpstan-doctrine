@@ -91,7 +91,6 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 			new ConstantIntegerType($this->getRealHydrationMode($methodName, $hydrationMode)),
 			$typeBuilder->getIndexType(),
 			$typeBuilder->getResultType(),
-			$entityManager,
 		) ?? new MixedType();
 
 		self::assertSame(

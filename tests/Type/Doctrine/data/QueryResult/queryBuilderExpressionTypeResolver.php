@@ -25,15 +25,15 @@ class QueryBuilderExpressionTypeResolverTest
 		$query = $this->getQueryBuilder($em)->getQuery();
 		$branchingQuery = $this->getBranchingQueryBuilder($em)->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>#1|Doctrine\ORM\Query<null, QueryResult\Entities\Many>#2', $branchingQuery);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $query);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>#1|Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>#2', $branchingQuery);
 	}
 
 	public function testQueryTypeIsInferredOnAcrossMethodsEvenWhenVariableAssignmentIsUsed(EntityManagerInterface $em): void
 	{
 		$queryBuilder = $this->getQueryBuilder($em);
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $queryBuilder->getQuery());
 	}
 
 	public function testQueryBuilderPassedElsewhereNotTracked(EntityManagerInterface $em): void
@@ -43,14 +43,14 @@ class QueryBuilderExpressionTypeResolverTest
 
 		$this->adjustQueryBuilderToIndexByInt($queryBuilder);
 
-		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many, 1>', $queryBuilder->getQuery());
 	}
 
 	public function testDiveIntoCustomEntityRepository(EntityManagerInterface $em): void
 	{
 		$queryBuilder = $this->myRepository->getCustomQueryBuilder($em);
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $queryBuilder->getQuery());
 	}
 
 
@@ -58,7 +58,7 @@ class QueryBuilderExpressionTypeResolverTest
 	{
 		$queryBuilder = self::getStaticQueryBuilder($em);
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $queryBuilder->getQuery());
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $queryBuilder->getQuery());
 	}
 
 	public function testFirstClassCallableDoesNotFail(EntityManagerInterface $em): void

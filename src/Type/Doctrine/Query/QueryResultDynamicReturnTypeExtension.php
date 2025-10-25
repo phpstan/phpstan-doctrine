@@ -9,7 +9,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Doctrine\HydrationModeReturnTypeResolver;
-use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -27,16 +26,12 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 		'getSingleResult' => 0,
 	];
 
-	private ObjectMetadataResolver $objectMetadataResolver;
-
 	private HydrationModeReturnTypeResolver $hydrationModeReturnTypeResolver;
 
 	public function __construct(
-		ObjectMetadataResolver $objectMetadataResolver,
 		HydrationModeReturnTypeResolver $hydrationModeReturnTypeResolver
 	)
 	{
-		$this->objectMetadataResolver = $objectMetadataResolver;
 		$this->hydrationModeReturnTypeResolver = $hydrationModeReturnTypeResolver;
 	}
 
@@ -84,7 +79,7 @@ final class QueryResultDynamicReturnTypeExtension implements DynamicMethodReturn
 			$hydrationMode,
 			$queryType->getTemplateType(AbstractQuery::class, 'TKey'),
 			$queryType->getTemplateType(AbstractQuery::class, 'TResult'),
-			$this->objectMetadataResolver->getObjectManager(),
+			$queryType->getTemplateType(AbstractQuery::class, 'THydrationMode'),
 		);
 	}
 

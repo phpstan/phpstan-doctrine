@@ -15,6 +15,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
+use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
@@ -197,17 +198,24 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		}
 
 		$typeBuilder = new QueryResultTypeBuilder();
+		$query = $em->createQuery($dql);
+		$hydrationMode = ConstantTypeHelper::getTypeFromValue($query->getHydrationMode());
 
 		try {
-			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion, $this->driverDetector);
 		} catch (ORMException | DBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null, null, $hydrationMode);
 		} catch (AssertionError $e) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null, null, $hydrationMode);
 		}
 
-		return new QueryType($dql, $typeBuilder->getIndexType(), $typeBuilder->getResultType());
+		return new QueryType(
+			$dql,
+			$typeBuilder->getIndexType(),
+			$typeBuilder->getResultType(),
+			null,
+			$hydrationMode,
+		);
 	}
 
 }

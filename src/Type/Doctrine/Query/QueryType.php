@@ -15,16 +15,26 @@ class QueryType extends GenericObjectType
 
 	private Type $resultType;
 
+	private Type $defaultHydrationModeType;
+
 	private string $dql;
 
-	public function __construct(string $dql, ?Type $indexType = null, ?Type $resultType = null, ?Type $subtractedType = null)
+	public function __construct(
+		string $dql,
+		?Type $indexType = null,
+		?Type $resultType = null,
+		?Type $subtractedType = null,
+		?Type $defaultHydrationModeType = null
+	)
 	{
 		$this->indexType = $indexType ?? new MixedType();
 		$this->resultType = $resultType ?? new MixedType();
+		$this->defaultHydrationModeType = $defaultHydrationModeType ?? new MixedType();
 
 		parent::__construct('Doctrine\ORM\Query', [
 			$this->indexType,
 			$this->resultType,
+			$this->defaultHydrationModeType,
 		], $subtractedType);
 
 		$this->dql = $dql;
@@ -41,7 +51,7 @@ class QueryType extends GenericObjectType
 
 	public function changeSubtractedType(?Type $subtractedType): Type
 	{
-		return new self('Doctrine\ORM\Query', $this->indexType, $this->resultType, $subtractedType);
+		return new self('Doctrine\ORM\Query', $this->indexType, $this->resultType, $subtractedType, $this->defaultHydrationModeType);
 	}
 
 	public function isSuperTypeOf(Type $type): IsSuperTypeOfResult

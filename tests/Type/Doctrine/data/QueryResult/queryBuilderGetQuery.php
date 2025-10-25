@@ -40,14 +40,14 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select(['m.intColumn', 'm.stringNullColumn'])
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}>', $query);
+		assertType('Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}, 1>', $query);
 	}
 
 	public function testIndexByInfering(EntityManagerInterface $em): void
@@ -57,14 +57,14 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm', 'm.intColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<int, QueryResult\Entities\Many, 1>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select('m')
 			->from(Many::class, 'm', 'm.stringColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<string, QueryResult\Entities\Many, 1>', $query);
 
 		$query = $em->createQueryBuilder()
 			->select(['m.intColumn', 'm.stringNullColumn'])
@@ -72,7 +72,7 @@ class QueryBuilderGetQuery
 			->indexBy('m', 'm.stringColumn')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<string, array{intColumn: int, stringNullColumn: string|null}>', $query);
+		assertType('Doctrine\ORM\Query<string, array{intColumn: int, stringNullColumn: string|null}, 1>', $query);
 	}
 
 	public function testIndexByResultInfering(EntityManagerInterface $em): void
@@ -113,14 +113,14 @@ class QueryBuilderGetQuery
 		}
 		$query = $qb->from(Many::class, 'm')->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, array{intColumn: int}>|Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}>', $query);
+		assertType('Doctrine\ORM\Query<null, array{intColumn: int}, 1>|Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}, 1>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsNotKnown(QueryBuilder $builder): void
 	{
 		$query = $builder->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, mixed>', $query);
+		assertType('Doctrine\ORM\Query<null, mixed, 1>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsInvalid(EntityManagerInterface $em): void
@@ -130,7 +130,7 @@ class QueryBuilderGetQuery
 			->from(Many::class, 'm')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<mixed, mixed>', $query);
+		assertType('Doctrine\ORM\Query<mixed, mixed, 1>', $query);
 	}
 
 	public function testQueryResultTypeIsMixedWhenDQLIsUsingAnInterfaceTypeDefinition(EntityManagerInterface $em): void
@@ -144,7 +144,7 @@ class QueryBuilderGetQuery
 			->from(get_class($vehicle), 'v')
 			->getQuery();
 
-		assertType('Doctrine\ORM\Query<null, mixed>', $query);
+		assertType('Doctrine\ORM\Query<null, mixed, 1>', $query);
 	}
 
 	public function testQueryResultTypeIsVoidWithDeleteOrUpdate(EntityManagerInterface $em): void
@@ -156,7 +156,7 @@ class QueryBuilderGetQuery
 				 ->delete()
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<void, void>', $query);
+		assertType('Doctrine\ORM\Query<void, void, 1>', $query);
 
 		$query = $em->getRepository(Many::class)
 				 ->createQueryBuilder('m')
@@ -166,7 +166,7 @@ class QueryBuilderGetQuery
 				 ->set('m.intColumn', '42')
 				 ->getQuery();
 
-		assertType('Doctrine\ORM\Query<void, void>', $query);
+		assertType('Doctrine\ORM\Query<void, void, 1>', $query);
 	}
 
 
