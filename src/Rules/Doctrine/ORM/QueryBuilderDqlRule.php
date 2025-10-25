@@ -54,15 +54,6 @@ class QueryBuilderDqlRule implements Rule
 		}
 
 		$calledOnType = $scope->getType($node->var);
-
-		// testing stuff
-		$obj = (new ObjectType('SomeClass'))->isSuperTypeOf($calledOnType);
-		if ($obj->yes()) {
-			$x = 1;
-		} else {
-			$x = 2;
-		}
-
 		$queryBuilderTypes = DoctrineTypeUtils::getQueryBuilderTypes($calledOnType);
 		if (count($queryBuilderTypes) === 0) {
 			if (
