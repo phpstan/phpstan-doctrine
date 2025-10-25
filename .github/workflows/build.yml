@@ -194,11 +194,13 @@ jobs:
         run: "composer install --no-interaction --no-progress"
 
       - name: "Configure mutators"
-        run: |
-          php build-infection/bin/infection-config.php \
-            --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
-          > infection.json5
-          cat infection.json5 | jq
+        run: cp build-infection/resources/infection.json5 .
+      #- name: "Configure mutators"
+      #  run: |
+      #    php build-infection/bin/infection-config.php \
+      #      --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
+      #    > infection.json5
+      #    cat infection.json5 | jq
 
       - name: "Cache Result cache"
         uses: actions/cache@v4
