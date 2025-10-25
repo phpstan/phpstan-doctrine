@@ -148,7 +148,7 @@ jobs:
   mutation-testing:
     name: "Mutation Testing"
     runs-on: "ubuntu-latest"
-    needs: ["tests", "static-analysis"]
+    #needs: ["tests", "static-analysis"]
 
     strategy:
       fail-fast: false
