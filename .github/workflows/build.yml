@@ -189,6 +189,12 @@ jobs:
         working-directory: "build-infection"
         run: "composer install --no-interaction --no-progress"
 
+      - name: "Configure mutators"
+        run: |
+          php build-infection/bin/infection-config.php \
+            --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
+          > infection.json5
+
       - uses: "actions/download-artifact@v4"
         with:
           name: "result-cache-${{ matrix.php-version }}"
