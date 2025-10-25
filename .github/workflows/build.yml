@@ -198,7 +198,7 @@ jobs:
       #- name: "Configure mutators"
       #  run: |
       #    php build-infection/bin/infection-config.php \
-      #      --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
+      #      --mutator-class='Infection\Mutator\Removal\MethodCallRemoval' \
       #    > infection.json5
       #    cat infection.json5 | jq
 
