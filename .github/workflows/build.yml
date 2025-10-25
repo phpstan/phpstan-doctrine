@@ -195,10 +195,13 @@ jobs:
             --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
           > infection.json5
 
-      - uses: "actions/download-artifact@v4"
+      - name: "Cache Result cache"
+        uses: actions/cache@v4
         with:
-          name: "result-cache-${{ matrix.php-version }}"
-          path: "tmp/"
+          path: ./tmp
+          key: "result-cache-v14-${{ matrix.php-version }}-${{ github.run_id }}"
+          restore-keys: |
+            result-cache-v14-${{ matrix.php-version }}-
 
       - name: "Run infection"
         run: |
@@ -257,9 +260,3 @@ jobs:
 
       - name: "PHPStan"
         run: "make phpstan"
-
-      - uses: "actions/upload-artifact@v4"
-        with:
-          # "update-packages" is not relevant for the download-artifact counterpart, but we need it here to get unique artifact names across all jobs
-          name: "result-cache-${{ matrix.php-version }}${{ matrix.update-packages && '-packages-updated' || '' }}"
-          path: "tmp/resultCache.php"
