@@ -173,7 +173,7 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-file: development
           extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-          tools: infection:0.31.6
+          tools: infection:0.31.7
 
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
@@ -202,6 +202,7 @@ jobs:
 
       - name: "Cache Result cache"
         uses: actions/cache@v4
+        if: always()
         with:
           path: ./tmp
           key: "result-cache-v14-${{ matrix.php-version }}-${{ github.run_id }}"
