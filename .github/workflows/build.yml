@@ -152,7 +152,7 @@ jobs:
   mutation-testing:
     name: "Mutation Testing"
     runs-on: "ubuntu-latest"
-    #needs: ["tests", "static-analysis"]
+    needs: ["tests", "static-analysis"]
 
     strategy:
       fail-fast: false
@@ -202,7 +202,6 @@ jobs:
 
       - name: "Cache Result cache"
         uses: actions/cache@v4
-        if: always()
         with:
           path: ./tmp
           key: "result-cache-v14-${{ matrix.php-version }}-${{ github.run_id }}"
