@@ -7,6 +7,7 @@ use Doctrine\Common\CommonException;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\MappingException;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -184,22 +185,25 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				}
 			}
 
-			$resultTypes[] = $this->getQueryType($queryBuilder->getDQL());
+			$resultTypes[] = $this->getQueryType($queryBuilder);
 		}
 
 		return TypeCombinator::union(...$resultTypes);
 	}
 
-	private function getQueryType(string $dql): Type
+	private function getQueryType(QueryBuilder $queryBuilder): Type
 	{
+		$dql = $queryBuilder->getDQL();
+
 		$em = $this->objectMetadataResolver->getObjectManager();
 		if (!$em instanceof EntityManagerInterface) {
 			return new QueryType($dql, null);
 		}
 
+		$hydrationMode = ConstantTypeHelper::getTypeFromValue($queryBuilder->getQuery()->getHydrationMode());
+
 		$typeBuilder = new QueryResultTypeBuilder();
 		$query = $em->createQuery($dql);
-		$hydrationMode = ConstantTypeHelper::getTypeFromValue($query->getHydrationMode());
 
 		try {
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion, $this->driverDetector);
