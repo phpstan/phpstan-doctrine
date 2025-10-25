@@ -195,12 +195,6 @@ jobs:
 
       - name: "Configure mutators"
         run: cp build-infection/resources/infection.json5 .
-      #- name: "Configure mutators"
-      #  run: |
-      #    php build-infection/bin/infection-config.php \
-      #      --mutator-class='Infection\Mutator\Removal\MethodCallRemoval' \
-      #    > infection.json5
-      #    cat infection.json5 | jq
 
       - name: "Cache Result cache"
         uses: actions/cache@v4
