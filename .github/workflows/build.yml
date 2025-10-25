@@ -192,9 +192,9 @@ jobs:
       - name: "Configure mutators"
         run: |
           php build-infection/bin/infection-config.php \
-            --mutator-class='PHPStan\\\Infection\\\TrinaryLogicMutator' \
+            --mutator-class='PHPStan\Infection\TrinaryLogicMutator' \
           > infection.json5
-          cat infection.json5
+          cat infection.json5 | jq
 
       - name: "Cache Result cache"
         uses: actions/cache@v4
