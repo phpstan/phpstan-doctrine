@@ -11,4 +11,15 @@ namespace Doctrine\ORM;
  */
 final class Query extends AbstractQuery
 {
+
+    /**
+     * @template TNewHydrationMode of string|AbstractQuery::HYDRATE_*
+     * @param TNewHydrationMode $hydrationMode
+     * @phpstan-self-out static<TKey, TResult, TNewHydrationMode>
+     * @return static<TKey, TResult, TNewHydrationMode>
+     */
+    public function setHydrationMode($hydrationMode): static
+    {
+    }
+
 }
