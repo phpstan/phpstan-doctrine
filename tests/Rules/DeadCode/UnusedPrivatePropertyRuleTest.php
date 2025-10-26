@@ -7,6 +7,7 @@ use PHPStan\Testing\RuleTestCase;
 use const PHP_VERSION_ID;
 
 /**
+ * @covers UnusedPrivatePropertyRule
  * @extends RuleTestCase<UnusedPrivatePropertyRule>
  */
 class UnusedPrivatePropertyRuleTest extends RuleTestCase

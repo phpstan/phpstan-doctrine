@@ -6,6 +6,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
+ * @covers MissingReadOnlyByPhpDocPropertyAssignRule
  * @extends RuleTestCase<MissingReadOnlyByPhpDocPropertyAssignRule>
  */
 class MissingReadOnlyByPhpDocPropertyAssignRuleTest extends RuleTestCase

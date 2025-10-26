@@ -6,6 +6,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
+ * @covers TooWideMethodThrowTypeRule
  * @extends RuleTestCase<TooWideMethodThrowTypeRule>
  */
 class TooWideMethodThrowTypeRuleTest extends RuleTestCase

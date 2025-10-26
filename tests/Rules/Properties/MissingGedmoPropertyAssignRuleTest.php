@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use const PHP_VERSION_ID;
 
 /**
+ * @covers UnusedPrivatePropertyRule
  * @extends RuleTestCase<UnusedPrivatePropertyRule>
  */
 class MissingGedmoPropertyAssignRuleTest extends RuleTestCase

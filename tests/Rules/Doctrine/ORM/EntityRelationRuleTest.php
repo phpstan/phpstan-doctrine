@@ -9,6 +9,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use const PHP_VERSION_ID;
 
 /**
+ * @covers EntityColumnRule
  * @extends RuleTestCase<EntityRelationRule>
  * @runInSeparateProcess
  */

@@ -10,6 +10,7 @@ use function sprintf;
 use function strpos;
 
 /**
+ * @covers DqlRule
  * @extends RuleTestCase<DqlRule>
  * @runInSeparateProcess
  */

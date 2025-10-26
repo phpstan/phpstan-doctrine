@@ -35,6 +35,7 @@ use function strpos;
 use const PHP_VERSION_ID;
 
 /**
+ * @covers EntityColumnRule
  * @extends RuleTestCase<EntityColumnRule>
  * @runInSeparateProcess
  */

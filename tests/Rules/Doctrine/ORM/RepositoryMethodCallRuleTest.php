@@ -7,6 +7,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
+ * @covers RepositoryMethodCallRule
  * @extends RuleTestCase<RepositoryMethodCallRule>
  */
 class RepositoryMethodCallRuleTest extends RuleTestCase

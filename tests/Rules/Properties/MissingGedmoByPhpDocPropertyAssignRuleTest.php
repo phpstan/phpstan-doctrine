@@ -9,6 +9,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
+ * @covers UnusedPrivatePropertyRule
  * @extends RuleTestCase<UnusedPrivatePropertyRule>
  */
 class MissingGedmoByPhpDocPropertyAssignRuleTest extends RuleTestCase
