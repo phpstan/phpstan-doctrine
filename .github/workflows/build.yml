@@ -166,14 +166,17 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: "Checkout build-infection"
+        uses: actions/checkout@v5
         with:
-          coverage: "pcov"
+          repository: "phpstan/build-infection"
+          path: "build-infection"
+          ref: "1.x"
+
+      - uses: ./build-infection/.github/actions/setup-php
+        with:
           php-version: "${{ matrix.php-version }}"
-          ini-file: development
-          extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-          tools: infection:0.31.7
+          php-extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
 
       - name: "Allow installing on PHP 8.4"
         if: matrix.php-version == '8.4'
@@ -181,13 +184,6 @@ jobs:
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
-
-      - name: "Checkout build-infection"
-        uses: actions/checkout@v5
-        with:
-          repository: "phpstan/build-infection"
-          path: "build-infection"
-          ref: "1.x"
 
       - name: "Install build-infection dependencies"
         working-directory: "build-infection"
