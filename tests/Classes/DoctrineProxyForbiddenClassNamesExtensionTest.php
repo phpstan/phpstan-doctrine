@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 use function array_merge;
 
 /**
- * @covers InstantiationRule
+ * @covers \PHPStan\Rules\Classes\InstantiationRule
  * @extends RuleTestCase<InstantiationRule>
  * @runInSeparateProcess
  */

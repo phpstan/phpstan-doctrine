@@ -7,7 +7,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
- * @covers QueryBuilderDqlRule
+ * @covers \PHPStan\Rules\Doctrine\ORM\QueryBuilderDqlRule
  * @extends RuleTestCase<QueryBuilderDqlRule>
  */
 class QueryBuilderDqlRuleTest extends RuleTestCase

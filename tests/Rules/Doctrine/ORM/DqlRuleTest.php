@@ -10,7 +10,7 @@ use function sprintf;
 use function strpos;
 
 /**
- * @covers DqlRule
+ * @covers \PHPStan\Rules\Doctrine\ORM\DqlRule
  * @extends RuleTestCase<DqlRule>
  * @runInSeparateProcess
  */

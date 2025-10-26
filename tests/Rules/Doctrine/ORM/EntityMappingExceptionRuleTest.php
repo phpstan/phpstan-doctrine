@@ -8,7 +8,7 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use const PHP_VERSION_ID;
 
 /**
- * @covers EntityMappingExceptionRule
+ * @covers \PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule
  * @extends RuleTestCase<EntityMappingExceptionRule>
  * @runInSeparateProcess
  */

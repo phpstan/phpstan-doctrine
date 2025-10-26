@@ -7,7 +7,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
- * @covers CallMethodsRule
+ * @covers \PHPStan\Rules\Methods\CallMethodsRule
  * @extends RuleTestCase<CallMethodsRule>
  */
 class MagicRepositoryMethodCallRuleTest extends RuleTestCase

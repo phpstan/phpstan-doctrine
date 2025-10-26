@@ -7,7 +7,7 @@ use PHPStan\Testing\RuleTestCase;
 use const PHP_VERSION_ID;
 
 /**
- * @covers MissingReadOnlyPropertyAssignRule
+ * @covers \PHPStan\Rules\Properties\MissingReadOnlyPropertyAssignRule
  * @extends RuleTestCase<MissingReadOnlyPropertyAssignRule>
  */
 class MissingReadOnlyPropertyAssignRuleTest extends RuleTestCase

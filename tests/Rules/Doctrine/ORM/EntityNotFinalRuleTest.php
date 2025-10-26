@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 
 /**
- * @covers EntityNotFinalRule
+ * @covers \PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
  * @extends RuleTestCase<EntityNotFinalRule>
  * @runInSeparateProcess
  */
