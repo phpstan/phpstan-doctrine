@@ -5,7 +5,7 @@ namespace PHPStan\DoctrineIntegration\ODM;
 use PHPStan\Testing\TypeInferenceTestCase;
 use const PHP_VERSION_ID;
 
-class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
+final class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 {
 
 	/**
@@ -13,10 +13,6 @@ class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 	 */
 	public function dataFileAsserts(): iterable
 	{
-		if (PHP_VERSION_ID >= 80000) {
-			return [];
-		}
-
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentManagerDynamicReturn.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentRepositoryDynamicReturn.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentManagerMergeReturn.php');
@@ -33,6 +29,10 @@ class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 		...$args
 	): void
 	{
+		if (PHP_VERSION_ID >= 80000) {
+			self::markTestSkipped('Test requires PHP 7.');
+		}
+
 		$this->assertFileAsserts($assertType, $file, ...$args);
 	}
 
