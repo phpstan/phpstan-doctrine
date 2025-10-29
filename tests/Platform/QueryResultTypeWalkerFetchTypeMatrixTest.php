@@ -449,7 +449,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	): void
 	{
 		$this->performDriverTest(
-			'pdoPgsqlExpectedType',
+			'pdo_pgsql',
 			self::CONFIG_DEFAULT,
 			$data,
 			$dqlTemplate,
@@ -489,7 +489,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	): void
 	{
 		$this->performDriverTest(
-			'pdoPgsqlExpectedType',
+			'pdo_pgsql',
 			self::CONFIG_STRINGIFY,
 			$data,
 			$dqlTemplate,
