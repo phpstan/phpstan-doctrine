@@ -4747,7 +4747,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 					'password' => 'secret',
 					'dbname' => 'foo',
 				];
-			case 'pdoPgsqlExpectedType':
+			case 'pdo_pgsql':
 			case 'pgsql':
 				return [
 					'host' => getenv('PGSQL_HOST'),
@@ -4780,7 +4780,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			case 'pdo_mysql':
 			case 'mysqli':
 				return '8.0.0';
-			case 'pdoPgsqlExpectedType':
+			case 'pdo_pgsql':
 			case 'pgsql':
 				return '13.0.0';
 			case 'pdo_sqlite':
