@@ -7,9 +7,6 @@ use PHPStan\Testing\TypeInferenceTestCase;
 class NewExprTest extends TypeInferenceTestCase
 {
 
-	/**
-	 * @return iterable<mixed>
-	 */
 	public function dataFileAsserts(): iterable
 	{
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/bug-191.php');

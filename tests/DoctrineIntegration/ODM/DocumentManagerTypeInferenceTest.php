@@ -8,9 +8,6 @@ use const PHP_VERSION_ID;
 final class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 {
 
-	/**
-	 * @return iterable<mixed>
-	 */
 	public function dataFileAsserts(): iterable
 	{
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentManagerDynamicReturn.php');

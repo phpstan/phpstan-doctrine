@@ -1495,9 +1495,6 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield from $this->yieldConditionalDataset();
 	}
 
-	/**
-	 * @return iterable<mixed>
-	 */
 	private function yieldConditionalDataset(): iterable
 	{
 		if (property_exists(Column::class, 'enumType') && PHP_VERSION_ID >= 80100) {

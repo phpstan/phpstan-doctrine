@@ -9,9 +9,6 @@ use function strpos;
 class EntityManagerTypeInferenceTest extends TypeInferenceTestCase
 {
 
-	/**
-	 * @return iterable<mixed>
-	 */
 	public function dataFileAsserts(): iterable
 	{
 		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
