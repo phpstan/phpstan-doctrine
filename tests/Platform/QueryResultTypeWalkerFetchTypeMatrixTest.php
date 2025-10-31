@@ -4714,7 +4714,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$realFirstResult = var_export($firstResult, true);
 
 		self::assertTrue($inferredType->isConstantArray()->yes());
-		$inferredFirstItemType = $inferredType->getFirstIterableValueType();
+		$inferredFirstItemType = $inferredType->getIterableValueType();
 
 		self::assertTrue(
 			$expectedFirstItemType->accepts($inferredFirstItemType, true)->yes(),
