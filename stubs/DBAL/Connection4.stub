@@ -123,4 +123,101 @@ class Connection
      * @throws Exception
      */
     public function insert(string $table, array $data, array $types = []): int|string;
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return array<string, mixed>|false
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchAssociative(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return list<mixed>|false
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchNumeric(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchOne(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return list<list<mixed>>
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchAllNumeric(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return list<array<string,mixed>>
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchAllAssociative(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return array<mixed,mixed>
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchAllKeyValue(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return array<mixed,array<string,mixed>>
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchAllAssociativeIndexed(string $query, array $params = [], array $types = []);
+
+    /**
+     * @param list<mixed>|array<string, mixed> $params
+     * @param WrapperParameterTypeArray $types
+     *
+     * @return list<mixed>
+     *
+     * @throws Exception
+     *
+     * @phpstan-impure
+     */
+    public function fetchFirstColumn(string $query, array $params = [], array $types = []);
+
 }
