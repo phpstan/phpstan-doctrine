@@ -43,10 +43,6 @@ jobs:
       - name: "Validate Composer"
         run: "composer validate"
 
-      - name: "Allow installing on PHP 8.4"
-        if: matrix.php-version == '8.4'
-        run: "composer config platform.php 8.3.99"
-
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
 
@@ -131,10 +127,6 @@ jobs:
           ini-file: development
           extensions: "mongodb"
 
-      - name: "Allow installing on PHP 8.4"
-        if: matrix.php-version == '8.4'
-        run: "composer config platform.php 8.3.99"
-
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
         run: "composer update --prefer-lowest --no-interaction --no-progress"
@@ -177,10 +169,6 @@ jobs:
         with:
           php-version: "${{ matrix.php-version }}"
           php-extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
-
-      - name: "Allow installing on PHP 8.4"
-        if: matrix.php-version == '8.4'
-        run: "composer config platform.php 8.3.99"
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
@@ -247,10 +235,6 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: "mongodb"
           ini-file: development
-
-      - name: "Allow installing on PHP 8.4"
-        if: matrix.php-version == '8.4'
-        run: "composer config platform.php 8.3.99"
 
       - name: "Install dependencies"
         run: "composer update --no-interaction --no-progress"
