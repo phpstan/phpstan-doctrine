@@ -54,7 +54,7 @@ class ClassMetadataInfo implements ClassMetadata
 	public function getName();
 
 	/**
-	 * @return ReflectionClass<T>
+	 * @return ReflectionClass<covariant T>
 	 */
 	public function getReflectionClass();
 
