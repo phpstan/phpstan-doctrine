@@ -39,9 +39,16 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 
 		$config = new Configuration();
 		$config->setMetadataDriverImpl(count($drivers) === 1 ? $drivers[0] : new MappingDriverChain($drivers));
-		$config->setAutoGenerateProxyClasses(true);
-		$config->setProxyDir($this->tmpDir);
-		$config->setProxyNamespace('__PHPStanDoctrine__\\Proxy');
+
+		// @phpstan-ignore function.impossibleType (Available since Doctrine ORM 3.4)
+		if (PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
+			$config->enableNativeLazyObjects(true);
+		} else {
+			$config->setAutoGenerateProxyClasses(true);
+			$config->setProxyDir($this->tmpDir);
+			$config->setProxyNamespace('__PHPStanDoctrine__\\Proxy');
+		}
+
 		$connection = DriverManager::getConnection([
 			'driver' => 'pdo_sqlite',
 			'memory' => true,
