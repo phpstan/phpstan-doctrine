@@ -61,12 +61,13 @@ class ArgumentsProcessor
 			if ($value->isClassString()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
 				/** @var class-string $className */
 				$className = $value->getClassStringObjectType()->getObjectClassNames()[0];
-				if ($this->objectMetadataResolver->isTransient($className)) {
-					throw new DynamicQueryBuilderArgumentException();
+				if (!$this->objectMetadataResolver->isTransient($className)) {
+					$args[] = $className;
+					continue;
 				}
-
-				$args[] = $className;
-				continue;
+				// Transient class-string: fall through to constant scalar handling.
+				// This handles aliases like 'override' or 'event' that coincidentally
+				// match a PHP class name but are not intended as entity class references.
 			}
 
 			if (count($value->getConstantScalarValues()) !== 1) {

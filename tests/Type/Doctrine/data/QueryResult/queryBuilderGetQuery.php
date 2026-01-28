@@ -310,4 +310,14 @@ class QueryBuilderGetQuery
 		assertType('mixed', $result);
 	}
 
+	public function testEventAlias(EntityManagerInterface $em): void
+	{
+		$query = $em->createQueryBuilder()
+			->select('event')
+			->from(Many::class, 'event')
+			->getQuery();
+
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
+	}
+
 }
