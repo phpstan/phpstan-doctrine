@@ -62,7 +62,7 @@ class ArgumentsProcessor
 			if ($value->isClassString()->yes() && count($value->getClassStringObjectType()->getObjectClassNames()) === 1) {
 				/** @var class-string $className */
 				$className = $value->getClassStringObjectType()->getObjectClassNames()[0];
-				$isEntityClassArgument = $argIndex === 0 && in_array($methodName, ['from', 'join', 'innerJoin', 'leftJoin', 'rightJoin'], true);
+				$isEntityClassArgument = $argIndex === 0 && in_array($methodName, ['from', 'join', 'innerJoin', 'leftJoin'], true);
 				if ($isEntityClassArgument) {
 					if ($this->objectMetadataResolver->isTransient($className)) {
 						throw new DynamicQueryBuilderArgumentException();
