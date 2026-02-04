@@ -78,4 +78,49 @@ class Connection
      */
     public function transactional(Closure $func);
 
+    /**
+     * Executes an SQL DELETE statement on a table.
+     *
+     * Table expression and columns are not escaped and are not safe for user-input.
+     *
+     * @param __doctrine-literal-string                                                             $table
+     * @param array<__doctrine-literal-string, mixed>                                               $criteria
+     * @param array<int<0,max>, string|ParameterType|Type>|array<string, string|ParameterType|Type> $types
+     *
+     * @return int|numeric-string The number of affected rows.
+     *
+     * @throws Exception
+     */
+    public function delete(string $table, array $criteria = [], array $types = []): int|string;
+
+    /**
+     * Executes an SQL UPDATE statement on a table.
+     *
+     * Table expression and columns are not escaped and are not safe for user-input.
+     *
+     * @param __doctrine-literal-string                                                             $table
+     * @param array<__doctrine-literal-string, mixed>                                               $data
+     * @param array<__doctrine-literal-string, mixed>                                               $criteria
+     * @param array<int<0,max>, string|ParameterType|Type>|array<string, string|ParameterType|Type> $types
+     *
+     * @return int|numeric-string The number of affected rows.
+     *
+     * @throws Exception
+     */
+    public function update(string $table, array $data, array $criteria = [], array $types = []): int|string;
+
+    /**
+     * Inserts a table row with specified data.
+     *
+     * Table expression and columns are not escaped and are not safe for user-input.
+     *
+     * @param __doctrine-literal-string                                                             $table
+     * @param array<__doctrine-literal-string, mixed>                                               $data
+     * @param array<int<0,max>, string|ParameterType|Type>|array<string, string|ParameterType|Type> $types
+     *
+     * @return int|numeric-string The number of affected rows.
+     *
+     * @throws Exception
+     */
+    public function insert(string $table, array $data, array $types = []): int|string;
 }
