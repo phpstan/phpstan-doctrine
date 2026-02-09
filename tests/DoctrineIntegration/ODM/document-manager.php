@@ -7,7 +7,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 
 $config = new Configuration();
-$config->setProxyDir(__DIR__);
+$config->setProxyDir(__DIR__); /** @phpstan-ignore method.deprecated */
 $config->setProxyNamespace('PHPstan\Doctrine\OdmProxies');
 $config->setMetadataCache(new ArrayCachePool());
 $config->setHydratorDir(__DIR__);
