@@ -662,6 +662,7 @@ class QueryResultTypeWalker extends SqlWalker
 			case $function instanceof AST\Functions\IdentityFunction:
 				$dqlAlias = $function->pathExpression->identificationVariable;
 				$assocField = $function->pathExpression->field;
+				assert(is_string($assocField));
 				$queryComp = $this->queryComponents[$dqlAlias];
 				assert(array_key_exists('metadata', $queryComp));
 				$class = $queryComp['metadata'];
