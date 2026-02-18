@@ -15,7 +15,7 @@ $config = new Configuration();
 $config->setProxyDir(__DIR__);
 $config->setProxyNamespace('PHPstan\Doctrine\OrmProxies');
 $config->setMetadataCache(new ArrayCachePool());
-$config->setLazyGhostObjectEnabled(true);
+$config->enableNativeLazyObjects(true);
 
 $metadataDriver = new MappingDriverChain();
 $metadataDriver->addDriver(new AnnotationDriver(

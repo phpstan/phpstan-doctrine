@@ -25,6 +25,7 @@ parameters:
 		- tests/*/data-attributes/*
 		- tests/*/data-php-*/*
 		- tests/Rules/Doctrine/ORM/entity-manager.php
+		- tests/Rules/Doctrine/ORM/entity-manager-lazy-ghost-objects.php
 
 	reportUnmatchedIgnoredErrors: false
 

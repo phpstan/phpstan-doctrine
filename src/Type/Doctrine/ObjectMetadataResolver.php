@@ -78,11 +78,6 @@ final class ObjectMetadataResolver
 				return true;
 			}
 
-			// @phpstan-ignore function.alreadyNarrowedType (Method may not exist in future Doctrine ORM versions)
-			if (method_exists($config, 'isLazyGhostObjectEnabled') && $config->isLazyGhostObjectEnabled()) {
-				return true;
-			}
-
 			return false;
 		}
 
