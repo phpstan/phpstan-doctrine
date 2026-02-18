@@ -44,6 +44,16 @@ class EntityNotFinalRuleTest extends RuleTestCase
 	}
 
 	/**
+	 * @dataProvider ruleWithLazyGhostObjectsProvider
+	 * @param list<array{0: string, 1: int, 2?: string}> $expectedErrors
+	 */
+	public function testRuleWithLazyGhostObjects(string $file, array $expectedErrors): void
+	{
+		$this->objectManagerLoader = __DIR__ . '/entity-manager-lazy-ghost-objects.php';
+		$this->analyse([$file], $expectedErrors);
+	}
+
+	/**
 	 * @return Iterator<mixed[]>
 	 */
 	public function ruleProvider(): Iterator
@@ -79,6 +89,42 @@ class EntityNotFinalRuleTest extends RuleTestCase
 		];
 
 		yield 'non final embeddable' => [
+			__DIR__ . '/data/MyEmbeddable.php',
+			[],
+		];
+	}
+
+	/**
+	 * @return Iterator<mixed[]>
+	 */
+	public function ruleWithLazyGhostObjectsProvider(): Iterator
+	{
+		yield 'final entity with lazy ghost objects' => [
+			__DIR__ . '/data/FinalEntity.php',
+			[],
+		];
+
+		yield 'final annotated entity with lazy ghost objects' => [
+			__DIR__ . '/data/FinalAnnotatedEntity.php',
+			[],
+		];
+
+		yield 'final non-entity with lazy ghost objects' => [
+			__DIR__ . '/data/FinalNonEntity.php',
+			[],
+		];
+
+		yield 'correct entity with lazy ghost objects' => [
+			__DIR__ . '/data/MyEntity.php',
+			[],
+		];
+
+		yield 'final embeddable with lazy ghost objects' => [
+			__DIR__ . '/data/FinalEmbeddable.php',
+			[],
+		];
+
+		yield 'non final embeddable with lazy ghost objects' => [
 			__DIR__ . '/data/MyEmbeddable.php',
 			[],
 		];

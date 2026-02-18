@@ -48,6 +48,10 @@ class EntityNotFinalRule implements Rule
 			return [];
 		}
 
+		if ($this->objectMetadataResolver->isNativeLazyObjectsEnabled()) {
+			return [];
+		}
+
 		return [
 			RuleErrorBuilder::message(sprintf(
 				'Entity class %s is final which can cause problems with proxies.',

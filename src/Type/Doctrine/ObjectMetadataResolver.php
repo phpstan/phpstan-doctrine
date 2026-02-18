@@ -3,6 +3,8 @@
 namespace PHPStan\Type\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ObjectManager;
@@ -12,7 +14,9 @@ use ReflectionException;
 use function class_exists;
 use function is_file;
 use function is_readable;
+use function method_exists;
 use function sprintf;
+use const PHP_VERSION_ID;
 
 final class ObjectMetadataResolver
 {
@@ -60,6 +64,34 @@ final class ObjectMetadataResolver
 		$this->objectManager = $this->loadObjectManager($this->objectManagerLoader);
 
 		return $this->objectManager;
+	}
+
+	public function isNativeLazyObjectsEnabled(): bool
+	{
+		$objectManager = $this->getObjectManager();
+
+		if ($objectManager instanceof EntityManagerInterface) {
+			$config = $objectManager->getConfiguration();
+
+			// @phpstan-ignore function.impossibleType (Available since Doctrine ORM 3.4)
+			if (method_exists($config, 'isNativeLazyObjectsEnabled') && $config->isNativeLazyObjectsEnabled()) {
+				return true;
+			}
+
+			// @phpstan-ignore function.alreadyNarrowedType (Method may not exist in future Doctrine ORM versions)
+			if (method_exists($config, 'isLazyGhostObjectEnabled') && $config->isLazyGhostObjectEnabled()) {
+				return true;
+			}
+
+			return false;
+		}
+
+		// No object manager - check if the standalone ClassMetadataFactory would enable native lazy objects
+		if (PHP_VERSION_ID >= 80400 && class_exists(Configuration::class) && method_exists(Configuration::class, 'enableNativeLazyObjects')) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
