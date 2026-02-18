@@ -52,6 +52,7 @@ class EntityNotFinalRuleTest extends RuleTestCase
 	 */
 	public function testRuleWithNativeLazyObjects(string $file, array $expectedErrors): void
 	{
+		// @phpstan-ignore function.impossibleType, function.alreadyNarrowedType
 		if (PHP_VERSION_ID < 80400 || !method_exists(Configuration::class, 'enableNativeLazyObjects')) {
 			self::markTestSkipped('Test requires PHP 8.4+ and Doctrine ORM 3.4+.');
 		}
@@ -111,7 +112,7 @@ class EntityNotFinalRuleTest extends RuleTestCase
 	public function ruleWithoutObjectManagerLoaderProvider(): Iterator
 	{
 		$nativeLazyObjectsFallback = PHP_VERSION_ID >= 80400
-			&& method_exists(Configuration::class, 'enableNativeLazyObjects');
+			&& method_exists(Configuration::class, 'enableNativeLazyObjects'); // @phpstan-ignore function.impossibleType, function.alreadyNarrowedType
 
 		$finalEntityErrors = $nativeLazyObjectsFallback
 			? []
@@ -191,6 +192,7 @@ class EntityNotFinalRuleTest extends RuleTestCase
 
 	private static function isNativeLazyObjectsDefault(): bool
 	{
+		// @phpstan-ignore function.impossibleType, function.alreadyNarrowedType
 		if (!method_exists(Configuration::class, 'isNativeLazyObjectsEnabled')) {
 			return false;
 		}

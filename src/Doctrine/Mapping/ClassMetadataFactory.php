@@ -40,7 +40,7 @@ class ClassMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 		$config = new Configuration();
 		$config->setMetadataDriverImpl(count($drivers) === 1 ? $drivers[0] : new MappingDriverChain($drivers));
 
-		// @phpstan-ignore function.impossibleType (Available since Doctrine ORM 3.4)
+		// @phpstan-ignore function.impossibleType, function.alreadyNarrowedType (Available since Doctrine ORM 3.4)
 		if (PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
 			$config->enableNativeLazyObjects(true);
 		} else {

@@ -73,7 +73,7 @@ final class ObjectMetadataResolver
 		if ($objectManager instanceof EntityManagerInterface) {
 			$config = $objectManager->getConfiguration();
 
-			// @phpstan-ignore function.impossibleType (Available since Doctrine ORM 3.4)
+			// @phpstan-ignore function.impossibleType, function.alreadyNarrowedType (Available since Doctrine ORM 3.4)
 			if (method_exists($config, 'isNativeLazyObjectsEnabled') && $config->isNativeLazyObjectsEnabled()) {
 				return true;
 			}
@@ -82,6 +82,7 @@ final class ObjectMetadataResolver
 		}
 
 		// No object manager - check if the standalone ClassMetadataFactory would enable native lazy objects
+		// @phpstan-ignore function.impossibleType, function.alreadyNarrowedType (Available since Doctrine ORM 3.4)
 		if (PHP_VERSION_ID >= 80400 && class_exists(Configuration::class) && method_exists(Configuration::class, 'enableNativeLazyObjects')) {
 			return true;
 		}
