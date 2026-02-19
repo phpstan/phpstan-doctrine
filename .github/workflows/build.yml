@@ -116,7 +116,7 @@ jobs:
         include:
           - php-version: "8.5"
             dependencies: "lowest"
-            update-packages: "composer require --dev doctrine/dbal:^3.9 doctrine/orm:^2.18 carbonphp/carbon-doctrine-types:^3 -W --no-interaction --no-progress"
+            update-packages: "composer update doctrine/dbal doctrine/orm nesbot/carbon carbonphp/carbon-doctrine-types --no-interaction --no-progress"
           - php-version: "8.3"
             dependencies: "highest"
             update-packages: |
