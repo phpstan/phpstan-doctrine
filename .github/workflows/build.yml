@@ -110,7 +110,13 @@ jobs:
           - "highest"
         update-packages:
           - ""
+        exclude:
+          - php-version: "8.5"
+            dependencies: "lowest"
         include:
+          - php-version: "8.5"
+            dependencies: "lowest"
+            update-packages: "composer require --dev doctrine/dbal:^3.9 doctrine/orm:^2.18 -W --no-interaction --no-progress"
           - php-version: "8.3"
             dependencies: "highest"
             update-packages: |
