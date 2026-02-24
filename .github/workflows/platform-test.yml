@@ -8,6 +8,9 @@ on:
     branches:
       - "2.0.x"
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     name: "Platform test"
@@ -39,11 +42,16 @@ jobs:
             update-packages: doctrine/orm:^3.0 doctrine/dbal:^4.0 carbonphp/carbon-doctrine-types:^3 gedmo/doctrine-extensions:^3
 
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+        with:
+          egress-policy: audit
+
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+        uses: "shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1" # v2
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
