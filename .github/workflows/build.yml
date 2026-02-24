@@ -209,7 +209,7 @@ jobs:
         run: |
           php build-infection/bin/infection-config.php \
           > infection.json5
-          cat infection.json5 | jq
+          jq . infection.json5
 
       - name: "Cache Result cache"
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -221,9 +221,9 @@ jobs:
 
       - name: "Run infection"
         run: |
-          git fetch --depth=1 origin $GITHUB_BASE_REF
+          git fetch --depth=1 origin "$GITHUB_BASE_REF"
           infection \
-            --git-diff-base=origin/$GITHUB_BASE_REF \
+            --git-diff-base=origin/"$GITHUB_BASE_REF" \
             --git-diff-lines \
             --ignore-msi-with-no-mutations \
             --min-msi=100 \
