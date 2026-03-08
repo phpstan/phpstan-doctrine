@@ -14,3 +14,6 @@ assertType("Doctrine\ORM\Query\Expr\Andx", $modifiedAnd);
 
 $string = $and->__toString();
 assertType("string", $string);
+
+$invalidAdd = $and->add(123);
+assertType("Doctrine\ORM\Query\Expr\Andx", $invalidAdd);

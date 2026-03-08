@@ -11,6 +11,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use Throwable;
 use function get_class;
 use function is_object;
 use function method_exists;
@@ -74,7 +75,12 @@ class ExpressionBuilderDynamicReturnTypeExtension implements DynamicMethodReturn
 			return null;
 		}
 
-		$exprValue = $expr->{$methodReflection->getName()}(...$args);
+		try {
+			$exprValue = $expr->{$methodReflection->getName()}(...$args);
+		} catch (Throwable $e) {
+			return null;
+		}
+
 		if (is_object($exprValue)) {
 			return new ExprType(get_class($exprValue), $exprValue);
 		}

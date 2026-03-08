@@ -9,6 +9,7 @@ use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use Throwable;
 use function get_class;
 use function in_array;
 use function is_object;
@@ -55,7 +56,12 @@ class BaseExpressionDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 			return null;
 		}
 
-		$exprValue = $expr->{$methodReflection->getName()}(...$args);
+		try {
+			$exprValue = $expr->{$methodReflection->getName()}(...$args);
+		} catch (Throwable $e) {
+			return null;
+		}
+
 		if (is_object($exprValue)) {
 			return new ExprType(get_class($exprValue), $exprValue);
 		}
