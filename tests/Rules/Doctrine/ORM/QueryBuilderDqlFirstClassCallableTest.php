@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -22,6 +23,10 @@ class QueryBuilderDqlFirstClassCallableTest extends RuleTestCase
 
 	public function testFirstClassCallableInMatchArm(): void
 	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('Test requires PHP 8.1.');
+		}
+
 		$this->analyse([__DIR__ . '/data/query-builder-first-class-callable.php'], []);
 	}
 
