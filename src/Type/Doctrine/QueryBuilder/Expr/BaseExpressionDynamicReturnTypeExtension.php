@@ -2,7 +2,6 @@
 
 namespace PHPStan\Type\Doctrine\QueryBuilder\Expr;
 
-use ArgumentCountError;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -60,11 +59,7 @@ class BaseExpressionDynamicReturnTypeExtension implements DynamicMethodReturnTyp
 			return null;
 		}
 
-		try {
-			$exprValue = $expr->{$methodReflection->getName()}(...$args);
-		} catch (ArgumentCountError $e) {
-			return null;
-		}
+		$exprValue = $expr->{$methodReflection->getName()}(...$args);
 
 		if (is_object($exprValue)) {
 			return new ExprType(get_class($exprValue), $exprValue);
