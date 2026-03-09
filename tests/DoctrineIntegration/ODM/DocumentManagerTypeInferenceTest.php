@@ -3,6 +3,7 @@
 namespace PHPStan\DoctrineIntegration\ODM;
 
 use PHPStan\Testing\TypeInferenceTestCase;
+use function extension_loaded;
 use const PHP_VERSION_ID;
 
 final class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
@@ -10,6 +11,10 @@ final class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 
 	public function dataFileAsserts(): iterable
 	{
+		if (!extension_loaded('mongo')) {
+			self::markTestSkipped('MongoDB extension is not installed.');
+		}
+
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentManagerDynamicReturn.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentRepositoryDynamicReturn.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/documentManagerMergeReturn.php');
