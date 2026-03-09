@@ -11,7 +11,7 @@ final class DocumentManagerTypeInferenceTest extends TypeInferenceTestCase
 
 	public function dataFileAsserts(): iterable
 	{
-		if (!extension_loaded('mongo')) {
+		if (!extension_loaded('mongodb')) {
 			self::markTestSkipped('MongoDB extension is not installed.');
 		}
 
