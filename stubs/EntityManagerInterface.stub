@@ -78,4 +78,9 @@ interface EntityManagerInterface extends ObjectManager
 	 */
 	public function wrapInTransaction(callable $func);
 
+	/**
+	 * @return bool
+	 * @phpstan-impure
+	 */
+	public function isOpen();
 }
