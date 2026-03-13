@@ -70,4 +70,9 @@ class EntityManager implements EntityManagerInterface
      */
     public function flush($entity = null);
 
+	/**
+	 * @return bool
+	 * @phpstan-impure
+	 */
+	public function isOpen();
 }

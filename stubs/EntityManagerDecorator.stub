@@ -61,4 +61,9 @@ class EntityManagerDecorator implements EntityManagerInterface
 	 */
 	public function copy($entity, $deep = false);
 
+	/**
+	 * @return bool
+	 * @phpstan-impure
+	 */
+	public function isOpen();
 }
