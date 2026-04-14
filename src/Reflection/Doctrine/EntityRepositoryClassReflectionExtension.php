@@ -10,7 +10,6 @@ use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
 use function lcfirst;
 use function str_replace;
@@ -88,10 +87,7 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 	{
 		$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
 		if ($repositoryAncesor === null) {
-			$repositoryAncesor = $classReflection->getAncestorWithClassName(ObjectRepository::class);
-			if ($repositoryAncesor === null) {
-				throw new ShouldNotHappenException();
-			}
+			throw new ShouldNotHappenException();
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
@@ -107,7 +103,7 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 		} elseif (
 			strpos($methodName, 'findOneBy') === 0
 		) {
-			$returnType = TypeCombinator::union($entityClassType, new NullType());
+			$returnType = TypeCombinator::addNull($entityClassType);
 		} elseif (
 			strpos($methodName, 'countBy') === 0
 		) {
