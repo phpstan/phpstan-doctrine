@@ -11,6 +11,15 @@ use Throwable;
 class Connection
 {
     /**
+     * Prepares an SQL statement.
+     *
+     * @param __doctrine-literal-string $sql The SQL statement to prepare.
+     *
+     * @throws Exception
+     */
+    public function prepare(string $sql): Statement;
+
+    /**
      * Executes an SQL statement with the given parameters and returns the number of affected rows.
      *
      * Could be used for:
