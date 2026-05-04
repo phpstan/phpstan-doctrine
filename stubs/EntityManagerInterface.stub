@@ -2,10 +2,10 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Persistence\EntityRepository;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 
 interface EntityManagerInterface extends ObjectManager
 {
