@@ -8,8 +8,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 
 class EntityRepositoryMatchingDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
