@@ -12,6 +12,7 @@ class TypeInferenceTest extends TypeInferenceTestCase
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/getRepository.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/isEmpty.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/Collection.php');
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/repositoryMatching.php');
 	}
 
 	/**
