@@ -2,7 +2,10 @@
 
 namespace PHPStan\DoctrineIntegration;
 
+use Doctrine\Common\Collections\AbstractLazyCollection;
+use Doctrine\Common\Collections\Selectable;
 use PHPStan\Testing\TypeInferenceTestCase;
+use function is_a;
 
 class TypeInferenceTest extends TypeInferenceTestCase
 {
@@ -12,7 +15,12 @@ class TypeInferenceTest extends TypeInferenceTestCase
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/getRepository.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/isEmpty.php');
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/Collection.php');
-		yield from $this->gatherAssertTypes(__DIR__ . '/data/repositoryMatching.php');
+
+		if (is_a(AbstractLazyCollection::class, Selectable::class, true)) { // @phpstan-ignore function.alreadyNarrowedType
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/repositoryMatching-collection26.php');
+		} else {
+			yield from $this->gatherAssertTypes(__DIR__ . '/data/repositoryMatching-collection25.php');
+		}
 	}
 
 	/**
