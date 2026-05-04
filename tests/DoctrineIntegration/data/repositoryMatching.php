@@ -18,7 +18,7 @@ class Foo
 		$repository = $this->entityManager->getRepository(MyEntity::class);
 		$criteria = Criteria::create();
 		$result = $repository->matching($criteria);
-		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>&Doctrine\Common\Collections\Selectable<int, RepositoryMatching\MyEntity>', $result);
+		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $result);
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Foo
 	{
 		$criteria = Criteria::create();
 		$result = $repository->matching($criteria);
-		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>&Doctrine\Common\Collections\Selectable<int, RepositoryMatching\MyEntity>', $result);
+		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $result);
 	}
 
 }
