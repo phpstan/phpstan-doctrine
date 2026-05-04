@@ -17,8 +17,11 @@ class Foo
 	{
 		$repository = $this->entityManager->getRepository(MyEntity::class);
 		$criteria = Criteria::create();
-		$result = $repository->matching($criteria);
-		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $result);
+		$results = $repository->matching($criteria);
+		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $results);
+		foreach ($results as $result) {
+			assertType(MyEntity::class, $result);
+		}
 	}
 
 	/**
@@ -27,8 +30,11 @@ class Foo
 	public function withTypedRepository(EntityRepository $repository): void
 	{
 		$criteria = Criteria::create();
-		$result = $repository->matching($criteria);
-		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $result);
+		$results = $repository->matching($criteria);
+		assertType('Doctrine\Common\Collections\AbstractLazyCollection<int, RepositoryMatching\MyEntity>', $results);
+		foreach ($results as $result) {
+			assertType(MyEntity::class, $result);
+		}
 	}
 
 }
