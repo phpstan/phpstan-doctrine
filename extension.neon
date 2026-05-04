@@ -115,6 +115,10 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
+		class: PHPStan\Type\Doctrine\EntityRepositoryMatchingDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\Doctrine\ObjectMetadataResolver
 		arguments:
 			objectManagerLoader: %doctrine.objectManagerLoader%

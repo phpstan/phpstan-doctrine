@@ -2,9 +2,7 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Selectable;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
@@ -59,13 +57,6 @@ class EntityRepository implements ObjectRepository
 	 * @phpstan-return class-string<TEntityClass>
 	 */
 	protected function getEntityName();
-
-	/**
-	 * @param Criteria $criteria
-	 *
-	 * @phpstan-return Collection<int, TEntityClass>&Selectable<int, TEntityClass>
-	 */
-	public function matching(Criteria $criteria);
 
 	/**
 	 * @param __doctrine-literal-string      $alias
