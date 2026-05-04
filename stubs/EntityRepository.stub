@@ -61,9 +61,7 @@ class EntityRepository implements ObjectRepository
 	/**
 	 * @param \Doctrine\Common\Collections\Criteria $criteria
 	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 *
-	 * @psalm-return \Doctrine\Common\Collections\Collection<int, TEntityClass>
+	 * @phpstan-return \Doctrine\Common\Collections\AbstractLazyCollection<int, TEntityClass>
 	 */
 	public function matching(Criteria $criteria);
 
