@@ -32,6 +32,7 @@ parameters:
 		- stubs/Persistence/ObjectManagerDecorator.stub
 		- stubs/Persistence/ObjectRepository.stub
 		- stubs/RepositoryFactory.stub
+		- stubs/Collections/AbstractLazyCollection.stub
 		- stubs/Collections/ArrayCollection.stub
 		- stubs/Collections/Selectable.stub
 		- stubs/ORM/AbstractQuery.stub
