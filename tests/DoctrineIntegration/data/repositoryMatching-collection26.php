@@ -1,6 +1,6 @@
 <?php
 
-namespace RepositoryMatching;
+namespace RepositoryMatching26;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
