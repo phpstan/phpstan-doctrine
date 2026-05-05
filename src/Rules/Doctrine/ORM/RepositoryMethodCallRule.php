@@ -38,7 +38,7 @@ class RepositoryMethodCallRule implements Rule
 		}
 		$argType = $scope->getType($node->getArgs()[0]->value);
 		$calledOnType = $scope->getType($node->var);
-		$entityClassType = $calledOnType->getTemplateType(ObjectRepository::class, 'TEntityClass');
+		$entityClassType = $calledOnType->getTemplateType(ObjectRepository::class, 'T');
 
 		/** @var list<class-string> $entityClassNames */
 		$entityClassNames = $entityClassType->getObjectClassNames();

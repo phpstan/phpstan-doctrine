@@ -4,8 +4,8 @@ namespace Doctrine\Bundle\DoctrineBundle\Repository;
 use \Doctrine\ORM\EntityRepository;
 
 /**
- * @template TEntityClass of object
- * @template-extends EntityRepository<TEntityClass>
+ * @template T of object
+ * @template-extends EntityRepository<T>
  */
 class ServiceEntityRepository extends EntityRepository {
 }
