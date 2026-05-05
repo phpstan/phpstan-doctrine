@@ -2,7 +2,9 @@
 
 namespace Doctrine\ORM;
 
+use Doctrine\Common\Collections\AbstractLazyCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
@@ -59,11 +61,9 @@ class EntityRepository implements ObjectRepository
 	protected function getEntityName();
 
 	/**
-	 * @param \Doctrine\Common\Collections\Criteria $criteria
+	 * @param Criteria $criteria
 	 *
-	 * @return \Doctrine\Common\Collections\Collection
-	 *
-	 * @psalm-return \Doctrine\Common\Collections\Collection<int, TEntityClass>
+	 * @phpstan-return AbstractLazyCollection<int, TEntityClass>&Selectable<int, TEntityClass>
 	 */
 	public function matching(Criteria $criteria);
 

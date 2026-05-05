@@ -1,0 +1,13 @@
+<?php
+
+namespace Doctrine\Common\Collections;
+
+/**
+ * @phpstan-template TKey of array-key
+ * @phpstan-template T
+ * @template-implements Collection<TKey,T>
+ * @template-implements Selectable<TKey,T>
+ */
+abstract class AbstractLazyCollection implements Collection, Selectable
+{
+}

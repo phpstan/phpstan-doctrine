@@ -2,10 +2,10 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 
 interface EntityManagerInterface extends ObjectManager
 {
@@ -29,7 +29,7 @@ interface EntityManagerInterface extends ObjectManager
 	/**
 	 * @template T of object
 	 * @phpstan-param class-string<T> $className
-	 * @phpstan-return ObjectRepository<T>
+	 * @phpstan-return EntityRepository<T>
 	 */
 	public function getRepository($className);
 
