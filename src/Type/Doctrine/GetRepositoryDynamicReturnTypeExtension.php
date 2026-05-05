@@ -127,7 +127,7 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 			$args,
 			$methodReflection->getVariants(),
 		)->getReturnType();
-		$entity = $defaultType->getTemplateType(ObjectRepository::class, 'TEntityClass');
+		$entity = $defaultType->getTemplateType(ObjectRepository::class, 'T');
 		if (!$entity instanceof ErrorType) {
 			return new GenericObjectType(
 				$defaultRepositoryClass,

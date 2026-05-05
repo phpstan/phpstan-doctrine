@@ -55,7 +55,7 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
-		$entityClassType = $templateTypeMap->getType('TEntityClass');
+		$entityClassType = $templateTypeMap->getType('T');
 		if ($entityClassType === null) {
 			return false;
 		}
@@ -91,7 +91,7 @@ class EntityRepositoryClassReflectionExtension implements MethodsClassReflection
 		}
 
 		$templateTypeMap = $repositoryAncesor->getActiveTemplateTypeMap();
-		$entityClassType = $templateTypeMap->getType('TEntityClass');
+		$entityClassType = $templateTypeMap->getType('T');
 		if ($entityClassType === null) {
 			throw new ShouldNotHappenException();
 		}
