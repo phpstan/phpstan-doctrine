@@ -32,3 +32,6 @@ phpstan:
 .PHONY: phpstan-generate-baseline
 phpstan-generate-baseline:
 	php vendor/bin/phpstan analyse -c phpstan.neon -b phpstan-baseline.neon
+
+name-collision:
+	php vendor/bin/detect-collisions --configuration collision-detector.json
