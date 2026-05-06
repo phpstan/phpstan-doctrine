@@ -37,6 +37,7 @@
 		"phpstan/phpstan-strict-rules": "^2.0",
 		"phpunit/phpunit": "^9.6.20",
 		"ramsey/uuid": "^4.2",
+		"shipmonk/name-collision-detector": "^2.1",
 		"symfony/cache": "^5.4",
 		"symfony/uid": "^5.4 || ^6.4 || ^7.3"
 	},
