@@ -4,24 +4,14 @@ namespace PHPStan\Stubs\Doctrine;
 
 use Composer\InstalledVersions;
 use OutOfBoundsException;
-use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\PhpDoc\StubFilesExtension;
 use function class_exists;
 use function dirname;
 use function strpos;
+use function version_compare;
 
 class StubFilesExtensionLoader implements StubFilesExtension
 {
-
-	private Reflector $reflector;
-
-	public function __construct(
-		Reflector $reflector
-	)
-	{
-		$this->reflector = $reflector;
-	}
 
 	public function getFiles(): array
 	{
@@ -36,20 +26,7 @@ class StubFilesExtensionLoader implements StubFilesExtension
 			$files[] = $stubsDir . '/DBAL/Connection.stub';
 		}
 
-		$hasLazyServiceEntityRepositoryAsParent = false;
-
-		try {
-			$serviceEntityRepository = $this->reflector->reflectClass('Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository');
-			if ($serviceEntityRepository->getParentClass() !== null) {
-				/** @var class-string $lazyServiceEntityRepositoryName */
-				$lazyServiceEntityRepositoryName = 'Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository';
-				$hasLazyServiceEntityRepositoryAsParent = $serviceEntityRepository->getParentClass()->getName() === $lazyServiceEntityRepositoryName;
-			}
-		} catch (IdentifierNotFound $e) {
-			// pass
-		}
-
-		if ($hasLazyServiceEntityRepositoryAsParent) {
+		if ($this->hasLazyServiceEntityRepository()) {
 			$files[] = $stubsDir . '/LazyServiceEntityRepository.stub';
 		} else {
 			$files[] = $stubsDir . '/ServiceEntityRepository.stub';
@@ -71,6 +48,25 @@ class StubFilesExtensionLoader implements StubFilesExtension
 		}
 
 		return $files;
+	}
+
+	private function hasLazyServiceEntityRepository(): bool
+	{
+		if (!class_exists(InstalledVersions::class)) {
+			return false;
+		}
+
+		try {
+			$bundleVersion = InstalledVersions::getVersion('doctrine/doctrine-bundle');
+		} catch (OutOfBoundsException $e) {
+			return false;
+		}
+
+		if ($bundleVersion === null) {
+			return false;
+		}
+
+		return version_compare($bundleVersion, '2.8.1', '>=') && version_compare($bundleVersion, '3.0.0', '<');
 	}
 
 	private function isInstalledVersion(string $package, int $majorVersion): bool
