@@ -15,3 +15,4 @@ phpstan-baseline-*.neon export-ignore
 phpunit.xml export-ignore
 stubs/runtime/Enum/UnitEnum.php export-ignore
 stubs/runtime/Enum/BackedEnum.php export-ignore
+/collision-detector.json export-ignore
