@@ -21,6 +21,7 @@ use PHPStan\Type\Doctrine\Descriptors\DecimalType;
 use PHPStan\Type\Doctrine\Descriptors\EnumType;
 use PHPStan\Type\Doctrine\Descriptors\IntegerType;
 use PHPStan\Type\Doctrine\Descriptors\JsonType;
+use PHPStan\Type\Doctrine\Descriptors\NumberType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor as RamseyUuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
@@ -95,6 +96,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new DecimalType(new DriverDetector()),
 				new JsonType(),
 				new IntegerType(),
+				new NumberType(),
 				new StringType(),
 				new SimpleArrayType(),
 				new EnumType(),
