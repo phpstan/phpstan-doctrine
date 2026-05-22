@@ -7,6 +7,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
@@ -23,7 +24,7 @@ final class ObjectMetadataResolver
 
 	private ?string $objectManagerLoader = null;
 
-	/** @var ObjectManager|false|null */
+	/** @var ObjectManager|ManagerRegistry|false|null */
 	private $objectManager;
 
 	private ?ClassMetadataFactory $metadataFactory = null;
@@ -46,6 +47,38 @@ final class ObjectMetadataResolver
 
 	/** @api */
 	public function getObjectManager(): ?ObjectManager
+	{
+		$objectManager = $this->getObjectManagerLoaderResult();
+		if ($objectManager instanceof ManagerRegistry) {
+			return $objectManager->getManager();
+		}
+
+		if ($objectManager instanceof ObjectManager) {
+			return $objectManager;
+		}
+
+		return null;
+	}
+
+	public function getObjectManagerByName(string $name): ?ObjectManager
+	{
+		$objectManager = $this->getObjectManagerLoaderResult();
+		if (!$objectManager instanceof ManagerRegistry) {
+			return null;
+		}
+
+		$namedObjectManager = $objectManager->getManager($name);
+		if (!$namedObjectManager instanceof ObjectManager) {
+			return null;
+		}
+
+		return $namedObjectManager;
+	}
+
+	/**
+	 * @return ObjectManager|ManagerRegistry|null
+	 */
+	private function getObjectManagerLoaderResult()
 	{
 		if ($this->objectManager === false) {
 			return null;
@@ -172,7 +205,10 @@ final class ObjectMetadataResolver
 		return $ormMetadata;
 	}
 
-	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
+	/**
+	 * @return ObjectManager|ManagerRegistry|null
+	 */
+	private function loadObjectManager(string $objectManagerLoader)
 	{
 		if (!is_file($objectManagerLoader)) {
 			throw new ShouldNotHappenException(sprintf(
