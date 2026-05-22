@@ -52,12 +52,7 @@ final class ObjectMetadataResolver
 	{
 		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
 		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
-			$objectManager = $objectManagerLoaderResult->getManager();
-			if (!$objectManager instanceof ObjectManager) {
-				return null;
-			}
-
-			return $objectManager;
+			return $objectManagerLoaderResult->getManager();
 		}
 
 		if ($objectManagerLoaderResult instanceof ObjectManager) {

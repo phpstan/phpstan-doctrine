@@ -7,8 +7,6 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectRepository;
 
 $createEntityManager = static function (string $path): EntityManager {
 	$config = new Configuration();
@@ -53,7 +51,7 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 		return 'default';
 	}
 
-	public function getConnection(?string $name = null)
+	public function getConnection($name = null)
 	{
 		return $this->getManager($name)->getConnection();
 	}
@@ -79,7 +77,7 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 		return 'default';
 	}
 
-	public function getManager(?string $name = null)
+	public function getManager($name = null)
 	{
 		if ($name === 'tenant') {
 			return $this->tenantManager;
@@ -96,7 +94,7 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 		];
 	}
 
-	public function resetManager(?string $name = null)
+	public function resetManager($name = null)
 	{
 		return $this->getManager($name);
 	}
@@ -109,12 +107,12 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 		];
 	}
 
-	public function getRepository(string $persistentObject, ?string $persistentManagerName = null): ObjectRepository
+	public function getRepository($persistentObject, $persistentManagerName = null)
 	{
 		return $this->getManager($persistentManagerName)->getRepository($persistentObject);
 	}
 
-	public function getManagerForClass(string $class): ?ObjectManager
+	public function getManagerForClass($class)
 	{
 		foreach ($this->getManagers() as $manager) {
 			if (!$manager->getMetadataFactory()->isTransient($class)) {
