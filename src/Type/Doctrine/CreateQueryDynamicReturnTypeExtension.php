@@ -89,7 +89,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 			if ($type instanceof ConstantStringType) {
 				$queryString = $type->getValue();
 
-				$em = $this->objectMetadataResolver->getObjectManager();
+				$em = $this->objectMetadataResolver->getObjectManagerForDql($queryString);
 				if (!$em instanceof EntityManagerInterface) {
 					return new QueryType($queryString, null, null);
 				}

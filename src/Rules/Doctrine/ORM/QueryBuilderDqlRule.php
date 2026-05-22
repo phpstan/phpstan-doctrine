@@ -92,21 +92,18 @@ class QueryBuilderDqlRule implements Rule
 			return [];
 		}
 
-		$objectManager = $this->objectMetadataResolver->getObjectManager();
-		if ($objectManager === null) {
-			return [];
-		}
-
 		$entityManagerInterface = 'Doctrine\ORM\EntityManagerInterface';
-		if (!$objectManager instanceof $entityManagerInterface) {
-			return [];
-		}
-
-		/** @var EntityManagerInterface $objectManager */
-		$objectManager = $objectManager;
 
 		$messages = [];
 		foreach ($dqls as $dql) {
+			$objectManager = $this->objectMetadataResolver->getObjectManagerForDql($dql->getValue());
+			if (!$objectManager instanceof $entityManagerInterface) {
+				continue;
+			}
+
+			/** @var EntityManagerInterface $objectManager */
+			$objectManager = $objectManager;
+
 			try {
 				$objectManager->createQuery($dql->getValue())->getAST();
 			} catch (QueryException $e) {

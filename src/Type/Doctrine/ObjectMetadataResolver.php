@@ -7,14 +7,17 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
+use function array_merge;
 use function class_exists;
 use function is_file;
 use function is_readable;
 use function method_exists;
+use function preg_match_all;
 use function sprintf;
 use const PHP_VERSION_ID;
 
@@ -23,8 +26,8 @@ final class ObjectMetadataResolver
 
 	private ?string $objectManagerLoader = null;
 
-	/** @var ObjectManager|false|null */
-	private $objectManager;
+	/** @var ObjectManager|ManagerRegistry|false|null */
+	private $objectManagerLoaderResult;
 
 	private ?ClassMetadataFactory $metadataFactory = null;
 
@@ -47,23 +50,79 @@ final class ObjectMetadataResolver
 	/** @api */
 	public function getObjectManager(): ?ObjectManager
 	{
-		if ($this->objectManager === false) {
+		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
+		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
+			$objectManager = $objectManagerLoaderResult->getManager();
+			if (!$objectManager instanceof ObjectManager) {
+				return null;
+			}
+
+			return $objectManager;
+		}
+
+		if ($objectManagerLoaderResult instanceof ObjectManager) {
+			return $objectManagerLoaderResult;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param class-string $className
+	 */
+	public function getObjectManagerForClass(string $className): ?ObjectManager
+	{
+		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
+		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
+			$objectManager = $objectManagerLoaderResult->getManagerForClass($className);
+			if ($objectManager instanceof ObjectManager) {
+				return $objectManager;
+			}
+		}
+
+		return $this->getObjectManager();
+	}
+
+	public function getObjectManagerForDql(string $dql): ?ObjectManager
+	{
+		preg_match_all('~\b(?:FROM|UPDATE)\s+([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $matches);
+		preg_match_all('~\bDELETE\s+(?:FROM\s+)?([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $deleteMatches);
+		foreach (array_merge($matches[1], $deleteMatches[1]) as $className) {
+			if (!class_exists($className)) {
+				continue;
+			}
+
+			$objectManager = $this->getObjectManagerForClass($className);
+			if ($objectManager !== null) {
+				return $objectManager;
+			}
+		}
+
+		return $this->getObjectManager();
+	}
+
+	/**
+	 * @return ObjectManager|ManagerRegistry|null
+	 */
+	private function getObjectManagerLoaderResult()
+	{
+		if ($this->objectManagerLoaderResult === false) {
 			return null;
 		}
 
-		if ($this->objectManager !== null) {
-			return $this->objectManager;
+		if ($this->objectManagerLoaderResult !== null) {
+			return $this->objectManagerLoaderResult;
 		}
 
 		if ($this->objectManagerLoader === null) {
-			$this->objectManager = false;
+			$this->objectManagerLoaderResult = false;
 
 			return null;
 		}
 
-		$this->objectManager = $this->loadObjectManager($this->objectManagerLoader);
+		$this->objectManagerLoaderResult = $this->loadObjectManager($this->objectManagerLoader);
 
-		return $this->objectManager;
+		return $this->objectManagerLoaderResult;
 	}
 
 	public function isNativeLazyObjectsEnabled(): bool
@@ -99,7 +158,7 @@ final class ObjectMetadataResolver
 			return true;
 		}
 
-		$objectManager = $this->getObjectManager();
+		$objectManager = $this->getObjectManagerForClass($className);
 
 		try {
 			if ($objectManager === null) {
@@ -143,7 +202,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		$objectManager = $this->getObjectManager();
+		$objectManager = $this->getObjectManagerForClass($className);
 
 		try {
 			if ($objectManager === null) {
@@ -172,7 +231,10 @@ final class ObjectMetadataResolver
 		return $ormMetadata;
 	}
 
-	private function loadObjectManager(string $objectManagerLoader): ?ObjectManager
+	/**
+	 * @return ObjectManager|ManagerRegistry|null
+	 */
+	private function loadObjectManager(string $objectManagerLoader)
 	{
 		if (!is_file($objectManagerLoader)) {
 			throw new ShouldNotHappenException(sprintf(
