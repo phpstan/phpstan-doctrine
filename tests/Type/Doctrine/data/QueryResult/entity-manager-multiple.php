@@ -107,6 +107,11 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 		];
 	}
 
+	public function getAliasNamespace($alias)
+	{
+		throw new LogicException('Alias namespaces are not used in this test fixture.');
+	}
+
 	public function getRepository($persistentObject, $persistentManagerName = null)
 	{
 		return $this->getManager($persistentManagerName)->getRepository($persistentObject);
