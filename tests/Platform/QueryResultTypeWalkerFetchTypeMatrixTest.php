@@ -1887,7 +1887,8 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'mysqlExpectedResult' => null,
 			'sqliteExpectedResult' => null,
 			'pdoPgsqlExpectedResult' => null,
-			'pgsqlExpectedResult' => null,
+			// The bugfix https://github.com/doctrine/dbal/pull/7059 was backport in 4.3.2 which requires PHP 8.2.
+			'pgsqlExpectedResult' => PHP_VERSION_ID < 80200 && self::hasDbal4() ? false : null,
 			'mssqlExpectedResult' => null,
 			'stringify' => self::STRINGIFY_NONE,
 		];
