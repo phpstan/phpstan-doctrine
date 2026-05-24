@@ -114,7 +114,7 @@ final class QueryResultTypeWalkerHydrationModeTest extends PHPStanTestCase
 	}
 
 	/**
-	 * @return iterable<string,array{Type,string,2?:string|null}>
+	 * @return iterable<string,array{Type,string,string,3?:int|null}>
 	 */
 	public static function getTestData(): iterable
 	{

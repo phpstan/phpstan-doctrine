@@ -52,10 +52,12 @@ use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\Constraint\IsIdentical;
 use Psr\Log\LoggerInterface;
 use Throwable;
+use function assert;
 use function class_exists;
 use function floor;
 use function getenv;
 use function in_array;
+use function is_string;
 use function method_exists;
 use function reset;
 use function sprintf;
@@ -64,6 +66,9 @@ use const PHP_VERSION_ID;
 
 /**
  * This test ensures our query type inferring never differs from actual result types produced by PHP, Database drivers and Doctrine (with various versions and configurations).
+ *
+ * @phpstan-type Driver 'ibm_db2'|'mysqli'|'oci8'|'pdo_mysql'|'pdo_oci'|'pdo_pgsql'|'pdo_sqlite'|'pdo_sqlsrv'|'pgsql'|'sqlite3'|'sqlsrv'
+ * @phpstan-import-type Params from DriverManager
  *
  * @group platform
  */
@@ -4432,6 +4437,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	}
 
 	/**
+	 * @param Driver $driver
 	 * @param mixed $expectedFirstResult
 	 * @param array<string, mixed> $data
 	 * @param self::STRINGIFY_* $stringification
@@ -4511,7 +4517,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	}
 
 	/**
-	 * @param array<string, mixed> $connectionParams
+	 * @param Params $connectionParams
 	 */
 	private function createConnection(
 		array $connectionParams
@@ -4534,7 +4540,7 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			$connection->executeQuery('USE foo');
 		}
 
-		if ($connectionParams['driver'] === 'pdo_mysql') {
+		if (isset($connectionParams['driver']) && $connectionParams['driver'] === 'pdo_mysql') {
 			$connection->executeQuery('SET GLOBAL max_connections = 1000');
 		}
 
@@ -4734,23 +4740,29 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 	}
 
 	/**
-	 * @return array<string, mixed>
+	 * @return Params
 	 */
 	private function getConnectionParamsForDriver(string $driver): array
 	{
 		switch ($driver) {
 			case 'pdo_mysql':
 			case 'mysqli':
+				$host = getenv('MYSQL_HOST');
+				assert(is_string($host));
+
 				return [
-					'host' => getenv('MYSQL_HOST'),
+					'host' => $host,
 					'user' => 'root',
 					'password' => 'secret',
 					'dbname' => 'foo',
 				];
 			case 'pdo_pgsql':
 			case 'pgsql':
+				$host = getenv('PGSQL_HOST');
+				assert(is_string($host));
+
 				return [
-					'host' => getenv('PGSQL_HOST'),
+					'host' => $host,
 					'user' => 'root',
 					'password' => 'secret',
 					'dbname' => 'foo',
@@ -4763,8 +4775,11 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 				];
 			case 'pdo_sqlsrv':
 			case 'sqlsrv':
+				$host = getenv('MSSQL_HOST');
+				assert(is_string($host));
+
 				return [
-					'host' => getenv('MSSQL_HOST'),
+					'host' => $host,
 					'user' => 'SA',
 					'password' => 'Secret.123',
 					// user database is created after connection
