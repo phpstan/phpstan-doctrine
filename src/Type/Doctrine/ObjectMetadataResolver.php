@@ -54,15 +54,11 @@ final class ObjectMetadataResolver
 	public function getObjectManager(): ?ObjectManager
 	{
 		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
-		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
-			return $objectManagerLoaderResult->getManager();
-		}
-
-		if ($objectManagerLoaderResult instanceof ObjectManager) {
+		if (!$objectManagerLoaderResult instanceof ManagerRegistry) {
 			return $objectManagerLoaderResult;
 		}
 
-		return null;
+		return $objectManagerLoaderResult->getManager();
 	}
 
 	/**
@@ -71,20 +67,13 @@ final class ObjectMetadataResolver
 	public function getObjectManagerForClass(string $className): ?ObjectManager
 	{
 		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
-		if ($objectManagerLoaderResult instanceof ObjectManager) {
+		if (!$objectManagerLoaderResult instanceof ManagerRegistry) {
 			return $objectManagerLoaderResult;
 		}
 
-		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
-			$singleObjectManager = $this->getSingleObjectManager($objectManagerLoaderResult);
-			if ($singleObjectManager !== null) {
-				return $singleObjectManager;
-			}
-
-			$objectManager = $objectManagerLoaderResult->getManagerForClass($className);
-			if ($objectManager instanceof ObjectManager) {
-				return $objectManager;
-			}
+		$objectManager = $objectManagerLoaderResult->getManagerForClass($className);
+		if ($objectManager instanceof ObjectManager) {
+			return $objectManager;
 		}
 
 		return $this->getObjectManager();
@@ -106,6 +95,11 @@ final class ObjectMetadataResolver
 
 	public function getObjectManagerForDql(string $dql): ?ObjectManager
 	{
+		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
+		if (!$objectManagerLoaderResult instanceof ManagerRegistry) {
+			return $objectManagerLoaderResult;
+		}
+
 		preg_match_all('~\b(?:FROM|UPDATE)\s+([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $matches);
 		preg_match_all('~\bDELETE\s+(?:FROM\s+)?([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $deleteMatches);
 		foreach (array_merge($matches[1], $deleteMatches[1]) as $className) {
@@ -113,23 +107,13 @@ final class ObjectMetadataResolver
 				continue;
 			}
 
-			$objectManager = $this->getObjectManagerForClass($className);
+			$objectManager = $objectManagerLoaderResult->getManagerForClass($className);
 			if ($objectManager !== null) {
 				return $objectManager;
 			}
 		}
 
 		return $this->getObjectManager();
-	}
-
-	private function getSingleObjectManager(ManagerRegistry $managerRegistry): ?ObjectManager
-	{
-		$objectManagers = $managerRegistry->getManagers();
-		if (count($objectManagers) !== 1) {
-			return null;
-		}
-
-		return reset($objectManagers);
 	}
 
 	/**
@@ -151,7 +135,15 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		$this->objectManagerLoaderResult = $this->loadObjectManager($this->objectManagerLoader);
+		$objectManagerLoaderResult = $this->loadObjectManager($this->objectManagerLoader);
+		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
+			$objectManagers = $objectManagerLoaderResult->getManagers();
+			if (count($objectManagers) === 1) {
+				$objectManagerLoaderResult = reset($objectManagers);
+			}
+		}
+
+		$this->objectManagerLoaderResult = $objectManagerLoaderResult;
 
 		return $this->objectManagerLoaderResult;
 	}
