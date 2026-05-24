@@ -14,10 +14,12 @@ use PHPStan\ShouldNotHappenException;
 use ReflectionException;
 use function array_merge;
 use function class_exists;
+use function count;
 use function is_file;
 use function is_readable;
 use function method_exists;
 use function preg_match_all;
+use function reset;
 use function sprintf;
 use const PHP_VERSION_ID;
 
@@ -68,7 +70,16 @@ final class ObjectMetadataResolver
 	public function getObjectManagerForClass(string $className): ?ObjectManager
 	{
 		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
+		if ($objectManagerLoaderResult instanceof ObjectManager) {
+			return $objectManagerLoaderResult;
+		}
+
 		if ($objectManagerLoaderResult instanceof ManagerRegistry) {
+			$singleObjectManager = $this->getSingleObjectManager($objectManagerLoaderResult);
+			if ($singleObjectManager !== null) {
+				return $singleObjectManager;
+			}
+
 			$objectManager = $objectManagerLoaderResult->getManagerForClass($className);
 			if ($objectManager instanceof ObjectManager) {
 				return $objectManager;
@@ -76,6 +87,20 @@ final class ObjectMetadataResolver
 		}
 
 		return $this->getObjectManager();
+	}
+
+	public function getObjectManagerByName(string $name): ?ObjectManager
+	{
+		$objectManagerLoaderResult = $this->getObjectManagerLoaderResult();
+		if (!$objectManagerLoaderResult instanceof ManagerRegistry) {
+			return null;
+		}
+
+		try {
+			return $objectManagerLoaderResult->getManager($name);
+		} catch (\Throwable $e) {
+			return null;
+		}
 	}
 
 	public function getObjectManagerForDql(string $dql): ?ObjectManager
@@ -94,6 +119,17 @@ final class ObjectMetadataResolver
 		}
 
 		return $this->getObjectManager();
+	}
+
+	private function getSingleObjectManager(ManagerRegistry $managerRegistry): ?ObjectManager
+	{
+		$objectManagers = $managerRegistry->getManagers();
+		if (count($objectManagers) !== 1) {
+			return null;
+		}
+
+		$objectManager = reset($objectManagers);
+		return $objectManager;
 	}
 
 	/**
