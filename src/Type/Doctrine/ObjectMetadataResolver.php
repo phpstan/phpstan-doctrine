@@ -12,6 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
+use Throwable;
 use function array_merge;
 use function class_exists;
 use function count;
@@ -98,7 +99,7 @@ final class ObjectMetadataResolver
 
 		try {
 			return $objectManagerLoaderResult->getManager($name);
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			return null;
 		}
 	}
@@ -128,8 +129,7 @@ final class ObjectMetadataResolver
 			return null;
 		}
 
-		$objectManager = reset($objectManagers);
-		return $objectManager;
+		return reset($objectManagers);
 	}
 
 	/**

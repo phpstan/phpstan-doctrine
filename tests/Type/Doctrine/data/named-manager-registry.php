@@ -70,6 +70,11 @@ $createManager = static function (string $repositoryClass): ObjectManager {
 		{
 		}
 
+		public function merge($object)
+		{
+			return $object;
+		}
+
 		public function remove($object)
 		{
 		}
