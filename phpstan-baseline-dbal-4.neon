@@ -31,6 +31,18 @@ parameters:
 			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
 		-
+			message: '#^Class Doctrine\\DBAL\\Types\\NumberType not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Type/Doctrine/Descriptors/NumberType.php
+
+		-
+			message: '#^Method PHPStan\\Type\\Doctrine\\Descriptors\\NumberType\:\:getType\(\) should return class\-string\<Doctrine\\DBAL\\Types\\Type\> but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Type/Doctrine/Descriptors/NumberType.php
+
+		-
 			rawMessage: '''
 				Call to method __construct() of deprecated class Doctrine\ORM\Mapping\Driver\AnnotationDriver:
 				This class will be removed in 3.0 without replacement.

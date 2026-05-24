@@ -374,6 +374,9 @@ services:
 		class: PHPStan\Type\Doctrine\Descriptors\JsonType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
+		class: PHPStan\Type\Doctrine\Descriptors\NumberType
+		tags: [phpstan.doctrine.typeDescriptor]
+	-
 		class: PHPStan\Type\Doctrine\Descriptors\ObjectType
 		tags: [phpstan.doctrine.typeDescriptor]
 	-
