@@ -49,4 +49,11 @@ class MultipleEntityManagers
 		assertType('list<QueryResult\MultipleEntityManagers\Main\User>', $query->getResult());
 	}
 
+	public function directTenantDelete(EntityManagerInterface $entityManager): void
+	{
+		$query = $entityManager->createQuery('DELETE QueryResult\MultipleEntityManagers\Tenant\App a');
+
+		assertType('Doctrine\ORM\Query<void, void>', $query);
+	}
+
 }
