@@ -36,7 +36,7 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # v2
@@ -67,10 +67,10 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Checkout build-cs"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: "phpstan/build-cs"
           path: "build-cs"
@@ -140,7 +140,7 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # v2
@@ -183,10 +183,10 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Checkout build-infection"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: "phpstan/build-infection"
           path: "build-infection"
@@ -211,7 +211,7 @@ jobs:
           jq . infection.json5
 
       - name: "Cache Result cache"
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: ./tmp
           key: "result-cache-v1-${{ matrix.php-version }}-${{ github.run_id }}"
@@ -259,7 +259,7 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # v2
@@ -291,7 +291,7 @@ jobs:
           egress-policy: audit
 
       - name: "Checkout"
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # v2
@@ -299,7 +299,7 @@ jobs:
           coverage: "none"
           php-version: "8.5"
 
-      - uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # v3
+      - uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
       - name: "Name Collision Detector"
         run: "make name-collision"
