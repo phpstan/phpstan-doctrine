@@ -56,4 +56,18 @@ class MultipleEntityManagers
 		assertType('Doctrine\ORM\Query<void, void>', $query);
 	}
 
+	public function directTenantDeleteWithFrom(EntityManagerInterface $entityManager): void
+	{
+		$query = $entityManager->createQuery('DELETE FROM QueryResult\MultipleEntityManagers\Tenant\App a');
+
+		assertType('Doctrine\ORM\Query<void, void>', $query);
+	}
+
+	public function directTenantUpdate(EntityManagerInterface $entityManager): void
+	{
+		$query = $entityManager->createQuery('UPDATE QueryResult\MultipleEntityManagers\Tenant\App a SET a.id = :id');
+
+		assertType('Doctrine\ORM\Query<void, void>', $query);
+	}
+
 }
