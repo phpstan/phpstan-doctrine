@@ -47,6 +47,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
+		class: PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
+		arguments:
+			checkOrderByFields: %featureToggles.bleedingEdge%
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPStan\Classes\DoctrineProxyForbiddenClassNamesExtension
 		tags:
 			- phpstan.forbiddenClassNamesExtension
