@@ -20,7 +20,6 @@ parametersSchema:
 
 rules:
 	- PHPStan\Rules\Doctrine\ORM\DqlRule
-	- PHPStan\Rules\Doctrine\ORM\RepositoryMethodCallRule
 	- PHPStan\Rules\Doctrine\ORM\EntityConstructorNotFinalRule
 	- PHPStan\Rules\Doctrine\ORM\EntityMappingExceptionRule
 	- PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
