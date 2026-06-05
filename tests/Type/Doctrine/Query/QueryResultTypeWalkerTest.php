@@ -15,6 +15,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
+use PHPStan\Type\Accessory\AccessoryDecimalIntegerStringType;
 use PHPStan\Type\Accessory\AccessoryLowercaseStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Accessory\AccessoryUppercaseStringType;
@@ -384,7 +385,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString(true, true)],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->decimalIntString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				]),
 			),
@@ -406,7 +407,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantIntegerType(0), new ObjectType(Many::class)],
-					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString(true, true)],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->decimalIntString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				]),
 			),
@@ -427,7 +428,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				]),
 				$this->constantArray([
 					[new ConstantStringType('one'), new ObjectType(One::class)],
-					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString(true, true)],
+					[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->decimalIntString()],
 					[new ConstantStringType('intColumn'), new IntegerType()],
 				]),
 			),
@@ -537,7 +538,7 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		yield 'just root entity and scalars' => [
 			$this->constantArray([
 				[new ConstantIntegerType(0), new ObjectType(One::class)],
-				[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->numericString(true, true)],
+				[new ConstantStringType('id'), $hasDbal4 ? new IntegerType() : $this->decimalIntString()],
 			]),
 			'
 				SELECT		o, o.id
@@ -1621,6 +1622,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 		}
 
 		return $builder->getArray();
+	}
+
+	private function decimalIntString(): Type
+	{
+		return new IntersectionType([
+			new StringType(),
+			new AccessoryDecimalIntegerStringType(),
+		]);
 	}
 
 	private function numericString(bool $lowercase = false, bool $uppercase = false): Type
