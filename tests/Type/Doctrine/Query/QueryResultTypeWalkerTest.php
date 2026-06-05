@@ -1691,14 +1691,14 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	private function intOrStringified(): Type
 	{
 		return $this->stringifies()
-			? $this->numericString(true, true)
+			? $this->decimalIntString()
 			: new IntegerType();
 	}
 
 	private function uintOrStringified(): Type
 	{
 		return $this->stringifies()
-			? $this->numericString(true, true)
+			? $this->decimalIntString()
 			: $this->uint();
 	}
 
