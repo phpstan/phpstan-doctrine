@@ -20,7 +20,7 @@ interface ObjectRepository
 	public function findAll();
 
 	/**
-	 * @phpstan-param array<string, string> $criteria
+	 * @phpstan-param array<string, mixed> $criteria
 	 * @phpstan-param array<string, 'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
 	 * @phpstan-param int|null $limit
 	 * @phpstan-param int|null $offset
