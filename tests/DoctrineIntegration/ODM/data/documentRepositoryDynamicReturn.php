@@ -52,7 +52,7 @@ class Example
 	public function findAllDynamicType(): void
 	{
 		$items = $this->repository->findAll();
-		assertType('array<int, object>', $items);
+		assertType('list<object>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -63,7 +63,7 @@ class Example
 	public function findByDynamicType(): void
 	{
 		$items = $this->repository->findBy(['blah' => 'testing']);
-		assertType('array<int, object>', $items);
+		assertType('list<object>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -115,7 +115,7 @@ class Example2
 	public function findAllDynamicType(): void
 	{
 		$items = $this->repository->findAll();
-		assertType('array<int, ' . MyDocument::class . '>', $items);
+		assertType('list<' . MyDocument::class . '>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
@@ -126,7 +126,7 @@ class Example2
 	public function findByDynamicType(): void
 	{
 		$items = $this->repository->findBy(['blah' => 'testing']);
-		assertType('array<int, ' . MyDocument::class . '>', $items);
+		assertType('list<' . MyDocument::class . '>', $items);
 
 		foreach ($items as $test) {
 			$test->doSomething();
