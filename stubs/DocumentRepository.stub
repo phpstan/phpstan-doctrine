@@ -21,17 +21,18 @@ class DocumentRepository implements ObjectRepository
 	public function find($id, $lockMode = null, $lockVersion = null);
 
 	/**
-	 * @phpstan-return array<int, TDocumentClass>
+	 * @phpstan-return list<TDocumentClass>
 	 * @phpstan-impure
 	 */
 	public function findAll();
 
 	/**
-	 * @phpstan-param array<string, mixed> $criteria
+	 * @phpstan-param array<string, string> $criteria
 	 * @phpstan-param array<string, string>|null $sort
 	 * @phpstan-param int|null $limit
 	 * @phpstan-param int|null $skip
 	 * @phpstan-return array<int, TDocumentClass>
+	 * @phpstan-return list<TDocumentClass>
 	 * @phpstan-impure
 	 */
 	public function findBy(array $criteria, ?array $sort = null, $limit = null, $skip = null);
