@@ -1577,6 +1577,7 @@ class QueryResultTypeWalker extends SqlWalker
 	 */
 	public function walkLiteral($literal): string
 	{
+		$type = new MixedType();
 		switch ($literal->type) {
 			case AST\Literal::STRING:
 				$value = $literal->value;
@@ -1623,10 +1624,6 @@ class QueryResultTypeWalker extends SqlWalker
 					}
 				}
 
-				break;
-
-			default:
-				$type = new MixedType();
 				break;
 		}
 
