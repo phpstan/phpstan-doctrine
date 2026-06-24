@@ -210,6 +210,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 	public function setUp(): void
 	{
 		$this->descriptorRegistry = self::getContainer()->getByType(DescriptorRegistry::class);
+
+		parent::setUp();
 	}
 
 	/** @dataProvider getTestData */
