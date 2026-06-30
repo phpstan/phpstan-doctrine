@@ -120,6 +120,20 @@ class EntityColumnRule implements Rule
 								$enumReflection->getDisplayName(),
 								$writableToDatabaseType->describe(VerbosityLevel::typeOnly()),
 							))->identifier('doctrine.enumType')->build();
+						} elseif ($backedEnumType->isString()->yes()) {
+							$databaseLength = $fieldMapping['length'] ?? 255;
+							$cases = $enumTypeString::cases();
+							$maxLength = max(array_map(fn ($case): int => strlen($case->value), $cases) ?: [0]);
+							if ($maxLength > $databaseLength) {
+								$errors[] = RuleErrorBuilder::message(sprintf(
+									'Property %s::$%s length mismatch: maximum value length %s for enum %s exceeds database column length %s.',
+									$className,
+									$propertyName,
+									$maxLength,
+									$enumReflection->getDisplayName(),
+									$databaseLength,
+								))->identifier('doctrine.enumStringLength')->build();
+							}
 						}
 					}
 				}

@@ -61,4 +61,10 @@ class Foo
 	 */
 	#[ORM\Column(type: "simple_array", enumType: BazEnum::class)]
 	public array $type7;
+
+	#[ORM\Column(type: "string", length: 1, enumType: FooEnum::class)]
+	public FooEnum $type8;
+
+	#[ORM\Column(type: "string", length: 3, enumType: FooEnum::class)]
+	public FooEnum $type9;
 }

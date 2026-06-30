@@ -445,6 +445,10 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type7 type mapping mismatch: backing type int of enum PHPStan\Rules\Doctrine\ORMAttributes\BazEnum does not match value type string of the database type array<string>.',
 				63,
 			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type8 length mismatch: maximum value length 3 for enum PHPStan\Rules\Doctrine\ORMAttributes\FooEnum exceeds database column length 1.',
+				66,
+			]
 		]);
 	}
 
