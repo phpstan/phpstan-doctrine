@@ -20,6 +20,7 @@ use function is_file;
 use function is_readable;
 use function method_exists;
 use function preg_match_all;
+use function preg_replace;
 use function reset;
 use function sprintf;
 use const PHP_VERSION_ID;
@@ -100,8 +101,13 @@ final class ObjectMetadataResolver
 			return $objectManagerLoaderResult;
 		}
 
-		preg_match_all('~\b(?:FROM|UPDATE)\s+([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $matches);
-		preg_match_all('~\bDELETE\s+(?:FROM\s+)?([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dql, $deleteMatches);
+		$dqlWithoutStringLiterals = preg_replace("~'(?:''|[^'])*'~", "''", $dql);
+		if ($dqlWithoutStringLiterals === null) {
+			$dqlWithoutStringLiterals = $dql;
+		}
+
+		preg_match_all('~\b(?:FROM|UPDATE)\s+([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dqlWithoutStringLiterals, $matches);
+		preg_match_all('~\bDELETE\s+(?:FROM\s+)?([\\\\A-Za-z_][\\\\A-Za-z0-9_]*)(?:\s+|$)~i', $dqlWithoutStringLiterals, $deleteMatches);
 		foreach (array_merge($matches[1], $deleteMatches[1]) as $className) {
 			if (!class_exists($className)) {
 				continue;
