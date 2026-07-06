@@ -8,32 +8,37 @@ use QueryResult\MultipleEntityManagers\Tenant\App;
 $createObjectManager = static function (): ObjectManager {
 	return new class () implements ObjectManager {
 
-		public function find(string $className, $id)
+		public function find($className, $id)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function persist(object $object)
+		public function persist($object)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function remove(object $object)
+		public function remove($object)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function clear()
+		public function merge($object)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function detach(object $object)
+		public function clear($objectName = null)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function refresh(object $object)
+		public function detach($object)
+		{
+			throw new LogicException('Not used by this fixture.');
+		}
+
+		public function refresh($object)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
@@ -43,12 +48,12 @@ $createObjectManager = static function (): ObjectManager {
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function getRepository(string $className)
+		public function getRepository($className)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function getClassMetadata(string $className)
+		public function getClassMetadata($className)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
@@ -58,12 +63,12 @@ $createObjectManager = static function (): ObjectManager {
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function initializeObject(object $obj)
+		public function initializeObject($obj)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
 
-		public function contains(object $object)
+		public function contains($object)
 		{
 			throw new LogicException('Not used by this fixture.');
 		}
@@ -145,6 +150,11 @@ return new class ($defaultManager, $tenantManager) implements ManagerRegistry {
 			'default' => 'default',
 			'tenant' => 'tenant',
 		];
+	}
+
+	public function getAliasNamespace($alias)
+	{
+		throw new LogicException('Alias namespaces are not used in this test fixture.');
 	}
 
 	public function getRepository($persistentObject, $persistentManagerName = null)
