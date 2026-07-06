@@ -1,0 +1,5 @@
+includes:
+	- ../../../../extension.neon
+parameters:
+	doctrine:
+		objectManagerLoader: named-manager-registry.php
