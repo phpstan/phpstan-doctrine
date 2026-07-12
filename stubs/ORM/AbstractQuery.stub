@@ -9,6 +9,7 @@ use Doctrine\ORM\NoResultException;
 /**
  * @template-covariant TKey The type of column used in indexBy
  * @template-covariant TResult The type of results returned by this query in HYDRATE_OBJECT mode
+ * @template-covariant THydrationMode of string|AbstractQuery::HYDRATE_* = string|AbstractQuery::HYDRATE_* The default hydration mode when none is provided
  */
 abstract class AbstractQuery
 {
@@ -81,6 +82,16 @@ abstract class AbstractQuery
      * @throws NonUniqueResultException
      */
     public function getSingleScalarResult()
+    {
+    }
+
+    /**
+     * @template TNewHydrationMode of string|AbstractQuery::HYDRATE_*
+     * @param TNewHydrationMode $hydrationMode
+     * @phpstan-self-out static<TKey, TResult, TNewHydrationMode>
+     * @return static<TKey, TResult, TNewHydrationMode>
+     */
+    public function setHydrationMode($hydrationMode): static
     {
     }
 

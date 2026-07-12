@@ -67,7 +67,7 @@ class Foo
 			]);
 
 		$result = $queryBuilder->getQuery()->getOneOrNullResult();
-		assertType('mixed', $result);
+		assertType('PHPStan\DoctrineIntegration\ORM\CustomRepositoryUsage\MyEntity|null', $result);
 
 		return $result;
 	}

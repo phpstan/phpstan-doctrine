@@ -16,6 +16,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeBuilder;
 use PHPStan\Type\Doctrine\Query\QueryResultTypeWalker;
 use PHPStan\Type\Doctrine\Query\QueryType;
@@ -76,7 +77,7 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 		if (!isset($args[$queryStringArgIndex])) {
 			return new GenericObjectType(
 				Query::class,
-				[new MixedType(), new MixedType()],
+				[new MixedType(), new MixedType(), new MixedType()],
 			);
 		}
 
@@ -95,21 +96,28 @@ final class CreateQueryDynamicReturnTypeExtension implements DynamicMethodReturn
 				}
 
 				$typeBuilder = new QueryResultTypeBuilder();
+				$query = $em->createQuery($queryString);
+				$hydrationMode = ConstantTypeHelper::getTypeFromValue($query->getHydrationMode());
 
 				try {
-					$query = $em->createQuery($queryString);
 					QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion, $this->driverDetector);
 				} catch (ORMException | DBALException | NewDBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
-					return new QueryType($queryString, null, null);
+					return new QueryType($queryString, null, null, null, $hydrationMode);
 				} catch (AssertionError $e) {
-					return new QueryType($queryString, null, null);
+					return new QueryType($queryString, null, null, null, $hydrationMode);
 				}
 
-				return new QueryType($queryString, $typeBuilder->getIndexType(), $typeBuilder->getResultType());
+				return new QueryType(
+					$queryString,
+					$typeBuilder->getIndexType(),
+					$typeBuilder->getResultType(),
+					null,
+					$hydrationMode,
+				);
 			}
 			return new GenericObjectType(
 				Query::class,
-				[new MixedType(), new MixedType()],
+				[new MixedType(), new MixedType(), new MixedType()],
 			);
 		});
 	}

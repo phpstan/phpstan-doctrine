@@ -17,14 +17,14 @@ class QueryResultTest
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $query);
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $query);
 
 		$query = $em->createQuery('
 			SELECT		m.intColumn, m.stringNullColumn
 			FROM		QueryResult\Entities\Many m
 		');
 
-		assertType('Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}>', $query);
+		assertType('Doctrine\ORM\Query<null, array{intColumn: int, stringNullColumn: string|null}, 1>', $query);
 
 	}
 
@@ -50,23 +50,23 @@ class QueryResultTest
 			$query->toIterable()
 		);
 		assertType(
-			'mixed',
+			'list<QueryResult\Entities\Many>',
 			$query->execute()
 		);
 		assertType(
-			'mixed',
+			'list<QueryResult\Entities\Many>',
 			$query->executeIgnoreQueryCache()
 		);
 		assertType(
-			'mixed',
+			'list<QueryResult\Entities\Many>',
 			$query->executeUsingQueryCache()
 		);
 		assertType(
-			'mixed',
+			'QueryResult\Entities\Many',
 			$query->getSingleResult()
 		);
 		assertType(
-			'mixed',
+			'QueryResult\Entities\Many|null',
 			$query->getOneOrNullResult()
 		);
 	}
@@ -429,17 +429,17 @@ class QueryResultTest
 	{
 		$q = 'SELECT m FROM QueryResult\Entities\Many m';
 
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setLockMode(LockMode::NONE));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setParameter(1, 1));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setMaxResults(10));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setCacheable(true));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setLifetime(1));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->disableResultCache());
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->enableResultCache(1));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheLifetime(1));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setResultCacheProfile(null));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHint('name', 1));
-		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many>', $em->createQuery($q)->setHydrationMode(AbstractQuery::HYDRATE_OBJECT));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setLockMode(LockMode::NONE));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setParameter(1, 1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setMaxResults(10));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setCacheable(true));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setLifetime(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->disableResultCache());
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->enableResultCache(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setResultCacheLifetime(1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setResultCacheProfile(null));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 1>', $em->createQuery($q)->setHint('name', 1));
+		assertType('Doctrine\ORM\Query<null, QueryResult\Entities\Many, 2>', $em->createQuery($q)->setHydrationMode(AbstractQuery::HYDRATE_ARRAY));
 	}
 
 }

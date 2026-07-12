@@ -7,6 +7,7 @@ use Doctrine\Common\CommonException;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\MappingException;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -15,6 +16,7 @@ use PHPStan\Doctrine\Driver\DriverDetector;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
+use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
@@ -183,31 +185,41 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				}
 			}
 
-			$resultTypes[] = $this->getQueryType($queryBuilder->getDQL());
+			$resultTypes[] = $this->getQueryType($queryBuilder);
 		}
 
 		return TypeCombinator::union(...$resultTypes);
 	}
 
-	private function getQueryType(string $dql): Type
+	private function getQueryType(QueryBuilder $queryBuilder): Type
 	{
+		$dql = $queryBuilder->getDQL();
+
 		$em = $this->objectMetadataResolver->getObjectManager();
 		if (!$em instanceof EntityManagerInterface) {
 			return new QueryType($dql, null);
 		}
 
+		$hydrationMode = ConstantTypeHelper::getTypeFromValue($queryBuilder->getQuery()->getHydrationMode());
+
 		$typeBuilder = new QueryResultTypeBuilder();
+		$query = $em->createQuery($dql);
 
 		try {
-			$query = $em->createQuery($dql);
 			QueryResultTypeWalker::walk($query, $typeBuilder, $this->descriptorRegistry, $this->phpVersion, $this->driverDetector);
 		} catch (ORMException | DBALException | CommonException | MappingException | \Doctrine\ORM\Exception\ORMException $e) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null, null, $hydrationMode);
 		} catch (AssertionError $e) {
-			return new QueryType($dql, null);
+			return new QueryType($dql, null, null, null, $hydrationMode);
 		}
 
-		return new QueryType($dql, $typeBuilder->getIndexType(), $typeBuilder->getResultType());
+		return new QueryType(
+			$dql,
+			$typeBuilder->getIndexType(),
+			$typeBuilder->getResultType(),
+			null,
+			$hydrationMode,
+		);
 	}
 
 }
