@@ -107,6 +107,25 @@ $kernel->boot();
 return $kernel->getContainer()->get('doctrine')->getManager();
 ```
 
+If your application uses multiple entity managers, return the Doctrine manager
+registry from the loader. PHPStan Doctrine will use it to pick the object manager
+that owns the entity being analysed:
+
+```php
+// tests/object-manager.php
+
+use App\Kernel;
+use Symfony\Component\Dotenv\Dotenv;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+(new Dotenv())->bootEnv(__DIR__ . '/../.env');
+
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$kernel->boot();
+return $kernel->getContainer()->get('doctrine');
+```
+
 ## Query type inference
 
 This extension can infer the result type of DQL queries when an `objectManagerLoader` is provided.
