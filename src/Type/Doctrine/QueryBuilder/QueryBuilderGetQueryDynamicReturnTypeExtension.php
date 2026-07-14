@@ -191,7 +191,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 
 	private function getQueryType(string $dql): Type
 	{
-		$em = $this->objectMetadataResolver->getObjectManager();
+		$em = $this->objectMetadataResolver->getObjectManagerForDql($dql);
 		if (!$em instanceof EntityManagerInterface) {
 			return new QueryType($dql, null);
 		}
