@@ -48,9 +48,22 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 			return null;
 		}
 
-		$returnType = ParametersAcceptorSelector::selectFromArgs($scope, $expr->getArgs(), $methodReflection->getVariants())->getReturnType();
+		$queryBuilderType = new ObjectType(QueryBuilder::class);
+		$variants = $methodReflection->getVariants();
+		$canReturnQueryBuilder = false;
+		foreach ($variants as $variant) {
+			if (!$queryBuilderType->isSuperTypeOf($variant->getReturnType())->no()) {
+				$canReturnQueryBuilder = true;
+				break;
+			}
+		}
+		if (!$canReturnQueryBuilder) {
+			return null;
+		}
 
-		$returnsQueryBuilder = (new ObjectType(QueryBuilder::class))->isSuperTypeOf($returnType)->yes();
+		$returnType = ParametersAcceptorSelector::selectFromArgs($scope, $expr->getArgs(), $variants)->getReturnType();
+
+		$returnsQueryBuilder = $queryBuilderType->isSuperTypeOf($returnType)->yes();
 
 		if (!$returnsQueryBuilder) {
 			return null;
