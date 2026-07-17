@@ -25,11 +25,14 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 
 	private OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser;
 
+	private ObjectType $queryBuilderObjectType;
+
 	public function __construct(
 		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
 	{
 		$this->otherMethodQueryBuilderParser = $otherMethodQueryBuilderParser;
+		$this->queryBuilderObjectType = new ObjectType(QueryBuilder::class);
 	}
 
 	public function getType(Expr $expr, Scope $scope): ?Type
@@ -50,7 +53,7 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 
 		$returnType = ParametersAcceptorSelector::selectFromArgs($scope, $expr->getArgs(), $methodReflection->getVariants())->getReturnType();
 
-		$returnsQueryBuilder = (new ObjectType(QueryBuilder::class))->isSuperTypeOf($returnType)->yes();
+		$returnsQueryBuilder = $this->queryBuilderObjectType->isSuperTypeOf($returnType)->yes();
 
 		if (!$returnsQueryBuilder) {
 			return null;
