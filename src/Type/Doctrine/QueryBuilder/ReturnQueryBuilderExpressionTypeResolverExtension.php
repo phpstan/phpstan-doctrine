@@ -25,6 +25,9 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 
 	private OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser;
 
+	/** @var array<string, bool> */
+	private array $queryBuilderClasses = [];
+
 	public function __construct(
 		OtherMethodQueryBuilderParser $otherMethodQueryBuilderParser
 	)
@@ -85,7 +88,8 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 		$methodName = $call->name->name;
 
 		foreach ($callerType->getObjectClassReflections() as $callerClassReflection) {
-			if ($callerClassReflection->is(QueryBuilder::class)) {
+			$className = $callerClassReflection->getName();
+			if (($this->queryBuilderClasses[$className] ??= $callerClassReflection->is(QueryBuilder::class))) {
 				return null; // covered by QueryBuilderMethodDynamicReturnTypeExtension
 			}
 			if ($methodName === 'createQueryBuilder' && $callerClassReflection->is(EntityRepository::class)) {
