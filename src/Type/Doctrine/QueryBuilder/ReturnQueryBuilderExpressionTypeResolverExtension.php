@@ -92,10 +92,10 @@ class ReturnQueryBuilderExpressionTypeResolverExtension implements ExpressionTyp
 			if (($this->queryBuilderClasses[$className] ??= $callerClassReflection->is(QueryBuilder::class))) {
 				return null; // covered by QueryBuilderMethodDynamicReturnTypeExtension
 			}
-			if ($callerClassReflection->is(EntityRepository::class) && $methodName === 'createQueryBuilder') {
+			if ($methodName === 'createQueryBuilder' && $callerClassReflection->is(EntityRepository::class)) {
 				return null; // covered by EntityRepositoryCreateQueryBuilderDynamicReturnTypeExtension
 			}
-			if ($callerClassReflection->is(EntityManagerInterface::class) && $methodName === 'createQueryBuilder') {
+			if ($methodName === 'createQueryBuilder' && $callerClassReflection->is(EntityManagerInterface::class)) {
 				return null; // no need to dive there
 			}
 		}
