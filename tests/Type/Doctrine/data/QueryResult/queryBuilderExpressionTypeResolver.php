@@ -66,6 +66,11 @@ class QueryBuilderExpressionTypeResolverTest
 		$this->getQueryBuilder(...);
 	}
 
+	public function testNullableQueryBuilderIsNotInferred(EntityManagerInterface $em): void
+	{
+		assertType('Doctrine\\ORM\\QueryBuilder|null', $this->getNullableQueryBuilder($em));
+	}
+
 	private function adjustQueryBuilderToIndexByInt(QueryBuilder $qb): void
 	{
 		$qb->indexBy('m', 'm.intColumn');
@@ -94,6 +99,13 @@ class QueryBuilderExpressionTypeResolverTest
 	}
 
 	private static function getStaticQueryBuilder(EntityManagerInterface $em): QueryBuilder
+	{
+		return $em->createQueryBuilder()
+			->select('m')
+			->from(Many::class, 'm');
+	}
+
+	private function getNullableQueryBuilder(EntityManagerInterface $em): ?QueryBuilder
 	{
 		return $em->createQueryBuilder()
 			->select('m')
