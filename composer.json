@@ -8,7 +8,7 @@
 	"keywords": ["static analysis"],
 	"require": {
 		"php": "^7.4 || ^8.0",
-		"phpstan/phpstan": "^2.2.2"
+		"phpstan/phpstan": "^2.2.10"
 	},
 	"conflict": {
 		"doctrine/collections": "<1.0",
