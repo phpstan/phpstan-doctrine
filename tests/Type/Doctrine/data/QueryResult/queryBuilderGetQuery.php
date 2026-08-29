@@ -15,6 +15,9 @@ use function PHPStan\Testing\assertType;
 
 class QueryBuilderGetQuery
 {
+
+	use TraitWithQueryBuilder;
+
 	private function getQueryBuilderMany(EntityManagerInterface $em): QueryBuilder
 	{
 		return $em->createQueryBuilder()
@@ -31,6 +34,11 @@ class QueryBuilderGetQuery
 	public function getQueryDirectly(EntityManagerInterface $em): void
 	{
 		assertType('list<QueryResult\Entities\Many>', $this->getQueryBuilderMany($em)->getQuery()->getResult());
+	}
+
+	public function getQueryFromTrait(EntityManagerInterface $em): void
+	{
+		assertType('list<QueryResult\Entities\Many>', $this->getQueryBuilderFromTrait($em)->getQuery()->getResult());
 	}
 
 	public function testQueryTypeParametersAreInfered(EntityManagerInterface $em): void
