@@ -83,4 +83,10 @@ class MyEntity
 	 * @ORM\Column(type="json")
 	 */
 	private $jsonString;
+
+	/**
+	 * @var list<string>
+	 * @ORM\Column(type="simple_array", nullable=true)
+	 */
+	private $simpleArrayFromNullableField;
 }
