@@ -77,6 +77,16 @@ parameters:
 			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
 		-
+			messages: # TypedExpression is deprecated since ORM 3.7, but ORM < 3.7 has no replacement
+				- '#^Instanceof references deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#'
+				- '#^Call to method getReturnType\(\) of deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#'
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: '#^Class PHPStan\\Platform\\TypedExpression\w+ implements deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#' # tests both interfaces
+			path: tests/Platform/*
+
+		-
 			message: '#^Call to an undefined method Doctrine\\DBAL\\Connection\:\:getWrappedConnection\(\)\.$#' # dropped in DBAL 4
 			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
