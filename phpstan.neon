@@ -21,11 +21,12 @@ parameters:
 	resultCachePath: tmp/resultCache.php
 
 	excludePaths:
-		- tests/*/data/*
-		- tests/*/data-attributes/*
-		- tests/*/data-php-*/*
-		- tests/Rules/Doctrine/ORM/entity-manager.php
-		- tests/Rules/Doctrine/ORM/entity-manager-lazy-ghost-objects.php
+		analyseAndScan:
+			- tests/*/data/*
+			- tests/*/data-attributes/*
+			- tests/*/data-php-*/*
+			- tests/Rules/Doctrine/ORM/entity-manager.php
+			- tests/Rules/Doctrine/ORM/entity-manager-lazy-ghost-objects.php
 
 	reportUnmatchedIgnoredErrors: false
 
@@ -68,6 +69,12 @@ parameters:
 				- '#^Class PgSql\\Connection not found\.$#'
 				- '#^Class Doctrine\\DBAL\\Driver\\PgSQL\\Driver not found\.$#'
 				- '#^Class Doctrine\\DBAL\\Driver\\SQLite3\\Driver not found\.$#'
+
+		-
+			messages: # needed for ORM < 3.7
+				- '#^Class Doctrine\\ORM\\Query\\AST\\ExpressionWithReturnType not found\.$#'
+				- '#^Call to method getReturnTypeName\(\) on an unknown class Doctrine\\ORM\\Query\\AST\\ExpressionWithReturnType\.$#'
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
 
 		-
 			message: '#^Call to an undefined method Doctrine\\DBAL\\Connection\:\:getWrappedConnection\(\)\.$#' # dropped in DBAL 4

@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 
 $includes = [];
 
@@ -14,5 +15,11 @@ if ($hasOrm3) {
 
 $config = [];
 $config['includes'] = $includes;
+
+$hasExpressionWithReturnType = $ormVersion !== null && InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '>=3.7');
+if (!$hasExpressionWithReturnType) {
+	// those fixtures implement an interface that does not exist yet, PHPStan cannot ignore that
+	$config['parameters']['excludePaths']['analyse'][] = __DIR__ . '/../tests/Platform/ExpressionWithReturnType*.php';
+}
 
 return $config;
