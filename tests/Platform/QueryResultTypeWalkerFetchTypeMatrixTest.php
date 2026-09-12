@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\AST\ExpressionWithReturnType;
 use Doctrine\ORM\Tools\SchemaTool;
 use LogicException;
 use PDO;
@@ -57,6 +58,7 @@ use function class_exists;
 use function floor;
 use function getenv;
 use function in_array;
+use function interface_exists;
 use function is_string;
 use function method_exists;
 use function reset;
@@ -3994,6 +3996,72 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 			'stringify' => self::STRINGIFY_NONE,
 		];
 
+		if (self::hasExpressionWithReturnType()) {
+			yield 'RT_INT_PI()' => [
+				'data' => self::dataDefault(),
+				'dqlTemplate' => 'SELECT RT_INT_PI() FROM %s t',
+				'mysqlExpectedType' => self::int(),
+				'sqliteExpectedType' => self::int(),
+				'pdoPgsqlExpectedType' => self::int(),
+				'pgsqlExpectedType' => self::int(),
+				'mssqlExpectedType' => self::int(),
+				'mysqlExpectedResult' => 3,
+				'sqliteExpectedResult' => 3,
+				'pdoPgsqlExpectedResult' => 3,
+				'pgsqlExpectedResult' => 3,
+				'mssqlExpectedResult' => 3,
+				'stringify' => self::STRINGIFY_NONE,
+			];
+
+			yield 'RT_STRING_PI()' => [
+				'data' => self::dataDefault(),
+				'dqlTemplate' => 'SELECT RT_STRING_PI() FROM %s t',
+				'mysqlExpectedType' => self::mixed(),
+				'sqliteExpectedType' => self::mixed(),
+				'pdoPgsqlExpectedType' => self::mixed(),
+				'pgsqlExpectedType' => self::mixed(),
+				'mssqlExpectedType' => self::mixed(),
+				'mysqlExpectedResult' => '3.14159',
+				'sqliteExpectedResult' => 3.14159,
+				'pdoPgsqlExpectedResult' => '3.14159',
+				'pgsqlExpectedResult' => '3.14159',
+				'mssqlExpectedResult' => '3.14159',
+				'stringify' => self::STRINGIFY_DEFAULT,
+			];
+
+			yield 'RT_INT_WRAP(MIN(t.col_float)) + no data' => [
+				'data' => self::dataNone(),
+				'dqlTemplate' => 'SELECT RT_INT_WRAP(MIN(t.col_float)) FROM %s t',
+				'mysqlExpectedType' => self::intOrNull(),
+				'sqliteExpectedType' => self::intOrNull(),
+				'pdoPgsqlExpectedType' => self::intOrNull(),
+				'pgsqlExpectedType' => self::intOrNull(),
+				'mssqlExpectedType' => self::intOrNull(),
+				'mysqlExpectedResult' => null,
+				'sqliteExpectedResult' => null,
+				'pdoPgsqlExpectedResult' => null,
+				'pgsqlExpectedResult' => null,
+				'mssqlExpectedResult' => null,
+				'stringify' => self::STRINGIFY_NONE,
+			];
+
+			yield 'RT_INT_WRAP(MIN(t.col_float))' => [
+				'data' => self::dataDefault(),
+				'dqlTemplate' => 'SELECT RT_INT_WRAP(MIN(t.col_float)) FROM %s t',
+				'mysqlExpectedType' => self::intOrNull(),
+				'sqliteExpectedType' => self::intOrNull(),
+				'pdoPgsqlExpectedType' => self::intOrNull(),
+				'pgsqlExpectedType' => self::intOrNull(),
+				'mssqlExpectedType' => self::intOrNull(),
+				'mysqlExpectedResult' => 0,
+				'sqliteExpectedResult' => 0,
+				'pdoPgsqlExpectedResult' => 0,
+				'pgsqlExpectedResult' => 0,
+				'mssqlExpectedResult' => 0,
+				'stringify' => self::STRINGIFY_NONE,
+			];
+		}
+
 		yield 'COALESCE(t.col_datetime, t.col_datetime)' => [
 			'data' => self::dataDefault(),
 			'dqlTemplate' => 'SELECT COALESCE(t.col_datetime, t.col_datetime) FROM %s t',
@@ -5051,6 +5119,11 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		return floor($phpVersion / 10000) . '.' . floor(($phpVersion % 10000) / 100);
 	}
 
+	private static function hasExpressionWithReturnType(): bool
+	{
+		return interface_exists(ExpressionWithReturnType::class); // ORM 3.7+
+	}
+
 	private static function hasDbal4(): bool
 	{
 		if (!class_exists(InstalledVersions::class)) {
@@ -5121,6 +5194,12 @@ final class QueryResultTypeWalkerFetchTypeMatrixTest extends PHPStanTestCase
 		$config->addCustomStringFunction('BOOL_PI', TypedExpressionBooleanPiFunction::class);
 		$config->addCustomStringFunction('STRING_PI', TypedExpressionStringPiFunction::class);
 		$config->addCustomStringFunction('INT_WRAP', TypedExpressionIntegerWrapFunction::class);
+
+		if (self::hasExpressionWithReturnType()) {
+			$config->addCustomStringFunction('RT_INT_PI', ExpressionWithReturnTypeIntegerPiFunction::class);
+			$config->addCustomStringFunction('RT_STRING_PI', ExpressionWithReturnTypeStringPiFunction::class);
+			$config->addCustomStringFunction('RT_INT_WRAP', ExpressionWithReturnTypeIntegerWrapFunction::class);
+		}
 
 		return $config;
 	}

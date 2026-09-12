@@ -1,13 +1,11 @@
 --- src/Mapping/JoinColumns.php	2024-02-03 17:50:09
 +++ src/Mapping/JoinColumns.php	2024-02-08 14:26:44
-@@ -4,6 +4,10 @@
-
+@@ -5,6 +5,8 @@
  namespace Doctrine\ORM\Mapping;
-
-+/**
+ 
+ /**
 + * @Annotation
 + * @Target("PROPERTY")
-+ */
- final class JoinColumns implements MappingAttribute
- {
-     /** @param array<JoinColumn> $value */
+  * @deprecated Using this attribute has no effect, use the `#[JoinColumn]`
+  *              attribute instead, it is repeatable.
+  */

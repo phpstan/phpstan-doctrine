@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\AST;
+use Doctrine\ORM\Query\AST\ExpressionWithReturnType;
 use Doctrine\ORM\Query\AST\TypedExpression;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\ParserResult;
@@ -1235,12 +1236,9 @@ class QueryResultTypeWalker extends SqlWalker
 			$resultAlias = $selectExpression->fieldIdentificationVariable ?? $this->scalarResultCounter++;
 			$type = $this->unmarshalType($expr->dispatch($this));
 
-			if (
-				$expr instanceof TypedExpression
-				&& !$expr->getReturnType() instanceof DbalStringType // StringType is no-op, so using TypedExpression with that does nothing
-				&& !$expr->getReturnType() instanceof DbalEnumType // EnumType is also no-op
-			) {
-				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
+			$dbalTypeName = $this->resolveExpressionReturnTypeName($expr);
+
+			if ($dbalTypeName !== null) {
 				$type = TypeCombinator::intersect( // e.g. count is typed as int, but we infer int<0, max>
 					$type,
 					$this->resolveDoctrineType($dbalTypeName, null, null, TypeCombinator::containsNull($type)),
@@ -2046,6 +2044,32 @@ class QueryResultTypeWalker extends SqlWalker
 		}
 
 		return array_values($values);
+	}
+
+	/**
+	 * Returns null when the expression declares no DBAL type
+	 * or when the declared type does not convert the fetched value.
+	 */
+	private function resolveExpressionReturnTypeName(AST\Node $expr): ?string
+	{
+		if ($expr instanceof ExpressionWithReturnType) { // ORM 3.7+
+			$typeName = $expr->getReturnTypeName();
+		} elseif ($expr instanceof TypedExpression) { // deprecated since ORM 3.7
+			$typeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
+		} else {
+			return null;
+		}
+
+		if (DbalType::hasType($typeName)) {
+			$dbalType = DbalType::getType($typeName);
+
+			// convertToPHPValue() of StringType and EnumType is no-op, so the actual type depends on the driver
+			if ($dbalType instanceof DbalStringType || $dbalType instanceof DbalEnumType) {
+				return null;
+			}
+		}
+
+		return $typeName;
 	}
 
 	/**
