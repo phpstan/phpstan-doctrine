@@ -192,9 +192,20 @@ class EntityColumnRule implements Rule
 		}
 
 		$nullable = isset($fieldMapping['nullable']) ? $fieldMapping['nullable'] === true : false;
-		if ($nullable) {
-			$writableToPropertyType = TypeCombinator::addNull($writableToPropertyType);
+
+		// In single table inheritance, the database columns of child entities are always nullable,
+		// because the column is shared with the rest of the hierarchy that does not have the field set
+		// (see Doctrine\ORM\Tools\SchemaTool::gatherColumn). The property itself, however, may stay
+		// non-nullable, so the forced database nullability must not be required on the property side.
+		$nullabilityForcedBySingleTableInheritance = $metadata->isInheritanceTypeSingleTable()
+			&& $metadata->parentClasses !== []
+			&& !isset($fieldMapping['inherited']);
+
+		if ($nullable || $nullabilityForcedBySingleTableInheritance) {
 			$writableToDatabaseType = TypeCombinator::addNull($writableToDatabaseType);
+		}
+		if ($nullable && !$nullabilityForcedBySingleTableInheritance) {
+			$writableToPropertyType = TypeCombinator::addNull($writableToPropertyType);
 		}
 
 		$phpDocType = $node->getPhpDocType();
