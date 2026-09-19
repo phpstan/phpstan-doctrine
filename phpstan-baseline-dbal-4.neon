@@ -50,7 +50,7 @@ parameters:
 				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Classes/entity-manager.php
 
 		-
@@ -61,7 +61,7 @@ parameters:
 				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Classes/entity-manager.php
 
 		-
@@ -144,7 +144,7 @@ parameters:
 				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: method.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Rules/Properties/entity-manager.php
 
 		-
@@ -155,7 +155,7 @@ parameters:
 				From https://github.com/doctrine/orm/blob/40fbbf4429b0d66517244051237a2bd0616a7a13/src/Mapping/Driver/AnnotationDriver.php
 			'''
 			identifier: new.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Rules/Properties/entity-manager.php
 
 		-

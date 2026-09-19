@@ -1,0 +1,11 @@
+parameters:
+	doctrine:
+		objectManagerLoader: entity-manager.php
+
+services:
+	-
+		class: PHPStan\Rules\Gedmo\PropertiesExtension
+		arguments:
+			objectMetadataResolver: @PHPStan\Type\Doctrine\ObjectMetadataResolver
+		tags:
+			- phpstan.properties.readWriteExtension

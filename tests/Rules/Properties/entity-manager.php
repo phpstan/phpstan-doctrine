@@ -19,11 +19,19 @@ $metadataDriver->addDriver(new AnnotationDriver(
 	new AnnotationReader(),
 	[__DIR__ . '/data'],
 ), 'PHPStan\\Rules\\Doctrine\\ORM\\');
+$metadataDriver->addDriver(new AnnotationDriver(
+	new AnnotationReader(),
+	[__DIR__ . '/data'],
+), 'MissingGedmoWrittenPropertyAssignPhpDoc\\');
 
 if (PHP_VERSION_ID >= 80100) {
 	$metadataDriver->addDriver(
 		new AttributeDriver([__DIR__ . '/data']),
 		'PHPStan\\Rules\\Doctrine\\ORMAttributes\\',
+	);
+	$metadataDriver->addDriver(
+		new AttributeDriver([__DIR__ . '/data']),
+		'MissingGedmoWrittenPropertyAssign\\',
 	);
 }
 
