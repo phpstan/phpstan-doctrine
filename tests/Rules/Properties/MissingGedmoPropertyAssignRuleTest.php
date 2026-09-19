@@ -4,10 +4,9 @@ namespace PHPStan\Rules\Properties;
 
 use Iterator;
 use PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule;
-use PHPStan\Rules\Gedmo\PropertiesExtension;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use function array_merge;
 use const PHP_VERSION_ID;
 
 /**
@@ -21,16 +20,12 @@ class MissingGedmoPropertyAssignRuleTest extends RuleTestCase
 		return self::getContainer()->getByType(UnusedPrivatePropertyRule::class);
 	}
 
-	protected function getReadWritePropertiesExtensions(): array
-	{
-		return [
-			new PropertiesExtension(new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp')),
-		];
-	}
-
 	public static function getAdditionalConfigFiles(): array
 	{
-		return [__DIR__ . '/../../../extension.neon'];
+		return array_merge(parent::getAdditionalConfigFiles(), [
+			__DIR__ . '/../../../extension.neon',
+			__DIR__ . '/gedmo-property-assign-rule.neon',
+		]);
 	}
 
 	/**
