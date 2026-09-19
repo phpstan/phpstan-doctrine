@@ -270,7 +270,7 @@ parameters:
 				This class will be removed in 3\.0 without replacement\.$#
 			'''
 			identifier: method.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Rules/Properties/entity-manager.php
 
 		-
@@ -279,7 +279,7 @@ parameters:
 				This class will be removed in 3\.0 without replacement\.$#
 			'''
 			identifier: new.deprecatedClass
-			count: 1
+			count: 2
 			path: tests/Rules/Properties/entity-manager.php
 
 		-
