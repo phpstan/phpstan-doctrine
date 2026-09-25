@@ -74,7 +74,7 @@ class Connection
 
     /**
      * @param-immediately-invoked-callable $func
-     * @param Closure(self): T $func
+     * @param Closure(static): T $func
      * @return T
      *
      * @template T
