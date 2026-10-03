@@ -5,7 +5,7 @@ namespace PHPStan\Type\Doctrine;
 use Doctrine\Common\Collections\Collection;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -48,7 +48,7 @@ final class DoctrineSelectableDynamicReturnTypeExtensionTest extends TestCase
 	{
 		$methodReflection = $this->createMock(MethodReflection::class);
 
-		$scope = $this->createMock(Scope::class);
+		$scope = $this->createMock(MutatingScope::class);
 		$scope->method('getType')->will(
 			self::returnCallback(
 				static fn (): Type => new ObjectType(Collection::class),

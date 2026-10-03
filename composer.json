@@ -8,7 +8,7 @@
 	"keywords": ["static analysis"],
 	"require": {
 		"php": "^7.4 || ^8.0",
-		"phpstan/phpstan": "^2.2.10"
+		"phpstan/phpstan": "^2.3"
 	},
 	"conflict": {
 		"doctrine/collections": "<1.0",
@@ -33,8 +33,8 @@
 		"nesbot/carbon": "^2.49",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-deprecation-rules": "^2.0.2",
-		"phpstan/phpstan-phpunit": "^2.0.8",
-		"phpstan/phpstan-strict-rules": "^2.0",
+		"phpstan/phpstan-phpunit": "^2.1",
+		"phpstan/phpstan-strict-rules": "^2.1",
 		"phpunit/phpunit": "^9.6.20",
 		"ramsey/uuid": "^4.2",
 		"shipmonk/name-collision-detector": "^2.1",

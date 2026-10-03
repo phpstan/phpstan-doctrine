@@ -15,6 +15,7 @@ final class DoctrineSelectableClassReflectionExtensionTest extends PHPStanTestCa
 
 	protected function setUp(): void
 	{
+		parent::setUp();
 		$this->reflectionProvider = $this->createReflectionProvider();
 		$this->extension = new DoctrineSelectableClassReflectionExtension($this->reflectionProvider);
 
