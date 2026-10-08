@@ -551,6 +551,26 @@ class EntityColumnRuleTest extends RuleTestCase
 	/**
 	 * @dataProvider dataObjectManagerLoader
 	 */
+	public function testSingleTableInheritance(?string $objectManagerLoader): void
+	{
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+
+		$this->analyse([__DIR__ . '/data/single-table-inheritance.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\SingleTableInheritance\ChildEntity::$childBrokenColumn type mapping mismatch: database can contain string but property expects int.',
+				69,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\SingleTableInheritance\ChildEntity::$childBrokenColumn type mapping mismatch: property can contain int but database expects string|null.',
+				69,
+			],
+		]);
+	}
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
 	public function testBug659(?string $objectManagerLoader): void
 	{
 		$this->allowNullablePropertyForRequiredField = false;
