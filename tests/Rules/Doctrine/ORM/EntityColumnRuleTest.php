@@ -83,6 +83,9 @@ class EntityColumnRuleTest extends RuleTestCase
 		if (!Type::hasType('array')) {
 			Type::addType('array', \Doctrine\DBAL\Types\ArrayType::class);
 		}
+		// entity-manager.php overrides the date type for the whole process, so without this the
+		// result of a data set without an object manager depends on the tests that ran before it
+		Type::overrideType('date', \Doctrine\DBAL\Types\DateTimeImmutableType::class);
 
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
