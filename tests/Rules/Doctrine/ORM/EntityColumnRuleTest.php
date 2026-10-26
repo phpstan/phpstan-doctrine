@@ -84,6 +84,10 @@ class EntityColumnRuleTest extends RuleTestCase
 			Type::addType('array', \Doctrine\DBAL\Types\ArrayType::class);
 		}
 
+		// entity-manager.php overrides the global "date" type; do the same here
+		// so the result does not depend on whether a loader ran earlier in the process
+		Type::overrideType('date', \Doctrine\DBAL\Types\DateTimeImmutableType::class);
+
 		return new EntityColumnRule(
 			new ObjectMetadataResolver($this->objectManagerLoader, __DIR__ . '/../../../../tmp'),
 			new DefaultDescriptorRegistry([
