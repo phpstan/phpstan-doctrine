@@ -25,6 +25,7 @@ use PHPStan\Type\Doctrine\Descriptors\NumberType;
 use PHPStan\Type\Doctrine\Descriptors\Ramsey\UuidTypeDescriptor as RamseyUuidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\ReflectionDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\SimpleArrayType;
+use PHPStan\Type\Doctrine\Descriptors\SmallIntType;
 use PHPStan\Type\Doctrine\Descriptors\StringType;
 use PHPStan\Type\Doctrine\Descriptors\Symfony\UlidTypeDescriptor as SymfonyUlidTypeDescriptor;
 use PHPStan\Type\Doctrine\Descriptors\Symfony\UuidTypeDescriptor as SymfonyUuidTypeDescriptor;
@@ -101,6 +102,7 @@ class EntityColumnRuleTest extends RuleTestCase
 				new JsonType(),
 				new IntegerType(),
 				new NumberType(),
+				new SmallIntType(),
 				new StringType(),
 				new SimpleArrayType(),
 				new EnumType(),
@@ -476,6 +478,25 @@ class EntityColumnRuleTest extends RuleTestCase
 			[
 				'Property PHPStan\Rules\Doctrine\ORM\Bug306\MyBrokenEntity::$one type mapping mismatch: database can contain string|null but property expects string.',
 				25,
+			],
+		]);
+	}
+
+	/**
+	 * @dataProvider dataObjectManagerLoader
+	 */
+	public function testBug672(?string $objectManagerLoader): void
+	{
+		$this->allowNullablePropertyForRequiredField = false;
+		$this->objectManagerLoader = $objectManagerLoader;
+		$this->analyse([__DIR__ . '/data/bug-672.php'], [
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\Bug672\SmallIntEntity::$signedAsUnsigned type mapping mismatch: database can contain int<-32768, 32767> but property expects int<0, 65535>.',
+				54,
+			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORM\Bug672\SmallIntEntity::$unsignedAsSigned type mapping mismatch: database can contain int<0, 65535> but property expects int<-32768, 32767>.',
+				60,
 			],
 		]);
 	}

@@ -12,8 +12,10 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Doctrine\DescriptorNotRegisteredException;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\Descriptors\SmallIntType;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 use PHPStan\Type\ErrorType;
+use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
@@ -177,6 +179,10 @@ class EntityColumnRule implements Rule
 					$writableToDatabaseType = $unionType;
 				}
 			}
+		} elseif ($descriptor instanceof SmallIntType) {
+			$writableToPropertyType = ($fieldMapping['options']['unsigned'] ?? false) === true
+				? IntegerRangeType::fromInterval(0, 65535)
+				: IntegerRangeType::fromInterval(-32768, 32767);
 		}
 
 		$identifiers = [];
