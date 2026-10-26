@@ -125,3 +125,30 @@ parameters:
 			identifier: new.deprecated
 			count: 1
 			path: tests/Type/Doctrine/DBAL/pdo.php
+
+		-
+			message: '#^Access to constant on deprecated class Doctrine\\DBAL\\Types\\SimpleArrayType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/SimpleArrayType.php
+
+		-
+			message: '#^Instanceof references deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#'
+			identifier: instanceof.deprecatedInterface
+			count: 1
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: '#^Call to method getReturnType\(\) of deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#'
+			identifier: method.deprecatedInterface
+			count: 3
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: '#^Class PHPStan\\Platform\\TypedExpression[a-zA-Z]+Function implements deprecated interface Doctrine\\ORM\\Query\\AST\\TypedExpression\:#'
+			identifier: class.implementsDeprecatedInterface
+			paths:
+				- tests/Platform/TypedExpressionBooleanPiFunction.php
+				- tests/Platform/TypedExpressionIntegerPiFunction.php
+				- tests/Platform/TypedExpressionIntegerWrapFunction.php
+				- tests/Platform/TypedExpressionStringPiFunction.php
