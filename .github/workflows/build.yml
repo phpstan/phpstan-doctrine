@@ -17,6 +17,9 @@ jobs:
     name: "Lint"
     runs-on: "ubuntu-latest"
 
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
+
     strategy:
       fail-fast: false
       matrix:
@@ -104,6 +107,9 @@ jobs:
   tests:
     name: "Tests"
     runs-on: "ubuntu-latest"
+
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
 
     strategy:
       fail-fast: false
@@ -241,6 +247,9 @@ jobs:
   static-analysis:
     name: "PHPStan"
     runs-on: "ubuntu-latest"
+
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
 
     strategy:
       fail-fast: false
