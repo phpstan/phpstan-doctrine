@@ -100,7 +100,7 @@ class Connection
      *
      * @throws Exception
      */
-    public function delete(string $table, array $criteria = [], array $types = []): int|string;
+    public function delete(string $table, array $criteria = [], array $types = []);
 
     /**
      * Executes an SQL UPDATE statement on a table.
@@ -116,7 +116,7 @@ class Connection
      *
      * @throws Exception
      */
-    public function update(string $table, array $data, array $criteria = [], array $types = []): int|string;
+    public function update(string $table, array $data, array $criteria = [], array $types = []);
 
     /**
      * Inserts a table row with specified data.
@@ -131,7 +131,7 @@ class Connection
      *
      * @throws Exception
      */
-    public function insert(string $table, array $data, array $types = []): int|string;
+    public function insert(string $table, array $data, array $types = []);
 
     /**
      * @param list<mixed>|array<string, mixed> $params
