@@ -109,6 +109,97 @@ class MyRepository extends EntityRepository
 }
 
 /**
+ * @ORM\Entity(repositoryClass=NonGenericRepository::class)
+ */
+class EntityWithNonGenericRepository
+{
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 *
+	 * @var int
+	 */
+	private $id;
+}
+
+/**
+ * @extends EntityRepository<EntityWithNonGenericRepository>
+ */
+class NonGenericRepository extends EntityRepository
+{
+
+}
+
+/**
+ * @ORM\Entity(repositoryClass=UnrelatedTemplateRepository::class)
+ */
+class EntityWithUnrelatedTemplateRepository
+{
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 *
+	 * @var int
+	 */
+	private $id;
+}
+
+/**
+ * @template TKey
+ * @extends EntityRepository<EntityWithUnrelatedTemplateRepository>
+ */
+class UnrelatedTemplateRepository extends EntityRepository
+{
+
+}
+
+/**
+ * @ORM\Entity(repositoryClass=TwoTemplatesRepository::class)
+ */
+class EntityWithTwoTemplatesRepository
+{
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 *
+	 * @var int
+	 */
+	private $id;
+}
+
+/**
+ * @template T of object
+ * @template TKey
+ * @extends EntityRepository<T>
+ */
+class TwoTemplatesRepository extends EntityRepository
+{
+
+}
+
+class UseNonGenericRepository
+{
+
+	public function doFoo(EntityManagerInterface $entityManager): void
+	{
+		$repository = $entityManager->getRepository(EntityWithNonGenericRepository::class);
+		assertType(NonGenericRepository::class, $repository);
+		assertType(EntityWithNonGenericRepository::class . '|null', $repository->find(1));
+
+		$repository = $entityManager->getRepository(EntityWithUnrelatedTemplateRepository::class);
+		assertType(UnrelatedTemplateRepository::class, $repository);
+		assertType(EntityWithUnrelatedTemplateRepository::class . '|null', $repository->find(1));
+
+		assertType(TwoTemplatesRepository::class, $entityManager->getRepository(EntityWithTwoTemplatesRepository::class));
+		assertType(MyRepository::class . '<' . MyEntity::class . '>', $entityManager->getRepository(MyEntity::class));
+	}
+
+}
+
+/**
  * @template T of MyEntity
  * @extends EntityRepository<T>
  */

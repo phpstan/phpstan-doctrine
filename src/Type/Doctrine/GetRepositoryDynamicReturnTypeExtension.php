@@ -18,10 +18,12 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use function array_key_first;
 use function count;
 
 class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -112,10 +114,42 @@ class GetRepositoryDynamicReturnTypeExtension implements DynamicMethodReturnType
 				return $this->getDefaultReturnType($scope, $methodCall->getArgs(), $methodReflection, $defaultRepositoryClass);
 			}
 
+			if (!$this->isRepositoryGenericOverObject($repositoryClass)) {
+				$repositoryTypes[] = new ObjectType($repositoryClass);
+				continue;
+			}
+
 			$repositoryTypes[] = new GenericObjectType($repositoryClass, [$classType]);
 		}
 
 		return TypeCombinator::union(...$repositoryTypes);
+	}
+
+	/**
+	 * Whether the repository has a single @template that is passed to ObjectRepository<T>.
+	 */
+	private function isRepositoryGenericOverObject(string $repositoryClass): bool
+	{
+		if (!$this->reflectionProvider->hasClass($repositoryClass)) {
+			return true;
+		}
+
+		$classReflection = $this->reflectionProvider->getClass($repositoryClass);
+		$templateTypes = $classReflection->getTemplateTypeMap()->getTypes();
+		if (count($templateTypes) !== 1) {
+			return false;
+		}
+
+		$objectRepository = $classReflection->getAncestorWithClassName(ObjectRepository::class);
+		if ($objectRepository === null) {
+			return false;
+		}
+
+		$objectType = $objectRepository->getActiveTemplateTypeMap()->getType('T');
+
+		return $objectType instanceof TemplateType
+			&& $objectType->getScope()->getClassName() === $classReflection->getName()
+			&& $objectType->getName() === array_key_first($templateTypes);
 	}
 
 	/**
