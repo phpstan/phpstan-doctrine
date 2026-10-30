@@ -61,4 +61,34 @@ class Foo
 	 */
 	#[ORM\Column(type: "simple_array", enumType: BazEnum::class)]
 	public array $type7;
+
+	/**
+	 * @var list<BazEnum>
+	 */
+	#[ORM\Column(type: "json", enumType: BazEnum::class)]
+	public array $type8;
+
+	/**
+	 * @var array<BazEnum>
+	 */
+	#[ORM\Column(type: "json", enumType: BazEnum::class)]
+	public array $type9;
+
+	/**
+	 * @var BazEnum[]
+	 */
+	#[ORM\Column(type: "json", enumType: BazEnum::class)]
+	public array $type10;
+
+	/**
+	 * @var list<FooEnum>
+	 */
+	#[ORM\Column(type: "json", enumType: FooEnum::class)]
+	public array $type11;
+
+	/**
+	 * @var list<string>
+	 */
+	#[ORM\Column(type: "json", enumType: BazEnum::class)]
+	public array $type12;
 }
