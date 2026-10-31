@@ -9,6 +9,7 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDoc\TypeNodeResolverAwareExtension;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NameNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\NullType;
@@ -31,7 +32,9 @@ class QueryTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeN
 			return null;
 		}
 
-		$typeName = $nameScope->resolveStringName($typeNode->type->name);
+		$typeName = $nameScope->resolveStringName(
+			$typeNode->type instanceof NameNode ? $typeNode->type->toCodeString() : $typeNode->type->name,
+		);
 		if ($typeName !== Query::class && $typeName !== AbstractQuery::class) {
 			return null;
 		}
