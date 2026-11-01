@@ -45,6 +45,18 @@
 		"sort-packages": true,
 		"allow-plugins": {
 			"cweagans/composer-patches": true
+		},
+		"audit": {
+			"ignore": {
+				"CVE-2026-81525": {
+					"apply": "block",
+					"reason": "mongodb/mongodb is a dev dependency for tests; all versions that support PHP < 8.1 are affected"
+				},
+				"CVE-2026-88023": {
+					"apply": "block",
+					"reason": "mongodb/mongodb is a dev dependency for tests; all versions that support PHP < 8.1 are affected"
+				}
+			}
 		}
 	},
 	"extra": {
