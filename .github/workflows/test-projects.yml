@@ -7,6 +7,10 @@ on:
     branches:
       - "2.1.x"
 
+concurrency:
+  group: test-projects
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

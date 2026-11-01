@@ -12,6 +12,9 @@ concurrency:
   group: build-${{ github.head_ref || github.run_id }} # will be canceled on subsequent pushes in pull requests but not branches
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: "Lint"
@@ -37,6 +40,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2
@@ -68,10 +73,13 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Checkout build-cs"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           repository: "phpstan/build-cs"
           path: "build-cs"
           ref: "2.x"
@@ -141,6 +149,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2
@@ -159,7 +169,7 @@ jobs:
         run: "composer update --no-interaction --no-progress"
 
       - name: "Update packages"
-        run: ${{ matrix.update-packages }}
+        run: ${{ matrix.update-packages }} # zizmor: ignore[template-injection] the script is defined by the matrix above
 
       - name: "Tests"
         run: "make tests"
@@ -184,15 +194,19 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Checkout build-infection"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           repository: "phpstan/build-infection"
           path: "build-infection"
           ref: "1.x"
 
-      - uses: ./build-infection/.github/actions/setup-php
+      # The action comes from the phpstan/build-infection checkout above, which the $/ self-repository syntax cannot load
+      - uses: ./build-infection/.github/actions/setup-php # zizmor: ignore[self-repository]
         with:
           php-version: "${{ matrix.php-version }}"
           php-extensions: pdo, mysqli, pgsql, pdo_mysql, pdo_pgsql, pdo_sqlite, mongodb
@@ -260,6 +274,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2
@@ -273,7 +289,7 @@ jobs:
         run: "composer update --no-interaction --no-progress"
 
       - name: "Update packages"
-        run: ${{ matrix.update-packages }}
+        run: ${{ matrix.update-packages }} # zizmor: ignore[template-injection] the script is defined by the matrix above
 
       - name: "PHPStan"
         run: "make phpstan"
@@ -292,6 +308,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2
@@ -299,7 +317,7 @@ jobs:
           coverage: "none"
           php-version: "8.5"
 
-      - uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
+      - uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # 4.0.0
 
       - name: "Name Collision Detector"
         run: "make name-collision"
