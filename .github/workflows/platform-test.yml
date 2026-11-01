@@ -8,6 +8,10 @@ on:
     branches:
       - "2.1.x"
 
+concurrency:
+  group: platform-test-${{ github.head_ref || github.run_id }} # will be canceled on subsequent pushes in pull requests but not branches
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -49,6 +53,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2
@@ -63,14 +69,19 @@ jobs:
 
       - name: "Update packages"
         if: ${{ matrix.update-packages != '' }}
-        run: composer require --dev ${{ matrix.update-packages }} -W
+        env:
+          UPDATE_PACKAGES: ${{ matrix.update-packages }}
+        run: |
+          # shellcheck disable=SC2086 # UPDATE_PACKAGES is a space-separated list of packages
+          composer require --dev $UPDATE_PACKAGES -W
 
       - name: "Run platform matrix test"
         run: vendor/bin/phpunit --group=platform
 
     services:
+      # Platform tests deliberately run against the newest database server releases
       postgres:
-        image: "postgres:latest"
+        image: "postgres:latest" # zizmor: ignore[unpinned-images]
         env:
           POSTGRES_PASSWORD: "secret"
           POSTGRES_USER: root
@@ -79,7 +90,7 @@ jobs:
           - "5432:5432"
 
       mysql:
-        image: "mysql:latest"
+        image: "mysql:latest" # zizmor: ignore[unpinned-images]
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: secret
