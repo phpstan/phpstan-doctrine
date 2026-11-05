@@ -4,8 +4,11 @@ namespace PHPStan\Type\Doctrine\Descriptors;
 
 use Doctrine\DBAL\Connection;
 use PHPStan\Doctrine\Driver\DriverDetector;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\Accessory\AccessoryUppercaseStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -28,7 +31,7 @@ class DecimalType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 
 	public function getWritableToPropertyType(): Type
 	{
-		return (new FloatType())->toString();
+		return $this->getDecimalStringType();
 	}
 
 	public function getWritableToDatabaseType(): Type
@@ -55,11 +58,23 @@ class DecimalType implements DoctrineTypeDescriptor, DoctrineTypeDriverAwareDesc
 			DriverDetector::PGSQL,
 			DriverDetector::PDO_PGSQL,
 		], true)) {
-			return (new FloatType())->toString();
+			return $this->getDecimalStringType();
 		}
 
 		// not yet supported driver, return the old implementation guess
 		return $this->getDatabaseInternalType();
+	}
+
+	/**
+	 * (string) of a finite float. Unlike FloatType::toString(), leaves out 'INF', '-INF' and 'NAN', which are not numeric strings.
+	 */
+	private function getDecimalStringType(): Type
+	{
+		return new IntersectionType([
+			new StringType(),
+			new AccessoryNumericStringType(),
+			new AccessoryUppercaseStringType(),
+		]);
 	}
 
 }
