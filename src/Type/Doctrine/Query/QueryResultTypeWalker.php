@@ -2247,9 +2247,14 @@ class QueryResultTypeWalker extends SqlWalker
 
 	private function simpleStringify(Type $type): Type
 	{
-		return TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+		return TypeTraverser::map($type, function (Type $type, callable $traverse): Type {
 			if ($type instanceof UnionType || $type instanceof IntersectionType) {
 				return $traverse($type);
+			}
+
+			// FloatType::toString() also covers the non-numeric 'INF' and 'NAN', which the database does not return
+			if ($type instanceof FloatType && !$type instanceof ConstantFloatType) {
+				return $this->createNumericString(false, false, true);
 			}
 
 			if ($type instanceof IntegerType || $type instanceof FloatType || $type instanceof BooleanType) {
