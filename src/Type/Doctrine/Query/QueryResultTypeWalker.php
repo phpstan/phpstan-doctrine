@@ -60,13 +60,11 @@ use function is_int;
 use function is_numeric;
 use function is_object;
 use function is_string;
-use function serialize;
 use function sprintf;
 use function stripos;
 use function strpos;
 use function strtolower;
 use function strtoupper;
-use function unserialize;
 
 /**
  * QueryResultTypeWalker is a TreeWalker that uses a QueryResultTypeBuilder to build the result type of a Query
@@ -97,6 +95,13 @@ class QueryResultTypeWalker extends SqlWalker
 	 *
 	 */
 	private int $newObjectCounter = 0;
+
+	/**
+	 * Types handed between walker methods, which have to return strings
+	 *
+	 * @var array<string, Type>
+	 */
+	private array $marshalledTypes = [];
 
 	/** @var Query<mixed> */
 	private Query $query;
@@ -1980,7 +1985,7 @@ class QueryResultTypeWalker extends SqlWalker
 
 	private function unmarshalType(string $marshalledType): Type
 	{
-		$type = unserialize($marshalledType);
+		$type = $this->marshalledTypes[$marshalledType] ?? null;
 
 		assert($type instanceof Type);
 
@@ -1989,9 +1994,13 @@ class QueryResultTypeWalker extends SqlWalker
 
 	private function marshalType(Type $type): string
 	{
-		// TreeWalker methods are supposed to return string, so we need to
-		// marshal the types in strings
-		return serialize($type);
+		// TreeWalker methods are supposed to return string, so we keep the type
+		// and return a key to it. Serializing it would copy it and fail on
+		// types that hold reflection.
+		$key = sprintf('#type%d', count($this->marshalledTypes));
+		$this->marshalledTypes[$key] = $type;
+
+		return $key;
 	}
 
 	private function isQueryComponentNullable(string $dqlAlias): bool
