@@ -26,6 +26,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ConstantTypeHelper;
 use PHPStan\Type\Doctrine\DescriptorRegistry;
+use PHPStan\Type\Doctrine\Descriptors\DoctrineTypeDescriptor;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntegerType;
@@ -262,6 +263,89 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 				),
 			);
 		}
+	}
+
+	public function testTypesThatCannotBeSerialized(): void
+	{
+		// A descriptor can hand out a type instance that PHPStan has already
+		// worked with, and PHPStan caches reflection inside such instances.
+		$dateTime = new ObjectType(DateTimeImmutable::class);
+		$dateTime->getClassReflection();
+		$databaseInternalType = TypeCombinator::union(new StringType(), $dateTime);
+
+		$stringDescriptor = $this->descriptorRegistry->get('string');
+		$descriptorRegistry = new class ($this->descriptorRegistry, $stringDescriptor, $databaseInternalType) implements DescriptorRegistry {
+
+			private DescriptorRegistry $registry;
+
+			private DoctrineTypeDescriptor $stringDescriptor;
+
+			private Type $databaseInternalType;
+
+			public function __construct(DescriptorRegistry $registry, DoctrineTypeDescriptor $stringDescriptor, Type $databaseInternalType)
+			{
+				$this->registry = $registry;
+				$this->stringDescriptor = $stringDescriptor;
+				$this->databaseInternalType = $databaseInternalType;
+			}
+
+			public function get(string $type): DoctrineTypeDescriptor
+			{
+				if ($type !== 'string') {
+					return $this->registry->get($type);
+				}
+
+				return new class ($this->stringDescriptor, $this->databaseInternalType) implements DoctrineTypeDescriptor {
+
+					private DoctrineTypeDescriptor $descriptor;
+
+					private Type $databaseInternalType;
+
+					public function __construct(DoctrineTypeDescriptor $descriptor, Type $databaseInternalType)
+					{
+						$this->descriptor = $descriptor;
+						$this->databaseInternalType = $databaseInternalType;
+					}
+
+					public function getType(): string
+					{
+						return $this->descriptor->getType();
+					}
+
+					public function getWritableToPropertyType(): Type
+					{
+						return $this->descriptor->getWritableToPropertyType();
+					}
+
+					public function getWritableToDatabaseType(): Type
+					{
+						return $this->descriptor->getWritableToDatabaseType();
+					}
+
+					public function getDatabaseInternalType(): Type
+					{
+						return $this->databaseInternalType;
+					}
+
+				};
+			}
+
+		};
+
+		$typeBuilder = new QueryResultTypeBuilder();
+
+		QueryResultTypeWalker::walk(
+			self::$em->createQuery('SELECT MAX(o.stringColumn) FROM QueryResult\Entities\One o'),
+			$typeBuilder,
+			$descriptorRegistry,
+			self::getContainer()->getByType(PhpVersion::class),
+			self::getContainer()->getByType(DriverDetector::class),
+		);
+
+		self::assertSame(
+			'array{1: DateTimeImmutable|string|null}',
+			$typeBuilder->getResultType()->describe(VerbosityLevel::precise()),
+		);
 	}
 
 	/**
