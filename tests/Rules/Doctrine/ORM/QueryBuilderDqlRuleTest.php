@@ -2,9 +2,13 @@
 
 namespace PHPStan\Rules\Doctrine\ORM;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use SortDirection;
+use function class_exists;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -165,6 +169,46 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 			['Could not analyse QueryBuilder with dynamic arguments.', 61],
 			['Could not analyse QueryBuilder with dynamic arguments.', 66],
 			['Could not analyse QueryBuilder with dynamic arguments.', 71],
+		]);
+	}
+
+	public function testSortDirection(): void
+	{
+		if (!class_exists(SortDirection::class)) {
+			self::markTestSkipped('Test requires SortDirection enum.');
+		}
+
+		if (!InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '>=3.7')) {
+			// ORM below 3.7 does not accept SortDirection so it stays a dynamic argument.
+			$this->analyse([__DIR__ . '/data/query-builder-dql-sort-direction.php'], [
+				['Could not analyse QueryBuilder with dynamic arguments.', 51],
+				['Could not analyse QueryBuilder with dynamic arguments.', 60],
+				['Could not analyse QueryBuilder with dynamic arguments.', 78],
+			]);
+			return;
+		}
+
+		$this->analyse([__DIR__ . '/data/query-builder-dql-sort-direction.php'], [
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 63 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				23,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 76 near \'name DESC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				41,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 63 near \'name DESC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				51,
+			],
+			[
+				'Could not analyse QueryBuilder with dynamic arguments.',
+				69,
+			],
+			[
+				'Could not analyse QueryBuilder with dynamic arguments.',
+				78,
+			],
 		]);
 	}
 
