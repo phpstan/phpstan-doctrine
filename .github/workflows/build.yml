@@ -186,6 +186,7 @@ jobs:
         php-version:
           - "8.3"
           - "8.4"
+          - "8.5"
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -225,8 +226,8 @@ jobs:
           > infection.json5
           jq . infection.json5
 
-      - name: "Cache Result cache"
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: "Restore result cache"
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ./tmp
           key: "result-cache-v1-${{ matrix.php-version }}-${{ github.run_id }}"
@@ -245,6 +246,13 @@ jobs:
             --log-verbosity=all \
             --debug \
             --logger-text=php://stdout
+
+      - name: "Save result cache"
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: ${{ !cancelled() }}
+        with:
+          path: ./tmp
+          key: "result-cache-v1-${{ matrix.php-version }}-${{ github.run_id }}"
 
   static-analysis:
     name: "PHPStan"

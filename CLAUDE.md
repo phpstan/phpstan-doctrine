@@ -131,7 +131,7 @@ The CI runs on every pull request and push to `2.0.x`:
 2. **Coding Standard** — phpcs with build-cs rules
 3. **Tests** — PHPUnit on PHP 7.4–8.4, both lowest and highest dependencies, plus a special matrix entry with ORM 3.x + DBAL 4.x
 4. **Static Analysis** — PHPStan at level 8 on PHP 7.4–8.4, plus ORM 3.x + DBAL 4.x variant
-5. **Mutation Testing** — Infection on PHP 8.2–8.4, requires 100% MSI on changed lines
+5. **Mutation Testing** — Infection on PHP 8.3–8.5, pull requests only, requires 100% MSI on changed lines
 6. **Platform Tests** — PHPUnit `platform` group against real MySQL and PostgreSQL databases
 
 ## Architecture Notes
