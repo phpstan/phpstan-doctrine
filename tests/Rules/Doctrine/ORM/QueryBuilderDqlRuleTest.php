@@ -5,6 +5,7 @@ namespace PHPStan\Rules\Doctrine\ORM;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<QueryBuilderDqlRule>
@@ -12,11 +13,13 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolver;
 class QueryBuilderDqlRuleTest extends RuleTestCase
 {
 
+	private bool $reportDynamicQueryBuilders = true;
+
 	protected function getRule(): Rule
 	{
 		return new QueryBuilderDqlRule(
 			new ObjectMetadataResolver(__DIR__ . '/entity-manager.php', __DIR__ . '/../../../../tmp'),
-			true,
+			$this->reportDynamicQueryBuilders,
 		);
 	}
 
@@ -165,6 +168,46 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 			['Could not analyse QueryBuilder with dynamic arguments.', 61],
 			['Could not analyse QueryBuilder with dynamic arguments.', 66],
 			['Could not analyse QueryBuilder with dynamic arguments.', 71],
+		]);
+	}
+
+	public function testDynamicRoots(): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('Test requires PHP 8.0.');
+		}
+
+		// The branch limit must be reported even when ordinary dynamic-query diagnostics are disabled.
+		$this->reportDynamicQueryBuilders = false;
+
+		$this->analyse([__DIR__ . '/data-php-8/query-builder-dynamic-roots.php'], [
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 76 near \'c\': Error: Class PHPStan\Rules\Doctrine\ORM\DynamicRoot has no association named channel',
+				26,
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 87 near \'nonexistent =\': Error: Class PHPStan\Rules\Doctrine\ORM\DynamicRootA has no field or association named nonexistent',
+				35,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\DynamicRootA e INNER JOIN e.channel c WHERE e.nonexistent = 1',
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 87 near \'nonexistent =\': Error: Class PHPStan\Rules\Doctrine\ORM\DynamicRootB has no field or association named nonexistent',
+				35,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\DynamicRootB e INNER JOIN e.channel c WHERE e.nonexistent = 1',
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 77 near \'c\': Error: Class PHPStan\Rules\Doctrine\ORM\PartialRootB has no association named channel',
+				45,
+				'Detected from DQL branch: SELECT e FROM PHPStan\Rules\Doctrine\ORM\PartialRootB e INNER JOIN e.channel c',
+			],
+			[
+				'QueryBuilder: [Semantical Error] line 0, col 76 near \'c\': Error: Class PHPStan\Rules\Doctrine\ORM\DynamicRoot has no association named channel',
+				63,
+			],
+			[
+				'QueryBuilder has more than 16 possible entity-root combinations.',
+				97,
+			],
 		]);
 	}
 

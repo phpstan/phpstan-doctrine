@@ -35,6 +35,8 @@ use function strtolower;
 class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
+	private const MAX_COMBINATIONS = 16;
+
 	/**
 	 * Those are critical methods where we need to understand arguments passed to them, the rest is allowed to be more dynamic
 	 * - this list reflects what is implemented in QueryResultTypeWalker
@@ -126,6 +128,7 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 		$resultTypes = [];
 		foreach ($queryBuilderTypes as $queryBuilderType) {
 			$queryBuilder = $objectManager->createQueryBuilder();
+			$queryBuilders = [$queryBuilder];
 
 			foreach ($queryBuilderType->getMethodCalls() as $calledMethodCall) {
 				if (!$calledMethodCall->name instanceof Identifier) {
@@ -142,12 +145,16 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				}
 
 				if ($lowerMethodName === 'setfirstresult') {
-					$queryBuilder->setFirstResult(0);
+					foreach ($queryBuilders as $currentQueryBuilder) {
+						$currentQueryBuilder->setFirstResult(0);
+					}
 					continue;
 				}
 
 				if ($lowerMethodName === 'setmaxresults') {
-					$queryBuilder->setMaxResults(10);
+					foreach ($queryBuilders as $currentQueryBuilder) {
+						$currentQueryBuilder->setMaxResults(10);
+					}
 					continue;
 				}
 
@@ -158,7 +165,9 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 						return null;
 					}
 					if (count($args) === 1) {
-						$queryBuilder->set($args[0], $args[0]);
+						foreach ($queryBuilders as $currentQueryBuilder) {
+							$currentQueryBuilder->set($args[0], $args[0]);
+						}
 						continue;
 					}
 				}
@@ -168,7 +177,11 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 				}
 
 				try {
-					$args = $this->argumentsProcessor->processArgs($scope, $methodName, $calledMethodCall->getArgs());
+					$alternatives = $this->argumentsProcessor->processQueryBuilderArgsAlternatives(
+						$scope,
+						$methodName,
+						$calledMethodCall->getArgs(),
+					);
 				} catch (DynamicQueryBuilderArgumentException $e) {
 					if (in_array($lowerMethodName, self::METHODS_NOT_AFFECTING_RESULT_TYPE, true)) {
 						continue;
@@ -176,14 +189,31 @@ class QueryBuilderGetQueryDynamicReturnTypeExtension implements DynamicMethodRet
 					return null;
 				}
 
-				try {
-					$queryBuilder->{$methodName}(...$args);
-				} catch (Throwable $e) {
-					return null;
+				if (count($resultTypes) + count($queryBuilders) * count($alternatives) > self::MAX_COMBINATIONS) {
+					return new QueryBuilderAnalysisLimitType(self::MAX_COMBINATIONS);
 				}
+
+				$nextQueryBuilders = [];
+				foreach ($queryBuilders as $currentQueryBuilder) {
+					foreach ($alternatives as $args) {
+						$branchedQueryBuilder = $currentQueryBuilder;
+						if (count($alternatives) > 1) {
+							$branchedQueryBuilder = clone $currentQueryBuilder;
+						}
+						try {
+							$branchedQueryBuilder->{$methodName}(...$args);
+						} catch (Throwable $e) {
+							return null;
+						}
+						$nextQueryBuilders[] = $branchedQueryBuilder;
+					}
+				}
+				$queryBuilders = $nextQueryBuilders;
 			}
 
-			$resultTypes[] = $this->getQueryType($queryBuilder->getDQL());
+			foreach ($queryBuilders as $currentQueryBuilder) {
+				$resultTypes[] = $this->getQueryType($currentQueryBuilder->getDQL());
+			}
 		}
 
 		return TypeCombinator::union(...$resultTypes);
