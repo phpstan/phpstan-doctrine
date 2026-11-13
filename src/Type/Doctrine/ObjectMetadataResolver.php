@@ -11,6 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use ReflectionException;
 use Throwable;
 use function array_merge;
@@ -258,6 +260,54 @@ final class ObjectMetadataResolver
 		$ormMetadata = $metadata;
 
 		return $ormMetadata;
+	}
+
+	/**
+	 * Returns null unless the receiver type directly identifies a single mapped object hierarchy.
+	 * Class-string bounds do not provide direct object class names.
+	 *
+	 * @return non-empty-list<class-string>|null
+	 */
+	public function getConcreteEntityClasses(Type $objectType): ?array
+	{
+		$classNames = $objectType->getObjectClassNames();
+		if (count($classNames) !== 1) {
+			return null;
+		}
+
+		$className = $classNames[0];
+		if (!class_exists($className)) {
+			return null;
+		}
+
+		$metadata = $this->getClassMetadata($className);
+		if ($metadata === null || $metadata->isMappedSuperclass || $metadata->isEmbeddedClass) {
+			return null;
+		}
+
+		$concreteClasses = [];
+		foreach (array_merge([$metadata->name], $metadata->subClasses) as $className) {
+			$isSuperType = $objectType->isSuperTypeOf(new ObjectType($className));
+			if ($isSuperType->no()) {
+				continue;
+			}
+			if (!$isSuperType->yes()) {
+				return null;
+			}
+
+			$classMetadata = $this->getClassMetadata($className);
+			if ($classMetadata === null || $classMetadata->isMappedSuperclass || $classMetadata->isEmbeddedClass) {
+				return null;
+			}
+			$reflection = $classMetadata->getReflectionClass();
+			if ($reflection->isAbstract()) {
+				continue;
+			}
+
+			$concreteClasses[] = $className;
+		}
+
+		return count($concreteClasses) > 0 ? $concreteClasses : null;
 	}
 
 	/**
