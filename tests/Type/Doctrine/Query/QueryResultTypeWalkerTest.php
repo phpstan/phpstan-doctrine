@@ -1345,6 +1345,19 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			',
 		];
 
+		yield 'typed expression converting to a type unrelated to the walked one' => [
+			$this->constantArray([
+				[new ConstantIntegerType(1), new ObjectType(DateTimeImmutable::class)],
+				[new ConstantIntegerType(2), TypeCombinator::addNull(new ObjectType(DateTimeImmutable::class))],
+			]),
+			'
+				SELECT		TYPED_DATE_ADD(m.datetimeColumn, 1, \'day\'),
+							TYPED_DATE_ADD(m.datetimeColumn, o.intColumn, \'day\')
+				FROM		QueryResult\Entities\Many m
+				LEFT JOIN	m.oneNull o
+			',
+		];
+
 		yield 'length function' => [
 			$this->constantArray([
 				[
