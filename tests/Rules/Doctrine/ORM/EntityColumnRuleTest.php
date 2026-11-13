@@ -451,6 +451,10 @@ class EntityColumnRuleTest extends RuleTestCase
 				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type7 type mapping mismatch: backing type int of enum PHPStan\Rules\Doctrine\ORMAttributes\BazEnum does not match value type string of the database type array<string>.',
 				63,
 			],
+			[
+				'Property PHPStan\Rules\Doctrine\ORMAttributes\Foo::$type12 type mapping mismatch: property can contain list<string> but database expects array<mixed, PHPStan\Rules\Doctrine\ORMAttributes\BazEnum>.',
+				93,
+			],
 		]);
 	}
 
