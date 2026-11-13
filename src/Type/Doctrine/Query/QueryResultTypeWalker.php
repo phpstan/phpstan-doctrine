@@ -1246,11 +1246,10 @@ class QueryResultTypeWalker extends SqlWalker
 				&& !$expr->getReturnType() instanceof DbalEnumType // EnumType is also no-op
 			) {
 				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
-				$returnType = $this->resolveDoctrineType($dbalTypeName, null, null, TypeCombinator::containsNull($type));
-				$narrowedType = TypeCombinator::intersect($type, $returnType); // e.g. count is typed as int, but we infer int<0, max>
-				$type = TypeCombinator::removeNull($narrowedType) instanceof NeverType
-					? $returnType // nothing in common, the DBAL type converts the value, e.g. a date string to DateTime
-					: $narrowedType;
+				$declaredType = $this->resolveDoctrineType($dbalTypeName, null, null, TypeCombinator::containsNull($type));
+				if (!$declaredType->isSuperTypeOf($type)->yes()) { // the walked type is kept only when it narrows the declared one, e.g. count is typed as int, but we infer int<0, max>
+					$type = $declaredType;
+				}
 
 				if ($this->hasAggregateWithoutGroupBy() && !$expr instanceof AST\Functions\CountFunction) {
 					$type = TypeCombinator::addNull($type);

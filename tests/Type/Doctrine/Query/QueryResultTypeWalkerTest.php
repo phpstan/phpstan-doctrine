@@ -1352,9 +1352,8 @@ final class QueryResultTypeWalkerTest extends PHPStanTestCase
 			]),
 			'
 				SELECT		TYPED_DATE_ADD(m.datetimeColumn, 1, \'day\'),
-							TYPED_DATE_ADD(m.datetimeColumn, o.intColumn, \'day\')
+							TYPED_DATE_ADD(m.datetimeColumn, NULLIF(m.intColumn, 1), \'day\')
 				FROM		QueryResult\Entities\Many m
-				LEFT JOIN	m.oneNull o
 			',
 		];
 
