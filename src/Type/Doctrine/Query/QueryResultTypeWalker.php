@@ -1246,10 +1246,10 @@ class QueryResultTypeWalker extends SqlWalker
 				&& !$expr->getReturnType() instanceof DbalEnumType // EnumType is also no-op
 			) {
 				$dbalTypeName = DbalType::getTypeRegistry()->lookupName($expr->getReturnType());
-				$type = TypeCombinator::intersect( // e.g. count is typed as int, but we infer int<0, max>
-					$type,
-					$this->resolveDoctrineType($dbalTypeName, null, null, TypeCombinator::containsNull($type)),
-				);
+				$declaredType = $this->resolveDoctrineType($dbalTypeName, null, null, TypeCombinator::containsNull($type));
+				if (!$declaredType->isSuperTypeOf($type)->yes()) { // the walked type is kept only when it narrows the declared one, e.g. count is typed as int, but we infer int<0, max>
+					$type = $declaredType;
+				}
 
 				if ($this->hasAggregateWithoutGroupBy() && !$expr instanceof AST\Functions\CountFunction) {
 					$type = TypeCombinator::addNull($type);
