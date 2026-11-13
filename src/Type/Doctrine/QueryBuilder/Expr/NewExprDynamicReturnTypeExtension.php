@@ -13,6 +13,7 @@ use PHPStan\Type\Doctrine\ArgumentsProcessor;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Throwable;
 use function class_exists;
 
 class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
@@ -65,14 +66,14 @@ class NewExprDynamicReturnTypeExtension implements DynamicStaticMethodReturnType
 		}
 
 		try {
-			$exprObject = new $className(
-				...$this->argumentsProcessor->processArgs(
-					$scope,
-					$methodReflection->getName(),
-					$methodCall->getArgs(),
-				),
-			);
+			$args = $this->argumentsProcessor->processArgs($scope, $methodReflection->getName(), $methodCall->getArgs());
 		} catch (DynamicQueryBuilderArgumentException $e) {
+			return new ObjectType($this->reflectionProvider->getClassName($className));
+		}
+
+		try {
+			$exprObject = new $className(...$args);
+		} catch (Throwable $e) {
 			return new ObjectType($this->reflectionProvider->getClassName($className));
 		}
 
