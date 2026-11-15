@@ -17,9 +17,6 @@ use PHPStan\Type\Doctrine\ObjectMetadataResolverData\NotMappedWithObjectManagerL
 use PHPStan\Type\Doctrine\ObjectMetadataResolverData\NotMappedWithoutReflectionProvider;
 use function class_exists;
 
-/**
- * @runTestsInSeparateProcesses
- */
 class ObjectMetadataResolverTest extends PHPStanTestCase
 {
 
