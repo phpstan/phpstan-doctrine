@@ -152,3 +152,135 @@ parameters:
 				- tests/Platform/TypedExpressionIntegerPiFunction.php
 				- tests/Platform/TypedExpressionIntegerWrapFunction.php
 				- tests/Platform/TypedExpressionStringPiFunction.php
+
+		-
+			message: '#^Call to deprecated method getTypesMap\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/Type/Doctrine/DefaultDescriptorRegistry.php
+
+		-
+			message: '#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\DateTimeType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/DateTimeType.php
+
+		-
+			message: '#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\DateTimeTzType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/DateTimeTzType.php
+
+		-
+			message: '#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\DateType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/DateType.php
+
+		-
+			message: '#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\SimpleArrayType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/SimpleArrayType.php
+
+		-
+			message: '#^Fetching class constant class of deprecated class Doctrine\\DBAL\\Types\\TimeType\:#'
+			identifier: classConstant.deprecatedClass
+			count: 1
+			path: src/Type/Doctrine/Descriptors/TimeType.php
+
+		-
+			message: '#^Call to deprecated method getTypeRegistry\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: '#^Call to deprecated method lookupName\(\) of class Doctrine\\DBAL\\Types\\TypeRegistry\:#'
+			identifier: method.deprecated
+			count: 1
+			path: src/Type/Doctrine/Query/QueryResultTypeWalker.php
+
+		-
+			message: '#^Call to deprecated method overrideType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Classes/entity-manager.php
+
+		-
+			message: '#^Call to deprecated method addType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			message: '#^Call to deprecated method hasType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/QueryResultTypeWalkerFetchTypeMatrixTest.php
+
+		-
+			message: '#^Call to deprecated method getType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/TypedExpressionBooleanPiFunction.php
+
+		-
+			message: '#^Call to deprecated method getType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/TypedExpressionIntegerPiFunction.php
+
+		-
+			message: '#^Call to deprecated method getType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/TypedExpressionIntegerWrapFunction.php
+
+		-
+			message: '#^Call to deprecated method getType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Platform/TypedExpressionStringPiFunction.php
+
+		-
+			message: '#^Call to deprecated method addType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 8
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: '#^Call to deprecated method hasType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 8
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: '#^Call to deprecated method overrideType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 3
+			path: tests/Rules/Doctrine/ORM/EntityColumnRuleTest.php
+
+		-
+			message: '#^Call to deprecated method addType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Type/Doctrine/Query/QueryResultTypeWalkerHydrationModeTest.php
+
+		-
+			message: '#^Call to deprecated method hasType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Type/Doctrine/Query/QueryResultTypeWalkerHydrationModeTest.php
+
+		-
+			message: '#^Call to deprecated method addType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Type/Doctrine/Query/QueryResultTypeWalkerTest.php
+
+		-
+			message: '#^Call to deprecated method hasType\(\) of class Doctrine\\DBAL\\Types\\Type\:#'
+			identifier: staticMethod.deprecated
+			count: 1
+			path: tests/Type/Doctrine/Query/QueryResultTypeWalkerTest.php
