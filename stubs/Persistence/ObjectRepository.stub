@@ -2,6 +2,8 @@
 
 namespace Doctrine\Persistence;
 
+use SortDirection;
+
 /**
  * @template-covariant T of object
  */
@@ -21,7 +23,7 @@ interface ObjectRepository
 
 	/**
 	 * @phpstan-param array<string, mixed> $criteria
-	 * @phpstan-param array<string, 'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
+	 * @phpstan-param array<string, SortDirection|'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
 	 * @phpstan-param int|null $limit
 	 * @phpstan-param int|null $offset
 	 * @phpstan-return list<T>
