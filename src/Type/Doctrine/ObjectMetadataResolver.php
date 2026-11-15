@@ -10,15 +10,18 @@ use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPStan\Doctrine\Mapping\ClassMetadataFactory;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
 use Throwable;
 use function array_merge;
 use function class_exists;
 use function count;
+use function in_array;
 use function is_file;
 use function is_readable;
 use function method_exists;
+use function preg_match;
 use function preg_match_all;
 use function preg_replace;
 use function reset;
@@ -27,6 +30,15 @@ use const PHP_VERSION_ID;
 
 final class ObjectMetadataResolver
 {
+
+	/**
+	 * Class attributes the fallback metadata drivers (attribute, annotation) use to decide the class is not transient
+	 */
+	private const MAPPING_ATTRIBUTES = [
+		'Doctrine\\ORM\\Mapping\\Entity',
+		'Doctrine\\ORM\\Mapping\\MappedSuperclass',
+		'Doctrine\\ORM\\Mapping\\Embeddable',
+	];
 
 	private ?string $objectManagerLoader = null;
 
@@ -37,13 +49,17 @@ final class ObjectMetadataResolver
 
 	private string $tmpDir;
 
+	private ?ReflectionProvider $reflectionProvider;
+
 	public function __construct(
 		?string $objectManagerLoader,
-		string $tmpDir
+		string $tmpDir,
+		?ReflectionProvider $reflectionProvider = null
 	)
 	{
 		$this->objectManagerLoader = $objectManagerLoader;
 		$this->tmpDir = $tmpDir;
+		$this->reflectionProvider = $reflectionProvider;
 	}
 
 	public function hasObjectManagerLoader(): bool
@@ -183,6 +199,13 @@ final class ObjectMetadataResolver
 	 */
 	public function isTransient(string $className): bool
 	{
+		if (
+			$this->objectManagerLoader === null
+			&& !$this->mayBeMappedByFallbackDrivers($className)
+		) {
+			return true;
+		}
+
 		if (!class_exists($className)) {
 			return true;
 		}
@@ -203,6 +226,31 @@ final class ObjectMetadataResolver
 		} catch (ReflectionException $e) {
 			return true;
 		}
+	}
+
+	/**
+	 * Checks the mapping using static reflection, so the class is not autoloaded (and its file executed) when it cannot be mapped.
+	 * Without object manager loader, only the fallback attribute and annotation drivers are used,
+	 * they consider the class not transient only if it has an entity mapping attribute or annotation.
+	 */
+	private function mayBeMappedByFallbackDrivers(string $className): bool
+	{
+		if ($this->reflectionProvider === null || !$this->reflectionProvider->hasClass($className)) {
+			return true;
+		}
+
+		$nativeReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
+
+		foreach ($nativeReflection->getAttributes() as $attribute) {
+			if (in_array($attribute->getName(), self::MAPPING_ATTRIBUTES, true)) {
+				return true;
+			}
+		}
+
+		$docComment = $nativeReflection->getDocComment();
+
+		return $docComment !== false
+			&& preg_match('~@(?:[A-Za-z0-9_\\\\]*\\\\)?(?:Entity|MappedSuperclass|Embeddable)\\b~', $docComment) === 1;
 	}
 
 	private function getMetadataFactory(): ?ClassMetadataFactory
