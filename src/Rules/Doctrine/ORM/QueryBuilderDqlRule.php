@@ -12,6 +12,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Doctrine\DoctrineTypeUtils;
 use PHPStan\Type\Doctrine\ObjectMetadataResolver;
+use PHPStan\Type\Doctrine\QueryBuilder\QueryBuilderAnalysisLimitType;
 use PHPStan\Type\ObjectType;
 use Throwable;
 use function array_values;
@@ -70,6 +71,15 @@ class QueryBuilderDqlRule implements Rule
 		}
 
 		try {
+			$queryType = $scope->getType($node);
+			if ($queryType instanceof QueryBuilderAnalysisLimitType) {
+				return [
+					RuleErrorBuilder::message(sprintf('QueryBuilder has more than %d possible entity-root combinations.', $queryType->getLimit()))
+						->identifier('doctrine.queryBuilderBranchLimit')
+						->build(),
+				];
+			}
+
 			$dqlType = $scope->getType(new MethodCall($node, new Node\Identifier('getDQL'), []));
 		} catch (Throwable $e) {
 			return [
