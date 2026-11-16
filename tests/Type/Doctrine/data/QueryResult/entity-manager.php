@@ -12,11 +12,13 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use QueryResult\EntitiesDbal42\Dbal4Entity;
+use Type\Doctrine\data\QueryResult\TypedExpressionDateAddFunction;
 
 $config = new Configuration();
 $config->setProxyDir(__DIR__);
 $config->setProxyNamespace('PHPstan\Doctrine\OrmProxies');
 $config->setMetadataCache(new ArrayCachePool());
+$config->addCustomDatetimeFunction('TYPED_DATE_ADD', TypedExpressionDateAddFunction::class);
 
 $metadataDriver = new MappingDriverChain();
 
