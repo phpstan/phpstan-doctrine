@@ -2,13 +2,18 @@
 
 namespace PHPStan\Type\Doctrine;
 
+use Composer\InstalledVersions;
 use PhpParser\Node\Arg;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Doctrine\ORM\DynamicQueryBuilderArgumentException;
 use PHPStan\Type\Doctrine\QueryBuilder\Expr\ExprType;
+use function class_exists;
+use function constant;
 use function count;
 use function in_array;
+use function sprintf;
 use function strpos;
+use function version_compare;
 
 /** @api */
 class ArgumentsProcessor
@@ -72,6 +77,16 @@ class ArgumentsProcessor
 				}
 			}
 
+			$enumCases = $value->getEnumCases();
+			if (
+				count($enumCases) === 1
+				&& $enumCases[0]->getClassName() === 'SortDirection'
+				&& $this->isSortDirectionSupported()
+			) {
+				$args[] = constant(sprintf('%s::%s', $enumCases[0]->getClassName(), $enumCases[0]->getEnumCaseName()));
+				continue;
+			}
+
 			if (count($value->getConstantScalarValues()) !== 1) {
 				throw new DynamicQueryBuilderArgumentException();
 			}
@@ -80,6 +95,17 @@ class ArgumentsProcessor
 		}
 
 		return $args;
+	}
+
+	private function isSortDirectionSupported(): bool
+	{
+		if (!class_exists(InstalledVersions::class)) {
+			return false;
+		}
+
+		$ormVersion = InstalledVersions::getVersion('doctrine/orm');
+
+		return $ormVersion !== null && version_compare($ormVersion, '3.7.0', '>=');
 	}
 
 }
