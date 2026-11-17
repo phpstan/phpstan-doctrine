@@ -20,6 +20,9 @@ jobs:
     name: "Lint"
     runs-on: "ubuntu-latest"
 
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
+
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +34,7 @@ jobs:
           - "8.3"
           - "8.4"
           - "8.5"
+          - "8.6"
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -112,6 +116,9 @@ jobs:
     name: "Tests"
     runs-on: "ubuntu-latest"
 
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
+
     strategy:
       fail-fast: false
       matrix:
@@ -123,6 +130,7 @@ jobs:
           - "8.3"
           - "8.4"
           - "8.5"
+          - "8.6"
         dependencies:
           - "lowest"
           - "highest"
@@ -131,8 +139,13 @@ jobs:
         exclude:
           - php-version: "8.5"
             dependencies: "lowest"
+          - php-version: "8.6"
+            dependencies: "lowest"
         include:
           - php-version: "8.5"
+            dependencies: "lowest"
+            update-packages: "composer update doctrine/dbal doctrine/orm nesbot/carbon carbonphp/carbon-doctrine-types --no-interaction --no-progress"
+          - php-version: "8.6"
             dependencies: "lowest"
             update-packages: "composer update doctrine/dbal doctrine/orm nesbot/carbon carbonphp/carbon-doctrine-types --no-interaction --no-progress"
           - php-version: "8.3"
@@ -258,6 +271,9 @@ jobs:
     name: "PHPStan"
     runs-on: "ubuntu-latest"
 
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQ: "${{ matrix.php-version == '8.6' && 'php+' || '' }}" # PHP 8.6 is a pre-release; dependencies don't allow it yet
+
     strategy:
       fail-fast: false
       matrix:
@@ -269,6 +285,7 @@ jobs:
           - "8.3"
           - "8.4"
           - "8.5"
+          - "8.6"
         update-packages:
           - ""
         include:
