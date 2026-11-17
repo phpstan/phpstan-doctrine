@@ -168,6 +168,11 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testQueryBuilderInheritedFromGenericRepository(): void
+	{
+		$this->analyse([__DIR__ . '/data/query-builder-dql-generic-repository.php'], []);
+	}
+
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [

@@ -15,13 +15,17 @@ use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Parser\Parser;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use function array_key_exists;
+use function array_map;
+use function implode;
 use function is_array;
 use function sprintf;
 
@@ -57,7 +61,7 @@ class OtherMethodQueryBuilderParser
 			return [];
 		}
 
-		$cacheKey = $this->buildCacheKey($fileName, $className, $methodName);
+		$cacheKey = $this->buildCacheKey($fileName, $methodReflection->getDeclaringClass(), $methodName);
 
 		if (array_key_exists($cacheKey, $this->cache)) {
 			if ($this->cache[$cacheKey] === null) {
@@ -174,9 +178,19 @@ class OtherMethodQueryBuilderParser
 		return null;
 	}
 
-	private function buildCacheKey(string $fileName, string $declaringClassName, string $methodName): string
+	private function buildCacheKey(string $fileName, ClassReflection $classReflection, string $methodName): string
 	{
-		return sprintf('%s-%s-%s', $fileName, $declaringClassName, $methodName);
+		$className = $classReflection->getName();
+		if ($classReflection->isGeneric()) {
+			// the template types bound by the caller decide the query builder an inherited method returns
+			$templateTypes = array_map(
+				static fn (Type $type): string => $type->describe(VerbosityLevel::cache()),
+				$classReflection->getActiveTemplateTypeMap()->getTypes(),
+			);
+			$className .= sprintf('<%s>', implode(',', $templateTypes));
+		}
+
+		return sprintf('%s-%s-%s', $fileName, $className, $methodName);
 	}
 
 }
