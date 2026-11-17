@@ -133,7 +133,8 @@ class EntityColumnRule implements Rule
 				if ($this->reflectionProvider->hasClass($enumTypeString)) {
 					$enumReflection = $this->reflectionProvider->getClass($enumTypeString);
 					$backedEnumType = $enumReflection->getBackedEnumType();
-					if ($backedEnumType !== null) {
+					// If the type descriptor does not precise the types inside the array, don't compare them with the backing type
+					if ($backedEnumType !== null && !$writableToDatabaseType->getIterableValueType() instanceof MixedType) {
 						if (!$backedEnumType->equals($writableToDatabaseType->getIterableValueType()) || !$backedEnumType->equals($writableToPropertyType->getIterableValueType())) {
 							$errors[] = RuleErrorBuilder::message(
 								sprintf(
@@ -150,10 +151,12 @@ class EntityColumnRule implements Rule
 					}
 				}
 
-				$writableToPropertyType = TypeCombinator::intersect(new ArrayType(
-					$writableToPropertyType->getIterableKeyType(),
-					$enumType,
-				), ...TypeUtils::getAccessoryTypes($writableToPropertyType));
+				if (!$writableToPropertyType instanceof NeverType) {
+					$writableToPropertyType = TypeCombinator::intersect(new ArrayType(
+						$writableToPropertyType->getIterableKeyType(),
+						$enumType,
+					), ...TypeUtils::getAccessoryTypes($writableToPropertyType));
+				}
 				$writableToDatabaseType = TypeCombinator::intersect(new ArrayType(
 					$writableToDatabaseType->getIterableKeyType(),
 					$enumType,
