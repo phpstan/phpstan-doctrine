@@ -1,16 +1,12 @@
---- src/Mapping/Entity.php	2024-02-08 09:55:51
-+++ src/Mapping/Entity.php	2024-02-08 09:55:54
-@@ -7,7 +7,12 @@
- use Attribute;
- use Doctrine\ORM\EntityRepository;
-
--/** @template T of object */
-+/**
+--- src/Mapping/Entity.php
++++ src/Mapping/Entity.php
+@@ -10,6 +10,9 @@
+ /**
+  * Marks a class as an entity, whose objects are stored in a database table.
+  *
 + * @Annotation
 + * @NamedArgumentConstructor()
 + * @Target("CLASS")
-+ * @template T of object
-+ */
+  * @template T of object
+  */
  #[Attribute(Attribute::TARGET_CLASS)]
- final class Entity implements MappingAttribute
- {

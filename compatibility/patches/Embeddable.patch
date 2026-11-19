@@ -1,13 +1,12 @@
---- src/Mapping/Embeddable.php	2024-02-03 17:50:09
-+++ src/Mapping/Embeddable.php	2024-02-08 14:23:25
-@@ -6,6 +6,10 @@
-
- use Attribute;
-
-+/**
+--- src/Mapping/Embeddable.php
++++ src/Mapping/Embeddable.php
+@@ -8,6 +8,9 @@
+ 
+ /**
+  * Marks a class as embeddable, so that its properties are stored in the table of the entities that embed it.
++ *
 + * @Annotation
 + * @Target("CLASS")
-+ */
+  */
  #[Attribute(Attribute::TARGET_CLASS)]
  final class Embeddable implements MappingAttribute
- {
