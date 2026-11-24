@@ -9,9 +9,10 @@ use Doctrine\Persistence\ObjectRepository;
 
 /**
  * @template T of object
+ * @implements Selectable<int, T>
  * @implements ObjectRepository<T>
  */
-class EntityRepository implements ObjectRepository
+class EntityRepository implements ObjectRepository, Selectable
 {
 
 	/** @var class-string<T> */
