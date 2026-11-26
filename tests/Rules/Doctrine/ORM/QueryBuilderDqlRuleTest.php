@@ -25,71 +25,75 @@ class QueryBuilderDqlRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/query-builder-dql.php'], [
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 66: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1)",
-				31,
+				32,
 			],
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = :id)",
-				43,
+				44,
 			],
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 68: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = :id)",
-				55,
+				56,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
-				62,
+				63,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 14 near \'Foo e\': Error: Class \'Foo\' is not defined.',
-				71,
+				72,
 			],
 			[
 				'Could not analyse QueryBuilder with dynamic arguments.',
-				99,
+				100,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
-				107,
+				108,
 			],
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 82: Error: Expected end of string, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1 ORDER BY e.name) ASC",
-				129,
+				130,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 78 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
-				139,
+				140,
 			],
 			[
-				'QueryBuilder: [Semantical Error] line 0, col 78 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				'Could not analyse QueryBuilder with dynamic arguments.',
 				160,
 			],
 			[
+				'QueryBuilder: [Semantical Error] line 0, col 78 near \'name ASC\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named name',
+				171,
+			],
+			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = 1\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
-				170,
+				181,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 72 near \'nickname LIKE\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nickname',
-				194,
+				205,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 72 near \'nickname IS \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nickname',
-				206,
+				217,
 			],
 			[
 				"QueryBuilder: [Syntax Error] line 0, col 80: Error: Expected =, <, <=, <>, >, >=, !=, got ')'\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE e.id = 1 OR e.nickname) IS NULL",
-				218,
+				229,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'transient = \': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named transient',
-				234,
+				245,
 			],
 			[
 				'QueryBuilder: [Semantical Error] line 0, col 60 near \'nonexistent =\': Error: Class PHPStan\Rules\Doctrine\ORM\MyEntity has no field or association named nonexistent',
-				251,
+				262,
 			],
 			[
 				"QueryBuilder: [Syntax Error] line 0, col -1: Error: Expected =, <, <=, <>, >, >=, !=, got end of string.\nDQL: SELECT e FROM PHPStan\Rules\Doctrine\ORM\MyEntity e WHERE foo",
-				281,
+				292,
 			],
 		]);
 	}
