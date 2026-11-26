@@ -13,6 +13,7 @@ class DateTimeTzType implements DoctrineTypeDescriptor
 
 	public function getType(): string
 	{
+		// @phpstan-ignore classConstant.deprecatedClass (To be removed when the type is removed)
 		return \Doctrine\DBAL\Types\DateTimeTzType::class;
 	}
 
