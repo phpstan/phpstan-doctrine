@@ -93,6 +93,13 @@ namespace Doctrine\ORM\Mapping;
  *    inherited?: class-string,
  *    declared?: class-string,
  * }
+ * @phpstan-type IndexMapping = array{
+ *     name?: string,
+ *     columns?: list<string>,
+ *     fields?: non-empty-list<string>,
+ *     flags?: array<array-key, mixed>,
+ *     options?: array<array-key, mixed>,
+ * }
  * @phpstan-type ConcreteAssociationMapping = OneToOneOwningSideMapping|OneToOneInverseSideMapping|ManyToOneAssociationMapping|OneToManyAssociationMapping|ManyToManyOwningSideMapping|ManyToManyInverseSideMapping
  */
 class ClassMetadata extends ClassMetadataInfo
