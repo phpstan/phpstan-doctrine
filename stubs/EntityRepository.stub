@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\AbstractLazyCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Persistence\ObjectRepository;
+use SortDirection;
 
 /**
  * @template T of object
@@ -34,7 +35,7 @@ class EntityRepository implements ObjectRepository
 
 	/**
 	 * @phpstan-param array<string, mixed> $criteria
-	 * @phpstan-param array<string, string>|null $orderBy
+	 * @phpstan-param array<string, SortDirection|'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
 	 * @phpstan-param int|null $limit
 	 * @phpstan-param int|null $offset
 	 * @phpstan-return list<T>
@@ -44,7 +45,7 @@ class EntityRepository implements ObjectRepository
 
 	/**
 	 * @phpstan-param array<string, mixed> $criteria The criteria.
-	 * @phpstan-param array<string, string>|null $orderBy
+	 * @phpstan-param array<string, SortDirection|'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
 	 * @phpstan-return T|null
 	 * @phpstan-impure
 	 */

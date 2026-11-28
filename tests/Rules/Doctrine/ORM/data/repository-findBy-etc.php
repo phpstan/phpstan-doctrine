@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManager;
+use SortDirection;
 
 class RepositoryFindByCalls
 {
@@ -50,7 +51,9 @@ class RepositoryFindByCalls
 	{
 		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
 		$entityRepository->findBy([], ['id' => 'ASC']);
+		$entityRepository->findBy([], ['id' => SortDirection::Ascending]);
 		$entityRepository->findBy([], ['title' => 'DESC']);
+		$entityRepository->findBy([], ['title' => SortDirection::Descending]);
 		$entityRepository->findBy([], ['transient' => 'ASC']);
 		$entityRepository->findBy([], ['nonexistent' => 'DESC']);
 		$entityRepository->findBy([], ['nonexistent' => 'ASC', 'transient' => 'DESC']);
@@ -60,7 +63,9 @@ class RepositoryFindByCalls
 	{
 		$entityRepository = $this->entityManager->getRepository(MyEntity::class);
 		$entityRepository->findOneBy([], ['id' => 'ASC']);
+		$entityRepository->findOneBy([], ['id' => SortDirection::Ascending]);
 		$entityRepository->findOneBy([], ['title' => 'DESC']);
+		$entityRepository->findOneBy([], ['title' => SortDirection::Descending]);
 		$entityRepository->findOneBy([], ['transient' => 'ASC']);
 		$entityRepository->findOneBy([], ['nonexistent' => 'DESC']);
 		$entityRepository->findOneBy([], ['nonexistent' => 'ASC', 'transient' => 'DESC']);

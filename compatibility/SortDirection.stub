@@ -1,0 +1,7 @@
+<?php
+
+enum SortDirection
+{
+    case Ascending;
+    case Descending;
+}

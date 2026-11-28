@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManager;
+use SortDirection;
 
 class TestQueryBuilderRepository
 {
@@ -151,6 +152,16 @@ class TestQueryBuilderRepository
 			->from(MyEntity::class, 'e')
 			->andWhere('e.id = 1')
 			->add('orderBy', new \Doctrine\ORM\Query\Expr\OrderBy('e.title', 'ASC'))
+			->getQuery();
+	}
+
+	public function addNewExprSortDirectionCorrect(): void
+	{
+		$this->entityManager->createQueryBuilder()
+			->select('e')
+			->from(MyEntity::class, 'e')
+			->andWhere('e.id = 1')
+			->add('orderBy', new \Doctrine\ORM\Query\Expr\OrderBy('e.title', SortDirection::Ascending))
 			->getQuery();
 	}
 

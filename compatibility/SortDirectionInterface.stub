@@ -1,0 +1,6 @@
+<?php
+
+/** Special interface to ensure PHPStan analysis on PHP <8.1 doesn't fail */
+interface SortDirection
+{
+}
