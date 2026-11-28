@@ -2,6 +2,8 @@
 
 namespace PHPStan\DoctrineIntegration;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use Doctrine\Common\Collections\Selectable;
 use PHPStan\Testing\TypeInferenceTestCase;
@@ -21,6 +23,12 @@ class TypeInferenceTest extends TypeInferenceTestCase
 		} else {
 			yield from $this->gatherAssertTypes(__DIR__ . '/data/repositoryMatching-collection25.php');
 		}
+
+		if (!InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '>=3.8')) {
+			return;
+		}
+
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/classMetadataIndexMapping.php');
 	}
 
 	/**
